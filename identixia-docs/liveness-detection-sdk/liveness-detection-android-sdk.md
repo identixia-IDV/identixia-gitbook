@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `FaceLivenessDetection-Android` |
 | **Platform** | Android |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -150,6 +150,12 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 | Camera black / crash | Use a **physical** device; grant camera permission |
 | Docker license fails after bare-metal license | Machine codes differ — re-license the container |
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/liveness-mobile.png" alt="Mobile liveness result" width="220"><figcaption>Mobile liveness result</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/liveness-desktop.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
+
 
 ## Support
 
@@ -157,7 +163,7 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
 ## Identixia Face Liveness Detection SDK — Android (Fully On-Premise)
 
@@ -174,7 +180,7 @@ The following is adapted from the shipping repository README for screenshots, ex
 - [ ] Open this folder in Android Studio → Run on a **physical** phone
 - [ ] Home status shows **Ready** → **Liveness / Settings / About** unlock
 
-> **Your own app?** Skip to [Setup on your own app](#setup-on-your-own-app). Full API: [docs.identixia.com](https://doc.identixia.com).
+> **Your own app?** Skip to [Setup on your own app](#setup-on-your-own-app). Full API: [docs.identixia.com](https://docs.identixia.com).
 
 ---
 
@@ -245,14 +251,6 @@ FaceLivenessDetection-Android/
 
 Keep `applicationId` **`com.identixia.faceliveness`** so the key matches the binary (product `741777` only).
 
-### Screenshots
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-liveness/mobile/liveness.png" alt="Liveness result" width="220"/>
-</p>
-
----
-
 ## SDK License
 
 Licenses are **offline** and bound to your `applicationId`.
@@ -281,7 +279,7 @@ After activation, `FaceLivenessSDK.getLicenseStatus()` (and `LicenseStatus.curre
 
 ## Setup on your own app
 
-Minimal integration (details: [docs.identixia.com](https://doc.identixia.com)):
+Minimal integration (details: [docs.identixia.com](https://docs.identixia.com)):
 
 1. Copy `libfacesdk/` into your project and place `facelivenessdk.aar` inside it.
 2. `settings.gradle`: `include ':libfacesdk'`
@@ -297,7 +295,7 @@ Request a license for **your** `applicationId`, not the demo’s.
 
 ## About SDK
 
-Public class: `com.identixia.facelivenessdk.FaceLivenessSDK`. Call **once per process** on a background thread: `setActivation` → `init`. Serialize native calls. Full reference: [docs.identixia.com](https://doc.identixia.com).
+Public class: `com.identixia.facelivenessdk.FaceLivenessSDK`. Call **once per process** on a background thread: `setActivation` → `init`. Serialize native calls. Full reference: [docs.identixia.com](https://docs.identixia.com).
 
 | Code | Meaning |
 | ---- | ------- |

@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `FaceLivenessDetection-Docker` |
 | **Platform** | Linux |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -128,6 +128,12 @@ curl -s -X POST http://127.0.0.1:14103/api/liveness \
 | Multipart vs JSON | Field names must match (`image`, `image1`, `images`) |
 | Envelope vs process JSON | Only control routes use `{success,code,…}`; process routes return engine JSON |
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/liveness-mobile.png" alt="Mobile liveness result" width="220"><figcaption>Mobile liveness result</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/liveness-desktop.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
+
 
 ## Support
 
@@ -135,7 +141,7 @@ curl -s -X POST http://127.0.0.1:14103/api/liveness \
 
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
 ## Identixia Face Liveness — Linux / Docker
 

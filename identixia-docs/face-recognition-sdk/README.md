@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `Face-Recognition-SDK` |
 | **Platform** | Hub |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -52,9 +52,24 @@ Open the platform page that matches your license and stack. Each page includes q
 | Windows (recognition only) | [Face Recognition Windows](face-recognition-windows-sdk.md) |
 | Linux (recognition only) | [Face Recognition Linux](face-recognition-linux-sdk.md) |
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/face-android-home.png" alt="Android home" width="160"><figcaption>Android home</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-android-identify.png" alt="Identify" width="160"><figcaption>Identify</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-android-match.png" alt="1:1 match" width="160"><figcaption>1:1 match</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-desktop-detect.png" alt="Desktop detect" width="280"><figcaption>Desktop detect</figcaption></figure>
+
+
+## Support
+
+{% include "../.gitbook/includes/contact.md" %}
+
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
 ## Identixia Face Recognition SDK — Fully On-Premise
 
@@ -70,7 +85,7 @@ You get **face detection** (box, landmarks, pose, attributes), **ICAO-style face
 
 All processing stays on the device. **NO** biometric data is sent to Identixia cloud.
 
-Docs: [https://doc.identixia.com](https://doc.identixia.com)
+Docs: [https://docs.identixia.com](https://docs.identixia.com)
 
 Dedicated PAD-only product: **[Face Liveness Detection SDK](https://github.com/identixia-IDV/Face-Liveness-Detection-SDK)**.
 
@@ -105,22 +120,6 @@ Then `POST /api/detect`, `/api/quality`, `/api/match`. Guide: [FaceRecognition-D
 
 ---
 
-## Screenshots
-
-| Home | Identity | Enroll | Identify |
-| ---- | -------- | ------ | -------- |
-| <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/home.png" alt="Face recognition home" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/capture.png" alt="Identity camera" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/enroll.png" alt="Enroll result" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/identify.png" alt="Identify result" width="180"/></p> |
-
-| Detect | Attribute | Quality | Landmarks |
-| ------ | --------- | ------- | --------- |
-| <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/detect.png" alt="Face detect result" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/attribute.png" alt="Face attribute result" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/attribute-quality.png" alt="Image quality result" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/landmarks.png" alt="68-point landmarks" width="180"/></p> |
-
-| Match | Liveness | Settings | About |
-| ----- | -------- | -------- | ----- |
-| <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/match.png" alt="1:1 match result" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/attribute-liveness.png" alt="Liveness result" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/settings.png" alt="Settings" width="180"/></p> | <p align="center"><img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-recognition/android/about.png" alt="About" width="180"/></p> |
-
----
-
 ## On YouTube
 
 <a href="https://www.youtube.com/watch?v=qVtdkwtGtqs" target="_blank">
@@ -150,11 +149,6 @@ This GitHub repo is the **product hub**. Clone the platform SDK you need. Engine
 | **Vue** | [FaceRecognition-LivenessDetection-Vue](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Vue) | Vue web |
 
 ---
-
-
-## Support
-
-{% include "../.gitbook/includes/contact.md" %}
 
 ### Platforms in this section
 

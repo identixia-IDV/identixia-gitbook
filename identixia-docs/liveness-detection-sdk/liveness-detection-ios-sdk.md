@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `FaceLivenessDetection-iOS` |
 | **Platform** | iOS |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -138,6 +138,12 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 | Camera black / crash | Use a **physical** device; grant camera permission |
 | Docker license fails after bare-metal license | Machine codes differ — re-license the container |
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/liveness-mobile.png" alt="Mobile liveness result" width="220"><figcaption>Mobile liveness result</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/liveness-desktop.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
+
 
 ## Support
 
@@ -145,7 +151,7 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
 ## Identixia Face Liveness Detection SDK — iOS (Fully On-Premise)
 
@@ -162,7 +168,7 @@ The following is adapted from the shipping repository README for screenshots, ex
 - [ ] Open `FaceLivenessSDK.xcodeproj` → set **your** Team → Run on a **physical** iPhone
 - [ ] Home status shows ready → **Liveness / Settings / About** unlock
 
-> **Your own app?** Skip to [Setup on your own app](#setup-on-your-own-app). Full API: [docs.identixia.com](https://doc.identixia.com).
+> **Your own app?** Skip to [Setup on your own app](#setup-on-your-own-app). Full API: [docs.identixia.com](https://docs.identixia.com).
 
 ---
 
@@ -236,14 +242,6 @@ FaceLivenessDetection-iOS/
 
 Keep bundle id **`com.identixia.faceliveness.app`** so the key matches the binary (product `741777` only).
 
-### Screenshots
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-liveness/mobile/liveness.png" alt="Liveness result" width="220"/>
-</p>
-
----
-
 ## SDK License
 
 Licenses are **offline** and bound to your bundle identifier.
@@ -264,7 +262,7 @@ Please [contact us](#contact) to get a license for **your own app**.
 
 ## Setup on your own app
 
-Minimal integration (details: [docs.identixia.com](https://doc.identixia.com)):
+Minimal integration (details: [docs.identixia.com](https://docs.identixia.com)):
 
 1. Add `facelivenessdk.framework`, `FaceLivenessEngine.framework`, and `onnxruntime.framework` (Embed & Sign).
 2. Optionally copy **FaceLivenessKit** for `FaceLivenessClient` helpers.
@@ -277,7 +275,7 @@ Request a license for **your** bundle id, not the demo’s.
 
 ## About SDK
 
-Use **FaceLivenessKit** (`FaceLivenessClient.shared`) or call the native SDK from Objective-C++. Call **once per process**: activate → init. Serialize native work. Full reference: [docs.identixia.com](https://doc.identixia.com).
+Use **FaceLivenessKit** (`FaceLivenessClient.shared`) or call the native SDK from Objective-C++. Call **once per process**: activate → init. Serialize native work. Full reference: [docs.identixia.com](https://docs.identixia.com).
 
 | Code | Meaning |
 | ---- | ------- |

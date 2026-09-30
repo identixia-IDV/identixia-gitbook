@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `ID-Document-Recognition-Liveness-Detection-SDK` |
 | **Platform** | Hub |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -37,23 +37,32 @@ See the product README for toolchain details.
 
 Open the platform page that matches your license and stack. Each page includes quick start, activation, full API reference, and troubleshooting.
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/document-desktop-result.png" alt="Document recognition result UI" width="520"><figcaption>Document recognition result UI</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/document-docker-result.png" alt="Docker document result" width="520"><figcaption>Docker document result</figcaption></figure>
+
+
+## Support
+
+{% include "../.gitbook/includes/contact.md" %}
+
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
-## <img src="https://api.iconify.design/lucide/id-card.svg?color=%230F766E" width="32" height="32" alt="" /> Identixia ID Document Recognition and Liveness Detection SDK
+## Identixia ID Document Recognition and Liveness Detection SDK
 
 **On-premise / on-device ID document recognition** for passports, national IDs, and driver licenses — passport MRZ OCR, ID card barcode, live capture, and optional document liveness / authenticity. Built for KYC and eKYC: **no** identity images or fields are sent to Identixia cloud.
 
 Ship once across mobile, plugins, Windows, and Docker with the same product family and licensing model. Mobile demos use a wide Camera Home plus Gallery / About, and a one-scroll Result (identity → fields → checks → images → Raw JSON).
 
-<p><img src="https://img.shields.io/badge/On-premise-0F766E?style=flat-square" alt="On-premise" /> <img src="https://img.shields.io/badge/On-device-0F766E?style=flat-square" alt="On-device" /> <img src="https://img.shields.io/badge/MRZ%20OCR-0F766E?style=flat-square" alt="MRZ%20OCR" /> <img src="https://img.shields.io/badge/Document%20liveness-0F766E?style=flat-square" alt="Document%20liveness" /> <img src="https://img.shields.io/badge/KYC%20%2F%20eKYC-5A6573?style=flat-square" alt="KYC%20%2F%20eKYC" /></p>
-
-Docs: [docs.identixia.com](https://doc.identixia.com) · Docker: [`identixia/document-reader`](https://hub.docker.com/r/identixia/document-reader)
+Docs: [docs.identixia.com](https://docs.identixia.com) · Docker: [`identixia/document-reader`](https://hub.docker.com/r/identixia/document-reader)
 
 ---
 
-## <img src="https://api.iconify.design/lucide/clipboard-list.svg?color=%230F766E" width="24" height="24" alt="" /> Basics
+## Basics
 
 Start here. Mobile samples include a demo license. Server samples print a machine code; please contact us with that machine code to get a license.
 
@@ -71,9 +80,7 @@ Start here. Mobile samples include a demo license. Server samples print a machin
 
 ---
 
-## <img src="https://api.iconify.design/lucide/terminal.svg?color=%230F766E" width="24" height="24" alt="" /> Initial commands
-
-### <img src="https://img.shields.io/badge/-1-0F766E?style=for-the-badge" alt="" /> Run the server
+## Initial commands
 
 ```bash
 docker pull identixia/document-reader:latest
@@ -84,8 +91,6 @@ docker run -d --name identixia-document-reader \
   identixia/document-reader:latest
 ```
 
-### <img src="https://img.shields.io/badge/-2-0F766E?style=for-the-badge" alt="" /> Get a license
-
 ```bash
 curl -s http://127.0.0.1:14102/api/machinecode
 ```
@@ -94,15 +99,11 @@ The response is JSON. Your machine code is `data.machinecode`.
 
 Please [contact us](#-contact) with the machine code to get a license.
 
-### <img src="https://img.shields.io/badge/-3-0F766E?style=for-the-badge" alt="" /> Activate
-
 This repository includes `license.txt`. Replace the key in that file with the license we send you, then run this command from the repository folder:
 
 ```bash
 curl -s -X POST http://127.0.0.1:14102/api/activate -H "Content-Type: text/plain" --data-binary @license.txt
 ```
-
-### <img src="https://img.shields.io/badge/-4-0F766E?style=for-the-badge" alt="" /> Process a document
 
 Replace `BASE64_JPEG` with a base64-encoded JPEG of the document.
 
@@ -112,29 +113,17 @@ curl -s -X POST http://127.0.0.1:14102/api/documentProcess -H "Content-Type: app
 
 ---
 
-## <img src="https://api.iconify.design/lucide/sparkles.svg?color=%230F766E" width="24" height="24" alt="" /> Why Identixia
+## Why Identixia
 
 | | | |
 | --- | --- | --- |
-| <img src="https://api.iconify.design/lucide/shield-check.svg?color=%230F766E" width="18" height="18" alt="" /> | **Privacy by design** | On-device or in your VPC — identity data never leaves your perimeter for Identixia SaaS. |
-| <img src="https://api.iconify.design/lucide/globe.svg?color=%230F766E" width="18" height="18" alt="" /> | **KYC / eKYC ready** | Passport MRZ OCR, ID barcodes, and optional authenticity in one stack. |
-| <img src="https://api.iconify.design/lucide/layers.svg?color=%230F766E" width="18" height="18" alt="" /> | **One product family** | Android → iOS → Flutter / RN / Ionic → Windows → Docker without changing vendors. |
-| <img src="https://api.iconify.design/lucide/key-round.svg?color=%230F766E" width="18" height="18" alt="" /> | **Flexible license** | Recognition, document liveness, or both — match what you ship. |
-| <img src="https://api.iconify.design/lucide/rocket.svg?color=%230F766E" width="18" height="18" alt="" /> | **Demo to production** | Sample apps and an HTTP API on port 14102. |
 
 ---
 
-## <img src="https://api.iconify.design/lucide/list-checks.svg?color=%230F766E" width="24" height="24" alt="" /> What you get
+## What you get
 
 | Capability | What it does |
 | --- | --- |
-| <img src="https://api.iconify.design/lucide/id-card.svg?color=%230F766E" width="16" height="16" alt="" /> Passport / ID / DL | On-device ID document recognition for passports, national IDs, and driver licenses |
-| <img src="https://api.iconify.design/lucide/scan-text.svg?color=%230F766E" width="16" height="16" alt="" /> Passport MRZ OCR | Machine-readable zone OCR for ICAO travel documents |
-| <img src="https://api.iconify.design/lucide/scan-barcode.svg?color=%230F766E" width="16" height="16" alt="" /> ID card barcode | PDF417 / barcode extraction on supported cards |
-| <img src="https://api.iconify.design/lucide/camera.svg?color=%230F766E" width="16" height="16" alt="" /> Live capture | Camera locate + Capture; gallery front / optional back |
-| <img src="https://api.iconify.design/lucide/shield.svg?color=%230F766E" width="16" height="16" alt="" /> Document liveness | Optional authenticity / PAD (screen, print, photo-swap) when licensed |
-| <img src="https://api.iconify.design/lucide/scroll-text.svg?color=%230F766E" width="16" height="16" alt="" /> Result UI | One scroll: identity → fields → checks → images → Raw JSON |
-| <img src="https://api.iconify.design/lucide/house.svg?color=%230F766E" width="16" height="16" alt="" /> Home UI | Wide Camera tile + Gallery / About |
 
 | Surface | Ports / notes |
 | --- | --- |
@@ -143,7 +132,7 @@ curl -s -X POST http://127.0.0.1:14102/api/documentProcess -H "Content-Type: app
 
 ---
 
-## <img src="https://api.iconify.design/lucide/map.svg?color=%230F766E" width="24" height="24" alt="" /> How to evaluate
+## How to evaluate
 
 1. Pick a **platform repo** from the table below (public GitHub name).
 2. Download that platform’s **runtime zip** (Drive link is `PENDING` in each App README until published).
@@ -154,40 +143,27 @@ Demo mobile licenses (where bundled) target `com.identixia.documentreader` / `co
 
 ---
 
-## <img src="https://api.iconify.design/lucide/package.svg?color=%230F766E" width="24" height="24" alt="" /> Runtime zips
+## Runtime zips
 
 Each platform App README names a **Google Drive single zip** (`PENDING` until links are published). Unzip so binaries sit at the documented path — not nested in an extra folder. One zip per runtime (Android AAR, iOS framework, Windows/Linux `lib/cpu`, etc.).
 
 ---
 
-## <img src="https://api.iconify.design/lucide/layers.svg?color=%230F766E" width="24" height="24" alt="" /> Choose platform
+## Choose platform
 
 | | Platform | Repo |
 | --- | --- | --- |
-| <img src="https://cdn.simpleicons.org/android/3DDC84" width="18" height="18" alt="" /> | Android | [ID-Document-Recognition-Liveness-Detection-Android](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android) |
-| <img src="https://cdn.simpleicons.org/apple/000000" width="18" height="18" alt="" /> | iOS | [ID-Document-Recognition-Liveness-Detection-iOS](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS) |
-| <img src="https://cdn.simpleicons.org/flutter/02569B" width="18" height="18" alt="" /> | Flutter | [ID-Document-Recognition-Liveness-Detection-Flutter](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter) |
-| <img src="https://cdn.simpleicons.org/react/61DAFB" width="18" height="18" alt="" /> | React Native | [ID-Document-Recognition-Liveness-Detection-React-Native](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native) |
-| <img src="https://cdn.simpleicons.org/ionic/3880FF" width="18" height="18" alt="" /> | Ionic Capacitor | [ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) |
-| <img src="https://cdn.simpleicons.org/apachecordova/E8E8E8" width="18" height="18" alt="" /> | Ionic Cordova | [ID-Document-Recognition-Liveness-Detection-Ionic-Cordova](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) |
-| <img src="https://cdn.simpleicons.org/windows/0078D4" width="18" height="18" alt="" /> | Windows | [ID-Document-Recognition-Liveness-Detection-Windows](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows) |
-| <img src="https://cdn.simpleicons.org/docker/2496ED" width="18" height="18" alt="" /> | Linux / Docker | [ID-Document-Recognition-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) |
 
 Document authenticity API only: [ID-Document-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker)
 
 ---
 
-## <img src="https://api.iconify.design/lucide/boxes.svg?color=%230F766E" width="24" height="24" alt="" /> Also from Identixia
+## Also from Identixia
 
 - [Face Recognition SDK](https://github.com/identixia-IDV/Face-Recognition-SDK) — on-device and on-premise face recognition, with passive liveness when the license includes it
 - [Face Liveness Detection](https://github.com/identixia-IDV/Face-Liveness-Detection-SDK)
 
 ---
-
-
-## Support
-
-{% include "../.gitbook/includes/contact.md" %}
 
 ### Platforms in this section
 

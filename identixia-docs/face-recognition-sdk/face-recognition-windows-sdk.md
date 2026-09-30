@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `FaceRecognition-Windows` |
 | **Platform** | Windows |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -166,6 +166,16 @@ curl -s -X POST http://127.0.0.1:14103/api/face/score \
 | Windows (recognition only) | [Face Recognition Windows](face-recognition-windows-sdk.md) |
 | Linux (recognition only) | [Face Recognition Linux](face-recognition-linux-sdk.md) |
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/face-desktop-detect.png" alt="Desktop detect" width="360"><figcaption>Desktop detect</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-desktop-match.png" alt="Desktop 1:1 match" width="360"><figcaption>Desktop 1:1 match</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-desktop-liveness.png" alt="Desktop liveness" width="360"><figcaption>Desktop liveness</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-desktop-identify.png" alt="Desktop identify" width="360"><figcaption>Desktop identify</figcaption></figure>
+
 
 ## Support
 
@@ -173,7 +183,7 @@ curl -s -X POST http://127.0.0.1:14103/api/face/score \
 
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
 ## Identixia Face Recognition — Windows
 

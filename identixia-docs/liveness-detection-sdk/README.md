@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `Face-Liveness-Detection-SDK` |
 | **Platform** | Hub |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -37,9 +37,20 @@ See the product README for toolchain details.
 
 Open the platform page that matches your license and stack. Each page includes quick start, activation, full API reference, and troubleshooting.
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/liveness-mobile.png" alt="Mobile liveness result" width="220"><figcaption>Mobile liveness result</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/liveness-desktop.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
+
+
+## Support
+
+{% include "../.gitbook/includes/contact.md" %}
+
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
 ## Identixia Face Liveness Detection SDK — Fully On-Premise
 
@@ -55,7 +66,7 @@ It is passive liveness: no smile or turn-head challenge, no extra hardware, and 
 
 All processing stays on the phone or in your VPC. **NO** biometric data leaves the device.
 
-Docs: [https://doc.identixia.com](https://doc.identixia.com)
+Docs: [https://docs.identixia.com](https://docs.identixia.com)
 
 | You need | This SDK returns |
 | -------- | ---------------- |
@@ -103,18 +114,6 @@ Score **≥ 0.5** → `Real` / `pass: true`. Full guide: [FaceLivenessDetection-
 
 ---
 
-## Screenshots
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-liveness/mobile/liveness.png" alt="Liveness result" width="220"/>
-</p>
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixiaAI/identixia-assets/main/screenshots/face-liveness/desktop/demo-ui.png" alt="Identixia Face Liveness Detection SDK Linux Docker Gradio demo — Real / Spoof score" width="720"/>
-</p>
-
----
-
 ## On YouTube
 
 <a href="https://www.youtube.com/watch?v=cjvEBzFpHGk" target="_blank">
@@ -148,11 +147,6 @@ Building **enroll + identify + liveness** together? Start from Face Recognition 
 | Linux / Docker | [FaceRecognition-LivenessDetection-Docker](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker) |
 
 ---
-
-
-## Support
-
-{% include "../.gitbook/includes/contact.md" %}
 
 ### Platforms in this section
 

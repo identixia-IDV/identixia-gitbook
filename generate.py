@@ -22,7 +22,7 @@ ABOUT_PATH = ROOT / "catalog" / "github_about.json"
 NAMES_PATH = ROOT / "catalog" / "repository_names.json"
 REPOS_DIR = ROOT / "repositories"
 OUT = Path(__file__).resolve().parent / "identixia-docs"
-DOCS_BASE = "https://doc.identixia.com"
+DOCS_BASE = "https://docs.identixia.com"
 
 TITLES: dict[str, str] = {
     "face-recognition-sdk": "Face Recognition SDK",
@@ -93,28 +93,28 @@ SECTION_META = {
             "On-premise face recognition for phones and servers. Enroll, 1:N identify, "
             "templates, quality, and 1:1 match. Passive liveness when the license includes it."
         ),
-        "cover": ".gitbook/assets/Lucid_Origin_A_futuristic_face_recognition_interface_for_Facep_1.jpg",
+        "cover": ".gitbook/assets/face-android-home.png",
     },
     "liveness-detection-sdk": {
         "blurb": (
             "Passive face presentation-attack detection on device or on your server. "
             "Scores a camera frame or still image when the license allows it."
         ),
-        "cover": ".gitbook/assets/Lucid_Origin_Splitscreen_concept_showing_real_face_vs_spoof_at_0.jpg",
+        "cover": ".gitbook/assets/liveness-mobile.png",
     },
     "id-document-recognition-sdk": {
         "blurb": (
             "Passport, national ID, and driver license OCR, MRZ, and barcode extraction. "
             "Document liveness runs when the license includes it."
         ),
-        "cover": ".gitbook/assets/Lucid_Origin_A_modern_UI_showing_an_ID_card_being_scanned_boun_0.jpg",
+        "cover": ".gitbook/assets/document-desktop-result.png",
     },
     "id-document-liveness-sdk": {
         "blurb": (
             "On-premise ID document liveness API for Linux and Docker. Separate from OCR. "
             "Document anti-spoofing when the license includes it."
         ),
-        "cover": ".gitbook/assets/Lucid_Origin_A_modern_UI_showing_an_ID_card_being_scanned_boun_0.jpg",
+        "cover": ".gitbook/assets/document-docker-result.png",
     },
 }
 
@@ -152,19 +152,36 @@ def title_for(slug: str) -> str:
 
 
 def rewrite_links(text: str, owner: str) -> str:
+    # Normalize legacy doc. host to docs.
+    text = text.replace("https://doc.identixia.com", DOCS_BASE)
     text = text.replace("https://docs.identixia.com", DOCS_BASE)
     text = text.replace("https://github.com/identixiaAI/", f"https://github.com/{owner}/")
     return text
+
+
+def _plain_heading(line: str) -> str:
+    """Strip HTML/icon img tags from markdown headings for GitBook."""
+    m = re.match(r"^(#{1,6})\s+(.*)$", line)
+    if not m:
+        return line
+    level, rest = m.group(1), m.group(2)
+    # Drop leading <img ... /> icons
+    rest = re.sub(r"<img\b[^>]*>\s*", "", rest, flags=re.I)
+    rest = re.sub(r"<[^>]+>", "", rest).strip()
+    rest = re.sub(r"\s+", " ", rest)
+    return f"{level} {rest}" if rest else line
 
 
 def strip_readme_noise(body: str) -> str:
     lines = body.splitlines()
     out: list[str] = []
     started = False
+    skip_screenshots = False
     for line in lines:
         if not started:
             if re.match(r"^#+\s+", line):
                 started = True
+                line = _plain_heading(line)
                 if line.startswith("# "):
                     out.append("## " + line[2:])
                 else:
@@ -173,13 +190,45 @@ def strip_readme_noise(body: str) -> str:
         if line.strip() in {"</div>", '<div align="center">', "<div align='center'>"}:
             continue
         # Drop trailing Contact section — Support is added by the generator.
-        if re.search(r"Contact\s*$", line) and ("mail.svg" in line or line.strip().startswith("##")):
+        if re.search(r"Contact\s*$", line) and (
+            "mail.svg" in line or line.strip().startswith("##")
+        ):
             break
+        # Drop README Screenshots blocks — generator inserts curated local assets.
+        if re.match(r"^##+\s+.*Screenshots", line, flags=re.I):
+            skip_screenshots = True
+            continue
+        if skip_screenshots:
+            if re.match(r"^##+\s+", line):
+                skip_screenshots = False
+            else:
+                continue
         if "contact@identixia.com" in line and "img.shields.io" in line:
             continue
+        # Drop remote badge / icon rows that often break in GitBook.
+        if "cdn.simpleicons.org" in line or "api.iconify.design" in line:
+            if re.match(r"^#+\s+", line):
+                out.append(_plain_heading(line))
+            continue
+        if "img.shields.io" in line and (
+            line.strip().startswith("<p>")
+            or line.strip().startswith("<img")
+            or "badge/-" in line
+        ):
+            continue
+        # Normalize legacy assets org + prefer docs host already handled upstream.
+        line = line.replace(
+            "raw.githubusercontent.com/identixiaAI/identixia-assets",
+            "raw.githubusercontent.com/identixia-IDV/identixia-assets",
+        )
+        if re.match(r"^#+\s+", line):
+            line = _plain_heading(line)
         out.append(line)
     text = "\n".join(out).strip() + "\n"
-    return re.sub(r"\n{3,}", "\n\n", text)
+    # Drop empty HTML wrappers left behind
+    text = re.sub(r"<p>\s*</p>", "", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text
 
 
 def frontmatter(description: str) -> str:
@@ -253,6 +302,8 @@ def write_welcome(structure: dict[str, list[tuple[str, str]]]) -> None:
             f'<td><a href="{sec}/">{sec}</a></td></tr>'
         )
     body = f"""
+<p align="center"><img src=".gitbook/assets/brand-logo.png" alt="Identixia" width="280"></p>
+
 ## Introduction
 
 Official **Identixia** documentation for on-premise biometric SDKs. Use these pages to integrate every customer-facing function: activation, capture, recognition, matching, liveness, and result handling.

@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `ID-Document-Recognition-Liveness-Detection-Flutter` |
 | **Platform** | Flutter |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -159,6 +159,12 @@ See [Document result JSON](document-result-json.md) and [Document security check
 | Camera black / crash | Use a **physical** device; grant camera permission |
 | Docker license fails after bare-metal license | Machine codes differ — re-license the container |
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/document-desktop-result.png" alt="Document recognition result UI" width="520"><figcaption>Document recognition result UI</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/document-docker-result.png" alt="Docker document result" width="520"><figcaption>Docker document result</figcaption></figure>
+
 
 ## Support
 
@@ -166,19 +172,17 @@ See [Document result JSON](document-result-json.md) and [Document security check
 
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
-## <img src="https://cdn.simpleicons.org/flutter/02569B" width="32" height="32" alt="" /> Identixia ID Document Recognition and Liveness Detection — Flutter
+## Identixia ID Document Recognition and Liveness Detection — Flutter
 
 **On-device ID document recognition** plugin for Android and iOS: passport MRZ OCR, ID card barcode, live capture, and optional document liveness / authenticity for KYC and eKYC. Processing stays on the device — **no** document images go to Identixia cloud.
 
 Package: `document_reader_sdk`.
 
-<p><img src="https://img.shields.io/badge/On-device-0F766E?style=flat-square" alt="On-device" /> <img src="https://img.shields.io/badge/Android%20%2B%20iOS-0F766E?style=flat-square" alt="Android%20%2B%20iOS" /> <img src="https://img.shields.io/badge/MRZ%20OCR-0F766E?style=flat-square" alt="MRZ%20OCR" /> <img src="https://img.shields.io/badge/Document%20liveness-0F766E?style=flat-square" alt="Document%20liveness" /> <img src="https://img.shields.io/badge/Plugin-5A6573?style=flat-square" alt="Plugin" /></p>
-
 ---
 
-## <img src="https://api.iconify.design/lucide/clipboard-list.svg?color=%230F766E" width="24" height="24" alt="" /> Basics
+## Basics
 
 Read this once before cloning. Plugin demos ship a **bundled license** for the sample Android / iOS ids. Production apps need a new key. [Initial commands](#-initial-commands) lists clone → place runtime → run → activate options.
 
@@ -195,11 +199,9 @@ Read this once before cloning. Plugin demos ship a **bundled license** for the s
 
 ---
 
-## <img src="https://api.iconify.design/lucide/terminal.svg?color=%230F766E" width="24" height="24" alt="" /> Initial commands
+## Initial commands
 
 Must-know path for the sample / example app.
-
-### <img src="https://img.shields.io/badge/-1-0F766E?style=for-the-badge" alt="" /> Clone and run
 
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter.git
@@ -209,31 +211,20 @@ cd example/ios && pod install && cd ../..
 cd example && flutter run
 ```
 
-### <img src="https://img.shields.io/badge/-2-0F766E?style=for-the-badge" alt="" /> Activate / license
-
 Please [contact us](#-contact) to get a license for your own app. The sample already includes a demo license for its application id.
-
-### <img src="https://img.shields.io/badge/-3-0F766E?style=for-the-badge" alt="" /> First capture
 
 Wait until Home = **Ready**, then Camera / Gallery. Confirm Result / About shows a licensed state.
 
 ---
 
-## <img src="https://api.iconify.design/lucide/list-checks.svg?color=%230F766E" width="24" height="24" alt="" /> What you get
+## What you get
 
 | Capability | What it does |
 | --- | --- |
-| <img src="https://api.iconify.design/lucide/id-card.svg?color=%230F766E" width="16" height="16" alt="" /> Passport / ID / DL | On-device ID document recognition for passports, national IDs, and driver licenses |
-| <img src="https://api.iconify.design/lucide/scan-text.svg?color=%230F766E" width="16" height="16" alt="" /> Passport MRZ OCR | Machine-readable zone OCR for ICAO travel documents |
-| <img src="https://api.iconify.design/lucide/scan-barcode.svg?color=%230F766E" width="16" height="16" alt="" /> ID card barcode | PDF417 / barcode extraction on supported cards |
-| <img src="https://api.iconify.design/lucide/camera.svg?color=%230F766E" width="16" height="16" alt="" /> Live capture | Camera locate + Capture; gallery front / optional back |
-| <img src="https://api.iconify.design/lucide/shield.svg?color=%230F766E" width="16" height="16" alt="" /> Document liveness | Optional authenticity / PAD (screen, print, photo-swap) when licensed |
-| <img src="https://api.iconify.design/lucide/scroll-text.svg?color=%230F766E" width="16" height="16" alt="" /> Result UI | One scroll: identity → fields → checks → images → Raw JSON |
-| <img src="https://api.iconify.design/lucide/house.svg?color=%230F766E" width="16" height="16" alt="" /> Home UI | Wide Camera tile + Gallery / About |
 
 ---
 
-## <img src="https://api.iconify.design/lucide/pc-case.svg?color=%230F766E" width="24" height="24" alt="" /> Requirements
+## Requirements
 
 | | |
 | --- | --- |
@@ -244,14 +235,12 @@ Wait until Home = **Ready**, then Camera / Gallery. Confirm Result / About shows
 
 ---
 
-## <img src="https://api.iconify.design/lucide/package.svg?color=%230F766E" width="24" height="24" alt="" /> Install
+## Install
 
 The example builds with native runtimes already in the clone when present. Missing files are fetched from the `v1.0.0` GitHub Releases.
 
 | | Path after unzip |
 | --- | --- |
-| <img src="https://cdn.simpleicons.org/android/3DDC84" width="14" height="14" alt="" /> Android | `example/android/libdocsdk/documentreadersdk.aar` |
-| <img src="https://cdn.simpleicons.org/apple/000000" width="14" height="14" alt="" /> iOS | `ios/Frameworks/docsdk.framework` |
 
 Customer apps depend on `document_reader_sdk` from this repo at tag `v1.0.0` (Flutter: git; React Native / Ionic: npm / github). Do **not** use a monorepo `path:` dependency in shipping apps.
 
@@ -259,7 +248,7 @@ Prefer package kits (`DocumentCapture`, `ResultParser`) for the same camera / Re
 
 ---
 
-## <img src="https://api.iconify.design/lucide/rocket.svg?color=%230F766E" width="24" height="24" alt="" /> Run
+## Run
 
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter.git
@@ -274,7 +263,7 @@ Home → Ready → Camera / Gallery. Result is one scroll (identity, fields, che
 
 ---
 
-## <img src="https://api.iconify.design/lucide/key-round.svg?color=%230F766E" width="24" height="24" alt="" /> License
+## License
 
 Demo ids: Android `com.identixia.documentreader` · iOS `com.identixia.documentreader.app`. Bundled demo license until **12 Aug 2027** for those ids.
 
@@ -288,33 +277,17 @@ Capabilities: document recognition and/or document liveness. Please [contact us]
 
 ---
 
-## <img src="https://api.iconify.design/lucide/puzzle.svg?color=%230F766E" width="24" height="24" alt="" /> Use in your app
+## Use in your app
 
-Depend on `document_reader_sdk` via git (`ref: v1.0.0`), keep Android `useLegacyPackaging = true`, then use `DocumentCapture` / `ResultParser` (or activate → init → recognize). See [Flutter guide](https://doc.identixia.com).
+Depend on `document_reader_sdk` via git (`ref: v1.0.0`), keep Android `useLegacyPackaging = true`, then use `DocumentCapture` / `ResultParser` (or activate → init → recognize). See [Flutter guide](https://docs.identixia.com).
 
 Depend on `document_reader_sdk` via **git** `ref: v1.0.0` (not a monorepo `path:`). Ship or download the AAR + framework, then activate → init → recognize.
 
 ---
 
-## <img src="https://api.iconify.design/lucide/images.svg?color=%230F766E" width="24" height="24" alt="" /> Screenshots
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-result.png" width="720" alt="ID document recognition Gradio demo — front and back capture, fields, and cropped images" />
-</p>
-
----
-
-## <img src="https://api.iconify.design/lucide/layers.svg?color=%230F766E" width="24" height="24" alt="" /> Platforms
+## Platforms
 
 | | Platform | Repo |
 | --- | --- | --- |
-| <img src="https://cdn.simpleicons.org/android/3DDC84" width="18" height="18" alt="" /> | Android | [ID-Document-Recognition-Liveness-Detection-Android](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android) |
-| <img src="https://cdn.simpleicons.org/apple/000000" width="18" height="18" alt="" /> | iOS | [ID-Document-Recognition-Liveness-Detection-iOS](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS) |
-| <img src="https://cdn.simpleicons.org/flutter/02569B" width="18" height="18" alt="" /> | Flutter | [ID-Document-Recognition-Liveness-Detection-Flutter](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter) |
-| <img src="https://cdn.simpleicons.org/react/61DAFB" width="18" height="18" alt="" /> | React Native | [ID-Document-Recognition-Liveness-Detection-React-Native](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native) |
-| <img src="https://cdn.simpleicons.org/ionic/3880FF" width="18" height="18" alt="" /> | Ionic Capacitor | [ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) |
-| <img src="https://cdn.simpleicons.org/apachecordova/E8E8E8" width="18" height="18" alt="" /> | Ionic Cordova | [ID-Document-Recognition-Liveness-Detection-Ionic-Cordova](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) |
-| <img src="https://cdn.simpleicons.org/windows/0078D4" width="18" height="18" alt="" /> | Windows | [ID-Document-Recognition-Liveness-Detection-Windows](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows) |
-| <img src="https://cdn.simpleicons.org/docker/2496ED" width="18" height="18" alt="" /> | Linux / Docker | [ID-Document-Recognition-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) |
 
 ---

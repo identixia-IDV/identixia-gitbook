@@ -78,7 +78,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `{ctx.name}` |
 | **Platform** | {ctx.platform} |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 """
 
 
@@ -649,13 +649,100 @@ def troubleshooting(ctx: ProductCtx) -> str:
     return common
 
 
+def _asset(name: str, alt: str, width: int = 180) -> str:
+    """GitBook-local asset (copied into identixia-docs/.gitbook/assets/)."""
+    return (
+        f'<figure><img src="../.gitbook/assets/{name}" alt="{alt}" width="{width}">'
+        f"<figcaption>{alt}</figcaption></figure>"
+    )
+
+
+def _asset_root(name: str, alt: str, width: int = 180) -> str:
+    return (
+        f'<figure><img src=".gitbook/assets/{name}" alt="{alt}" width="{width}">'
+        f"<figcaption>{alt}</figcaption></figure>"
+    )
+
+
+def screenshots_section(ctx: ProductCtx, *, nested: bool = True) -> str:
+    """Modern product screenshots shipped in .gitbook/assets (not remote hotlinks)."""
+    a = _asset if nested else _asset_root
+
+    # Face liveness product / hub
+    if ctx.family == "face_liveness" or ctx.name == "Face-Liveness-Detection-SDK":
+        imgs = [
+            a("liveness-mobile.png", "Mobile liveness result", 220),
+            a("liveness-desktop.png", "Desktop liveness demo", 480),
+        ]
+        return "## Screenshots\n\n" + "\n\n".join(imgs) + "\n"
+
+    # Document products / hub
+    if ctx.family in ("document", "document_liveness") or "Document" in ctx.name:
+        imgs = [
+            a("document-desktop-result.png", "Document recognition result UI", 520),
+            a("document-docker-result.png", "Docker document result", 520),
+        ]
+        return "## Screenshots\n\n" + "\n\n".join(imgs) + "\n"
+
+    # Face recognition (combined, recognition-only, hub)
+    if ctx.family in ("face_combined", "face_recog") or ctx.name == "Face-Recognition-SDK":
+        if ctx.platform == "iOS":
+            imgs = [
+                a("face-ios-home.png", "iOS home", 160),
+                a("face-ios-capture.png", "iOS capture", 160),
+                a("face-ios-identify.jpg", "iOS identify", 160),
+                a("face-ios-attribute.png", "iOS attributes", 160),
+                a("face-ios-liveness.png", "iOS liveness", 160),
+                a("face-ios-about.png", "iOS about", 160),
+            ]
+        elif ctx.platform == "Flutter":
+            imgs = [
+                a("face-flutter-camera.png", "Flutter camera", 200),
+                a("face-flutter-result.png", "Flutter result", 200),
+                a("face-android-home.png", "Android home (same product family)", 160),
+                a("face-android-identify.png", "Android identify", 160),
+            ]
+        elif ctx.platform in ("Windows", "Linux"):
+            imgs = [
+                a("face-desktop-detect.png", "Desktop detect", 360),
+                a("face-desktop-match.png", "Desktop 1:1 match", 360),
+                a("face-desktop-liveness.png", "Desktop liveness", 360),
+                a("face-desktop-identify.png", "Desktop identify", 360),
+            ]
+        elif ctx.platform == "Hub":
+            imgs = [
+                a("face-android-home.png", "Android home", 160),
+                a("face-android-identify.png", "Identify", 160),
+                a("face-android-match.png", "1:1 match", 160),
+                a("face-desktop-detect.png", "Desktop detect", 280),
+            ]
+        else:
+            imgs = [
+                a("face-android-home.png", "Home", 150),
+                a("face-android-capture.png", "Capture", 150),
+                a("face-android-enroll.png", "Enroll", 150),
+                a("face-android-identify.png", "Identify", 150),
+                a("face-android-detect.png", "Detect", 150),
+                a("face-android-attribute.png", "Attributes", 150),
+                a("face-android-quality.png", "Quality", 150),
+                a("face-android-landmarks.png", "Landmarks", 150),
+                a("face-android-match.png", "Match", 150),
+                a("face-android-liveness.png", "Liveness", 150),
+                a("face-android-settings.png", "Settings", 150),
+                a("face-android-about.png", "About", 150),
+            ]
+        return "## Screenshots\n\n" + "\n\n".join(imgs) + "\n"
+
+    return ""
+
+
 def readme_appendix(readme_body: str) -> str:
     if not readme_body.strip():
         return ""
     return (
         "## Product README (reference)\n\n"
-        "The following is adapted from the shipping repository README for screenshots, "
-        "exact commands, and platform-specific notes.\n\n"
+        "Adapted from the shipping repository README for exact commands and "
+        "platform-specific notes. Screenshots above use the current Identixia asset pack.\n\n"
         + readme_body.strip()
         + "\n"
     )
@@ -694,9 +781,10 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
         )
         if "Face-Recognition" in ctx.name or ctx.name == "Face-Recognition-SDK":
             parts.append(cross_platform_face())
-        parts.append(readme_appendix(readme_body))
+        parts.append(screenshots_section(ctx, nested=True))
         parts.append(CONTACT_NESTED)
-        return "\n".join(parts)
+        parts.append(readme_appendix(readme_body))
+        return "\n".join(p for p in parts if p)
 
     if ctx.platform in ("Windows", "Linux"):
         parts.append(quick_start_server(ctx))
@@ -730,6 +818,7 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
     parts.append(troubleshooting(ctx))
     if ctx.family in ("face_combined", "face_recog"):
         parts.append(cross_platform_face())
+    parts.append(screenshots_section(ctx, nested=True))
     parts.append(CONTACT_NESTED)
     parts.append(readme_appendix(readme_body))
     return "\n".join(p for p in parts if p)

@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `FaceRecognition-LivenessDetection-Docker` |
 | **Platform** | Linux |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -181,6 +181,16 @@ curl -s -X POST http://127.0.0.1:14103/api/face/score \
 | Windows (recognition only) | [Face Recognition Windows](face-recognition-windows-sdk.md) |
 | Linux (recognition only) | [Face Recognition Linux](face-recognition-linux-sdk.md) |
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/face-desktop-detect.png" alt="Desktop detect" width="360"><figcaption>Desktop detect</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-desktop-match.png" alt="Desktop 1:1 match" width="360"><figcaption>Desktop 1:1 match</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-desktop-liveness.png" alt="Desktop liveness" width="360"><figcaption>Desktop liveness</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/face-desktop-identify.png" alt="Desktop identify" width="360"><figcaption>Desktop identify</figcaption></figure>
+
 
 ## Support
 
@@ -188,17 +198,15 @@ curl -s -X POST http://127.0.0.1:14103/api/face/score \
 
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
-## <img src="https://cdn.simpleicons.org/docker/2496ED" width="32" height="32" alt="" /> Identixia Face Recognition SDK — Linux / Docker
+## Identixia Face Recognition SDK — Linux / Docker
 
 **On-premise face recognition SDK** with **passive face liveness** as a Linux / Docker HTTP API: detect, quality, face template matching, 1:1 compare, and PAD. Biometrics stay in your cluster — ideal for KYC backends and private access control. Image: [`identixia/face-recognition-liveness-sdk`](https://hub.docker.com/r/identixia/face-recognition-liveness-sdk).
 
-<p><img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square" alt="Docker" /> <img src="https://img.shields.io/badge/On-premise-0F766E?style=flat-square" alt="On-premise" /> <img src="https://img.shields.io/badge/Passive%20liveness-0F766E?style=flat-square" alt="Passive%20liveness" /> <img src="https://img.shields.io/badge/1%3A1%20match-0F766E?style=flat-square" alt="1%3A1%20match" /></p>
-
 ---
 
-## <img src="https://api.iconify.design/lucide/clipboard-list.svg?color=%230F766E" width="24" height="24" alt="" /> Basics
+## Basics
 
 Start the server, copy the machine code, and contact us with that code to get a license. Then replace the key in `license.txt` and activate.
 
@@ -216,9 +224,7 @@ Start the server, copy the machine code, and contact us with that code to get a 
 
 ---
 
-## <img src="https://api.iconify.design/lucide/terminal.svg?color=%230F766E" width="24" height="24" alt="" /> Initial commands
-
-### <img src="https://img.shields.io/badge/-1-0F766E?style=for-the-badge" alt="" /> Run the server
+## Initial commands
 
 ```bash
 docker pull identixia/face-recognition-liveness-sdk:latest
@@ -226,8 +232,6 @@ docker run -d --name identixia-api -p 14103:14103 \
   -v /etc/machine-id:/etc/machine-id:ro \
   identixia/face-recognition-liveness-sdk:latest
 ```
-
-### <img src="https://img.shields.io/badge/-2-0F766E?style=for-the-badge" alt="" /> Get a license
 
 ```bash
 curl -s http://127.0.0.1:14103/api/machinecode
@@ -237,21 +241,15 @@ The response is JSON. Your machine code is `data.machinecode`.
 
 Please [contact us](#-contact) with the machine code to get a license.
 
-### <img src="https://img.shields.io/badge/-3-0F766E?style=for-the-badge" alt="" /> Activate
-
 This repository includes `license.txt`. Replace the key in that file with the license we send you, then run this command from the repository folder:
 
 ```bash
 curl -s -X POST http://127.0.0.1:14103/api/activate -H "Content-Type: text/plain" --data-binary @license.txt
 ```
 
-### <img src="https://img.shields.io/badge/-4-0F766E?style=for-the-badge" alt="" /> Check that it is running
-
 ```bash
 curl -s http://127.0.0.1:14103/api/health
 ```
-
-### <img src="https://img.shields.io/badge/-5-0F766E?style=for-the-badge" alt="" /> Detect / match / liveness
 
 Replace `BASE64_JPEG` with a base64-encoded JPEG.
 
@@ -273,8 +271,6 @@ Check liveness:
 curl -s -X POST http://127.0.0.1:14103/api/face/liveness -H "Content-Type: application/json" -d "{\"image\":\"BASE64_JPEG\"}"
 ```
 
-### <img src="https://img.shields.io/badge/-6-0F766E?style=for-the-badge" alt="" /> Open the Gradio demo
-
 Gradio runs on your computer, not inside the container. Clone this repository, keep the API running, then open a second terminal in the repository folder.
 
 ```bash
@@ -286,7 +282,7 @@ Open http://127.0.0.1:14203
 
 ---
 
-## <img src="https://api.iconify.design/lucide/list-checks.svg?color=%230F766E" width="24" height="24" alt="" /> What you get
+## What you get
 
 | Capability | What it does |
 | --- | --- |
@@ -297,7 +293,7 @@ Open http://127.0.0.1:14203
 
 ---
 
-## <img src="https://api.iconify.design/lucide/pc-case.svg?color=%230F766E" width="24" height="24" alt="" /> Requirements
+## Requirements
 
 | | |
 | --- | --- |
@@ -307,7 +303,7 @@ Open http://127.0.0.1:14203
 
 ---
 
-## <img src="https://api.iconify.design/lucide/app-window.svg?color=%230F766E" width="24" height="24" alt="" /> Gradio demo
+## Gradio demo
 
 Gradio runs on your computer, not inside the container. Clone this repository, keep the API running, then open a second terminal in the repository folder.
 
@@ -320,43 +316,15 @@ Open http://127.0.0.1:14203
 
 ---
 
-## <img src="https://api.iconify.design/lucide/puzzle.svg?color=%230F766E" width="24" height="24" alt="" /> Use in your app
+## Use in your app
 
-Point your backend at `http://<host>:14103` for detect, match, and liveness. See [docs](https://doc.identixia.com).
-
----
-
-## <img src="https://api.iconify.design/lucide/images.svg?color=%230F766E" width="24" height="24" alt="" /> Screenshots
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-detect.png" width="420" alt="Face detection Gradio demo" />
-<img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-attribute.png" width="420" alt="Face attribute Gradio demo" />
-</p>
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-quality.png" width="420" alt="Face image quality Gradio demo" />
-<img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-landmarks.png" width="420" alt="Face landmarks Gradio demo" />
-</p>
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-match.png" width="420" alt="Face template matching 1:1 demo" />
-<img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-liveness.png" width="420" alt="Face liveness and deepfake Gradio demo" />
-</p>
-<p align="center">
-<img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-identify.png" width="420" alt="1:N identity Gradio demo" />
-</p>
+Point your backend at `http://<host>:14103` for detect, match, and liveness. See [docs](https://docs.identixia.com).
 
 ---
 
-## <img src="https://api.iconify.design/lucide/layers.svg?color=%230F766E" width="24" height="24" alt="" /> Platforms
+## Platforms
 
 | | Platform | Repo |
 | --- | --- | --- |
-| <img src="https://cdn.simpleicons.org/android/3DDC84" width="18" height="18" alt="" /> | Android | [FaceRecognition-LivenessDetection-Android](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android) |
-| <img src="https://cdn.simpleicons.org/apple/000000" width="18" height="18" alt="" /> | iOS | [FaceRecognition-LivenessDetection-iOS](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS) |
-| <img src="https://cdn.simpleicons.org/flutter/02569B" width="18" height="18" alt="" /> | Flutter | [FaceRecognition-LivenessDetection-Flutter](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Flutter) |
-| <img src="https://cdn.simpleicons.org/react/61DAFB" width="18" height="18" alt="" /> | React Native | [FaceRecognition-LivenessDetection-React-Native](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native) |
-| <img src="https://cdn.simpleicons.org/ionic/3880FF" width="18" height="18" alt="" /> | Ionic Capacitor | [FaceRecognition-LivenessDetection-Ionic-Capacitor](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Capacitor) |
-| <img src="https://cdn.simpleicons.org/apachecordova/E8E8E8" width="18" height="18" alt="" /> | Ionic Cordova | [FaceRecognition-LivenessDetection-Ionic-Cordova](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) |
-| <img src="https://cdn.simpleicons.org/windows/0078D4" width="18" height="18" alt="" /> | Windows | [FaceRecognition-LivenessDetection-Windows](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows) |
-| <img src="https://cdn.simpleicons.org/docker/2496ED" width="18" height="18" alt="" /> | Linux / Docker | [FaceRecognition-LivenessDetection-Docker](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker) |
 
 ---

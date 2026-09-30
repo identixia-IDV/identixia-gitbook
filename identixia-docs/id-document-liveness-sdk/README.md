@@ -16,7 +16,7 @@ Everything runs **on-premise** (on the phone or on your server). Identixia does 
 | --- | --- |
 | **Product repository** | `ID-Document-Liveness-Detection-Docker` |
 | **Platform** | Linux |
-| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
 
 
 ### Repository
@@ -123,6 +123,12 @@ This product is **PAD / authenticity**, not OCR. Pair with ID Document Recogniti
 | Multipart vs JSON | Field names must match (`image`, `image1`, `images`) |
 | Envelope vs process JSON | Only control routes use `{success,code,…}`; process routes return engine JSON |
 
+## Screenshots
+
+<figure><img src="../.gitbook/assets/document-desktop-result.png" alt="Document recognition result UI" width="520"><figcaption>Document recognition result UI</figcaption></figure>
+
+<figure><img src="../.gitbook/assets/document-docker-result.png" alt="Docker document result" width="520"><figcaption>Docker document result</figcaption></figure>
+
 
 ## Support
 
@@ -130,19 +136,17 @@ This product is **PAD / authenticity**, not OCR. Pair with ID Document Recogniti
 
 ## Product README (reference)
 
-The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
+Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
 
-## <img src="https://cdn.simpleicons.org/docker/2496ED" width="32" height="32" alt="" /> Identixia ID Document Liveness — Linux / Docker
+## Identixia ID Document Liveness — Linux / Docker
 
 **On-premise document liveness / authenticity** API for KYC and eKYC: detect screen replay, print attacks, and photo-swap style presentation attacks on ID documents. Complements full OCR recognition — this image focuses on **document PAD** so you can reject spoofed IDs before (or after) MRZ / barcode extraction.
 
 Image: [`identixia/document-liveness`](https://hub.docker.com/r/identixia/document-liveness).
 
-<p><img src="https://img.shields.io/badge/Document%20PAD-0F766E?style=flat-square" alt="Document%20PAD" /> <img src="https://img.shields.io/badge/Authenticity-0F766E?style=flat-square" alt="Authenticity" /> <img src="https://img.shields.io/badge/API%208086-0F766E?style=flat-square" alt="API%208086" /> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square" alt="Docker" /> <img src="https://img.shields.io/badge/KYC%20%2F%20eKYC-5A6573?style=flat-square" alt="KYC%20%2F%20eKYC" /></p>
-
 ---
 
-## <img src="https://api.iconify.design/lucide/clipboard-list.svg?color=%230F766E" width="24" height="24" alt="" /> Basics
+## Basics
 
 Start the server, copy the machine code, and contact us with that code to get a license. Then replace the key in `license.txt` and activate.
 
@@ -160,9 +164,7 @@ Start the server, copy the machine code, and contact us with that code to get a 
 
 ---
 
-## <img src="https://api.iconify.design/lucide/terminal.svg?color=%230F766E" width="24" height="24" alt="" /> Initial commands
-
-### <img src="https://img.shields.io/badge/-1-0F766E?style=for-the-badge" alt="" /> Run the server
+## Initial commands
 
 ```bash
 docker pull identixia/document-liveness:latest
@@ -170,8 +172,6 @@ docker run -d --name identixia-api -p 14107:14107 \
   -v /etc/machine-id:/etc/machine-id:ro \
   identixia/document-liveness:latest
 ```
-
-### <img src="https://img.shields.io/badge/-2-0F766E?style=for-the-badge" alt="" /> Get a license
 
 ```bash
 curl -s http://127.0.0.1:14107/api/machinecode
@@ -181,29 +181,21 @@ The response is JSON. Your machine code is `data.machinecode`.
 
 Please [contact us](#-contact) with the machine code to get a license.
 
-### <img src="https://img.shields.io/badge/-3-0F766E?style=for-the-badge" alt="" /> Activate
-
 This repository includes `license.txt`. Replace the key in that file with the license we send you, then run this command from the repository folder:
 
 ```bash
 curl -s -X POST http://127.0.0.1:14107/api/activate -H "Content-Type: text/plain" --data-binary @license.txt
 ```
 
-### <img src="https://img.shields.io/badge/-4-0F766E?style=for-the-badge" alt="" /> Check that it is running
-
 ```bash
 curl -s http://127.0.0.1:14107/api/health
 ```
-
-### <img src="https://img.shields.io/badge/-5-0F766E?style=for-the-badge" alt="" /> Run document liveness
 
 Replace `BASE64_JPEG` with a base64-encoded JPEG of the document.
 
 ```bash
 curl -s -X POST http://127.0.0.1:14107/api/documentLiveness -H "Content-Type: application/json" -d "{\"images\":[{\"image\":\"BASE64_JPEG\"}]}"
 ```
-
-### <img src="https://img.shields.io/badge/-6-0F766E?style=for-the-badge" alt="" /> Open the Gradio demo
 
 Gradio runs on your computer, not inside the container. Clone this repository, keep the API running, then open a second terminal in the repository folder.
 
@@ -216,7 +208,7 @@ Open http://127.0.0.1:14207
 
 ---
 
-## <img src="https://api.iconify.design/lucide/list-checks.svg?color=%230F766E" width="24" height="24" alt="" /> What you get
+## What you get
 
 | Capability | Notes |
 | --- | --- |
@@ -228,7 +220,7 @@ Open http://127.0.0.1:14207
 
 ---
 
-## <img src="https://api.iconify.design/lucide/pc-case.svg?color=%230F766E" width="24" height="24" alt="" /> Requirements
+## Requirements
 
 | | |
 | --- | --- |
@@ -238,7 +230,7 @@ Open http://127.0.0.1:14207
 
 ---
 
-## <img src="https://api.iconify.design/lucide/app-window.svg?color=%230F766E" width="24" height="24" alt="" /> Gradio demo
+## Gradio demo
 
 Gradio runs on your computer, not inside the container. Clone this repository, keep the API running, then open a second terminal in the repository folder.
 
@@ -251,13 +243,13 @@ Open http://127.0.0.1:14207
 
 ---
 
-## <img src="https://api.iconify.design/lucide/puzzle.svg?color=%230F766E" width="24" height="24" alt="" /> Use in your app
+## Use in your app
 
 POST document images to the liveness routes on **14107**. For full on-premise ID document recognition (passport MRZ OCR, ID card barcode, fields), use the recognition product on **14102**.
 
 ---
 
-## <img src="https://api.iconify.design/lucide/boxes.svg?color=%230F766E" width="24" height="24" alt="" /> Related
+## Related
 
 Full OCR product: [ID-Document-Recognition-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) · Hub: [ID-Document-Recognition-Liveness-Detection-SDK](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-SDK)
 

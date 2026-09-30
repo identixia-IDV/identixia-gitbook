@@ -1,4 +1,4 @@
-# GitBook push (doc.identixia.com)
+# GitBook push (docs.identixia.com)
 
 Source tree for the Identixia docs site. Pages are generated from
 `catalog/github_about.json` homepage URLs and each product’s current
@@ -41,7 +41,9 @@ python catalog/gitbook_push.py --no-generate
 ## Notes
 
 * Pages are **detailed customer guides**: overview, prerequisites, quick start, license,
-  full API reference, troubleshooting, plus the product README appendix.
+  full API reference, troubleshooting, curated screenshots, plus the product README appendix.
+* Screenshots live in `identixia-docs/.gitbook/assets/` (copied from `repositories/identixia-assets`).
+  Re-copy from that pack if product UI screenshots change, then regenerate.
 * Product docs live here — not under a separate `docs/` tree.
 * Engine binaries stay on GitHub Releases (`/releases/latest/download/…`), not in git.
 * Contact / license pages are generated with the same command.
