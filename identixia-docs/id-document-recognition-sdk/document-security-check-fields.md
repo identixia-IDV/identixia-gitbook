@@ -5,10 +5,22 @@ description: >-
 
 # Document security check fields
 
-When the license includes document liveness / authenticity, the result JSON may populate `security` (and related `verification.security`) with engine checks against screen replays, printouts, and substitution.
+## When security fields appear
 
-Treat missing or empty security blocks as **not licensed / not run**, not as a pass.
+If the license includes document liveness / authenticity, the result JSON populates `security` (and related verification / tests rows) with engine checks against:
 
-Mobile and server SDKs share the same field names where possible. Prefer the structured `security` object over scraping demo UI labels.
+* Screen replay
+* Printout / paper copy
+* Portrait or document substitution (when supported)
 
-See [Document result JSON](document-result-json.md) for the parent object.
+## How to interpret
+
+| Situation | Meaning |
+| --- | --- |
+| `security` missing / empty | Feature **not licensed** or **not requested** — not a pass |
+| Checks present with fail | Treat as authenticity reject per your risk policy |
+| Recognition-only license | Use OCR/MRZ/barcode only; do not invent security passes |
+
+Mobile and server SDKs share field names where possible. Prefer structured `security` / `tests` arrays over UI labels.
+
+Parent object: [Document result JSON](document-result-json.md).

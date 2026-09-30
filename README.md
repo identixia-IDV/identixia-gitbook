@@ -40,6 +40,9 @@ python catalog/gitbook_push.py --no-generate
 
 ## Notes
 
+* Pages are **detailed customer guides**: overview, prerequisites, quick start, license,
+  full API reference, troubleshooting, plus the product README appendix.
 * Product docs live here — not under a separate `docs/` tree.
 * Engine binaries stay on GitHub Releases (`/releases/latest/download/…`), not in git.
 * Contact / license pages are generated with the same command.
+* After changing catalog or product READMEs, run `generate.py` (or `catalog/gitbook_push.py`).

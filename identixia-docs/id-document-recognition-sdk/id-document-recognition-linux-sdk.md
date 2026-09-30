@@ -3,17 +3,156 @@ description: >-
   On-premise ID document recognition SDK for Linux and Docker. Passport, ID card, and driver license OCR, MRZ, and barcode extraction. Document liveness routes require the matching license.
 ---
 
-# ID Document Recognition Linux SDK
+# ID Document Recognition Linux / Docker SDK
+
+
+## Overview
 
 On-premise ID document recognition SDK for Linux and Docker. Passport, ID card, and driver license OCR, MRZ, and barcode extraction. Document liveness routes require the matching license.
+
+Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+
+| | |
+| --- | --- |
+| **Product repository** | `ID-Document-Recognition-Liveness-Detection-Docker` |
+| **Platform** | Linux |
+| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+
 
 ### Repository
 
 {% embed url="https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker" %}
 
-[`identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker)
+Source: [`identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker)
 
-### From the product README
+## What you can do
+
+| Capability | Description |
+| --- | --- |
+| Locate & crop | Find the ID document in a camera frame or still |
+| OCR | Visual-zone fields (name, document number, dates, …) |
+| MRZ | Machine-readable zone parse + checks |
+| Barcode / QR | When present on the document |
+| Front + back | Capture both sides when required |
+| Document liveness | Authenticity / PAD checks when the license includes it |
+| Structured JSON | Same result idea on mobile and server |
+
+## Prerequisites
+
+| Requirement | Detail |
+| --- | --- |
+| Host | Linux x86_64 or any Docker host |
+| Docker | Optional — same repository builds the image |
+| Port | Face **14103** · Document **14102** · Document liveness **14106** (product-specific) |
+| Machine code | Different for bare metal vs container — license the environment you ship |
+
+## Quick start (server)
+
+Default API port for this product family: **`14102`**.
+
+### 1. Clone and start
+
+```bash
+git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker.git
+cd ID-Document-Recognition-Liveness-Detection-Docker
+# Follow README: place lib/ runtime, then start the HTTP server / demo UI
+```
+
+### 2. Machine code → license → activate
+
+```bash
+curl -s http://127.0.0.1:14102/api/machinecode
+# Send data.machinecode to Identixia → receive license
+curl -s -X POST http://127.0.0.1:14102/api/activate \
+  -H "Content-Type: text/plain" \
+  --data-binary @license.txt
+curl -s http://127.0.0.1:14102/api/licenseStatus
+curl -s http://127.0.0.1:14102/api/health
+```
+
+You can also drop `license.txt` next to the server and restart.
+
+### Try document process
+
+```bash
+curl -s -X POST http://127.0.0.1:14102/api/documentProcess \
+  -H "Content-Type: application/json" \
+  -d "{\"images\":[{\"image\":\"BASE64_JPEG\"}]}"
+```
+
+### Docker (when the repo ships an image)
+
+```bash
+# See the repository README for the exact image name and tags (CPU/GPU).
+docker compose up -d   # or the documented docker run line
+curl -s http://127.0.0.1:PORT/api/health
+```
+
+
+## License and activation (server)
+
+1. Start the API (it stays up even without a key so you can read the machine code).
+2. `GET /api/machinecode` → copy `data.machinecode`.
+3. Contact Identixia with that code (Docker and bare metal codes differ).
+4. `POST /api/activate` with the license file/bytes **or** place `license.txt` and restart.
+5. `GET /api/licenseStatus` → check capability flags (`recognition`, `liveness` / `authenticity`).
+
+Control routes return the envelope `{success, code, message, request_id, data}`. Process routes return **engine / process JSON** (not the control envelope).
+
+## API reference — document HTTP (Windows / Linux / Docker)
+
+Base URL: `http://{host}:14102`
+
+### Control routes
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/health` | Health |
+| `GET` | `/api/backend` | Backend info |
+| `GET` | `/api/machinecode` | Machine code |
+| `GET` | `/api/licenseStatus` | `recognition`, `authenticity` flags |
+| `POST` | `/api/activate` | Activate license |
+
+### Process routes
+
+| Method | Path | Body | Description |
+| --- | --- | --- | --- |
+| `POST` | `/api/documentProcess` | `{ "images":[…], "rfid"?, "response"? }` | Full process (OCR + optional authenticity) |
+| `POST` | `/api/documentRecognition` | `{ "images":[…] }` | Recognition only |
+| `POST` | `/api/documentLiveness` | `{ "images":[…] }` | Authenticity / liveness only |
+| `POST` | `/api/generalProcess` | `{ "image", "options"? }` | General process helper |
+
+`images` entries are objects with base64 `image` (and optional metadata) or raw base64 strings depending on binding — see the sample Postman collection in the repo `postman/` folder.
+
+```bash
+curl -s -X POST http://127.0.0.1:14102/api/documentProcess \
+  -H "Content-Type: application/json" \
+  -d '{"images":[{"image":"BASE64_JPEG"}]}'
+```
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| Invalid license | Application / bundle id must match the key; server needs the correct machine code |
+| Init failed | Runtime AAR/framework/`lib` missing or wrong ABI |
+| No face / no document | Lighting, crop, distance; try still gallery image first |
+| Liveness / authenticity empty | License flag off — request the matching entitlement |
+| Camera black / crash | Use a **physical** device; grant camera permission |
+| Docker license fails after bare-metal license | Machine codes differ — re-license the container |
+
+| Port in use | Change host port or stop the other Identixia server |
+| Multipart vs JSON | Field names must match (`image`, `image1`, `images`) |
+| Envelope vs process JSON | Only control routes use `{success,code,…}`; process routes return engine JSON |
+
+
+## Support
+
+{% include "../.gitbook/includes/contact.md" %}
+
+## Product README (reference)
+
+The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
 
 ## <img src="https://cdn.simpleicons.org/docker/2496ED" width="32" height="32" alt="" /> Identixia ID Document Recognition and Liveness Detection — Linux / Docker
 
@@ -169,14 +308,3 @@ Common KYC wiring: health → activate → `documentProcess` (OCR / MRZ / barcod
 Document liveness only (API **14107**): [ID-Document-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker)
 
 ---
-
-## <img src="https://api.iconify.design/lucide/mail.svg?color=%230F766E" width="24" height="24" alt="" /> Contact
-
-<a href="mailto:contact@identixia.com"><img alt="Email contact@identixia.com" src="https://img.shields.io/badge/Email-contact%40identixia.com-0F766E?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-<a href="https://wa.me/17018854218"><img alt="WhatsApp +1 (701) 885-4218" src="https://img.shields.io/badge/WhatsApp-%2B1_(701)_885--4218-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" /></a>
-<a href="https://t.me/identixia"><img alt="Telegram @identixia" src="https://img.shields.io/badge/Telegram-%40identixia-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" /></a>
-
-
-{% hint style="info" %}
-Native engine binaries are distributed via GitHub Releases (`/releases/latest/download/…`) or the paths documented in the product README. They are not committed to git.
-{% endhint %}

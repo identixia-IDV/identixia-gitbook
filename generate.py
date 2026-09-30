@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Rebuild gitbook-push/identixia-docs from catalog + current product READMEs.
+"""Rebuild detailed GitBook docs from catalog + product READMEs + API guides.
 
-Keeps GitBook URL slugs from catalog/github_about.json homepages so GitHub
-About links keep working.
+Keeps URL slugs from catalog/github_about.json homepages.
 
   python gitbook-push/generate.py
 """
@@ -11,15 +10,20 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import content_lib as C  # noqa: E402
+
 ABOUT_PATH = ROOT / "catalog" / "github_about.json"
+NAMES_PATH = ROOT / "catalog" / "repository_names.json"
 REPOS_DIR = ROOT / "repositories"
 OUT = Path(__file__).resolve().parent / "identixia-docs"
 DOCS_BASE = "https://doc.identixia.com"
 
-# Display titles for known slugs (fallback: title-case filename).
 TITLES: dict[str, str] = {
     "face-recognition-sdk": "Face Recognition SDK",
     "face-recognition-android-sdk": "Face Recognition Android SDK",
@@ -29,19 +33,19 @@ TITLES: dict[str, str] = {
     "face-recognition-android-sdk-3": "Face Recognition Ionic Cordova SDK",
     "face-recognition-ionic-capacitor-sdk": "Face Recognition Ionic Capacitor SDK",
     "face-recognition-sdk-windows": "Face Recognition + Liveness Windows SDK",
-    "face-recognition-sdk-linux": "Face Recognition + Liveness Linux SDK",
+    "face-recognition-sdk-linux": "Face Recognition + Liveness Linux / Docker SDK",
     "face-recognition-windows-sdk": "Face Recognition Windows SDK",
-    "face-recognition-linux-sdk": "Face Recognition Linux SDK",
+    "face-recognition-linux-sdk": "Face Recognition Linux / Docker SDK",
     "liveness-detection-sdk": "Liveness Detection SDK",
     "liveness-detection-android-sdk": "Liveness Detection Android SDK",
     "liveness-detection-ios-sdk": "Liveness Detection iOS SDK",
     "liveness-detection-windows-sdk": "Liveness Detection Windows SDK",
-    "liveness-detection-linux-sdk": "Liveness Detection Linux SDK",
+    "liveness-detection-linux-sdk": "Liveness Detection Linux / Docker SDK",
     "id-document-recognition-sdk": "ID Document Recognition SDK",
     "id-document-recognition-android-sdk": "ID Document Recognition Android SDK",
     "id-document-recognition-ios-sdk": "ID Document Recognition iOS SDK",
     "id-document-recognition-windows-sdk": "ID Document Recognition Windows SDK",
-    "id-document-recognition-linux-sdk": "ID Document Recognition Linux SDK",
+    "id-document-recognition-linux-sdk": "ID Document Recognition Linux / Docker SDK",
     "id-document-recognition-flutter-sdk": "ID Document Recognition Flutter SDK",
     "id-document-recognition-react-native-sdk": "ID Document Recognition React Native SDK",
     "id-document-recognition-ionic-capacitor-sdk": "ID Document Recognition Ionic Capacitor SDK",
@@ -49,7 +53,6 @@ TITLES: dict[str, str] = {
     "id-document-liveness-sdk": "ID Document Liveness SDK",
 }
 
-# Preferred child order under each section (slug basename).
 SECTION_ORDER: dict[str, list[str]] = {
     "face-recognition-sdk": [
         "face-recognition-android-sdk",
@@ -115,41 +118,46 @@ SECTION_META = {
     },
 }
 
+PLATFORM_MAP = {
+    "Android": "Android",
+    "iOS": "iOS",
+    "Flutter": "Flutter",
+    "ReactNative": "ReactNative",
+    "Ionic": "Ionic",
+    "Ionic-Cordova": "Ionic-Cordova",
+    "Windows": "Windows",
+    "Linux": "Linux",
+}
 
-def die(msg: str) -> None:
-    raise SystemExit(f"ERROR: {msg}")
 
-
-def load_about() -> dict:
-    return json.loads(ABOUT_PATH.read_text(encoding="utf-8"))
+def load_catalog() -> tuple[dict, dict[str, dict]]:
+    about = json.loads(ABOUT_PATH.read_text(encoding="utf-8"))
+    names = {
+        item["name"]: item
+        for item in json.loads(NAMES_PATH.read_text(encoding="utf-8"))["repositories"]
+        if isinstance(item, dict) and "name" in item
+    }
+    return about, names
 
 
 def homepage_rel(url: str) -> str | None:
     if not url.startswith(DOCS_BASE):
         return None
-    path = url[len(DOCS_BASE) :].lstrip("/")
-    return path or None
+    return url[len(DOCS_BASE) :].lstrip("/") or None
 
 
 def title_for(slug: str) -> str:
     base = slug.rsplit("/", 1)[-1]
-    if base in TITLES:
-        return TITLES[base]
-    if slug in TITLES:
-        return TITLES[slug]
-    return re.sub(r"[-_]+", " ", base).title()
+    return TITLES.get(base) or TITLES.get(slug) or re.sub(r"[-_]+", " ", base).title()
 
 
-def rewrite_links(text: str, publish_owner: str) -> str:
+def rewrite_links(text: str, owner: str) -> str:
     text = text.replace("https://docs.identixia.com", DOCS_BASE)
-    text = text.replace("https://github.com/identixiaAI/", f"https://github.com/{publish_owner}/")
-    # Prefer publish org for product clones already using either owner.
+    text = text.replace("https://github.com/identixiaAI/", f"https://github.com/{owner}/")
     return text
 
 
 def strip_readme_noise(body: str) -> str:
-    """Turn a product README into GitBook-friendly markdown."""
-    # Drop leading centered brand/badge blocks (keep content after first heading).
     lines = body.splitlines()
     out: list[str] = []
     started = False
@@ -157,185 +165,144 @@ def strip_readme_noise(body: str) -> str:
         if not started:
             if re.match(r"^#+\s+", line):
                 started = True
-                # Prefer a single H1 from our generator; demote README H1 → H2.
                 if line.startswith("# "):
                     out.append("## " + line[2:])
                 else:
                     out.append(line)
             continue
-        # Drop orphan closing tags from removed <div align="center"> wrappers.
-        if line.strip() in {"</div>", "<div align=\"center\">", "<div align='center'>"}:
+        if line.strip() in {"</div>", '<div align="center">', "<div align='center'>"}:
+            continue
+        # Drop trailing Contact section — Support is added by the generator.
+        if re.search(r"Contact\s*$", line) and ("mail.svg" in line or line.strip().startswith("##")):
+            break
+        if "contact@identixia.com" in line and "img.shields.io" in line:
             continue
         out.append(line)
     text = "\n".join(out).strip() + "\n"
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text
+    return re.sub(r"\n{3,}", "\n\n", text)
 
 
 def frontmatter(description: str) -> str:
     desc = description.replace("\n", " ").strip()
     if len(desc) > 280:
         desc = desc[:277] + "..."
-    return (
-        "---\n"
-        f"description: >-\n"
-        f"  {desc}\n"
-        "---\n\n"
-    )
+    return f"---\ndescription: >-\n  {desc}\n---\n\n"
 
 
 def write_page(path: Path, title: str, description: str, body: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    content = frontmatter(description) + f"# {title}\n\n" + body.rstrip() + "\n"
-    path.write_text(content, encoding="utf-8", newline="\n")
-
-
-def github_block(owner: str, name: str) -> str:
-    return (
-        f"### Repository\n\n"
-        f"{{% embed url=\"https://github.com/{owner}/{name}\" %}}\n\n"
-        f"[`{owner}/{name}`](https://github.com/{owner}/{name})\n"
+    path.write_text(
+        frontmatter(description) + f"# {title}\n\n" + body.rstrip() + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
 
 
-def build_product_page(
-    *,
-    owner: str,
-    item: dict,
-    rel: str,
-) -> tuple[Path, str]:
-    """Return (out_path, summary_label)."""
+def build_product_page(owner: str, item: dict, rel: str, by_name: dict[str, dict]) -> Path:
     name = item["name"]
     desc = item["description"]
     title = title_for(rel)
-    readme_path = REPOS_DIR / name / "README.md"
-    parts: list[str] = []
-    parts.append(desc)
-    parts.append("")
-    parts.append(github_block(owner, name))
-    if readme_path.is_file():
-        raw = readme_path.read_text(encoding="utf-8", errors="replace")
-        raw = rewrite_links(raw, owner)
-        body = strip_readme_noise(raw)
-        parts.append("### From the product README\n")
-        parts.append(body)
-    else:
-        parts.append(
-            "{% hint style=\"warning\" %}\n"
-            f"Local README missing for `{name}`.\n"
-            "{% endhint %}\n"
-        )
-    parts.append(
-        "\n{% hint style=\"info\" %}\n"
-        "Native engine binaries are distributed via GitHub Releases "
-        "(`/releases/latest/download/…`) or the paths documented in the product README. "
-        "They are not committed to git.\n"
-        "{% endhint %}\n"
+    meta = by_name.get(name, {})
+    plat_raw = meta.get("platform")
+    plat_label, family = C.classify(name, PLATFORM_MAP.get(plat_raw, plat_raw))
+    ctx = C.ProductCtx(
+        name=name,
+        owner=owner,
+        description=desc,
+        title=title,
+        platform=plat_label,
+        family=family,
     )
+    readme_path = REPOS_DIR / name / "README.md"
+    readme_body = ""
+    if readme_path.is_file():
+        raw = rewrite_links(readme_path.read_text(encoding="utf-8", errors="replace"), owner)
+        readme_body = strip_readme_noise(raw)
+    body = C.build_page_body(ctx, readme_body)
 
-    # Section hub → README.md; leaf → <slug>.md
     if "/" not in rel:
         out = OUT / rel / "README.md"
-        label = title
     else:
         section, leaf = rel.split("/", 1)
         out = OUT / section / f"{leaf}.md"
-        label = title
-    write_page(out, title, desc, "\n".join(parts))
-    return out, label
+    write_page(out, title, desc, body)
+    return out
 
 
-def write_section_hub(section: str, children: list[tuple[str, str]], hub_item: dict | None, owner: str) -> None:
-    meta = SECTION_META.get(section, {"blurb": "", "cover": ""})
-    title = title_for(section)
-    blurb = meta.get("blurb") or (hub_item["description"] if hub_item else title)
-    lines = [blurb, ""]
-    if hub_item:
-        lines.append(github_block(owner, hub_item["name"]))
-        readme = REPOS_DIR / hub_item["name"] / "README.md"
-        if readme.is_file():
-            raw = rewrite_links(readme.read_text(encoding="utf-8", errors="replace"), owner)
-            lines.append("### Overview\n")
-            lines.append(strip_readme_noise(raw))
-    if children:
-        lines.append("\n### Platforms\n")
-        for label, link in children:
-            lines.append(f"* [{label}]({link})")
-        lines.append("")
-    out = OUT / section / "README.md"
-    # Hub product whose homepage IS the section root already wrote README — merge carefully.
-    if out.exists() and hub_item and homepage_rel(hub_item["homepage"]) == section:
-        # Product page already written as section README; append platform index if missing.
-        existing = out.read_text(encoding="utf-8")
-        if "### Platforms" not in existing and children:
-            out.write_text(
-                existing.rstrip()
-                + "\n\n### Platforms\n\n"
-                + "\n".join(f"* [{label}]({link})" for label, link in children)
-                + "\n",
-                encoding="utf-8",
-                newline="\n",
-            )
+def write_section_index(section: str, children: list[tuple[str, str]]) -> None:
+    path = OUT / section / "README.md"
+    if not path.is_file():
         return
-    write_page(out, title, blurb, "\n".join(lines))
+    text = path.read_text(encoding="utf-8")
+    if "### Platforms in this section" in text or not children:
+        return
+    lines = ["\n### Platforms in this section\n"]
+    for label, link in children:
+        lines.append(f"* [{label}]({link})")
+    path.write_text(text.rstrip() + "\n" + "\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
-def write_welcome(sections: list[str]) -> None:
+def write_welcome(structure: dict[str, list[tuple[str, str]]]) -> None:
     cards = []
-    for sec in sections:
-        meta = SECTION_META.get(sec, {})
+    for sec, meta in SECTION_META.items():
         cover = meta.get("cover", "")
-        title = title_for(sec)
-        blurb = meta.get("blurb", "")
         cover_cell = f'<a href="{cover}">{Path(cover).name}</a>' if cover else ""
         cards.append(
-            f"<tr><td><strong>{title}</strong></td><td>{blurb}</td>"
+            f"<tr><td><strong>{title_for(sec)}</strong></td><td>{meta['blurb']}</td>"
             f"<td>{cover_cell}</td><td></td>"
             f'<td><a href="{sec}/">{sec}</a></td></tr>'
         )
     body = f"""
-### Introduction
+## Introduction
 
-Official documentation for **Identixia** on-premise biometric SDKs:
+Official **Identixia** documentation for on-premise biometric SDKs. Use these pages to integrate every customer-facing function: activation, capture, recognition, matching, liveness, and result handling.
 
-* **Face Recognition** — enroll, 1:N identify, templates, quality, 1:1 match; optional passive liveness
+* **Face Recognition** — detect, attributes, quality, templates, 1:1, 1:N; optional passive liveness
 * **Liveness Detection** — passive face presentation-attack detection
 * **ID Document Recognition** — OCR, MRZ, barcode; optional document liveness
 * **ID Document Liveness** — document anti-spoofing API (separate from OCR)
 
-Processing stays on your device or server. Biometric data is **not** sent to Identixia cloud.
+Biometric data stays on **your** device or server.
 
-### How to use these docs
+## How to use these docs
 
-1. Open the product that matches your license.
-2. Open the **platform** page (Android, iOS, Flutter, React Native, Ionic, Windows, Linux/Docker).
-3. Follow setup in the product README / this page to place the runtime and run the demo.
-4. For server SDKs, copy the machine code, then [request a license](request-a-license-and-support.md).
-5. Call activate → init (or HTTP activate), then the process APIs. Store templates and document JSON in **your** database.
-
-Native binaries are **not** in git. Use GitHub Releases (`/releases/latest/download/…`) or the paths listed on each platform page.
+1. Open your **product** section.
+2. Open your **platform** page.
+3. Follow **Quick start** → run the demo → confirm Ready.
+4. Read **License and activation**, then **API reference** for every function you will call.
+5. Use **Troubleshooting** when something fails.
+6. Server integrators: copy machine code → [request a license](request-a-license-and-support.md) → `POST /api/activate`.
 
 {{% hint style="info" %}}
-The demo is a full sample app. Production integrations copy the runtime and call the SDK/API — you do not need the demo screens.
+Native engine binaries are distributed via GitHub Releases (`/releases/latest/download/…`) or the paths in each README. They are not committed to git. The demo UI is optional in production — call the SDK/API directly.
 {{% endhint %}}
 
-### Products
+## Products
 
 <table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-cover data-type="image">Cover image</th><th data-hidden></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody>
 {''.join(cards)}
 </tbody></table>
 
-### Links
+## Shared concepts
+
+| Topic | Summary |
+| --- | --- |
+| Control vs process (HTTP) | `/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus` use `{{success,code,message,request_id,data}}`. Process routes return engine JSON. |
+| Threading (mobile) | Activate, init, detect, recognize on a **background** thread. |
+| License flags | Face: `recognition` / `liveness`. Document: `recognition` / `authenticity`. Missing flag ⇒ feature not run. |
+| Your storage | Persist templates and document fields in **your** database. |
+
+## Links
 
 * [Request a license & support](request-a-license-and-support.md)
 * [Contact](contact-us.md)
-* Website: [identixia.com](https://identixia.com)
-* GitHub org: [identixia-IDV](https://github.com/identixia-IDV)
+* [identixia.com](https://identixia.com)
+* GitHub: [identixia-IDV](https://github.com/identixia-IDV)
 """
     write_page(
         OUT / "README.md",
         "Welcome to Identixia",
-        "Official Identixia documentation for on-premise Face Recognition, Liveness, and ID Document SDKs.",
+        "Detailed Identixia docs for Face Recognition, Liveness, and ID Document SDKs — setup, activation, and full API reference.",
         body.strip() + "\n",
     )
 
@@ -346,18 +313,27 @@ def write_static_pages() -> None:
         "Request a License & Support",
         "How to request an Identixia SDK license for mobile and server products.",
         """
-### Need a license?
+## Need a license?
 
-* **Mobile SDK:** contact us via WhatsApp, Telegram, or email. Request a new license for your own application / bundle id (the sample ships a demo key for its id only).
-* **Server SDK (Linux / Windows / Docker):** start the API once, copy the machine code from logs or `GET /api/machinecode`, and send that code. Docker and a native host have **different** machine codes. Use the code from the environment you will run in production.
+### Mobile SDK
 
-Do not paste demo license keys into your production app.
+1. Build your app with **your** applicationId / bundle id (not the demo id).
+2. Contact us (email / WhatsApp / Telegram) with the id and product (Face / Liveness / Document).
+3. Integrate the key with activate → init as shown on the platform page.
 
-### Need support?
+The sample apps ship a **demo key** for the sample id only. Do not reuse it in production.
 
-We offer **free integration** help with Identixia biometric solutions, plus after-sale and maintenance support.
+### Server SDK (Windows / Linux / Docker)
 
-### Contact
+1. Start the API once.
+2. `GET /api/machinecode` and copy `data.machinecode`.
+3. Send that code to Identixia. **Docker and bare metal have different codes.**
+4. `POST /api/activate` with the license file, or place `license.txt` and restart.
+5. Confirm with `GET /api/licenseStatus`.
+
+## Support
+
+We offer integration help and after-sale support for Identixia biometric solutions.
 
 {% include "./.gitbook/includes/contact.md" %}
 """.strip()
@@ -368,7 +344,7 @@ We offer **free integration** help with Identixia biometric solutions, plus afte
         "Contact",
         "Contact Identixia for licenses and support.",
         """
-### Availability
+## Availability
 
 We are available 24/7.
 
@@ -396,36 +372,48 @@ We are available 24/7.
         "Document result JSON",
         "Shared document recognition / process JSON shape across mobile and server SDKs.",
         """
-`recognize` (mobile) and `POST /api/documentProcess` (Linux / Windows) return the same idea: one JSON object. Dedicated `documentRecognition` / `documentLiveness` (and matching HTTP paths) use the same shape with recognition-only or authenticity-only fields populated.
+## Purpose
 
-Parse this object in your app. Do not copy the demo Result screen.
+`recognize` (mobile) and `POST /api/documentProcess` (Linux / Windows) return the **same idea**: one JSON object your app parses. Dedicated `documentRecognition` / `documentLiveness` routes use the same shape with recognition-only or authenticity-only fields populated.
 
-### Top-level fields
+Do **not** scrape the demo Result screen — parse this JSON.
+
+## Top-level fields
 
 | Field | Meaning |
 | ----- | ------- |
-| `errorCode` | Optional engine error |
-| `documentName` | Document type name |
+| `errorCode` / process `metadata.status` | Engine / process status |
+| `documentName` / identity class | Document type name |
 | `countryName` | Issuing country |
-| `score` | Document / locate confidence |
-| `msg` | Optional message |
-| `verification` | Field and document checks |
+| `score` | Locate / document confidence |
+| `msg` / `metadata.message` | Optional message |
+| `verification` / `tests` | Field and document checks |
 | `imageQuality` | Capture quality checks |
-| `ocr` | Visual-zone fields |
+| `ocr` / field readings | Visual-zone fields |
 | `mrz` | Machine-readable zone |
 | `barcode` | Barcode / QR fields |
 | `images` | Crops (portrait, document, signature, …) |
 | `security` | Authenticity / document liveness (license-gated) |
 
-### `verification` values
+Mobile kits may normalize Android output toward an iOS-shaped contract — use the kit `ResultParser` when present.
 
-**0** Pass · **1** Fail · **2** Not checked
+## `verification` values
 
-### Related HTTP routes
+| Value | Meaning |
+| ---: | --- |
+| `0` | Pass |
+| `1` | Fail |
+| `2` | Not checked |
 
-* `POST /api/documentProcess`
-* `POST /api/documentRecognition`
-* `POST /api/documentLiveness`
+Image-quality check enums may use a different 0/1/2 mapping — see the kit parser comments.
+
+## Related HTTP routes
+
+| Route | Role |
+| --- | --- |
+| `POST /api/documentProcess` | Full process |
+| `POST /api/documentRecognition` | OCR / MRZ / barcode |
+| `POST /api/documentLiveness` | Authenticity only |
 
 See also [Document security check fields](document-security-check-fields.md).
 """.strip()
@@ -436,13 +424,25 @@ See also [Document security check fields](document-security-check-fields.md).
         "Document security check fields",
         "License-gated document authenticity / liveness fields in the document result JSON.",
         """
-When the license includes document liveness / authenticity, the result JSON may populate `security` (and related `verification.security`) with engine checks against screen replays, printouts, and substitution.
+## When security fields appear
 
-Treat missing or empty security blocks as **not licensed / not run**, not as a pass.
+If the license includes document liveness / authenticity, the result JSON populates `security` (and related verification / tests rows) with engine checks against:
 
-Mobile and server SDKs share the same field names where possible. Prefer the structured `security` object over scraping demo UI labels.
+* Screen replay
+* Printout / paper copy
+* Portrait or document substitution (when supported)
 
-See [Document result JSON](document-result-json.md) for the parent object.
+## How to interpret
+
+| Situation | Meaning |
+| --- | --- |
+| `security` missing / empty | Feature **not licensed** or **not requested** — not a pass |
+| Checks present with fail | Treat as authenticity reject per your risk policy |
+| Recognition-only license | Use OCR/MRZ/barcode only; do not invent security passes |
+
+Mobile and server SDKs share field names where possible. Prefer structured `security` / `tests` arrays over UI labels.
+
+Parent object: [Document result JSON](document-result-json.md).
 """.strip()
         + "\n",
     )
@@ -483,18 +483,16 @@ def write_summary(structure: dict[str, list[tuple[str, str]]]) -> None:
 
 
 def main() -> int:
-    about = load_about()
+    about, by_name = load_catalog()
     owner = (about.get("publish_owner") or about.get("owner") or "identixia-IDV").strip()
     OUT.mkdir(parents=True, exist_ok=True)
 
-    # Map section → list of (label, filename.md)
     structure: dict[str, list[tuple[str, str]]] = {
         "face-recognition-sdk": [],
         "liveness-detection-sdk": [],
         "id-document-recognition-sdk": [],
         "id-document-liveness-sdk": [],
     }
-    hubs: dict[str, dict] = {}
 
     for item in about["repositories"]:
         name = item["name"]
@@ -502,21 +500,14 @@ def main() -> int:
             continue
         rel = homepage_rel(item["homepage"])
         if not rel:
-            print(f"SKIP non-docs homepage: {name} -> {item['homepage']}")
+            print(f"SKIP non-docs homepage: {name}")
             continue
-        # Hub section pages (no slash)
-        if "/" not in rel:
-            hubs[rel] = item
-            build_product_page(owner=owner, item=item, rel=rel)
-            continue
-        section, leaf = rel.split("/", 1)
-        if section not in structure:
-            structure[section] = []
-        path, label = build_product_page(owner=owner, item=item, rel=rel)
-        structure[section].append((label, f"{leaf}.md"))
-        print(f"OK {name} -> {path.relative_to(OUT.parent)}")
+        path = build_product_page(owner, item, rel, by_name)
+        print(f"OK {name} -> {path.relative_to(OUT.parent)} ({path.stat().st_size} bytes)")
+        if "/" in rel:
+            section, leaf = rel.split("/", 1)
+            structure.setdefault(section, []).append((title_for(rel), f"{leaf}.md"))
 
-    # Supplementary doc pages under document recognition
     write_static_pages()
     structure["id-document-recognition-sdk"].extend(
         [
@@ -526,31 +517,22 @@ def main() -> int:
     )
 
     for section, kids in structure.items():
-        write_section_hub(section, kids, hubs.get(section), owner)
+        # Stable order for index links
+        by_leaf = {Path(link).stem: (label, link) for label, link in kids}
+        ordered = []
+        seen = set()
+        for leaf in SECTION_ORDER.get(section, []):
+            if leaf in by_leaf:
+                ordered.append(by_leaf[leaf])
+                seen.add(leaf)
+        for leaf, pair in by_leaf.items():
+            if leaf not in seen:
+                ordered.append(pair)
+        write_section_index(section, ordered)
 
-    write_welcome(list(structure.keys()))
+    write_welcome(structure)
     write_summary(structure)
-
-    # Ensure gitbook-docs.yaml exists
-    yaml_path = Path(__file__).resolve().parent / "gitbook-docs.yaml"
-    if not yaml_path.is_file():
-        yaml_path.write_text(
-            "$schema: https://api.gitbook.com/gitbook-docs.yaml\n"
-            "site:\n"
-            "  title: Identixia Docs\n"
-            "  structure:\n"
-            "    - type: space\n"
-            "      key: space-1\n"
-            "      title: Identixia Docs\n"
-            "      path: identixia-docs\n"
-            "      default: true\n"
-            "      content:\n"
-            "        directory: ./identixia-docs\n",
-            encoding="utf-8",
-            newline="\n",
-        )
-
-    print(f"Wrote pages under {OUT}")
+    print(f"Wrote detailed docs under {OUT}")
     return 0
 
 

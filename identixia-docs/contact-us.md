@@ -5,7 +5,7 @@ description: >-
 
 # Contact
 
-### Availability
+## Availability
 
 We are available 24/7.
 

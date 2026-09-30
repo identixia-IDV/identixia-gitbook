@@ -5,15 +5,147 @@ description: >-
 
 # Liveness Detection iOS SDK
 
+
+## Overview
+
 On-device passive face liveness SDK for iOS. Scores a camera frame for presentation-attack detection when the license allows it.
+
+Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+
+| | |
+| --- | --- |
+| **Product repository** | `FaceLivenessDetection-iOS` |
+| **Platform** | iOS |
+| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+
 
 ### Repository
 
 {% embed url="https://github.com/identixia-IDV/FaceLivenessDetection-iOS" %}
 
-[`identixia-IDV/FaceLivenessDetection-iOS`](https://github.com/identixia-IDV/FaceLivenessDetection-iOS)
+Source: [`identixia-IDV/FaceLivenessDetection-iOS`](https://github.com/identixia-IDV/FaceLivenessDetection-iOS)
 
-### From the product README
+## What you can do
+
+| Capability | Description |
+| --- | --- |
+| Passive face liveness | Score one RGB face image / frame for presentation-attack detection |
+| License gating | Liveness runs only when the license allows it |
+
+## Prerequisites
+
+| Requirement | Detail |
+| --- | --- |
+| IDE | Xcode (recent stable) |
+| Device | Physical iPhone for camera demos |
+| Deployment | iOS 13+ (see sample project) |
+| Frameworks | Vendored `.framework` / `.xcframework` from Release or Drive pack |
+
+## Quick start
+
+### 1. Clone the sample
+
+```bash
+git clone https://github.com/identixia-IDV/FaceLivenessDetection-iOS.git
+cd FaceLivenessDetection-iOS
+```
+
+### 2. Place the runtime
+
+Liveness runtime AAR/framework as documented in the sample `libfacesdk` / Frameworks folder.
+
+Clients should download versioned assets via:
+
+```text
+https://github.com/identixia-IDV/FaceLivenessDetection-iOS/releases/latest/download/<asset>
+```
+
+### 3. Run the demo
+
+Follow the repository **Run** section (Android Studio / Xcode / `flutter run` / `yarn android` / Ionic). Wait until status shows **Ready** before opening camera modes.
+
+### 4. Try every demo mode
+
+Use each tile / screen once (enroll, identify, capture, document front/back, result, about). Confirm license state on the About / Result screen.
+
+
+## License and activation (mobile)
+
+| | |
+| --- | --- |
+| **Demo id** | Sample application / bundle id shipped in the repo |
+| **Demo key** | Bundled for the sample id only |
+| **Your app** | New applicationId / bundle id → request a new license |
+
+### Activate → init (concept)
+
+1. Call activate with your license string (background thread).
+2. On success, call init (unpacks on-device models; may take a few seconds the first time).
+3. Gate UI on Ready / license status before camera modes.
+4. Never paste the demo key into a production app id.
+
+
+### Status codes
+
+| Code | Meaning |
+| ---: | ------- |
+| `0` | Success |
+| `1` / `-1` | Invalid license |
+| `2` / `-2` | Wrong application / bundle id |
+| `3` / `-3` | License expired |
+| `4` / `-4` | Not activated |
+| `-5` | Init / model load failed |
+| `-10` | Invalid argument |
+| `-11` | Invalid image |
+| `-12` | No face |
+| `-13` | No document |
+| `-16` | Liveness failed (when gated) |
+
+Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+
+
+## API reference — mobile face liveness
+
+Activate → init, then score a camera frame or gallery still with the liveness API exposed by the sample (see kit / SDK class in the repo). Without a liveness entitlement the score is omitted.
+
+
+### Status codes
+
+| Code | Meaning |
+| ---: | ------- |
+| `0` | Success |
+| `1` / `-1` | Invalid license |
+| `2` / `-2` | Wrong application / bundle id |
+| `3` / `-3` | License expired |
+| `4` / `-4` | Not activated |
+| `-5` | Init / model load failed |
+| `-10` | Invalid argument |
+| `-11` | Invalid image |
+| `-12` | No face |
+| `-13` | No document |
+| `-16` | Liveness failed (when gated) |
+
+Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| Invalid license | Application / bundle id must match the key; server needs the correct machine code |
+| Init failed | Runtime AAR/framework/`lib` missing or wrong ABI |
+| No face / no document | Lighting, crop, distance; try still gallery image first |
+| Liveness / authenticity empty | License flag off — request the matching entitlement |
+| Camera black / crash | Use a **physical** device; grant camera permission |
+| Docker license fails after bare-metal license | Machine codes differ — re-license the container |
+
+
+## Support
+
+{% include "../.gitbook/includes/contact.md" %}
+
+## Product README (reference)
+
+The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
 
 ## Identixia Face Liveness Detection SDK — iOS (Fully On-Premise)
 
@@ -156,14 +288,3 @@ Use **FaceLivenessKit** (`FaceLivenessClient.shared`) or call the native SDK fro
 | 4 | Engine failed to start |
 
 ---
-
-## Contact
-
-<a href="mailto:contact@identixia.com"><img alt="Email contact@identixia.com" src="https://img.shields.io/badge/Email-contact%40identixia.com-0F766E?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-<a href="https://wa.me/17018854218"><img alt="WhatsApp +1 (701) 885-4218" src="https://img.shields.io/badge/WhatsApp-%2B1_(701)_885--4218-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" /></a>
-<a href="https://t.me/identixia"><img alt="Telegram @identixia" src="https://img.shields.io/badge/Telegram-%40identixia-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" /></a>
-
-
-{% hint style="info" %}
-Native engine binaries are distributed via GitHub Releases (`/releases/latest/download/…`) or the paths documented in the product README. They are not committed to git.
-{% endhint %}

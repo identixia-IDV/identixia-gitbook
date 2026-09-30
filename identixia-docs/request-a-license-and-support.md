@@ -5,17 +5,26 @@ description: >-
 
 # Request a License & Support
 
-### Need a license?
+## Need a license?
 
-* **Mobile SDK:** contact us via WhatsApp, Telegram, or email. Request a new license for your own application / bundle id (the sample ships a demo key for its id only).
-* **Server SDK (Linux / Windows / Docker):** start the API once, copy the machine code from logs or `GET /api/machinecode`, and send that code. Docker and a native host have **different** machine codes. Use the code from the environment you will run in production.
+### Mobile SDK
 
-Do not paste demo license keys into your production app.
+1. Build your app with **your** applicationId / bundle id (not the demo id).
+2. Contact us (email / WhatsApp / Telegram) with the id and product (Face / Liveness / Document).
+3. Integrate the key with activate → init as shown on the platform page.
 
-### Need support?
+The sample apps ship a **demo key** for the sample id only. Do not reuse it in production.
 
-We offer **free integration** help with Identixia biometric solutions, plus after-sale and maintenance support.
+### Server SDK (Windows / Linux / Docker)
 
-### Contact
+1. Start the API once.
+2. `GET /api/machinecode` and copy `data.machinecode`.
+3. Send that code to Identixia. **Docker and bare metal have different codes.**
+4. `POST /api/activate` with the license file, or place `license.txt` and restart.
+5. Confirm with `GET /api/licenseStatus`.
+
+## Support
+
+We offer integration help and after-sale support for Identixia biometric solutions.
 
 {% include "./.gitbook/includes/contact.md" %}

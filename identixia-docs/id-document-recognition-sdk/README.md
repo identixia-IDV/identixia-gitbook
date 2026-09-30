@@ -5,15 +5,41 @@ description: >-
 
 # ID Document Recognition SDK
 
+
+## Overview
+
 ID document recognition SDK for Android, iOS, Windows, and Docker. OCR, MRZ, and barcode extraction for passports, national IDs, and driver licenses. Document liveness requires the matching license.
+
+Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+
+| | |
+| --- | --- |
+| **Product repository** | `ID-Document-Recognition-Liveness-Detection-SDK` |
+| **Platform** | Hub |
+| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+
 
 ### Repository
 
 {% embed url="https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-SDK" %}
 
-[`identixia-IDV/ID-Document-Recognition-Liveness-Detection-SDK`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-SDK)
+Source: [`identixia-IDV/ID-Document-Recognition-Liveness-Detection-SDK`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-SDK)
 
-### From the product README
+## What you can do
+
+See the platform pages linked below for capabilities.
+
+## Prerequisites
+
+See the product README for toolchain details.
+
+## Start here
+
+Open the platform page that matches your license and stack. Each page includes quick start, activation, full API reference, and troubleshooting.
+
+## Product README (reference)
+
+The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
 
 ## <img src="https://api.iconify.design/lucide/id-card.svg?color=%230F766E" width="32" height="32" alt="" /> Identixia ID Document Recognition and Liveness Detection SDK
 
@@ -158,26 +184,20 @@ Document authenticity API only: [ID-Document-Liveness-Detection-Docker](https://
 
 ---
 
-## <img src="https://api.iconify.design/lucide/mail.svg?color=%230F766E" width="24" height="24" alt="" /> Contact
 
-<a href="mailto:contact@identixia.com"><img alt="Email contact@identixia.com" src="https://img.shields.io/badge/Email-contact%40identixia.com-0F766E?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-<a href="https://wa.me/17018854218"><img alt="WhatsApp +1 (701) 885-4218" src="https://img.shields.io/badge/WhatsApp-%2B1_(701)_885--4218-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" /></a>
-<a href="https://t.me/identixia"><img alt="Telegram @identixia" src="https://img.shields.io/badge/Telegram-%40identixia-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" /></a>
+## Support
 
+{% include "../.gitbook/includes/contact.md" %}
 
-{% hint style="info" %}
-Native engine binaries are distributed via GitHub Releases (`/releases/latest/download/…`) or the paths documented in the product README. They are not committed to git.
-{% endhint %}
-
-### Platforms
+### Platforms in this section
 
 * [ID Document Recognition Android SDK](id-document-recognition-android-sdk.md)
 * [ID Document Recognition iOS SDK](id-document-recognition-ios-sdk.md)
-* [ID Document Recognition Windows SDK](id-document-recognition-windows-sdk.md)
-* [ID Document Recognition Linux SDK](id-document-recognition-linux-sdk.md)
 * [ID Document Recognition Flutter SDK](id-document-recognition-flutter-sdk.md)
 * [ID Document Recognition React Native SDK](id-document-recognition-react-native-sdk.md)
 * [ID Document Recognition Ionic Capacitor SDK](id-document-recognition-ionic-capacitor-sdk.md)
 * [ID Document Recognition Ionic Cordova SDK](id-document-recognition-ionic-cordova-sdk.md)
+* [ID Document Recognition Windows SDK](id-document-recognition-windows-sdk.md)
+* [ID Document Recognition Linux / Docker SDK](id-document-recognition-linux-sdk.md)
 * [Document result JSON](document-result-json.md)
 * [Document security check fields](document-security-check-fields.md)

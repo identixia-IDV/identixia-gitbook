@@ -5,15 +5,168 @@ description: >-
 
 # ID Document Recognition Ionic Capacitor SDK
 
+
+## Overview
+
 Ionic Capacitor ID document recognition plugin for Android and iOS. Passport, national ID, and driver license OCR, MRZ, and barcode capture. Document liveness runs when the license includes it.
+
+Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+
+| | |
+| --- | --- |
+| **Product repository** | `ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor` |
+| **Platform** | Ionic |
+| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+
 
 ### Repository
 
 {% embed url="https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor" %}
 
-[`identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor)
+Source: [`identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor)
 
-### From the product README
+## What you can do
+
+| Capability | Description |
+| --- | --- |
+| Locate & crop | Find the ID document in a camera frame or still |
+| OCR | Visual-zone fields (name, document number, dates, …) |
+| MRZ | Machine-readable zone parse + checks |
+| Barcode / QR | When present on the document |
+| Front + back | Capture both sides when required |
+| Document liveness | Authenticity / PAD checks when the license includes it |
+| Structured JSON | Same result idea on mobile and server |
+
+## Prerequisites
+
+| Requirement | Detail |
+| --- | --- |
+| Node | 18+ |
+| Ionic CLI | Current stable |
+| Android / iOS | Native toolchains as for Capacitor or Cordova |
+| Device | Physical phone for camera capture |
+
+## Quick start
+
+### 1. Clone the sample
+
+```bash
+git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor.git
+cd ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor
+```
+
+### 2. Place the runtime
+
+Engine AAR / `docsdk` framework from Releases (`documentreadersdk.aar` / `docsdk.xcframework.zip`) or local `libdocsdk`.
+
+Clients should download versioned assets via:
+
+```text
+https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/releases/latest/download/<asset>
+```
+
+### 3. Run the demo
+
+Follow the repository **Run** section (Android Studio / Xcode / `flutter run` / `yarn android` / Ionic). Wait until status shows **Ready** before opening camera modes.
+
+### 4. Try every demo mode
+
+Use each tile / screen once (enroll, identify, capture, document front/back, result, about). Confirm license state on the About / Result screen.
+
+
+## License and activation (mobile)
+
+| | |
+| --- | --- |
+| **Demo id** | Sample application / bundle id shipped in the repo (document reader demo) |
+| **Demo key** | Bundled for the sample id only |
+| **Your app** | New applicationId / bundle id → request a new license |
+
+### Activate → init (concept)
+
+1. Call activate with your license string (background thread).
+2. On success, call init (unpacks on-device models; may take a few seconds the first time).
+3. Gate UI on Ready / license status before camera modes.
+4. Never paste the demo key into a production app id.
+
+
+### Status codes
+
+| Code | Meaning |
+| ---: | ------- |
+| `0` | Success |
+| `1` / `-1` | Invalid license |
+| `2` / `-2` | Wrong application / bundle id |
+| `3` / `-3` | License expired |
+| `4` / `-4` | Not activated |
+| `-5` | Init / model load failed |
+| `-10` | Invalid argument |
+| `-11` | Invalid image |
+| `-12` | No face |
+| `-13` | No document |
+| `-16` | Liveness failed (when gated) |
+
+Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+
+
+## API reference — mobile document SDK
+
+### Lifecycle
+
+| API | Purpose |
+| --- | --- |
+| Activate + init | License then load models (background thread) |
+| License status | Recognition / authenticity flags |
+| Session helpers | `startNewSession` / gallery session before recognize |
+
+### Capture and recognize
+
+| API | Purpose |
+| --- | --- |
+| Guide / crop helpers | Align document in frame (`DocumentGuideView` / kit crop) |
+| `recognize(front, back?)` | Run OCR + MRZ + barcode (+ liveness when licensed) |
+| Result parser | Map engine JSON → identity, fields, checks, images |
+
+### Result JSON (shared idea)
+
+Top-level concepts (names may be normalized per platform):
+
+| Area | Contents |
+| --- | --- |
+| Identity | Document type, country, overall score |
+| Fields / readings | OCR, MRZ, barcode field rows |
+| Checks / tests | Verification + image quality + security |
+| Images | Portrait / document crops (base64) |
+
+See [Document result JSON](document-result-json.md) and [Document security check fields](document-security-check-fields.md).
+
+### Integration checklist
+
+1. Apply `install.gradle` or vendor iOS `docsdk`.
+2. Activate with your app id license.
+3. Capture front (and back when needed) → `recognize`.
+4. Parse JSON in your app — do not depend on the demo Result UI.
+5. Store fields you need in **your** database.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| Invalid license | Application / bundle id must match the key; server needs the correct machine code |
+| Init failed | Runtime AAR/framework/`lib` missing or wrong ABI |
+| No face / no document | Lighting, crop, distance; try still gallery image first |
+| Liveness / authenticity empty | License flag off — request the matching entitlement |
+| Camera black / crash | Use a **physical** device; grant camera permission |
+| Docker license fails after bare-metal license | Machine codes differ — re-license the container |
+
+
+## Support
+
+{% include "../.gitbook/includes/contact.md" %}
+
+## Product README (reference)
+
+The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
 
 ## <img src="https://cdn.simpleicons.org/ionic/3880FF" width="32" height="32" alt="" /> Identixia ID Document Recognition and Liveness Detection — Ionic Capacitor
 
@@ -170,14 +323,3 @@ Depend on `document-reader-capacitor` via **git** `ref: v1.0.0` (not a monorepo 
 | <img src="https://cdn.simpleicons.org/docker/2496ED" width="18" height="18" alt="" /> | Linux / Docker | [ID-Document-Recognition-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) |
 
 ---
-
-## <img src="https://api.iconify.design/lucide/mail.svg?color=%230F766E" width="24" height="24" alt="" /> Contact
-
-<a href="mailto:contact@identixia.com"><img alt="Email contact@identixia.com" src="https://img.shields.io/badge/Email-contact%40identixia.com-0F766E?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-<a href="https://wa.me/17018854218"><img alt="WhatsApp +1 (701) 885-4218" src="https://img.shields.io/badge/WhatsApp-%2B1_(701)_885--4218-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" /></a>
-<a href="https://t.me/identixia"><img alt="Telegram @identixia" src="https://img.shields.io/badge/Telegram-%40identixia-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" /></a>
-
-
-{% hint style="info" %}
-Native engine binaries are distributed via GitHub Releases (`/releases/latest/download/…`) or the paths documented in the product README. They are not committed to git.
-{% endhint %}

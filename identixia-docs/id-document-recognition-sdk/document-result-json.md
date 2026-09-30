@@ -5,35 +5,47 @@ description: >-
 
 # Document result JSON
 
-`recognize` (mobile) and `POST /api/documentProcess` (Linux / Windows) return the same idea: one JSON object. Dedicated `documentRecognition` / `documentLiveness` (and matching HTTP paths) use the same shape with recognition-only or authenticity-only fields populated.
+## Purpose
 
-Parse this object in your app. Do not copy the demo Result screen.
+`recognize` (mobile) and `POST /api/documentProcess` (Linux / Windows) return the **same idea**: one JSON object your app parses. Dedicated `documentRecognition` / `documentLiveness` routes use the same shape with recognition-only or authenticity-only fields populated.
 
-### Top-level fields
+Do **not** scrape the demo Result screen — parse this JSON.
+
+## Top-level fields
 
 | Field | Meaning |
 | ----- | ------- |
-| `errorCode` | Optional engine error |
-| `documentName` | Document type name |
+| `errorCode` / process `metadata.status` | Engine / process status |
+| `documentName` / identity class | Document type name |
 | `countryName` | Issuing country |
-| `score` | Document / locate confidence |
-| `msg` | Optional message |
-| `verification` | Field and document checks |
+| `score` | Locate / document confidence |
+| `msg` / `metadata.message` | Optional message |
+| `verification` / `tests` | Field and document checks |
 | `imageQuality` | Capture quality checks |
-| `ocr` | Visual-zone fields |
+| `ocr` / field readings | Visual-zone fields |
 | `mrz` | Machine-readable zone |
 | `barcode` | Barcode / QR fields |
 | `images` | Crops (portrait, document, signature, …) |
 | `security` | Authenticity / document liveness (license-gated) |
 
-### `verification` values
+Mobile kits may normalize Android output toward an iOS-shaped contract — use the kit `ResultParser` when present.
 
-**0** Pass · **1** Fail · **2** Not checked
+## `verification` values
 
-### Related HTTP routes
+| Value | Meaning |
+| ---: | --- |
+| `0` | Pass |
+| `1` | Fail |
+| `2` | Not checked |
 
-* `POST /api/documentProcess`
-* `POST /api/documentRecognition`
-* `POST /api/documentLiveness`
+Image-quality check enums may use a different 0/1/2 mapping — see the kit parser comments.
+
+## Related HTTP routes
+
+| Route | Role |
+| --- | --- |
+| `POST /api/documentProcess` | Full process |
+| `POST /api/documentRecognition` | OCR / MRZ / barcode |
+| `POST /api/documentLiveness` | Authenticity only |
 
 See also [Document security check fields](document-security-check-fields.md).

@@ -5,15 +5,56 @@ description: >-
 
 # Face Recognition SDK
 
+
+## Overview
+
 Face recognition SDK for Android, iOS, Windows, and Docker. Mobile apps enroll and run 1:N identification. Server APIs detect, score quality, and match 1:1. Passive liveness requires the matching license.
+
+Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+
+| | |
+| --- | --- |
+| **Product repository** | `Face-Recognition-SDK` |
+| **Platform** | Hub |
+| **Docs site** | [doc.identixia.com](https://doc.identixia.com) |
+
 
 ### Repository
 
 {% embed url="https://github.com/identixia-IDV/Face-Recognition-SDK" %}
 
-[`identixia-IDV/Face-Recognition-SDK`](https://github.com/identixia-IDV/Face-Recognition-SDK)
+Source: [`identixia-IDV/Face-Recognition-SDK`](https://github.com/identixia-IDV/Face-Recognition-SDK)
 
-### From the product README
+## What you can do
+
+See the platform pages linked below for capabilities.
+
+## Prerequisites
+
+See the product README for toolchain details.
+
+## Start here
+
+Open the platform page that matches your license and stack. Each page includes quick start, activation, full API reference, and troubleshooting.
+
+## Related platforms
+
+| Platform | Docs |
+| --- | --- |
+| Android | [Face Recognition Android SDK](face-recognition-android-sdk.md) |
+| iOS | [Face Recognition iOS SDK](face-recognition-ios-sdk.md) |
+| Flutter | [Face Recognition Flutter SDK](face-recognition-android-sdk-2.md) |
+| React Native | [Face Recognition React Native SDK](face-recognition-android-sdk-1.md) |
+| Ionic Capacitor | [Face Recognition Ionic Capacitor SDK](face-recognition-ionic-capacitor-sdk.md) |
+| Ionic Cordova | [Face Recognition Ionic Cordova SDK](face-recognition-android-sdk-3.md) |
+| Windows (+ liveness) | [Face Recognition + Liveness Windows](face-recognition-sdk-windows.md) |
+| Linux / Docker (+ liveness) | [Face Recognition + Liveness Linux](face-recognition-sdk-linux.md) |
+| Windows (recognition only) | [Face Recognition Windows](face-recognition-windows-sdk.md) |
+| Linux (recognition only) | [Face Recognition Linux](face-recognition-linux-sdk.md) |
+
+## Product README (reference)
+
+The following is adapted from the shipping repository README for screenshots, exact commands, and platform-specific notes.
 
 ## Identixia Face Recognition SDK — Fully On-Premise
 
@@ -110,18 +151,12 @@ This GitHub repo is the **product hub**. Clone the platform SDK you need. Engine
 
 ---
 
-## Contact
 
-<a href="mailto:contact@identixia.com"><img alt="Email contact@identixia.com" src="https://img.shields.io/badge/Email-contact%40identixia.com-0F766E?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-<a href="https://wa.me/17018854218"><img alt="WhatsApp +1 (701) 885-4218" src="https://img.shields.io/badge/WhatsApp-%2B1_(701)_885--4218-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" /></a>
-<a href="https://t.me/identixia"><img alt="Telegram @identixia" src="https://img.shields.io/badge/Telegram-%40identixia-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" /></a>
+## Support
 
+{% include "../.gitbook/includes/contact.md" %}
 
-{% hint style="info" %}
-Native engine binaries are distributed via GitHub Releases (`/releases/latest/download/…`) or the paths documented in the product README. They are not committed to git.
-{% endhint %}
-
-### Platforms
+### Platforms in this section
 
 * [Face Recognition Android SDK](face-recognition-android-sdk.md)
 * [Face Recognition iOS SDK](face-recognition-ios-sdk.md)
@@ -130,6 +165,6 @@ Native engine binaries are distributed via GitHub Releases (`/releases/latest/do
 * [Face Recognition Ionic Capacitor SDK](face-recognition-ionic-capacitor-sdk.md)
 * [Face Recognition Ionic Cordova SDK](face-recognition-android-sdk-3.md)
 * [Face Recognition + Liveness Windows SDK](face-recognition-sdk-windows.md)
-* [Face Recognition + Liveness Linux SDK](face-recognition-sdk-linux.md)
+* [Face Recognition + Liveness Linux / Docker SDK](face-recognition-sdk-linux.md)
 * [Face Recognition Windows SDK](face-recognition-windows-sdk.md)
-* [Face Recognition Linux SDK](face-recognition-linux-sdk.md)
+* [Face Recognition Linux / Docker SDK](face-recognition-linux-sdk.md)
