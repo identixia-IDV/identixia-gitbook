@@ -10,32 +10,32 @@ description: >-
 
 Ionic Cordova face recognition plugin for Android and iOS: enrollment, 1:N identification, and face attributes. Passive liveness is available when the license allows it.
 
-Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+Processing runs **on the device**. Identixia does **not** receive biometric images, templates, or document scans.
 
 | | |
 | --- | --- |
-| **Product repository** | `FaceRecognition-LivenessDetection-Ionic-Cordova` |
+| **Repository** | [`FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) |
 | **Platform** | Ionic-Cordova |
-| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
+| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
 
 
-### Repository
+## Repository
 
 {% embed url="https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova" %}
 
-Source: [`identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova)
+[`identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/latest)
 
-## What you can do
+## Capabilities
 
 | Capability | Description |
 | --- | --- |
-| Detect faces | Bounding box, landmarks, pose |
-| Attributes | Age / gender / expression-style traits when enabled |
-| Image / face quality | ICAO-style quality scores |
-| Templates | Compact face feature vectors you store yourself |
+| Face detection | Bounding box, landmarks, and pose |
+| Attributes | Age, gender, and related traits when enabled |
+| Quality | ICAO-style image and face quality scores |
+| Templates | Compact feature vectors stored in **your** database |
 | 1:1 match | Compare two images or two templates |
-| 1:N identify | Enroll gallery + live search (mobile VideoWorker / server gallery) |
-| Passive liveness | Presentation-attack score when the license includes it |
+| 1:N identify | Enroll a gallery and search (mobile VideoWorker / server gallery) |
+| Passive liveness | Presentation-attack score when the license includes `liveness` |
 
 ## Prerequisites
 
@@ -178,6 +178,8 @@ When the license includes liveness, still-image detect/quality paths and VideoWo
 
 ## Related platforms
 
+Keep the same license product line across stacks. From the [Face SDK](README.md) hub:
+
 | Platform | Docs |
 | --- | --- |
 | Android (full) | [Android](android.md) |
@@ -219,14 +221,21 @@ When the license includes liveness, still-image detect/quality paths and VideoWo
 
 <figure><img src="../.gitbook/assets/face-android-about.png" alt="About" width="150"><figcaption>About</figcaption></figure>
 
+## Next steps
+
+1. Complete **Quick start** until the sample shows **Ready**.
+2. Activate with a license issued for **your** application id or machine code.
+3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
+4. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms.
+
 
 ## Support
 
 {% include "../.gitbook/includes/contact.md" %}
 
-## Product README (reference)
+## Repository README
 
-Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
 
 ## Identixia Face Recognition — Ionic Cordova
 

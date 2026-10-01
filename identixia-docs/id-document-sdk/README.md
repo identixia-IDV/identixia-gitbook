@@ -7,23 +7,23 @@ description: >-
 
 <p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
 
-## What this SDK is
+## Overview
 
-The **ID Document SDK** reads passports, national IDs, and driver licenses **on-premise**. Two licensed functions:
+The **ID Document SDK** reads passports, national IDs, and driver licenses **on-premise**. Two independently licensed functions:
 
-| Function | What it does | License flag |
+| Function | Capabilities | License flag |
 | --- | --- | --- |
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
 | **Liveness / authenticity** | Anti-spoof checks (screen, printout, substitution) | `authenticity` |
 
-Full product repositories run **both** when the license allows. There is also a **liveness-only** Linux / Docker API if you only need authenticity.
+Full product repositories run **both** when the license allows. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.
 
 ## Start here
 
 1. [Document recognition](recognition.md) — fields, MRZ, images
-2. [Document liveness](liveness.md) — security checks vs OCR
-3. [Result JSON](result-json.md) — one shape for mobile and server
-4. [Security check fields](security-fields.md) — how to read authenticity
+2. [Document liveness](liveness.md) — authenticity checks versus OCR
+3. [Result JSON](result-json.md) — shared shape for mobile and server
+4. [Security check fields](security-fields.md) — how to read authenticity results
 
 ## Full product (recognition + liveness)
 
@@ -33,10 +33,10 @@ Full product repositories run **both** when the license allows. There is also a 
 | iOS | [`ID-Document-Recognition-Liveness-Detection-iOS`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS) | [iOS](ios.md) |
 | Flutter | [`ID-Document-Recognition-Liveness-Detection-Flutter`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter) | [Flutter](flutter.md) |
 | React Native | [`ID-Document-Recognition-Liveness-Detection-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native) | [React Native](react-native.md) |
-| Ionic Capacitor | [`…-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) | [Ionic Capacitor](ionic-capacitor.md) |
-| Ionic Cordova | [`…-Ionic-Cordova`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) | [Ionic Cordova](ionic-cordova.md) |
-| Windows | [`…-Windows`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows) | [Windows](windows.md) |
-| Linux / Docker | [`…-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) | [Linux / Docker](linux-docker.md) |
+| Ionic Capacitor | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) | [Ionic Capacitor](ionic-capacitor.md) |
+| Ionic Cordova | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) | [Ionic Cordova](ionic-cordova.md) |
+| Windows | [`ID-Document-Recognition-Liveness-Detection-Windows`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows) | [Windows](windows.md) |
+| Linux / Docker | [`ID-Document-Recognition-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) | [Linux / Docker](linux-docker.md) |
 
 ## Liveness-only API
 

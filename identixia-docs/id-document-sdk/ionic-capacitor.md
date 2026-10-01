@@ -10,32 +10,32 @@ description: >-
 
 Ionic Capacitor ID document recognition plugin for Android and iOS. Passport, national ID, and driver license OCR, MRZ, and barcode capture. Document liveness runs when the license includes it.
 
-Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+Processing runs **on the device**. Identixia does **not** receive biometric images, templates, or document scans.
 
 | | |
 | --- | --- |
-| **Product repository** | `ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor` |
+| **Repository** | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) |
 | **Platform** | Ionic |
-| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
+| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
 
 
-### Repository
+## Repository
 
 {% embed url="https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor" %}
 
-Source: [`identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor)
+[`identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/releases/latest)
 
-## What you can do
+## Capabilities
 
 | Capability | Description |
 | --- | --- |
-| Locate & crop | Find the ID document in a camera frame or still |
-| OCR | Visual-zone fields (name, document number, dates, …) |
-| MRZ | Machine-readable zone parse + checks |
-| Barcode / QR | When present on the document |
-| Front + back | Capture both sides when required |
-| Document liveness | Authenticity / PAD checks when the license includes it |
-| Structured JSON | Same result idea on mobile and server |
+| Locate and crop | Find the ID document in a camera frame or still image |
+| OCR | Visual-zone fields (name, document number, dates, and related data) |
+| MRZ | Machine-readable zone parse and checksum checks |
+| Barcode / QR | Extracted when present on the document |
+| Front and back | Capture both sides when your workflow requires it |
+| Document authenticity | Anti-spoof checks when the license includes `authenticity` |
+| Structured JSON | Same result model on mobile and server — see Result JSON |
 
 ## Prerequisites
 
@@ -171,14 +171,21 @@ See [Result JSON](result-json.md) and [Security check fields](security-fields.md
 
 <figure><img src="../.gitbook/assets/document-desktop-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
 
+## Next steps
+
+1. Complete **Quick start** until the sample shows **Ready**.
+2. Activate with a license issued for **your** application id or machine code.
+3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
+4. Return to the [ID Document SDK](README.md) hub for Result JSON and related platforms.
+
 
 ## Support
 
 {% include "../.gitbook/includes/contact.md" %}
 
-## Product README (reference)
+## Repository README
 
-Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
 
 ## Identixia ID Document Recognition and Liveness Detection — Ionic Capacitor
 

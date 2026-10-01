@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Detailed GitBook section builders for customer-facing Identixia docs."""
+"""Platform page builders for customer-facing Identixia GitBook docs."""
 
 from __future__ import annotations
 
@@ -58,73 +58,87 @@ CONTACT_NESTED = """
 
 def github_block(owner: str, name: str) -> str:
     return f"""
-### Repository
+## Repository
 
 {{% embed url="https://github.com/{owner}/{name}" %}}
 
-Source: [`{owner}/{name}`](https://github.com/{owner}/{name})
+[`{owner}/{name}`](https://github.com/{owner}/{name}) · [Releases](https://github.com/{owner}/{name}/releases/latest)
 """
 
 
 def overview(ctx: ProductCtx) -> str:
+    where = (
+        "on the device"
+        if ctx.platform
+        not in ("Windows", "Linux", "Hub")
+        else "on your server (or in your container)"
+    )
     return f"""
 ## Overview
 
 {ctx.description}
 
-Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+Processing runs **{where}**. Identixia does **not** receive biometric images, templates, or document scans.
 
 | | |
 | --- | --- |
-| **Product repository** | `{ctx.name}` |
+| **Repository** | [`{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) |
 | **Platform** | {ctx.platform} |
-| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
+| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
 """
 
 
 def what_you_can_do(ctx: ProductCtx) -> str:
     if ctx.family in ("face_combined", "face_recog"):
         rows = [
-            "| Detect faces | Bounding box, landmarks, pose |",
-            "| Attributes | Age / gender / expression-style traits when enabled |",
-            "| Image / face quality | ICAO-style quality scores |",
-            "| Templates | Compact face feature vectors you store yourself |",
+            "| Face detection | Bounding box, landmarks, and pose |",
+            "| Attributes | Age, gender, and related traits when enabled |",
+            "| Quality | ICAO-style image and face quality scores |",
+            "| Templates | Compact feature vectors stored in **your** database |",
             "| 1:1 match | Compare two images or two templates |",
         ]
         if ctx.family == "face_combined":
-            rows.append("| 1:N identify | Enroll gallery + live search (mobile VideoWorker / server gallery) |")
-            rows.append("| Passive liveness | Presentation-attack score when the license includes it |")
-        return "## What you can do\n\n| Capability | Description |\n| --- | --- |\n" + "\n".join(rows) + "\n"
+            rows.append(
+                "| 1:N identify | Enroll a gallery and search (mobile VideoWorker / server gallery) |"
+            )
+            rows.append(
+                "| Passive liveness | Presentation-attack score when the license includes `liveness` |"
+            )
+        return (
+            "## Capabilities\n\n| Capability | Description |\n| --- | --- |\n"
+            + "\n".join(rows)
+            + "\n"
+        )
     if ctx.family == "face_liveness":
-        return """## What you can do
+        return """## Capabilities
 
 | Capability | Description |
 | --- | --- |
-| Passive face liveness | Score one RGB face image / frame for presentation-attack detection |
-| License gating | Liveness runs only when the license allows it |
+| Passive face liveness | Score one RGB face image or camera frame for presentation-attack detection |
+| License gating | Liveness runs only when the license includes `liveness` |
 """
     if ctx.family == "document":
-        return """## What you can do
+        return """## Capabilities
 
 | Capability | Description |
 | --- | --- |
-| Locate & crop | Find the ID document in a camera frame or still |
-| OCR | Visual-zone fields (name, document number, dates, …) |
-| MRZ | Machine-readable zone parse + checks |
-| Barcode / QR | When present on the document |
-| Front + back | Capture both sides when required |
-| Document liveness | Authenticity / PAD checks when the license includes it |
-| Structured JSON | Same result idea on mobile and server |
+| Locate and crop | Find the ID document in a camera frame or still image |
+| OCR | Visual-zone fields (name, document number, dates, and related data) |
+| MRZ | Machine-readable zone parse and checksum checks |
+| Barcode / QR | Extracted when present on the document |
+| Front and back | Capture both sides when your workflow requires it |
+| Document authenticity | Anti-spoof checks when the license includes `authenticity` |
+| Structured JSON | Same result model on mobile and server — see Result JSON |
 """
     if ctx.family == "document_liveness":
-        return """## What you can do
+        return """## Capabilities
 
 | Capability | Description |
 | --- | --- |
-| Document liveness API | Anti-spoofing against screen replay, printout, substitution |
-| Separate from OCR | Does not replace ID Document Recognition |
+| Document authenticity API | Checks against screen replay, printout, and substitution |
+| Separate from OCR | Complements ID Document Recognition; does not replace it |
 """
-    return "## What you can do\n\nSee the platform pages linked below for capabilities.\n"
+    return "## Capabilities\n\nSee the linked platform pages for the full capability list.\n"
 
 
 def prerequisites(ctx: ProductCtx) -> str:
@@ -748,16 +762,40 @@ def readme_appendix(readme_body: str) -> str:
     if not readme_body.strip():
         return ""
     return (
-        "## Product README (reference)\n\n"
-        "Adapted from the shipping repository README for exact commands and "
-        "platform-specific notes. Screenshots above use the current Identixia asset pack.\n\n"
+        "## Repository README\n\n"
+        "The following notes are adapted from the shipping repository README "
+        "(exact commands and platform-specific details). Screenshots on this page "
+        "use the Identixia documentation asset pack.\n\n"
         + readme_body.strip()
         + "\n"
     )
 
 
+def next_steps(ctx: ProductCtx) -> str:
+    lines = [
+        "## Next steps",
+        "",
+        "1. Complete **Quick start** until the sample shows **Ready**.",
+        "2. Activate with a license issued for **your** application id or machine code.",
+        "3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.",
+    ]
+    if ctx.family in ("face_combined", "face_recog", "face_liveness"):
+        lines.append(
+            "4. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms."
+        )
+    elif ctx.family in ("document", "document_liveness"):
+        lines.append(
+            "4. Return to the [ID Document SDK](README.md) hub for Result JSON and related platforms."
+        )
+    else:
+        lines.append("4. Open the product hub that matches your license.")
+    return "\n".join(lines) + "\n"
+
+
 def cross_platform_face() -> str:
     return """## Related platforms
+
+Keep the same license product line across stacks. From the [Face SDK](README.md) hub:
 
 | Platform | Docs |
 | --- | --- |
@@ -829,6 +867,7 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
     if ctx.family in ("face_combined", "face_recog"):
         parts.append(cross_platform_face())
     parts.append(screenshots_section(ctx, nested=True))
+    parts.append(next_steps(ctx))
     parts.append(CONTACT_NESTED)
     parts.append(readme_appendix(readme_body))
     return "\n".join(p for p in parts if p)

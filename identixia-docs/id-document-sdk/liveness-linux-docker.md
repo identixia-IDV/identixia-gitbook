@@ -10,27 +10,27 @@ description: >-
 
 On-premise ID document liveness API for Linux and Docker. Separate from OCR. Document liveness runs when the license includes it.
 
-Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+Processing runs **on your server (or in your container)**. Identixia does **not** receive biometric images, templates, or document scans.
 
 | | |
 | --- | --- |
-| **Product repository** | `ID-Document-Liveness-Detection-Docker` |
+| **Repository** | [`ID-Document-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker) |
 | **Platform** | Linux |
-| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
+| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
 
 
-### Repository
+## Repository
 
 {% embed url="https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker" %}
 
-Source: [`identixia-IDV/ID-Document-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker)
+[`identixia-IDV/ID-Document-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker) · [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/latest)
 
-## What you can do
+## Capabilities
 
 | Capability | Description |
 | --- | --- |
-| Document liveness API | Anti-spoofing against screen replay, printout, substitution |
-| Separate from OCR | Does not replace ID Document Recognition |
+| Document authenticity API | Checks against screen replay, printout, and substitution |
+| Separate from OCR | Complements ID Document Recognition; does not replace it |
 
 ## Prerequisites
 
@@ -129,14 +129,21 @@ This product is **PAD / authenticity**, not OCR. Pair with ID Document Recogniti
 
 <figure><img src="../.gitbook/assets/document-desktop-status.png" alt="Status card" width="420"><figcaption>Status card</figcaption></figure>
 
+## Next steps
+
+1. Complete **Quick start** until the sample shows **Ready**.
+2. Activate with a license issued for **your** application id or machine code.
+3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
+4. Return to the [ID Document SDK](README.md) hub for Result JSON and related platforms.
+
 
 ## Support
 
 {% include "../.gitbook/includes/contact.md" %}
 
-## Product README (reference)
+## Repository README
 
-Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
 
 ## Identixia ID Document Liveness — Linux / Docker
 

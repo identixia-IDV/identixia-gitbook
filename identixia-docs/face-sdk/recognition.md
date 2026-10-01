@@ -5,11 +5,11 @@ description: >-
 
 # Face recognition
 
-## In plain words
+## Overview
 
-Face **recognition** turns a camera image into something you can store and compare:
+Face **recognition** turns a camera image into data you can store and compare:
 
-1. **Find** the face (box, landmarks, pose).
+1. **Detect** the face (box, landmarks, pose).
 2. **Describe** it (optional attributes and quality).
 3. **Encode** it as a compact **template** (feature vector).
 4. **Compare** templates (1:1) or search a gallery (1:N).

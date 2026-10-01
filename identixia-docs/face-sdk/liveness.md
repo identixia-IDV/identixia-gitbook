@@ -5,11 +5,11 @@ description: >-
 
 # Face liveness
 
-## In plain words
+## Overview
 
-Face **liveness** answers: “Is this a live person, or a photo / screen / replay?”
+Face **liveness** answers whether the subject is a live person or a photo, screen, or replay.
 
-It is **passive** — the user looks at the camera; there is no smile/blink challenge in the core API.
+It is **passive**: the user looks at the camera. The core API does not require smile or blink challenges.
 
 ## When a score appears
 

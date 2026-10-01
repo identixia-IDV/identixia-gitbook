@@ -8,9 +8,9 @@ description: >-
 <p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
 <p align="center"><img src="../.gitbook/assets/favicon.png" alt="Identixia mark" width="48"></p>
 
-## What IDV is
+## Overview
 
-**IDV** is the Identixia identity-verification **platform** (`IDV/` in the monorepo). It does **not** replace the Face or Document SDKs — it **orchestrates** them and sits between your company systems and capture apps.
+**IDV** is the Identixia identity-verification **platform** (`IDV/` in the monorepo). It does not replace the Face or Document SDKs — it **orchestrates** them between your company systems and applicant capture apps.
 
 ## Who runs what
 

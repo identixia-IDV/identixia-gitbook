@@ -5,12 +5,12 @@ description: >-
 
 # Document liveness
 
-## In plain words
+## Overview
 
-Document **liveness** (authenticity) checks whether the ID is likely a real document versus:
+Document **liveness** (authenticity) checks whether the ID is likely a physical document versus:
 
 * A screen replay
-* A printout / paper copy
+* A printout or paper copy
 * Portrait or document substitution (when the engine supports it)
 
 It does **not** replace OCR. You can run authenticity alone or together with recognition.

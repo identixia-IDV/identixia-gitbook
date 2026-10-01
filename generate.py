@@ -313,29 +313,29 @@ def write_face_hub() -> None:
     body = f"""
 <p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
 
-## What this SDK is
+## Overview
 
-The **Face SDK** runs on the phone or on your server. It covers two licensed functions:
+The **Face SDK** runs entirely on the device or on your server. It covers two independently licensed functions:
 
-| Function | What it does | License flag |
+| Function | Capabilities | License flag |
 | --- | --- | --- |
 | **Recognition** | Detect faces, attributes, quality, templates, 1:1 match, 1:N identify | `recognition` |
-| **Liveness** | Passive presentation-attack score (real person vs photo/screen) | `liveness` |
+| **Liveness** | Passive presentation-attack score (live person vs photo or screen) | `liveness` |
 
-Pick a **repository that matches your license**. A recognition-only build will not invent liveness scores.
+Choose a **repository that matches your license**. A recognition-only build does not return liveness scores.
 
-## Choose a product line
+## Product lines
 
-| You need | Use |
+| Requirement | Start here |
 | --- | --- |
-| Recognition **and** liveness in one app / API | Full platforms below (Android → Docker) |
+| Recognition **and** liveness in one app or API | [Full product](full-product.md) (Android through Docker) |
 | Recognition only | [Windows](recognition-windows.md) · [Linux / Docker](recognition-linux-docker.md) |
 | Liveness only | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Linux / Docker](liveness-linux-docker.md) |
 
-Read the function guides first if you are new:
+Function guides:
 
-* [Face recognition](recognition.md) — APIs, gallery, match
-* [Face liveness](liveness.md) — when scores appear, how to gate UX
+* [Face recognition](recognition.md) — detect, templates, gallery, match
+* [Face liveness](liveness.md) — when scores appear and how to gate UX
 
 ## Full product (recognition + liveness)
 
@@ -352,12 +352,12 @@ Read the function guides first if you are new:
 
 <figure><img src="../.gitbook/assets/face-android-home.png" alt="Face SDK Android home" width="160"><figcaption>Android demo home</figcaption></figure>
 
-## How to integrate
+## Integration path
 
 1. Open the platform page for your stack.
-2. Clone the sample → place engine binaries from GitHub Releases → run until **Ready**.
-3. Activate with **your** application id / machine code (demo keys only work for demo ids).
-4. Call recognition and liveness APIs on a **background** thread (mobile) or via HTTP (server).
+2. Clone the sample, place engine binaries from GitHub Releases, and run until status shows **Ready**.
+3. Activate with **your** application id or machine code (demo keys work only for demo ids).
+4. Call recognition and liveness APIs on a **background** thread (mobile) or over HTTP (server).
 
 {{% hint style="info" %}}
 Biometric images and templates stay on **your** device or server. Identixia does not host them.
@@ -377,11 +377,11 @@ def write_face_concepts() -> None:
         "Face recognition",
         "What Identixia face recognition does, which APIs to call, and which repositories ship it.",
         f"""
-## In plain words
+## Overview
 
-Face **recognition** turns a camera image into something you can store and compare:
+Face **recognition** turns a camera image into data you can store and compare:
 
-1. **Find** the face (box, landmarks, pose).
+1. **Detect** the face (box, landmarks, pose).
 2. **Describe** it (optional attributes and quality).
 3. **Encode** it as a compact **template** (feature vector).
 4. **Compare** templates (1:1) or search a gallery (1:N).
@@ -443,11 +443,11 @@ Without `recognition` entitlement, detect/template/match calls fail or return em
         "Face liveness",
         "Passive face liveness: when it runs, which products include it, and how to read the score.",
         f"""
-## In plain words
+## Overview
 
-Face **liveness** answers: “Is this a live person, or a photo / screen / replay?”
+Face **liveness** answers whether the subject is a live person or a photo, screen, or replay.
 
-It is **passive** — the user looks at the camera; there is no smile/blink challenge in the core API.
+It is **passive**: the user looks at the camera. The core API does not require smile or blink challenges.
 
 ## When a score appears
 
@@ -493,23 +493,23 @@ def write_document_hub() -> None:
     body = f"""
 <p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
 
-## What this SDK is
+## Overview
 
-The **ID Document SDK** reads passports, national IDs, and driver licenses **on-premise**. Two licensed functions:
+The **ID Document SDK** reads passports, national IDs, and driver licenses **on-premise**. Two independently licensed functions:
 
-| Function | What it does | License flag |
+| Function | Capabilities | License flag |
 | --- | --- | --- |
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
 | **Liveness / authenticity** | Anti-spoof checks (screen, printout, substitution) | `authenticity` |
 
-Full product repositories run **both** when the license allows. There is also a **liveness-only** Linux / Docker API if you only need authenticity.
+Full product repositories run **both** when the license allows. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.
 
 ## Start here
 
 1. [Document recognition](recognition.md) — fields, MRZ, images
-2. [Document liveness](liveness.md) — security checks vs OCR
-3. [Result JSON](result-json.md) — one shape for mobile and server
-4. [Security check fields](security-fields.md) — how to read authenticity
+2. [Document liveness](liveness.md) — authenticity checks versus OCR
+3. [Result JSON](result-json.md) — shared shape for mobile and server
+4. [Security check fields](security-fields.md) — how to read authenticity results
 
 ## Full product (recognition + liveness)
 
@@ -519,10 +519,10 @@ Full product repositories run **both** when the license allows. There is also a 
 | iOS | [`ID-Document-Recognition-Liveness-Detection-iOS`]({GH}/ID-Document-Recognition-Liveness-Detection-iOS) | [iOS](ios.md) |
 | Flutter | [`ID-Document-Recognition-Liveness-Detection-Flutter`]({GH}/ID-Document-Recognition-Liveness-Detection-Flutter) | [Flutter](flutter.md) |
 | React Native | [`ID-Document-Recognition-Liveness-Detection-React-Native`]({GH}/ID-Document-Recognition-Liveness-Detection-React-Native) | [React Native](react-native.md) |
-| Ionic Capacitor | [`…-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) | [Ionic Capacitor](ionic-capacitor.md) |
-| Ionic Cordova | [`…-Ionic-Cordova`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) | [Ionic Cordova](ionic-cordova.md) |
-| Windows | [`…-Windows`]({GH}/ID-Document-Recognition-Liveness-Detection-Windows) | [Windows](windows.md) |
-| Linux / Docker | [`…-Docker`]({GH}/ID-Document-Recognition-Liveness-Detection-Docker) | [Linux / Docker](linux-docker.md) |
+| Ionic Capacitor | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) | [Ionic Capacitor](ionic-capacitor.md) |
+| Ionic Cordova | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) | [Ionic Cordova](ionic-cordova.md) |
+| Windows | [`ID-Document-Recognition-Liveness-Detection-Windows`]({GH}/ID-Document-Recognition-Liveness-Detection-Windows) | [Windows](windows.md) |
+| Linux / Docker | [`ID-Document-Recognition-Liveness-Detection-Docker`]({GH}/ID-Document-Recognition-Liveness-Detection-Docker) | [Linux / Docker](linux-docker.md) |
 
 ## Liveness-only API
 
@@ -550,14 +550,14 @@ def write_document_concepts() -> None:
         "Document recognition",
         "OCR, MRZ, barcode, and images from ID documents — APIs and repositories.",
         f"""
-## In plain words
+## Overview
 
 Document **recognition** finds the card in the frame and extracts:
 
-* Visual-zone fields (name, document number, dates, …)
+* Visual-zone fields (name, document number, dates, and related data)
 * **MRZ** (machine-readable zone)
 * Barcode / QR when present
-* Cropped images (portrait, document, signature, …)
+* Cropped images (portrait, document, signature, and related crops)
 
 ## Capture tips
 
@@ -597,12 +597,12 @@ Packaging hub: [`ID-Document-Recognition-Liveness-Detection-SDK`]({GH}/ID-Docume
         "Document liveness",
         "Document authenticity / anti-spoofing — separate from OCR, license-gated.",
         f"""
-## In plain words
+## Overview
 
-Document **liveness** (authenticity) checks whether the ID is likely a real document versus:
+Document **liveness** (authenticity) checks whether the ID is likely a physical document versus:
 
 * A screen replay
-* A printout / paper copy
+* A printout or paper copy
 * Portrait or document substitution (when the engine supports it)
 
 It does **not** replace OCR. You can run authenticity alone or together with recognition.
@@ -709,9 +709,9 @@ def write_idv_pages() -> None:
 <p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
 <p align="center"><img src="../.gitbook/assets/favicon.png" alt="Identixia mark" width="48"></p>
 
-## What IDV is
+## Overview
 
-**IDV** is the Identixia identity-verification **platform** (`IDV/` in the monorepo). It does **not** replace the Face or Document SDKs — it **orchestrates** them and sits between your company systems and capture apps.
+**IDV** is the Identixia identity-verification **platform** (`IDV/` in the monorepo). It does not replace the Face or Document SDKs — it **orchestrates** them between your company systems and applicant capture apps.
 
 ## Who runs what
 
@@ -931,23 +931,23 @@ def write_static_pages() -> None:
         """
 ## Mobile SDK (Face / Document)
 
-1. Build with **your** applicationId / bundle id (not the demo id).
-2. Contact us with the id and product (Face recognition / Face liveness / Document recognition / Document authenticity).
-3. Activate → init as shown on the platform page.
+1. Build with **your** applicationId or bundle id (not the demo id).
+2. Contact us with that id and the product (Face recognition, Face liveness, Document recognition, or Document authenticity).
+3. Activate and initialize as shown on the platform page.
 
 Demo keys work only for demo application ids.
 
 ## Server SDK (Windows / Linux / Docker)
 
 1. Start the API once.
-2. `GET /api/machinecode` → copy `data.machinecode`.
-3. Send that code to Identixia. **Docker and bare metal differ.**
-4. `POST /api/activate` or place `license.txt` and restart.
+2. Call `GET /api/machinecode` and copy `data.machinecode`.
+3. Send that code to Identixia. Docker and bare-metal machine codes differ — license the environment you ship.
+4. Call `POST /api/activate`, or place `license.txt` and restart.
 5. Confirm with `GET /api/licenseStatus`.
 
 ## IDV
 
-IDV uses Hybrid licensing via `license-admin` / `license_v2`. Issuer UI: `:14190` (localhost). Company systems use `company-backend` (sample `:14195`) to hold the service token and start sessions — see the [IDV → Company integration](idv/company.md) docs.
+IDV uses Hybrid licensing via `license-admin` and `license_v2`. The issuer UI listens on `:14190` (localhost). Company systems use `company-backend` (sample `:14195`) to hold the service token and start sessions — see [Company integration](idv/company.md).
 
 ## Support
 
@@ -958,11 +958,11 @@ IDV uses Hybrid licensing via `license-admin` / `license_v2`. Issuer UI: `:14190
     write_page(
         OUT / "contact-us.md",
         "Contact",
-        "Contact Identixia for licenses and support.",
+        "Contact Identixia for licenses and technical support.",
         """
-## Availability
+## Support channels
 
-We are available 24/7.
+We are available 24/7 for license requests and technical support.
 
 {% include "./.gitbook/includes/contact.md" %}
 """.strip()
@@ -990,28 +990,26 @@ def write_welcome() -> None:
 
 ## Introduction
 
-Identixia documentation is organized into **three products**:
+Identixia documentation covers **three products**. All biometric processing runs on **your** device or server.
 
 | Product | Source in monorepo | What you get |
 | --- | --- | --- |
 | [**Face SDK**](face-sdk/) | `repositories/Face*` | Face recognition and passive face liveness |
 | [**ID Document SDK**](id-document-sdk/) | `repositories/ID-Document*` | Document OCR/MRZ and document authenticity |
-| [**IDV**](idv/) | `IDV/` | Verification platform that calls the two SDKs |
-
-Biometric data stays on **your** device or server.
+| [**IDV**](idv/) | `IDV/` | Verification platform that orchestrates the two SDKs |
 
 ## How to use these docs
 
-The left sidebar is **multi-level** (product → function → product line → channel → platform).
+The sidebar is multi-level: product → function → product line → channel → platform.
 
-1. Open the **product** (Face, Document, or IDV).
-2. Open **Recognition** or **Liveness** (or IDV → Getting started / Engines / Components).
-3. Pick **full product**, **recognition-only**, or **liveness-only**, then **Mobile** or **Server**.
+1. Open the **product** (Face SDK, ID Document SDK, or IDV).
+2. Open **Recognition** or **Liveness** (for IDV: Getting started, Engines, or Components).
+3. Choose **full product**, **recognition-only**, or **liveness-only**, then **Mobile** or **Server**.
 4. Open your **platform** page → Quick start → Ready → API reference.
-5. For IDV, start Document + Face engines, then the IDV server and a client demo.
+5. For IDV, start the Document and Face engines, then the IDV server and a client demo.
 
 {% hint style="info" %}
-Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`). They are not committed to git. Demo UIs are optional — call the SDK/API directly in production.
+Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`). They are not committed to git. Demo UIs are optional — call the SDK or HTTP API directly in production.
 {% endhint %}
 
 ## Products
@@ -1019,17 +1017,17 @@ Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`)
 <table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-cover data-type="image">Cover image</th><th data-hidden></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody>
 <tr><td><strong>Face SDK</strong></td><td>Detect, templates, 1:1 / 1:N, and passive liveness when licensed. Mobile and server repositories under <code>repositories/</code>.</td><td><a href=".gitbook/assets/face-android-home.png">face-android-home.png</a></td><td></td><td><a href="face-sdk/">face-sdk</a></td></tr>
 <tr><td><strong>ID Document SDK</strong></td><td>Passport and ID OCR, MRZ, barcode, and document authenticity when licensed.</td><td><a href=".gitbook/assets/document-desktop-status.png">document-desktop-status.png</a></td><td></td><td><a href="id-document-sdk/">id-document-sdk</a></td></tr>
-<tr><td><strong>IDV platform</strong></td><td>Sessions, capture clients, Identity Console, company sample, and Hybrid licensing — uses Face + Document engines over HTTP.</td><td><a href=".gitbook/assets/brand-mark.png">brand-mark.png</a></td><td></td><td><a href="idv/">idv</a></td></tr>
+<tr><td><strong>IDV platform</strong></td><td>Sessions, capture clients, Identity Console, company sample, and Hybrid licensing — uses Face and Document engines over HTTP.</td><td><a href=".gitbook/assets/brand-mark.png">brand-mark.png</a></td><td></td><td><a href="idv/">idv</a></td></tr>
 </tbody></table>
 
-## Shared ideas
+## Shared conventions
 
 | Topic | Summary |
 | --- | --- |
-| Control vs process (HTTP) | `/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus` → `{success,code,message,request_id,data}`. Process routes return engine JSON. |
-| Threading (mobile) | Activate, init, detect, recognize on a **background** thread. |
-| License flags | Face: `recognition` / `liveness`. Document: `recognition` / `authenticity`. Missing flag ⇒ feature not run. |
-| Brand | Logo and favicons: docs `.gitbook/assets/`; IDV consoles `IDV/license-admin/brand/`. |
+| Control vs process (HTTP) | `/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus` return `{success,code,message,request_id,data}`. Process routes return engine JSON. |
+| Threading (mobile) | Activate, init, detect, and recognize on a **background** thread. |
+| License flags | Face: `recognition` / `liveness`. Document: `recognition` / `authenticity`. A missing flag means the feature is not evaluated. |
+| Brand | Logo and favicons live in docs `.gitbook/assets/`; IDV consoles use `IDV/license-admin/brand/`. |
 
 ## Links
 
@@ -1041,7 +1039,7 @@ Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`)
     write_page(
         OUT / "README.md",
         "Welcome to Identixia",
-        "Identixia docs: Face SDK, ID Document SDK, and IDV platform — clear setup and API guidance.",
+        "Identixia documentation for Face SDK, ID Document SDK, and the IDV platform.",
         body + "\n",
     )
 
@@ -1060,70 +1058,90 @@ def write_nav_hubs() -> None:
         """
 ## When to use this line
 
-Choose **full product** when one app or one API must do both:
+Choose **full product** when one application or one HTTP API must provide both:
 
-* face recognition (detect, template, 1:1, 1:N)
-* passive face liveness (when the license includes `liveness`)
+* Face recognition (detect, template, 1:1, 1:N)
+* Passive face liveness (when the license includes `liveness`)
 
-## Where to go next
+## Channels
 
 | Channel | Page |
 | --- | --- |
-| Phones & cross-platform | [Mobile](full-mobile.md) |
-| Windows & Docker | [Server](full-server.md) |
+| Phones and cross-platform | [Mobile](full-mobile.md) |
+| Windows and Docker | [Server](full-server.md) |
 
 Function guides: [Recognition](recognition.md) · [Liveness](liveness.md)
+
+Return to the [Face SDK](README.md) hub for product-line selection.
 """,
     )
     hub(
         "face-sdk/full-mobile.md",
         "Mobile & cross-platform",
         "Full Face SDK samples for Android, iOS, Flutter, React Native, and Ionic.",
-        """
+        f"""
 ## Platforms
 
 | Platform | Docs | Repository |
 | --- | --- | --- |
-| Android | [Android](android.md) | `FaceRecognition-LivenessDetection-Android` |
-| iOS | [iOS](ios.md) | `FaceRecognition-LivenessDetection-iOS` |
-| Flutter | [Flutter](flutter.md) | `FaceRecognition-LivenessDetection-Flutter` |
-| React Native | [React Native](react-native.md) | `FaceRecognition-LivenessDetection-React-Native` |
-| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | `…-Ionic-Capacitor` |
-| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | `…-Ionic-Cordova` |
+| Android | [Android](android.md) | [`FaceRecognition-LivenessDetection-Android`]({GH}/FaceRecognition-LivenessDetection-Android) |
+| iOS | [iOS](ios.md) | [`FaceRecognition-LivenessDetection-iOS`]({GH}/FaceRecognition-LivenessDetection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`FaceRecognition-LivenessDetection-Flutter`]({GH}/FaceRecognition-LivenessDetection-Flutter) |
+| React Native | [React Native](react-native.md) | [`FaceRecognition-LivenessDetection-React-Native`]({GH}/FaceRecognition-LivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`FaceRecognition-LivenessDetection-Ionic-Capacitor`]({GH}/FaceRecognition-LivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`FaceRecognition-LivenessDetection-Ionic-Cordova`]({GH}/FaceRecognition-LivenessDetection-Ionic-Cordova) |
 
-Open the platform page → Quick start → Ready → API reference.
+## Integration path
+
+1. Open the platform page for your stack.
+2. Complete **Quick start** until the sample shows **Ready**.
+3. Activate with a license issued for **your** application id.
+4. Call SDK APIs on a **background** thread; keep the camera preview on the UI thread.
+
+Parent: [Full product](full-product.md).
 """,
     )
     hub(
         "face-sdk/full-server.md",
         "Server (Windows & Docker)",
         "Full Face SDK HTTP APIs for Windows and Linux/Docker.",
-        """
+        f"""
 ## Platforms
 
-| Platform | Docs | Default port |
-| --- | --- | --- |
-| Windows | [Windows](windows.md) | 14103 |
-| Linux / Docker | [Linux / Docker](linux-docker.md) | 14103 |
+| Platform | Docs | Repository | Default port |
+| --- | --- | --- | ---: |
+| Windows | [Windows](windows.md) | [`FaceRecognition-LivenessDetection-Windows`]({GH}/FaceRecognition-LivenessDetection-Windows) | 14103 |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`FaceRecognition-LivenessDetection-Docker`]({GH}/FaceRecognition-LivenessDetection-Docker) | 14103 |
 
-Control routes use `{success,code,message,request_id,data}`. Process routes return engine JSON.
+## HTTP contract
+
+| Route type | Shape |
+| --- | --- |
+| Control (`/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus`) | `{{success, code, message, request_id, data}}` |
+| Process (`/api/face/*`) | Engine JSON (scores, templates, boxes) |
+
+Confirm the bind address and port in the product README before production.
+
+Parent: [Full product](full-product.md).
 """,
     )
     hub(
         "face-sdk/recognition-only.md",
         "Recognition-only products",
         "Face recognition without liveness packs — Windows and Linux/Docker.",
-        """
+        f"""
 ## When to use
 
-Use these when your license is **recognition only** (no `liveness` flag / no liveness packs).
+Use these repositories when your license is **recognition only** (no `liveness` entitlement).
 
-| Platform | Docs |
-| --- | --- |
-| Windows | [Windows (recognition only)](recognition-windows.md) |
-| Linux / Docker | [Linux / Docker (recognition only)](recognition-linux-docker.md) |
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Windows | [Windows (recognition only)](recognition-windows.md) | [`FaceRecognition-Windows`]({GH}/FaceRecognition-Windows) |
+| Linux / Docker | [Linux / Docker (recognition only)](recognition-linux-docker.md) | [`FaceRecognition-Docker`]({GH}/FaceRecognition-Docker) |
 
 For recognition **with** liveness in one build, use the [full product](full-product.md) instead.
+
+Concept guide: [Face recognition](recognition.md).
 """,
     )
     hub(
@@ -1135,43 +1153,51 @@ For recognition **with** liveness in one build, use the [full product](full-prod
 
 Score a face for presentation-attack detection without shipping the full enroll / 1:N stack.
 
-### Mobile
-
-| Platform | Docs |
+| Channel | Page |
 | --- | --- |
-| Android | [Android](liveness-android.md) |
-| iOS | [iOS](liveness-ios.md) |
+| Mobile | [Liveness-only — mobile](liveness-only-mobile.md) |
+| Server | [Liveness-only — server](liveness-only-server.md) |
 
-### Server
-
-| Platform | Docs |
-| --- | --- |
-| Windows | [Windows](liveness-windows.md) |
-| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) |
-
-Concept guide: [Face liveness](liveness.md).
+Concept guide: [Face liveness](liveness.md). For recognition plus liveness together, use the [full product](full-product.md).
 """,
     )
     hub(
         "face-sdk/liveness-only-mobile.md",
         "Liveness-only — mobile",
         "Android and iOS standalone face liveness samples.",
-        """
-| Platform | Docs |
-| --- | --- |
-| Android | [Android](liveness-android.md) |
-| iOS | [iOS](liveness-ios.md) |
+        f"""
+## Platforms
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Android](liveness-android.md) | [`FaceLivenessDetection-Android`]({GH}/FaceLivenessDetection-Android) |
+| iOS | [iOS](liveness-ios.md) | [`FaceLivenessDetection-iOS`]({GH}/FaceLivenessDetection-iOS) |
+
+## Integration path
+
+1. Clone the sample and place the liveness runtime from GitHub Releases.
+2. Run until status shows **Ready**, then open the camera flow.
+3. Activate with a license that includes `liveness`.
+4. Treat a missing score as “not evaluated”, not as pass.
+
+Parent: [Liveness-only products](liveness-only.md).
 """,
     )
     hub(
         "face-sdk/liveness-only-server.md",
         "Liveness-only — server",
         "Windows and Linux/Docker standalone face liveness APIs.",
-        """
-| Platform | Docs |
-| --- | --- |
-| Windows | [Windows](liveness-windows.md) |
-| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) |
+        f"""
+## Platforms
+
+| Platform | Docs | Repository | Default port |
+| --- | --- | --- | ---: |
+| Windows | [Windows](liveness-windows.md) | [`FaceLivenessDetection-Windows`]({GH}/FaceLivenessDetection-Windows) | 14103 |
+| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) | [`FaceLivenessDetection-Docker`]({GH}/FaceLivenessDetection-Docker) | 14103 |
+
+Process path is typically `POST /api/liveness` (confirm in the product README). Control routes use the standard `{{success, code, message, request_id, data}}` envelope.
+
+Parent: [Liveness-only products](liveness-only.md).
 """,
     )
 
@@ -1183,58 +1209,83 @@ Concept guide: [Face liveness](liveness.md).
         """
 ## When to use
 
-One sample / API for document **recognition** and document **authenticity** (when licensed).
+Choose **full product** when one sample or API must provide document **recognition** and document **authenticity** (when licensed).
 
 | Channel | Page |
 | --- | --- |
-| Phones & cross-platform | [Mobile](full-mobile.md) |
-| Windows & Docker | [Server](full-server.md) |
+| Phones and cross-platform | [Mobile](full-mobile.md) |
+| Windows and Docker | [Server](full-server.md) |
 
 Guides: [Recognition](recognition.md) · [Liveness](liveness.md) · [Result JSON](result-json.md)
+
+Return to the [ID Document SDK](README.md) hub for product-line selection.
 """,
     )
     hub(
         "id-document-sdk/full-mobile.md",
         "Mobile & cross-platform",
         "Full Document SDK samples for Android, iOS, Flutter, React Native, and Ionic.",
-        """
-| Platform | Docs |
-| --- | --- |
-| Android | [Android](android.md) |
-| iOS | [iOS](ios.md) |
-| Flutter | [Flutter](flutter.md) |
-| React Native | [React Native](react-native.md) |
-| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) |
-| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) |
+        f"""
+## Platforms
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | [`ID-Document-Recognition-Liveness-Detection-Android`]({GH}/ID-Document-Recognition-Liveness-Detection-Android) |
+| iOS | [iOS](ios.md) | [`ID-Document-Recognition-Liveness-Detection-iOS`]({GH}/ID-Document-Recognition-Liveness-Detection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`ID-Document-Recognition-Liveness-Detection-Flutter`]({GH}/ID-Document-Recognition-Liveness-Detection-Flutter) |
+| React Native | [React Native](react-native.md) | [`ID-Document-Recognition-Liveness-Detection-React-Native`]({GH}/ID-Document-Recognition-Liveness-Detection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) |
+
+## Integration path
+
+1. Open the platform page for your stack.
+2. Complete **Quick start** until the sample shows **Ready**.
+3. Activate with a license issued for **your** application id.
+4. Capture front (and back when required); parse [Result JSON](result-json.md) in your app.
+
+Parent: [Full product](full-product.md).
 """,
     )
     hub(
         "id-document-sdk/full-server.md",
         "Server (Windows & Docker)",
         "Full Document SDK HTTP APIs for Windows and Linux/Docker.",
-        """
-| Platform | Docs | Default port |
-| --- | --- | --- |
-| Windows | [Windows](windows.md) | 14102 |
-| Linux / Docker | [Linux / Docker](linux-docker.md) | 14102 |
+        f"""
+## Platforms
 
-Routes: `/api/documentProcess`, `/api/documentRecognition`, `/api/documentLiveness`.
+| Platform | Docs | Repository | Default port |
+| --- | --- | --- | ---: |
+| Windows | [Windows](windows.md) | [`ID-Document-Recognition-Liveness-Detection-Windows`]({GH}/ID-Document-Recognition-Liveness-Detection-Windows) | 14102 |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`ID-Document-Recognition-Liveness-Detection-Docker`]({GH}/ID-Document-Recognition-Liveness-Detection-Docker) | 14102 |
+
+## Routes
+
+| Route | Role |
+| --- | --- |
+| `POST /api/documentProcess` | Full process (recognition + authenticity when licensed) |
+| `POST /api/documentRecognition` | OCR / MRZ / barcode only |
+| `POST /api/documentLiveness` | Authenticity only |
+
+Control routes use `{{success, code, message, request_id, data}}`. Response shape: [Result JSON](result-json.md).
+
+Parent: [Full product](full-product.md).
 """,
     )
     hub(
         "id-document-sdk/liveness-only.md",
         "Liveness-only products",
         "Document authenticity API without the full OCR product surface.",
-        """
+        f"""
 ## When to use
 
-You only need document anti-spoofing (authenticity), not a full OCR UI.
+You need document anti-spoofing (authenticity) without shipping a full OCR UI.
 
-| Platform | Docs |
-| --- | --- |
-| Linux / Docker | [Document liveness Docker](liveness-linux-docker.md) |
+| Platform | Docs | Repository | Default port |
+| --- | --- | --- | ---: |
+| Linux / Docker | [Document liveness Docker](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) | 14106 |
 
-Concept guide: [Document liveness](liveness.md).
+Concept guide: [Document liveness](liveness.md). For OCR plus authenticity together, use the [full product](full-product.md).
 """,
     )
     hub(
@@ -1242,12 +1293,16 @@ Concept guide: [Document liveness](liveness.md).
         "Reference",
         "Shared Document SDK result shapes and security fields.",
         """
+## Topics
+
 | Topic | Page |
 | --- | --- |
 | Process / recognize JSON | [Result JSON](result-json.md) |
 | Authenticity fields | [Security check fields](security-fields.md) |
 
-Parse JSON in your app — do not scrape the demo Result screen.
+Parse JSON in your application. Do not scrape the demo Result screen.
+
+Return to the [ID Document SDK](README.md) hub for platform samples.
 """,
     )
 
@@ -1531,13 +1586,27 @@ First sign-in enrols an authenticator for the seeded `admin` operator.
         "Hybrid licence protocol",
         "license_v2 shared protocol used by idv-server and license-admin.",
         """
+## Overview
+
+IDV uses a **Hybrid** licence model: day-to-day entitlement metering runs on the customer host; Identixia issues and renews licence files.
+
 | Path | Role |
 | --- | --- |
-| `IDV/license_v2/` | Canonical protocol sources + tests |
+| `IDV/license_v2/` | Canonical protocol sources and tests |
 | Vendored copies | Inside `idv-server/` and `license-admin/` for self-contained runs |
-| `IDV/packages/license-core` | Helper package for consoles/libs |
+| `IDV/packages/license-core` | Helper package for consoles and shared libraries |
 
-Offline metering runs on the customer IDV host; usage receipts / status checks go to Identixia (USB or online sync). One commercial Hybrid product — operators do not pick STRICT/LENIENT tiers in the issuer UI.
+## Operating model
+
+| Step | Where it happens |
+| --- | --- |
+| Issue / renew `license.txt` | [License Admin](license-admin.md) (Identixia) |
+| Enforce usage on the host | `license_v2` inside `idv-server` |
+| Sync usage receipts | USB export or `POST /api/v2/online/report` (when exposed) |
+
+There is one commercial Hybrid product. Operators do not choose STRICT/LENIENT tiers in the issuer UI. The issuer never receives ID images or biometrics.
+
+Parent: [Licensing](licensing.md).
 """,
     )
     hub(
@@ -1575,14 +1644,19 @@ This GitBook section stays a **navigator + quick start**. The handbook is genera
         "Document engine",
         "How IDV calls the ID Document SDK HTTP API.",
         """
-## Default
+## Default configuration
 
 | Setting | Value |
 | --- | --- |
 | Base URL | `http://127.0.0.1:14102` |
 | Modes | `documentProcess` · `documentRecognition` · `documentLiveness` |
 
-Docs: [ID Document SDK → Server](../id-document-sdk/full-server.md). Parent: [Engines](engines.md).
+IDV selects recognition, authenticity, or full process based on workflow steps and licence flags. Parse engine responses as [Result JSON](../id-document-sdk/result-json.md).
+
+## Related docs
+
+* [ID Document SDK → Server](../id-document-sdk/full-server.md)
+* Parent: [Engines](engines.md)
 """,
     )
     hub(
@@ -1590,14 +1664,19 @@ Docs: [ID Document SDK → Server](../id-document-sdk/full-server.md). Parent: [
         "Face engine",
         "How IDV calls the Face SDK HTTP API.",
         """
-## Default
+## Default configuration
 
 | Setting | Value |
 | --- | --- |
 | Base URL | `http://127.0.0.1:14103` |
 | Modes | compare · boxes · template · score · liveness |
 
-Docs: [Face SDK → Server](../face-sdk/full-server.md). Parent: [Engines](engines.md).
+IDV uses the Face SDK matcher for 1:1 and related steps. Optional vector indexes stay off until interoperability gates are set — ANN distance alone never decides trust.
+
+## Related docs
+
+* [Face SDK → Server](../face-sdk/full-server.md)
+* Parent: [Engines](engines.md)
 """,
     )
     hub(
@@ -1635,13 +1714,19 @@ python IDV/client/tools/refresh_client.py
         "Web demo",
         "Run the IDV web applicant demo.",
         """
+## Run locally
+
 ```bash
 cd IDV/client/app/web
 npm install && npm run dev
 # http://127.0.0.1:5175/
 ```
 
-Start verification through the [company backend](company-backend.md) (or your own server), not with a hard-coded service token in the browser.
+## Integration rule
+
+Start verification through the [company backend](company-backend.md) (or your own server). Do not embed the company service bearer in the browser.
+
+Parent: [Applicant clients](components-clients.md).
 """,
     )
     hub(
@@ -1649,12 +1734,18 @@ Start verification through the [company backend](company-backend.md) (or your ow
         "Android demo",
         "Build the IDV Android applicant demo.",
         """
+## Build
+
 ```bash
 cd IDV/client/packages/idv-android
 ./gradlew publishToMavenLocal
 cd ../../app/android
 ./gradlew :app:assembleDebug
 ```
+
+Use a capture token from the company backend. Package sources: `IDV/client/packages/idv-android`.
+
+Parent: [Applicant clients](components-clients.md).
 """,
     )
     hub(
@@ -1662,9 +1753,13 @@ cd ../../app/android
         "iOS demo",
         "Run the IDV iOS applicant demo.",
         """
-Open `IDV/client/app/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme.
+## Run
 
-Session client: `IDV/client/packages/idv-ios`.
+Open `IDV/client/app/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme on a physical device when testing camera capture.
+
+Session client package: `IDV/client/packages/idv-ios`.
+
+Parent: [Applicant clients](components-clients.md).
 """,
     )
     hub(
@@ -1672,12 +1767,16 @@ Session client: `IDV/client/packages/idv-ios`.
         "Flutter & React Native demos",
         "Other IDV applicant demo hosts.",
         """
+## Demo hosts
+
 | App | Path |
 | --- | --- |
 | Flutter | `IDV/client/app/flutter` |
 | React Native | `IDV/client/app/react_native` |
 
-RN capture math comes from `packages/idv-web`. See `IDV/client/README.md`.
+React Native capture helpers align with `packages/idv-web`. See `IDV/client/README.md` for bootstrap details.
+
+Parent: [Applicant clients](components-clients.md).
 """,
     )
 

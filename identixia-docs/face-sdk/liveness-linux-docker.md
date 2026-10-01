@@ -10,27 +10,27 @@ description: >-
 
 On-premise passive face liveness SDK for Linux and Docker. Scores one RGB face image through the local liveness API when the license allows it.
 
-Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+Processing runs **on your server (or in your container)**. Identixia does **not** receive biometric images, templates, or document scans.
 
 | | |
 | --- | --- |
-| **Product repository** | `FaceLivenessDetection-Docker` |
+| **Repository** | [`FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) |
 | **Platform** | Linux |
-| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
+| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
 
 
-### Repository
+## Repository
 
 {% embed url="https://github.com/identixia-IDV/FaceLivenessDetection-Docker" %}
 
-Source: [`identixia-IDV/FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker)
+[`identixia-IDV/FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Docker/releases/latest)
 
-## What you can do
+## Capabilities
 
 | Capability | Description |
 | --- | --- |
-| Passive face liveness | Score one RGB face image / frame for presentation-attack detection |
-| License gating | Liveness runs only when the license allows it |
+| Passive face liveness | Score one RGB face image or camera frame for presentation-attack detection |
+| License gating | Liveness runs only when the license includes `liveness` |
 
 ## Prerequisites
 
@@ -134,14 +134,21 @@ curl -s -X POST http://127.0.0.1:14103/api/liveness \
 
 <figure><img src="../.gitbook/assets/liveness-desktop.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
 
+## Next steps
+
+1. Complete **Quick start** until the sample shows **Ready**.
+2. Activate with a license issued for **your** application id or machine code.
+3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
+4. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms.
+
 
 ## Support
 
 {% include "../.gitbook/includes/contact.md" %}
 
-## Product README (reference)
+## Repository README
 
-Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
 
 ## Identixia Face Liveness — Linux / Docker
 

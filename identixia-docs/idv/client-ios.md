@@ -5,6 +5,10 @@ description: >-
 
 # iOS demo
 
-Open `IDV/client/app/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme.
+## Run
 
-Session client: `IDV/client/packages/idv-ios`.
+Open `IDV/client/app/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme on a physical device when testing camera capture.
+
+Session client package: `IDV/client/packages/idv-ios`.
+
+Parent: [Applicant clients](components-clients.md).

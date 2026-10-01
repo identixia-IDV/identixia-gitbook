@@ -9,3 +9,4 @@ site:
       default: true
       content:
         directory: ./identixia-docs
+# Regenerated markdown lives under identixia-docs/ (Face SDK, ID Document SDK, IDV).

@@ -7,9 +7,18 @@ description: >-
 
 ## Platforms
 
-| Platform | Docs | Default port |
-| --- | --- | --- |
-| Windows | [Windows](windows.md) | 14103 |
-| Linux / Docker | [Linux / Docker](linux-docker.md) | 14103 |
+| Platform | Docs | Repository | Default port |
+| --- | --- | --- | ---: |
+| Windows | [Windows](windows.md) | [`FaceRecognition-LivenessDetection-Windows`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows) | 14103 |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`FaceRecognition-LivenessDetection-Docker`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker) | 14103 |
 
-Control routes use `{success,code,message,request_id,data}`. Process routes return engine JSON.
+## HTTP contract
+
+| Route type | Shape |
+| --- | --- |
+| Control (`/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus`) | `{success, code, message, request_id, data}` |
+| Process (`/api/face/*`) | Engine JSON (scores, templates, boxes) |
+
+Confirm the bind address and port in the product README before production.
+
+Parent: [Full product](full-product.md).

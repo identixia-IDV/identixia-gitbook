@@ -5,14 +5,14 @@ description: >-
 
 # Document recognition
 
-## In plain words
+## Overview
 
 Document **recognition** finds the card in the frame and extracts:
 
-* Visual-zone fields (name, document number, dates, …)
+* Visual-zone fields (name, document number, dates, and related data)
 * **MRZ** (machine-readable zone)
 * Barcode / QR when present
-* Cropped images (portrait, document, signature, …)
+* Cropped images (portrait, document, signature, and related crops)
 
 ## Capture tips
 

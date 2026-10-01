@@ -10,29 +10,29 @@ description: >-
 
 On-premise face recognition SDK for Windows. Detection, landmarks, attributes, ICAO-style quality, templates, and 1:1 match through a local API.
 
-Everything runs **on-premise** (on the phone or on your server). Identixia does **not** receive biometric images or templates.
+Processing runs **on your server (or in your container)**. Identixia does **not** receive biometric images, templates, or document scans.
 
 | | |
 | --- | --- |
-| **Product repository** | `FaceRecognition-Windows` |
+| **Repository** | [`FaceRecognition-Windows`](https://github.com/identixia-IDV/FaceRecognition-Windows) |
 | **Platform** | Windows |
-| **Docs site** | [docs.identixia.com](https://docs.identixia.com) |
+| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
 
 
-### Repository
+## Repository
 
 {% embed url="https://github.com/identixia-IDV/FaceRecognition-Windows" %}
 
-Source: [`identixia-IDV/FaceRecognition-Windows`](https://github.com/identixia-IDV/FaceRecognition-Windows)
+[`identixia-IDV/FaceRecognition-Windows`](https://github.com/identixia-IDV/FaceRecognition-Windows) · [Releases](https://github.com/identixia-IDV/FaceRecognition-Windows/releases/latest)
 
-## What you can do
+## Capabilities
 
 | Capability | Description |
 | --- | --- |
-| Detect faces | Bounding box, landmarks, pose |
-| Attributes | Age / gender / expression-style traits when enabled |
-| Image / face quality | ICAO-style quality scores |
-| Templates | Compact face feature vectors you store yourself |
+| Face detection | Bounding box, landmarks, and pose |
+| Attributes | Age, gender, and related traits when enabled |
+| Quality | ICAO-style image and face quality scores |
+| Templates | Compact feature vectors stored in **your** database |
 | 1:1 match | Compare two images or two templates |
 
 ## Prerequisites
@@ -153,6 +153,8 @@ curl -s -X POST http://127.0.0.1:14103/api/face/score \
 
 ## Related platforms
 
+Keep the same license product line across stacks. From the [Face SDK](README.md) hub:
+
 | Platform | Docs |
 | --- | --- |
 | Android (full) | [Android](android.md) |
@@ -178,14 +180,21 @@ curl -s -X POST http://127.0.0.1:14103/api/face/score \
 
 <figure><img src="../.gitbook/assets/face-desktop-identify.png" alt="Desktop identify" width="360"><figcaption>Desktop identify</figcaption></figure>
 
+## Next steps
+
+1. Complete **Quick start** until the sample shows **Ready**.
+2. Activate with a license issued for **your** application id or machine code.
+3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
+4. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms.
+
 
 ## Support
 
 {% include "../.gitbook/includes/contact.md" %}
 
-## Product README (reference)
+## Repository README
 
-Adapted from the shipping repository README for exact commands and platform-specific notes. Screenshots above use the current Identixia asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
 
 ## Identixia Face Recognition — Windows
 

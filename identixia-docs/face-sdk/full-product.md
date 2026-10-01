@@ -7,16 +7,18 @@ description: >-
 
 ## When to use this line
 
-Choose **full product** when one app or one API must do both:
+Choose **full product** when one application or one HTTP API must provide both:
 
-* face recognition (detect, template, 1:1, 1:N)
-* passive face liveness (when the license includes `liveness`)
+* Face recognition (detect, template, 1:1, 1:N)
+* Passive face liveness (when the license includes `liveness`)
 
-## Where to go next
+## Channels
 
 | Channel | Page |
 | --- | --- |
-| Phones & cross-platform | [Mobile](full-mobile.md) |
-| Windows & Docker | [Server](full-server.md) |
+| Phones and cross-platform | [Mobile](full-mobile.md) |
+| Windows and Docker | [Server](full-server.md) |
 
 Function guides: [Recognition](recognition.md) · [Liveness](liveness.md)
+
+Return to the [Face SDK](README.md) hub for product-line selection.
