@@ -287,9 +287,9 @@ Demo ids: Android `com.identixia.documentreader` · iOS `com.identixia.documentr
 
 The code below shows how to use the license:
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/blob/ad03f14f11b5f75effadf08ff6f74b4b3e375b16/example/src/license.ts#L7-L17](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/blob/ad03f14f11b5f75effadf08ff6f74b4b3e375b16/example/src/license.ts#L7-L17)
+[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/blob/85a8e05ae35cc984b555871b4b5228ca7e0d68cc/example/src/license.ts#L7-L17](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/blob/85a8e05ae35cc984b555871b4b5228ca7e0d68cc/example/src/license.ts#L7-L17)
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/blob/ad03f14f11b5f75effadf08ff6f74b4b3e375b16/example/src/SdkContext.tsx#L60-L70](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/blob/ad03f14f11b5f75effadf08ff6f74b4b3e375b16/example/src/SdkContext.tsx#L60-L70)
+[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/blob/85a8e05ae35cc984b555871b4b5228ca7e0d68cc/example/src/SdkContext.tsx#L60-L70](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/blob/85a8e05ae35cc984b555871b4b5228ca7e0d68cc/example/src/SdkContext.tsx#L60-L70)
 
 Capabilities: document recognition and/or document liveness. Please [contact us](#-contact) to get a license for **your own app**.
 

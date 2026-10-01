@@ -268,9 +268,9 @@ Licenses are **offline** and bound to your `applicationId`.
 
 The code below shows how to use the license:
 
-[https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/18e5ebacd71b3959df56a2ad082c96abe13cdbb9/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/18e5ebacd71b3959df56a2ad082c96abe13cdbb9/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22)
+[https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/c224f12f4b4c2af828508427f745bd024cfda7ef/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/c224f12f4b4c2af828508427f745bd024cfda7ef/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22)
 
-[https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/18e5ebacd71b3959df56a2ad082c96abe13cdbb9/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L50-L55](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/18e5ebacd71b3959df56a2ad082c96abe13cdbb9/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L50-L55)
+[https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/c224f12f4b4c2af828508427f745bd024cfda7ef/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L50-L55](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/c224f12f4b4c2af828508427f745bd024cfda7ef/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L50-L55)
 
 Please [contact us](#contact) to get a license for **your own app**.
 

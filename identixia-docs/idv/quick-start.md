@@ -7,12 +7,20 @@ description: >-
 
 ## Order that works locally
 
-1. Document engine `:14102` + Face engine `:14103` (see [Engines](engines.md))
-2. [IDV server](platform-server.md) `:14187`
-3. [Identity Console](platform-console.md) `:14188` (optional in prod — built into `/admin`)
-4. [Company backend](company-backend.md) `:14195` + [Company Admin](company-admin.md) `:14189`
-5. [License Admin](license-admin.md) `:14190` when testing Hybrid issue
-6. An [applicant demo](components-clients.md)
+1. Complete [Project setup](environment.md) (`.env`)
+2. Document engine `:14102` + Face engine `:14103` — [Prerequisites: engines](engines.md)
+3. Run `python IDV/scripts/start_local.py` **or** start services manually below
+4. [Initial setup process](initial-setup.md) — console, company settings, webhook
+5. [End-to-end walkthrough](walkthrough.md)
+
+## Helper (recommended)
+
+```bash
+# Engines must already be healthy on :14102 and :14103
+python IDV/scripts/start_local.py
+```
+
+Preflight checks engine health, starts IDV server + company backend, and prints URLs. It does **not** start License Admin and does **not** mean the stack is production-ready when `IDV_OPEN_API=1`.
 
 ## Storage defaults
 
@@ -22,12 +30,12 @@ description: >-
 | `company-backend` | `company-backend/database/company.sqlite` |
 | `license-admin` | `license-admin/database/` |
 
-PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. See [Environment & storage](environment.md).
+PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. See [Project setup](environment.md).
 
-## Minimal commands
+## Manual commands
 
 ```bash
-# Platform
+# Platform (localhost demo auth only)
 cd IDV/idv-server && python -m venv .venv && .venv/Scripts/activate
 pip install -r requirements.txt
 set IDV_OPEN_API=1
@@ -49,7 +57,7 @@ python app.py
 cd IDV/company-admin && npm install && npm run dev
 # → http://127.0.0.1:14189/
 
-# Licence issuer (localhost only)
+# Licence issuer (localhost / private network only — never public)
 cd IDV/license-admin && pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py

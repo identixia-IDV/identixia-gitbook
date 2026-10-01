@@ -72,6 +72,8 @@ BRAND_EXTRA: list[tuple[Path, str]] = [
     (IDV_DIR / "license-admin" / "brand" / "favicon.ico", "favicon.ico"),
     (IDV_DIR / "license-admin" / "brand" / "favicon.png", "favicon.png"),
     (IDV_DIR / "license-admin" / "brand" / "apple-touch-icon.png", "apple-touch-icon.png"),
+    (IDV_DIR / "docs" / "audit-console.png", "idv-audit-console.png"),
+    (IDV_DIR / "docs" / "device-idv-screen.png", "idv-device-screen.png"),
 ]
 
 # Catalog homepage leaf → human title (section hubs use README.md).
@@ -99,7 +101,13 @@ TITLES: dict[str, str] = {
     "idv": "IDV platform",
     "architecture": "Architecture",
     "quick-start": "Quick start",
-    "engines": "Document & Face engines",
+    "walkthrough": "End-to-end walkthrough",
+    "project-structure": "Project structure",
+    "initial-setup": "Initial setup process",
+    "session-states": "Session states",
+    "api": "Creating a session (API)",
+    "production": "Production",
+    "engines": "Prerequisites: engines",
     "components": "Components & clients",
 }
 
@@ -638,43 +646,105 @@ curl -s -X POST http://127.0.0.1:14102/api/documentLiveness \\
     write_page(
         OUT / "id-document-sdk" / "result-json.md",
         "Result JSON",
-        "Shared document process JSON for mobile recognize and server document APIs.",
+        "Customer process JSON for mobile recognize and server document APIs.",
         """
 ## Purpose
 
-Mobile `recognize` and server `POST /api/documentProcess` (plus recognition / liveness routes) return the **same idea**: one JSON object your app parses.
+Mobile `recognize` and server `POST /api/documentProcess` (also recognition / liveness routes) return one **customer process JSON**. Parse this object in your app — do not scrape the demo Result UI.
 
-## Top-level fields
+Allowed top-level keys:
+
+| Key | Role |
+| --- | --- |
+| `identity` | Document class, country, overall score |
+| `readings` | OCR / MRZ / barcode field rows |
+| `tests` | Validity, capture, and authenticity checks |
+| `images` | Crops (face, document pages, …) as base64 |
+| `session` | Job id, status code, detail, timestamp |
+
+There is **no** separate top-level `security` object. Authenticity lives in `tests` rows with `group: "authenticity"`.
+
+## Field shapes
+
+### `identity`
+
+| Field | Example | Meaning |
+| --- | --- | --- |
+| `class` / `type` | `"Passport"` | Document class |
+| `country` | `"UTO"` | Issuing country |
+| `score` | `0.91` | Overall document confidence when present |
+
+### `readings[]`
+
+| Field | Example | Meaning |
+| --- | --- | --- |
+| `name` | `"familyName"`, `"firstNames"`, `"docNumber"` | Canonical field id |
+| `value` | `"DOE"` | Extracted text |
+| `origin` / `source` | `"visual"`, `"zone"`, `"code"`, `"chip"` | Visual OCR, MRZ zone, barcode, RFID |
+| `score` | `0.97` | Optional confidence |
+
+Kits may still emit legacy names (`surname`, `mrz`, …). Prefer the sample `ResultParser` / `ix_payload` helpers when present.
+
+### `tests[]`
+
+| Field | Example | Meaning |
+| --- | --- | --- |
+| `name` | `"expiry"`, `"focus"`, `"foilCheck"` | Check id |
+| `group` / `kind` | `"validity"`, `"capture"`, `"authenticity"` | Category |
+| `outcome` / `result` | `"pass"`, `"fail"`, `"hold"` | Decision (`hold` ≈ skip / not evaluated) |
+| `page` | `0` / `1` | Front / back when applicable |
+| `score` | `0.88` | Optional numeric score |
+| `note` / `reason` | `"expired"` | Optional explanation |
+
+Overall UI grouping uses **most-severe-wins** within each kind: `fail` > `hold` > `pass`.
+
+### `images[]`
 
 | Field | Meaning |
 | --- | --- |
-| `errorCode` / process `metadata.status` | Engine / process status |
-| Document type / country | Identity class and issuing country |
-| `ocr` / field readings | Visual-zone fields |
-| `mrz` | Machine-readable zone |
-| `barcode` | Barcode / QR fields |
-| `images` | Crops (portrait, document, …) |
-| `tests` / `verification` | Field and document checks |
-| `security` | Authenticity / document liveness (license-gated) |
-| `session` | Session metadata when provided |
+| `name` / `id` | Crop role (`face`, document page, …) |
+| `page` | Page index when multi-page |
+| `data` / `image` | Base64 payload |
 
-### Example (trimmed)
+### `session`
+
+| Field | Meaning |
+| --- | --- |
+| `jobId` | Transaction / job id |
+| `code` | `0` = ready / success; non-zero = failure |
+| `detail` | Short status (`ready`, `failed`, …) |
+| `at` | ISO timestamp |
+
+## Example (contract fixture)
 
 ```json
 {
-  "identity": { "documentType": "Passport", "country": "UTO" },
-  "readings": [{ "field": "surname", "value": "DOE", "source": "mrz" }],
-  "tests": [{ "name": "mrzChecksum", "result": "passed" }],
-  "images": [{ "role": "portrait", "data": "…" }],
-  "session": { "scenario": "FullProcess" }
+  "identity": { "class": "Passport", "country": "UTO", "score": 0.91 },
+  "readings": [
+    { "name": "familyName", "value": "DOE", "origin": "visual", "score": 0.97 },
+    { "name": "firstNames", "value": "JOHN", "origin": "visual", "score": 0.96 },
+    { "name": "docNumber", "value": "123456789", "origin": "zone", "score": 0.99 }
+  ],
+  "tests": [
+    { "name": "expiry", "group": "validity", "outcome": "pass" },
+    { "name": "focus", "group": "capture", "outcome": "pass", "score": 0.9 },
+    { "name": "foilCheck", "group": "authenticity", "page": 0, "outcome": "pass", "score": 0.88 }
+  ],
+  "images": [
+    { "name": "face", "page": 0, "data": "<base64>" }
+  ],
+  "session": {
+    "jobId": "identixia_0123456789abcdef0123456789abcdef",
+    "code": 0,
+    "detail": "ready",
+    "at": "2026-09-14T00:55:12Z"
+  }
 }
 ```
 
-Exact nesting can vary slightly by platform kit — prefer the sample `ResultParser` when present. Values `0` / `1` / `2` in verification rows usually mean pass / fail / not checked.
-
 ## Related
 
-* [Security check fields](security-fields.md)
+* [Security check fields](security-fields.md) — authenticity rows in detail
 * [Document recognition](recognition.md) · [Document liveness](liveness.md)
 """.strip()
         + "\n",
@@ -682,19 +752,66 @@ Exact nesting can vary slightly by platform kit — prefer the sample `ResultPar
     write_page(
         OUT / "id-document-sdk" / "security-fields.md",
         "Security check fields",
-        "How to read document authenticity / liveness fields in result JSON.",
+        "How to read document authenticity / liveness checks inside Result JSON tests[].",
         """
-## When security fields appear
+## Where authenticity lives
 
-If the license includes document authenticity, the result includes `security` (and related `tests` rows) for anti-spoof checks.
+Document authenticity (document liveness) is **not** a separate top-level `security` object in the customer process JSON. It appears as rows in `tests[]` where:
+
+```text
+group == "authenticity"   // also accepted: kind, or legacy "security" / "liveness"
+```
+
+Parent shape: [Result JSON](result-json.md).
+
+## When rows appear
 
 | Situation | Meaning |
 | --- | --- |
-| `security` missing / empty | Feature **not licensed** or **not requested** — not a pass |
-| Checks present with fail | Treat as authenticity reject per your risk policy |
-| Recognition-only license | Use OCR/MRZ only; do not invent security passes |
+| No authenticity rows | Feature **not licensed**, **not requested**, or engine omitted them — **not a pass** |
+| Rows with `outcome: "fail"` | Treat as authenticity reject per your risk policy |
+| Rows with `outcome: "hold"` | Not evaluated / skipped — do not treat as pass |
+| Recognition-only license | Use OCR/MRZ (`readings` + validity/capture tests) only |
 
-Parent object: [Result JSON](result-json.md).
+## Row fields
+
+| Field | Meaning |
+| --- | --- |
+| `name` | Check id (e.g. `foilCheck`; legacy `hologramIntegrity` maps to the same idea) |
+| `group` | Must resolve to `authenticity` |
+| `outcome` | `pass` · `fail` · `hold` |
+| `page` | `0` = front, `1` = back |
+| `score` | Optional float (demo UI may show six decimals) |
+| `note` / `reason` | Optional human-readable detail |
+
+### Example authenticity row
+
+```json
+{
+  "name": "foilCheck",
+  "group": "authenticity",
+  "page": 0,
+  "outcome": "pass",
+  "score": 0.88
+}
+```
+
+### Example summary logic (same idea as the desktop demo)
+
+```text
+authenticity_rows = tests where group == "authenticity"
+if none → "not evaluated"
+else count pass / fail / hold → apply your policy (any fail ⇒ reject is common)
+```
+
+## License rule
+
+| License | What you get |
+| --- | --- |
+| `authenticity` present | Authenticity `tests` populate when the route requests them |
+| Missing | Empty authenticity set — never invent a pass |
+
+Server routes: `POST /api/documentLiveness` (authenticity only) or `POST /api/documentProcess` (OCR + authenticity when licensed).
 """.strip()
         + "\n",
     )
@@ -704,45 +821,47 @@ def write_idv_pages() -> None:
     write_page(
         OUT / "idv" / "README.md",
         "IDV platform",
-        "Identixia IDV: platform server, company integration, licensing, engines, and applicant clients.",
+        "Self-host identity verification platform: setup guide, sessions, APIs, and webhooks.",
         f"""
 <p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
 <p align="center"><img src="../.gitbook/assets/favicon.png" alt="Identixia mark" width="48"></p>
 
-## Overview
+## What IDV is
 
-**IDV** is the Identixia identity-verification **platform** (`IDV/` in the monorepo). It does not replace the Face or Document SDKs — it **orchestrates** them between your company systems and applicant capture apps.
+**IDV** is Identixia’s self-host identity-verification platform. It uses your on-premise **Document** and **Face** SDK HTTP engines as the biometric backend. It does not replace those SDKs — it orchestrates them between your company systems and applicant capture apps.
 
-## Who runs what
+## Project components
 
-| Role | Folders | Typical ports |
+| Component | Role | Folder · port |
 | --- | --- | --- |
-| **Platform** (tenant API, workers, reviews) | `idv-server/`, `idv-server-ui/` | 14187 · 14188 |
-| **Company / merchant sample** | `company-backend/`, `company-admin/` | 14195 · 14189 |
-| **Identixia licence issuer** | `license-admin/` (+ brand) | 14190 |
-| **Applicant capture** | `client/` | e.g. web 5175 |
-| **Shared libraries** | `packages/`, `license_v2/` | — |
-| **Biometric engines** | Face SDK + Document SDK (HTTP) | 14103 · 14102 |
+| **Platform (Admin)** | Tenant API, reviews, Identity Console | `idv-server/` · `:14187` · UI `:14188` / `/admin` |
+| **Company (Merchant)** | Holds service credentials; starts sessions | `company-backend/` · `:14195` · Admin `:14189` |
+| **Applicant (User)** | Web / mobile capture apps | `client/` · e.g. web `:5175` |
+| **Engines** | Document + Face HTTP APIs | Document `:14102` · Face `:14103` |
 
 ```text
-Applicant app ──► Company backend :14195 ──► IDV server :14187 ──► Face/Document engines
+Applicant app ──► Company backend :14195 ──► IDV server :14187 ──► Face / Document engines
                       │                         │
-               Company Admin :14189      Identity Console :14188 /admin
-                                                    │
-                                           License Admin :14190 (issuer)
+               Company Admin :14189      Identity Console /admin
 ```
 
-## Read next
+## Read this guide (in order)
 
-1. [Architecture](architecture.md)
-2. [Getting started](getting-started.md) → [Quick start](quick-start.md)
-3. [Platform](platform.md) · [Company integration](company.md) · [Licensing](licensing.md)
-4. [Engines](engines.md) · [Applicant clients](components-clients.md)
+1. [Project structure](project-structure.md)
+2. [Prerequisites: engines](engines.md) — start and activate Document + Face first
+3. [Project setup](environment.md) — `.env`, tokens, storage
+4. [Initial setup process](initial-setup.md) — first console login, settings, webhook secret
+5. [Quick start](quick-start.md) · [End-to-end walkthrough](walkthrough.md)
+6. [Session states](session-states.md)
+7. [Creating a session (API)](api.md)
+8. [Webhook integration](company-webhooks.md)
+9. [Applicant clients](components-clients.md) · [Production](production.md)
 
-Deep handbook / Postman: `IDV/docs/` and `IDV/idv-server/postman/` in source — not copied here.
+<figure><img src="../.gitbook/assets/idv-audit-console.png" alt="Identity Console" width="520"><figcaption>Identity Console</figcaption></figure>
+<figure><img src="../.gitbook/assets/idv-device-screen.png" alt="Applicant capture" width="220"><figcaption>Applicant capture</figcaption></figure>
 
-{{% hint style="info" %}}
-The **service bearer token stays on the company backend**. Capture apps use a short-lived **capture token**, not the company service secret.
+{{% hint style="danger" %}}
+**Safety:** Keep the company **service bearer** on the company backend only. Capture apps receive a short-lived **capture token**. Never commit secrets. `IDV_OPEN_API=1` / bearer `demo` is for **localhost demos only**. License Admin (`:14190`) stays on a private host.
 {{% endhint %}}
 """.strip()
         + "\n",
@@ -799,12 +918,20 @@ Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Miss
         """
 ## Order that works locally
 
-1. Document engine `:14102` + Face engine `:14103` (see [Engines](engines.md))
-2. [IDV server](platform-server.md) `:14187`
-3. [Identity Console](platform-console.md) `:14188` (optional in prod — built into `/admin`)
-4. [Company backend](company-backend.md) `:14195` + [Company Admin](company-admin.md) `:14189`
-5. [License Admin](license-admin.md) `:14190` when testing Hybrid issue
-6. An [applicant demo](components-clients.md)
+1. Complete [Project setup](environment.md) (`.env`)
+2. Document engine `:14102` + Face engine `:14103` — [Prerequisites: engines](engines.md)
+3. Run `python IDV/scripts/start_local.py` **or** start services manually below
+4. [Initial setup process](initial-setup.md) — console, company settings, webhook
+5. [End-to-end walkthrough](walkthrough.md)
+
+## Helper (recommended)
+
+```bash
+# Engines must already be healthy on :14102 and :14103
+python IDV/scripts/start_local.py
+```
+
+Preflight checks engine health, starts IDV server + company backend, and prints URLs. It does **not** start License Admin and does **not** mean the stack is production-ready when `IDV_OPEN_API=1`.
 
 ## Storage defaults
 
@@ -814,12 +941,12 @@ Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Miss
 | `company-backend` | `company-backend/database/company.sqlite` |
 | `license-admin` | `license-admin/database/` |
 
-PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. See [Environment & storage](environment.md).
+PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. See [Project setup](environment.md).
 
-## Minimal commands
+## Manual commands
 
 ```bash
-# Platform
+# Platform (localhost demo auth only)
 cd IDV/idv-server && python -m venv .venv && .venv/Scripts/activate
 pip install -r requirements.txt
 set IDV_OPEN_API=1
@@ -841,7 +968,7 @@ python app.py
 cd IDV/company-admin && npm install && npm run dev
 # → http://127.0.0.1:14189/
 
-# Licence issuer (localhost only)
+# Licence issuer (localhost / private network only — never public)
 cd IDV/license-admin && pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py
@@ -852,12 +979,14 @@ python app.py
     )
     write_page(
         OUT / "idv" / "engines.md",
-        "Document & Face engines",
-        "How IDV calls Identixia Document and Face HTTP APIs.",
+        "Prerequisites: engines",
+        "Start and activate Document and Face HTTP engines before running IDV.",
         """
-## Default HTTP engines
+## Why this comes first
 
-When `IDV_ENGINES=http`, the platform calls:
+IDV calls Identixia **Document** and **Face** HTTP APIs for OCR, authenticity, match, and liveness. Start and activate those engines **before** the IDV server and company sample.
+
+When `IDV_ENGINES=http`, the platform uses:
 
 | Role | Default URL | Example paths |
 | --- | --- | --- |
@@ -866,9 +995,24 @@ When `IDV_ENGINES=http`, the platform calls:
 
 Child pages: [Document engine](engines-document.md) · [Face engine](engines-face.md).
 
-Same APIs as [ID Document SDK](../id-document-sdk/) and [Face SDK](../face-sdk/).
+Same process APIs as [ID Document SDK](../id-document-sdk/) and [Face SDK](../face-sdk/). Document responses follow [Result JSON](../id-document-sdk/result-json.md).
 
-## Example — session create (platform API)
+## Numbered setup
+
+1. Run the Document server (Windows or Docker) on **14102** — see [ID Document SDK → Server](../id-document-sdk/full-server.md).
+2. Run the Face server on **14103** — see [Face SDK → Server](../face-sdk/full-server.md).
+3. Activate each engine with **its** machine code (`GET /api/machinecode` → send to Identixia → `POST /api/activate` or `license.txt`). Docker and bare metal codes differ.
+4. Confirm health:
+
+```bash
+curl -s http://127.0.0.1:14102/api/health
+curl -s http://127.0.0.1:14103/api/health
+```
+
+5. Set `IDV_ENGINES=http`, `DOCUMENT_API_URL`, and `FACE_API_URL` in `IDV/.env` (see [Project setup](environment.md)).
+6. Continue with [Initial setup process](initial-setup.md) or `python IDV/scripts/start_local.py`.
+
+## Session create (platform API)
 
 Usually the **company backend** calls this with the service bearer (not the capture app):
 
@@ -876,20 +1020,17 @@ Usually the **company backend** calls this with the service bearer (not the capt
 POST /v1/sessions
 Authorization: Bearer demo
 X-Tenant-Id: ten_demo
+Idempotency-Key: <unique>
 Content-Type: application/json
 
-{ "workflow_id": "onboarding_standard", "environment": "test" }
+{ "workflow_id": "onboarding_standard" }
 ```
 
-Then the company mints / returns a capture token; the applicant posts submissions with `X-IDV-Step-ID`.
+Then mint a capture token and hand it to the applicant app. Full flow: [Creating a session (API)](api.md) · [Walkthrough](walkthrough.md).
 
 ## Matching note
 
-Face 1:1 / 1:N uses the **Face SDK matcher**. Optional vector indexes stay off until interoperability gates are set — ANN distance alone never decides trust.
-
-## Full API tables
-
-`IDV/docs/API.md` and `IDV/idv-server/postman/` in the source tree.
+Face 1:1 uses the **Face SDK matcher**. Optional vector indexes stay off until interoperability gates are set — ANN distance alone never decides trust.
 """.strip()
         + "\n",
     )
@@ -1310,41 +1451,360 @@ Return to the [ID Document SDK](README.md) hub for platform samples.
     hub(
         "idv/getting-started.md",
         "Getting started",
-        "Recommended path before wiring company systems and capture apps.",
+        "IDKIT-style setup path: structure, engines, env, first admin, sessions, API, webhooks.",
         """
-## Path
+## Setup guide (follow in order)
 
-1. [Architecture](architecture.md) — company vs platform vs engines
-2. [Environment & storage](environment.md) — `.env`, SQLite, PostgreSQL
-3. Start [engines](engines.md), then [Quick start](quick-start.md)
-4. Platform: [IDV server](platform-server.md) + [Identity Console](platform-console.md)
-5. Company: [Company backend](company-backend.md) + [Company Admin](company-admin.md) + [Webhooks](company-webhooks.md)
-6. Capture: [Applicant clients](components-clients.md)
+1. [Project structure](project-structure.md) — Admin / Company / Applicant / Engines
+2. [Prerequisites: engines](engines.md) — Document `:14102` + Face `:14103`
+3. [Project setup](environment.md) — `.env`, tokens, storage
+4. [Initial setup process](initial-setup.md) — consoles, settings, webhook secret
+5. [Quick start](quick-start.md) · helper `python IDV/scripts/start_local.py`
+6. [End-to-end walkthrough](walkthrough.md)
+7. [Session states](session-states.md)
+8. [Creating a session (API)](api.md)
+9. [Webhook integration](company-webhooks.md)
+10. [Applicant clients](components-clients.md)
+11. [Production](production.md) before go-live
 
-Handbook: `IDV/docs/` (not duplicated here).
+Architecture deep-dive: [Architecture](architecture.md). Offline handbook: `IDV/docs/` (not duplicated here).
+""",
+    )
+    hub(
+        "idv/project-structure.md",
+        "Project structure",
+        "IDV folders mapped to Admin, Company, Applicant, and Engines roles.",
+        """
+## Components
+
+IDV is a self-host KYC platform that uses Identixia **SDK-integrated HTTP engines** as the biometric backend.
+
+| Role | What it is | Folder | Typical port |
+| --- | --- | --- | ---: |
+| **Admin (platform)** | Tenant API, workers, Identity Console | `idv-server/`, `idv-server-ui/` | 14187 · 14188 |
+| **Company (merchant)** | Your backend sample + operator UI | `company-backend/`, `company-admin/` | 14195 · 14189 |
+| **Applicant (user)** | Capture SDKs and demo apps | `client/` | e.g. 5175 |
+| **Engines** | Document + Face recognition / liveness | Face / Document SDK repos | 14102 · 14103 |
+
+## Supporting folders
+
+| Path | Role |
+| --- | --- |
+| `license-admin/` | Hybrid licence **issuer** (Identixia ops) — `:14190`, private only |
+| `license_v2/` | Shared Hybrid protocol sources |
+| `packages/` | Shared admin UI / decision / licence helpers |
+| `docs/` | Offline handbook + API notes |
+
+## Data flow
+
+```text
+Applicant (client) → Company backend (:14195) → IDV server (:14187) → Engines (:14102 / :14103)
+                         ↑                              ↓
+                  Company Admin                  Identity Console
+```
+
+Next: [Prerequisites: engines](engines.md).
+""",
+    )
+    hub(
+        "idv/walkthrough.md",
+        "End-to-end walkthrough",
+        "Run one verification: engines, IDV server, company backend, capture, webhook, review.",
+        """
+## Goal
+
+Complete one `onboarding_standard` verification locally and see a `session.completed` webhook plus an identity in Identity Console.
+
+## 1. Start engines
+
+| Service | URL |
+| --- | --- |
+| Document | `http://127.0.0.1:14102` — activate, then `GET /api/health` |
+| Face | `http://127.0.0.1:14103` — activate, then `GET /api/health` |
+
+## 2. Start platform + company
+
+```bash
+# IDV server
+cd IDV/idv-server && set IDV_OPEN_API=1 && python app.py
+# → http://127.0.0.1:14187/v1  and  /admin/
+
+# Company backend
+cd IDV/company-backend
+set IDV_BASE_URL=http://127.0.0.1:14187
+set IDV_SERVICE_TOKEN=demo
+set IDV_TENANT_ID=ten_demo
+python app.py
+# → http://127.0.0.1:14195/
+```
+
+Optional UIs: Identity Console `:14188` (or `/admin` on the server), Company Admin `:14189`.
+
+## 3. Register a webhook
+
+1. Company Admin → Settings → webhook URL  
+   `http://127.0.0.1:14195/demo/webhooks/idv`
+2. Identity Console → Webhooks → add that URL for `session.created` and `session.completed`
+3. Copy the one-time `whsec_…` into Company Admin Settings
+
+Details: [Company webhooks](company-webhooks.md).
+
+## 4. Start verification (company API)
+
+```bash
+curl -s -X POST http://127.0.0.1:14195/demo/start-verification \\
+  -H "Content-Type: application/json" \\
+  -d '{"workflow_id":"onboarding_standard"}'
+```
+
+Response includes `sessionId`, `captureToken`, `launchUrl`, and `next_step`. Hand the **capture token** (or launch URL) to the applicant app — never the service bearer.
+
+## 5. Capture steps
+
+1. `GET /v1/sessions/{id}` with `Authorization: Bearer <captureToken>` → read `next_step.id`
+2. `POST /v1/sessions/{id}/submissions` with headers:
+   * `Authorization: Bearer <captureToken>`
+   * `Idempotency-Key: <unique>`
+   * `X-IDV-Step-ID: <next_step.id>`
+   * `X-IDV-Attempt: 1`
+   * Body: `{ "images": ["<base64>"] }` (or the shape the step expects)
+3. Repeat until the session completes (typical: document then face)
+
+Use a [client demo](components-clients.md) or Postman (`IDV/idv-server/postman/IDV-Public.postman_collection.json`).
+
+## 6. Confirm outcome
+
+| Check | Where |
+| --- | --- |
+| Webhook delivery | Company Admin → Webhooks · or `GET /demo/webhooks/events` |
+| Session + identity | Identity Console · or `GET /v1/sessions/{id}` / `GET /v1/identities/{id}` |
+| Trust decision | Identity `trust_state` / `trust_factors` · webhook `payload.decision` |
+
+Decision aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Missing engine signals never auto-accept.
+
+## 7. Optional review
+
+If trust is `review`, claim the case in Identity Console (or `POST /v1/review-cases/{identity_id}/claim`) and transition with `accept` / `reject`.
+
+API details: [Creating a session (API)](api.md). Production hardening: [Production](production.md).
+""",
+    )
+    hub(
+        "idv/api.md",
+        "Creating a session (API)",
+        "Create a verification session, mint a capture token, and hand launchUrl to the applicant.",
+        """
+## Step 1 — Get a service credential
+
+| Environment | Credential |
+| --- | --- |
+| Local demo (`IDV_OPEN_API=1`) | Bearer `demo`, tenant `ten_demo` |
+| Production | Real service token issued for your tenant — stored **only** on the company backend |
+
+Never put the service bearer in a mobile/web applicant app.
+
+## Step 2 — Recommended: company shortcut
+
+Your merchant backend (sample `:14195`) creates the session and mint token together:
+
+```bash
+curl -s -X POST http://127.0.0.1:14195/demo/start-verification \\
+  -H "Content-Type: application/json" \\
+  -d '{"workflow_id":"onboarding_standard"}'
+```
+
+Response includes `sessionId`, `captureToken`, `launchUrl`, and `next_step`. Give **`launchUrl` / `captureToken`** to the applicant.
+
+| Method | Path | Role |
+| --- | --- | --- |
+| `POST` | `/demo/start-verification` | Session + capture token |
+| `GET` | `/demo/sessions/{id}` | Status refresh |
+| `POST` | `/demo/sessions/{id}/cancel` | Cancel (service side) |
+| `GET` | `/demo/workflows` | List workflows |
+
+## Step 3 — Platform API (same result, two calls)
+
+Use these from the **company backend** only:
+
+```http
+POST /v1/sessions
+Authorization: Bearer <service>
+X-Tenant-Id: <tenant>
+Idempotency-Key: <unique>
+Content-Type: application/json
+
+{ "workflow_id": "onboarding_standard" }
+```
+
+```http
+POST /v1/sessions/{session_id}/capture-token
+Authorization: Bearer <service>
+X-Tenant-Id: <tenant>
+```
+
+### Submit a capture step (applicant)
+
+```http
+POST /v1/sessions/{session_id}/submissions
+Authorization: Bearer <captureToken>
+Idempotency-Key: <unique>
+X-IDV-Step-ID: <next_step.id>
+X-IDV-Attempt: 1
+Content-Type: application/json
+
+{ "images": ["BASE64_JPEG"] }
+```
+
+Use the exact `next_step.id` from the session (e.g. `step_document_capture`, `step_face_capture`).
+
+## Auth summary
+
+| Caller | Credential |
+| --- | --- |
+| Company backend | Service bearer · `X-Tenant-Id` |
+| Capture app | Capture token as Bearer |
+
+Mutating calls often require `Idempotency-Key`.
+
+## Other useful routes
+
+| Method | Path | Role |
+| --- | --- | --- |
+| `GET` | `/v1/sessions` · `/v1/sessions/{id}` | List / poll session |
+| `POST` | `/v1/sessions/{id}/cancel` | Cancel (service only) |
+| `GET` | `/v1/identities` · `/v1/identities/{id}` | Finished record + `trust_state` |
+| `POST` | `/v1/identities/{id}/transitions` | `accept` / `reject` / `reset_to_review` |
+| `GET` | `/v1/workflows` | Includes `onboarding_standard` |
+
+## Webhooks
+
+Register in Identity Console. Events today: `session.created`, `session.completed`. See [Webhook integration](company-webhooks.md).
+
+## Postman
+
+| Collection | Path |
+| --- | --- |
+| Public | `IDV/idv-server/postman/IDV-Public.postman_collection.json` |
+| Company sample | `IDV/idv-server/postman/Company-Backend-Sample.postman_collection.json` |
+| Local env | `IDV/idv-server/postman/IDV-Local.postman_environment.json` |
+
+Full persistence notes: `IDV/docs/API.md` in source. Session meanings: [Session states](session-states.md).
+""",
+    )
+    hub(
+        "idv/production.md",
+        "Production",
+        "Hardening checklist: auth, TLS, databases, engines, and what not to expose.",
+        """
+## Checklist
+
+| Area | Guidance |
+| --- | --- |
+| Demo auth | Set `IDV_OPEN_API=0` (or unset). Issue real service tokens per tenant. |
+| Capture secrets | Keep `IDV_SERVICE_TOKEN` on the **company backend** only. Apps use capture tokens. |
+| TLS | Terminate HTTPS on a reverse proxy in front of `:14187` (and company `:14195` if public). |
+| License Admin | Keep `:14190` on **localhost** / private network. Do not publish the issuer UI. |
+| Engines | Point IDV at internal Document `:14102` and Face `:14103` URLs; activate each host/container with its own machine code. |
+| Database | Prefer PostgreSQL via `python IDV/setup_database.py` (or `--yes` for a guided default). SQLite is fine for local demos only. |
+| Memory store | `IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY` are for tests — not production. |
+| Webhooks | Require `whsec_…` HMAC verification; idempotent handlers; poll session API if a delivery is missed. |
+| Brand | Serve `/brand/*` from `license-admin/brand/` (or the configured `IDV_BRAND_DIR`). |
+
+## Reverse proxy (sketch)
+
+```text
+Internet clients
+      │
+      ▼
+ HTTPS terminator  ──►  idv-server :14187  (/v1, /admin)
+      │
+      └──►  company-backend :14195  (merchant APIs + /admin)
+                 │
+                 ├──► idv-server (service bearer)
+                 └──► (optional) capture CDN / static hosting
+
+Internal only:
+  document-engine :14102
+  face-engine     :14103
+  license-admin   :14190   ← Identixia / ops, not public
+```
+
+## Database
+
+```bash
+cd IDV
+python setup_database.py --check   # inspect current config
+python setup_database.py --yes     # non-interactive recommended local/prod bootstrap
+```
+
+Writes `IDV/.env` and creates schema. Production authority is **PostgreSQL**; media / Valkey / RabbitMQ options appear in the same wizard when you need them.
+
+## Engine URLs
+
+Configure IDV to reach engines on your private network (not `127.0.0.1` from another host). Confirm:
+
+```bash
+curl -s https://doc-engine.internal/api/health
+curl -s https://face-engine.internal/api/health
+```
+
+Machine codes differ for bare metal vs Docker — license the environment you ship.
+
+## Go-live smoke test
+
+1. Health on IDV, company backend, both engines
+2. Start verification → capture document + face → `session.completed` webhook
+3. Inspect identity `trust_state` in Identity Console
+4. Confirm License Admin and issuer ports are not internet-facing
+
+Related: [Project setup](environment.md) · [Walkthrough](walkthrough.md) · [Creating a session (API)](api.md).
 """,
     )
     hub(
         "idv/environment.md",
-        "Environment & storage",
-        "IDV .env keys, ports, and database defaults.",
+        "Project setup",
+        "Configure IDV .env, engine URLs, tokens, and storage — keep secrets out of apps and git.",
         """
-## Folder overrides (`.env`)
+## 1. Copy environment file
 
-Copy `IDV/.env.example` → `IDV/.env`.
+```bash
+cd IDV
+copy .env.example .env
+# or: cp .env.example .env
+```
+
+Edit `IDV/.env`. Restart servers after changes.
+
+## 2. Required keys for a real engine demo
+
+| Key | Local demo value | Notes |
+| --- | --- | --- |
+| `IDV_ENGINES` | `http` | Use `fake` only for UI smoke tests without engines |
+| `DOCUMENT_API_URL` | `http://127.0.0.1:14102` | Internal Document engine |
+| `FACE_API_URL` | `http://127.0.0.1:14103` | Internal Face engine |
+| `IDV_PORT` / `IDV_BASE_URL` | `14187` / `http://127.0.0.1:14187` | Platform listen URL |
+| `IDV_OPEN_API` | `1` locally only | Demo bearer `demo` — **off in production** |
+
+Company backend (process env or its own config):
+
+| Key | Local demo | Notes |
+| --- | --- | --- |
+| `IDV_BASE_URL` | `http://127.0.0.1:14187` | Platform URL |
+| `IDV_SERVICE_TOKEN` | `demo` with open API | Real token in production — **never in client apps** |
+| `IDV_TENANT_ID` | `ten_demo` | Tenant scope |
+
+## 3. Folder overrides
 
 | Env key | Default |
 | --- | --- |
 | `IDV_SERVER_DIR` | `idv-server` |
 | `IDV_SERVER_UI_DIST` | `idv-server-ui/dist` |
-| `IDV_PORTAL_DIR` | `idv-server-ui/portal` |
 | `IDV_BRAND_DIR` | `license-admin/brand` |
 | `COMPANY_ADMIN_DIST` | `company-admin/dist` |
 | `COMPANY_ADMIN_DIR` | `company-admin` |
 | `LICENSE_ADMIN_DIR` | `license-admin` |
-| `IDV_PORT` / `IDV_BASE_URL` | `14187` / `http://127.0.0.1:14187` |
 
-## Durable storage
+## 4. Storage
 
 | Project | Default |
 | --- | --- |
@@ -1352,7 +1812,135 @@ Copy `IDV/.env.example` → `IDV/.env`.
 | `company-backend` | `company-backend/database/company.sqlite` |
 | `license-admin` | `license-admin/database/` (issuer ledger) |
 
-Production: `python IDV/setup_database.py` for PostgreSQL / media / Valkey / RabbitMQ. Memory stores are for tests only (`IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY`).
+Production: `python IDV/setup_database.py` (or `--yes`) for PostgreSQL / media / Valkey / RabbitMQ. Memory stores are for tests only (`IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY`).
+
+## 5. Security rules (non-negotiable)
+
+| Rule | Why |
+| --- | --- |
+| Do not commit `.env` or licence files | Secrets and machine-bound keys |
+| Service bearer stays on company backend | Capture apps use capture tokens only |
+| No open “allow all” auth | Unlike public test-mode cloud rules — deny by default |
+| License Admin on localhost / private net | Issuer must not be internet-facing |
+
+Next: [Initial setup process](initial-setup.md).
+""",
+    )
+    hub(
+        "idv/initial-setup.md",
+        "Initial setup process",
+        "First Identity Console access, company settings, and webhook secret — after engines and .env.",
+        """
+## Before you start
+
+1. Engines healthy — [Prerequisites: engines](engines.md)
+2. `.env` configured — [Project setup](environment.md)
+3. Platform + company running — `python IDV/scripts/start_local.py` or [Quick start](quick-start.md)
+
+## 1. Open Identity Console
+
+| Mode | URL |
+| --- | --- |
+| Production build (served by server) | http://127.0.0.1:14187/admin/ |
+| Develop UI | http://127.0.0.1:14188/ |
+
+Confirm the console can reach the API (meta / sessions list loads). With `IDV_OPEN_API=1`, local demo auth uses bearer `demo` and tenant `ten_demo`.
+
+## 2. Company Admin settings
+
+1. Open Company Admin: http://127.0.0.1:14189/ (or `:14195/admin/` when built-in).
+2. Confirm **Overview** shows IDV reachable.
+3. Note the webhook receiver URL:  
+   `http://127.0.0.1:14195/demo/webhooks/idv`
+
+## 3. Register webhook + store secret
+
+1. Identity Console → **Webhooks** → add the company URL.
+2. Select `session.created` and `session.completed`.
+3. Copy the one-time `whsec_…` secret.
+4. Paste it into Company Admin → **Settings** and save.
+
+Details: [Webhook integration](company-webhooks.md).
+
+{{% hint style="danger" %}}
+Treat `whsec_…` like a password. Do not put it in applicant apps or public repos.
+{{% endhint %}}
+
+## 4. Service credential reminder
+
+| Credential | Where it lives |
+| --- | --- |
+| `IDV_SERVICE_TOKEN` | Company backend only |
+| Capture token / `launchUrl` | Returned to the applicant app for one session |
+
+## 5. First verification
+
+Use Company Admin → **Start verification** (workflow `onboarding_standard`) or:
+
+```bash
+curl -s -X POST http://127.0.0.1:14195/demo/start-verification \\
+  -H "Content-Type: application/json" \\
+  -d '{"workflow_id":"onboarding_standard"}'
+```
+
+Share `launchUrl` or `captureToken` with the applicant — not the service bearer.
+
+Next: [Session states](session-states.md) · [Creating a session (API)](api.md) · [Walkthrough](walkthrough.md).
+""",
+    )
+    hub(
+        "idv/session-states.md",
+        "Session states",
+        "Session status and identity trust_state through an Identixia IDV verification.",
+        """
+## Session status
+
+Each verification **session** moves through:
+
+| Status | Meaning |
+| --- | --- |
+| `created` | Session row exists; capture may not have started |
+| `capturing` | Waiting for / receiving applicant step submissions |
+| `processing` | Engines / pipeline evaluating the latest submission |
+| `completed` | Finalized — identity created or linked; see trust state |
+| `cancelled` | Stopped by the company (service bearer) |
+| `expired` | Timed out before completion |
+| `technical_error` | Unrecoverable platform / pipeline error |
+
+## Identity trust state
+
+When a session completes, the **identity** carries the decision:
+
+| `trust_state` | Meaning |
+| --- | --- |
+| `incomplete` | Not finished evaluating |
+| `review` | Needs human review in Identity Console |
+| `accepted` | Auto-accepted or accepted after review |
+| `rejected` | Auto-rejected or rejected after review |
+| `anonymized` | Personal data erased |
+
+Aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Missing engine signals never auto-accept.
+
+## Starting a verification (operator)
+
+Like a “create session + share link” flow:
+
+1. Company Admin → **Start verification** (or `POST /demo/start-verification`).
+2. Copy **`launchUrl`** (or show a QR of that URL in your own UI) and/or **`captureToken`**.
+3. Applicant opens the link / app; session stays `capturing` until steps finish.
+4. On completion, webhook `session.completed` fires; Identity Console shows the identity.
+
+Each capture token / launch URL is session-scoped. Start a **new** verification for each applicant attempt.
+
+## Reviewer path
+
+If `trust_state` is `review`:
+
+1. Open Identity Console → review cases / identity detail.
+2. Claim the case if required.
+3. Transition with `accept` or `reject` ([Creating a session (API)](api.md) · identities section).
+
+Next: [Creating a session (API)](api.md) · [Webhook integration](company-webhooks.md).
 """,
     )
     hub(
@@ -1366,6 +1954,10 @@ The **platform** is what tenants call for sessions, submissions, reviews, and wo
 | --- | --- |
 | API + workers | [IDV server](platform-server.md) |
 | Operator console | [Identity Console](platform-console.md) |
+| Customer routes | [Creating a session (API)](api.md) |
+| Hardening | [Production](production.md) |
+
+<figure><img src="../.gitbook/assets/idv-audit-console.png" alt="Identity Console" width="480"><figcaption>Identity Console</figcaption></figure>
 
 Company systems integrate **through** this platform — see [Company integration](company.md).
 """,
@@ -1381,6 +1973,7 @@ Company systems integrate **through** this platform — see [Company integration
 | API | `http://127.0.0.1:14187/v1` |
 | Admin (production build) | `http://127.0.0.1:14187/admin/` |
 | Postman | `IDV/idv-server/postman/` |
+| OpenAPI notes | `IDV/docs/API.md` |
 
 ```bash
 cd IDV/idv-server
@@ -1390,7 +1983,9 @@ set IDV_OPEN_API=1
 python app.py
 ```
 
-`IDV_OPEN_API=1` enables the local demo bearer. Workers and decision code live under `idv-server/idv/`.
+`IDV_OPEN_API=1` enables the local demo bearer (`demo` / `ten_demo`). Disable it outside local demos — see [Production](production.md).
+
+Integrator routes: [Creating a session (API)](api.md). Decision code: `idv-server/idv/decision/`.
 """,
     )
     hub(
@@ -1513,27 +2108,60 @@ Shared React helpers: `IDV/packages/admin-ui`.
     )
     hub(
         "idv/company-webhooks.md",
-        "Company webhooks",
-        "Connect Identity Console webhooks to the company-backend receiver.",
+        "Webhook integration",
+        "Subscribe to session events, verify HMAC signatures, and handle deliveries safely.",
         """
-## Wire-up (local)
+## Subscribe to events
 
-1. Start **IDV server** and **company-backend** (`:14195`).
-2. In **Company Admin → Settings**, copy the webhook URL:  
-   `http://127.0.0.1:14195/demo/webhooks/idv`
-3. In **Identity Console → Webhooks**, add that URL; select e.g. `session.created`, `session.completed`.
-4. Copy the one-time `whsec_…` secret into Company Admin Settings and save.
-5. Send a test event or finish a verification — Company Admin **Webhooks** lists deliveries.
+1. Expose an HTTPS endpoint on **your** company server (sample: `POST /demo/webhooks/idv` on `:14195`).
+2. In **Identity Console → Webhooks**, register that URL.
+3. Select events: `session.created`, `session.completed` (only these are emitted today).
+4. Store the one-time `whsec_…` secret in Company Admin **Settings** (or your secret manager).
 
-## Signature
+Local sample URL: `http://127.0.0.1:14195/demo/webhooks/idv`.
 
-The receiver checks:
+## Handle webhooks
+
+Your endpoint receives `POST` JSON:
+
+```json
+{
+  "eventId": "evt_...",
+  "eventType": "session.completed",
+  "occurredAt": "2026-09-24T12:00:00+00:00",
+  "payload": {
+    "sessionId": "ses_...",
+    "decision": "review"
+  }
+}
+```
+
+Headers include `X-IDV-Event` and `X-IDV-Signature`.
+
+## Security verification
 
 ```text
 X-IDV-Signature: sha256=<HMAC-SHA256 of the raw body>
 ```
 
-Leave the secret blank only for an unsigned local trial.
+Compute HMAC-SHA256 over the **raw** request body with `whsec_…` and compare in constant time. Leave the secret blank only for an unsigned **local** trial.
+
+{{% hint style="danger" %}}
+In production always verify the signature, reject bad signatures, and make handlers idempotent. Poll `GET /v1/sessions/{id}` if a delivery is missing.
+{{% endhint %}}
+
+## Test the integration
+
+Use Identity Console → Webhooks → **Send test**, or finish a verification. Company Admin **Webhooks** (or `GET /demo/webhooks/events`) lists deliveries.
+
+## Event types (supported)
+
+| Event | When |
+| --- | --- |
+| `session.created` | New verification session started |
+| `session.completed` | Verification finished (see `payload.decision` / identity trust) |
+
+Related: [Initial setup process](initial-setup.md) · [Creating a session (API)](api.md) · [Session states](session-states.md).
 """,
     )
     hub(
@@ -1547,6 +2175,14 @@ IDV uses **Hybrid** licensing: day-to-day metering on the customer host, issuanc
 | --- | --- |
 | Issuer UI / APIs | [License Admin](license-admin.md) |
 | Shared protocol | [Hybrid protocol (`license_v2`)](license-protocol.md) |
+| Production exposure | Keep issuer on localhost — [Production](production.md) |
+
+## Operator exchange
+
+| Action | Customer sends | You return |
+| --- | --- | --- |
+| First issue | `license_request.txt` | `license.txt` |
+| Same host again | — | Used count kept (no restore) |
 
 The issuer never sees ID images or biometrics. Brand files for consoles live under `license-admin/brand/`.
 """,
@@ -1629,14 +2265,15 @@ Applicant SDKs are **not** here — they live under `IDV/client/packages/`.
         "Reference",
         "Where to find IDV API tables, Postman, and the offline handbook.",
         """
-| Resource | Location in source |
+| Resource | Location |
 | --- | --- |
+| Integrator summary (this site) | [Creating a session (API)](api.md) · [Walkthrough](walkthrough.md) · [Production](production.md) |
 | Endpoint / persistence notes | `IDV/docs/API.md` |
 | Offline handbook (chapters) | `IDV/docs/handbook/` · `IDV/docs/index.html` |
 | Postman (public / private / company) | `IDV/idv-server/postman/` |
 | Architecture notes | `IDV/docs/architecture.md` |
 
-This GitBook section stays a **navigator + quick start**. The handbook is generated from `IDV/docs/` and is not duplicated page-for-page here.
+GitBook covers the integrator path. Deep handbook chapters stay in `IDV/docs/` and are not duplicated page-for-page here.
 """,
     )
     hub(
@@ -1839,27 +2476,33 @@ def write_summary(_structure: dict[str, list[tuple[str, str]]] | None = None) ->
         "    * [Security check fields](id-document-sdk/security-fields.md)",
         "* [IDV platform](idv/README.md)",
         "  * [Getting started](idv/getting-started.md)",
+        "    * [Project structure](idv/project-structure.md)",
+        "    * [Prerequisites: engines](idv/engines.md)",
+        "      * [Document engine](idv/engines-document.md)",
+        "      * [Face engine](idv/engines-face.md)",
+        "    * [Project setup](idv/environment.md)",
+        "    * [Initial setup process](idv/initial-setup.md)",
         "    * [Quick start](idv/quick-start.md)",
-        "    * [Environment & storage](idv/environment.md)",
+        "    * [End-to-end walkthrough](idv/walkthrough.md)",
+        "  * [Session states](idv/session-states.md)",
+        "  * [Creating a session (API)](idv/api.md)",
+        "  * [Webhook integration](idv/company-webhooks.md)",
+        "  * [Applicant clients](idv/components-clients.md)",
+        "    * [Web demo](idv/client-web.md)",
+        "    * [Android demo](idv/client-android.md)",
+        "    * [iOS demo](idv/client-ios.md)",
+        "    * [Flutter & React Native](idv/client-other.md)",
         "  * [Architecture](idv/architecture.md)",
-        "  * [Engines](idv/engines.md)",
-        "    * [Document engine](idv/engines-document.md)",
-        "    * [Face engine](idv/engines-face.md)",
         "  * [Platform](idv/platform.md)",
         "    * [IDV server](idv/platform-server.md)",
         "    * [Identity Console](idv/platform-console.md)",
         "  * [Company integration](idv/company.md)",
         "    * [Company backend (server)](idv/company-backend.md)",
         "    * [Company Admin UI](idv/company-admin.md)",
-        "    * [Webhooks](idv/company-webhooks.md)",
         "  * [Licensing](idv/licensing.md)",
         "    * [License Admin](idv/license-admin.md)",
         "    * [Hybrid licence protocol](idv/license-protocol.md)",
-        "  * [Applicant clients](idv/components-clients.md)",
-        "    * [Web demo](idv/client-web.md)",
-        "    * [Android demo](idv/client-android.md)",
-        "    * [iOS demo](idv/client-ios.md)",
-        "    * [Flutter & React Native](idv/client-other.md)",
+        "  * [Production](idv/production.md)",
         "  * [Shared packages](idv/shared-packages.md)",
         "  * [Map of components](idv/components.md)",
         "  * [Reference](idv/reference.md)",

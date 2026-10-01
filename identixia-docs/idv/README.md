@@ -1,6 +1,6 @@
 ---
 description: >-
-  Identixia IDV: platform server, company integration, licensing, engines, and applicant clients.
+  Self-host identity verification platform: setup guide, sessions, APIs, and webhooks.
 ---
 
 # IDV platform
@@ -8,38 +8,40 @@ description: >-
 <p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
 <p align="center"><img src="../.gitbook/assets/favicon.png" alt="Identixia mark" width="48"></p>
 
-## Overview
+## What IDV is
 
-**IDV** is the Identixia identity-verification **platform** (`IDV/` in the monorepo). It does not replace the Face or Document SDKs — it **orchestrates** them between your company systems and applicant capture apps.
+**IDV** is Identixia’s self-host identity-verification platform. It uses your on-premise **Document** and **Face** SDK HTTP engines as the biometric backend. It does not replace those SDKs — it orchestrates them between your company systems and applicant capture apps.
 
-## Who runs what
+## Project components
 
-| Role | Folders | Typical ports |
+| Component | Role | Folder · port |
 | --- | --- | --- |
-| **Platform** (tenant API, workers, reviews) | `idv-server/`, `idv-server-ui/` | 14187 · 14188 |
-| **Company / merchant sample** | `company-backend/`, `company-admin/` | 14195 · 14189 |
-| **Identixia licence issuer** | `license-admin/` (+ brand) | 14190 |
-| **Applicant capture** | `client/` | e.g. web 5175 |
-| **Shared libraries** | `packages/`, `license_v2/` | — |
-| **Biometric engines** | Face SDK + Document SDK (HTTP) | 14103 · 14102 |
+| **Platform (Admin)** | Tenant API, reviews, Identity Console | `idv-server/` · `:14187` · UI `:14188` / `/admin` |
+| **Company (Merchant)** | Holds service credentials; starts sessions | `company-backend/` · `:14195` · Admin `:14189` |
+| **Applicant (User)** | Web / mobile capture apps | `client/` · e.g. web `:5175` |
+| **Engines** | Document + Face HTTP APIs | Document `:14102` · Face `:14103` |
 
 ```text
-Applicant app ──► Company backend :14195 ──► IDV server :14187 ──► Face/Document engines
+Applicant app ──► Company backend :14195 ──► IDV server :14187 ──► Face / Document engines
                       │                         │
-               Company Admin :14189      Identity Console :14188 /admin
-                                                    │
-                                           License Admin :14190 (issuer)
+               Company Admin :14189      Identity Console /admin
 ```
 
-## Read next
+## Read this guide (in order)
 
-1. [Architecture](architecture.md)
-2. [Getting started](getting-started.md) → [Quick start](quick-start.md)
-3. [Platform](platform.md) · [Company integration](company.md) · [Licensing](licensing.md)
-4. [Engines](engines.md) · [Applicant clients](components-clients.md)
+1. [Project structure](project-structure.md)
+2. [Prerequisites: engines](engines.md) — start and activate Document + Face first
+3. [Project setup](environment.md) — `.env`, tokens, storage
+4. [Initial setup process](initial-setup.md) — first console login, settings, webhook secret
+5. [Quick start](quick-start.md) · [End-to-end walkthrough](walkthrough.md)
+6. [Session states](session-states.md)
+7. [Creating a session (API)](api.md)
+8. [Webhook integration](company-webhooks.md)
+9. [Applicant clients](components-clients.md) · [Production](production.md)
 
-Deep handbook / Postman: `IDV/docs/` and `IDV/idv-server/postman/` in source — not copied here.
+<figure><img src="../.gitbook/assets/idv-audit-console.png" alt="Identity Console" width="520"><figcaption>Identity Console</figcaption></figure>
+<figure><img src="../.gitbook/assets/idv-device-screen.png" alt="Applicant capture" width="220"><figcaption>Applicant capture</figcaption></figure>
 
-{% hint style="info" %}
-The **service bearer token stays on the company backend**. Capture apps use a short-lived **capture token**, not the company service secret.
+{% hint style="danger" %}
+**Safety:** Keep the company **service bearer** on the company backend only. Capture apps receive a short-lived **capture token**. Never commit secrets. `IDV_OPEN_API=1` / bearer `demo` is for **localhost demos only**. License Admin (`:14190`) stays on a private host.
 {% endhint %}

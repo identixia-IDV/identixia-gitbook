@@ -282,9 +282,9 @@ Demo ids: Android `com.identixia.documentreader` · iOS `com.identixia.documentr
 
 The code below shows how to use the license:
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/d916e3e5beadc0f26b8bde131070d406abc842ac/example/lib/core/constants/license.dart#L9-L15](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/d916e3e5beadc0f26b8bde131070d406abc842ac/example/lib/core/constants/license.dart#L9-L15)
+[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/fd19d0fb4ae7dcc82e4c59fa542c2f69b82f0c75/example/lib/core/constants/license.dart#L9-L15](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/fd19d0fb4ae7dcc82e4c59fa542c2f69b82f0c75/example/lib/core/constants/license.dart#L9-L15)
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/d916e3e5beadc0f26b8bde131070d406abc842ac/example/lib/services/sdk_service.dart#L25-L39](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/d916e3e5beadc0f26b8bde131070d406abc842ac/example/lib/services/sdk_service.dart#L25-L39)
+[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/fd19d0fb4ae7dcc82e4c59fa542c2f69b82f0c75/example/lib/services/sdk_service.dart#L25-L39](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/fd19d0fb4ae7dcc82e4c59fa542c2f69b82f0c75/example/lib/services/sdk_service.dart#L25-L39)
 
 Capabilities: document recognition and/or document liveness. Please [contact us](#-contact) to get a license for **your own app**.
 

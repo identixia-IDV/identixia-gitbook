@@ -1,17 +1,22 @@
 ---
 description: >-
-  Recommended path before wiring company systems and capture apps.
+  IDKIT-style setup path: structure, engines, env, first admin, sessions, API, webhooks.
 ---
 
 # Getting started
 
-## Path
+## Setup guide (follow in order)
 
-1. [Architecture](architecture.md) — company vs platform vs engines
-2. [Environment & storage](environment.md) — `.env`, SQLite, PostgreSQL
-3. Start [engines](engines.md), then [Quick start](quick-start.md)
-4. Platform: [IDV server](platform-server.md) + [Identity Console](platform-console.md)
-5. Company: [Company backend](company-backend.md) + [Company Admin](company-admin.md) + [Webhooks](company-webhooks.md)
-6. Capture: [Applicant clients](components-clients.md)
+1. [Project structure](project-structure.md) — Admin / Company / Applicant / Engines
+2. [Prerequisites: engines](engines.md) — Document `:14102` + Face `:14103`
+3. [Project setup](environment.md) — `.env`, tokens, storage
+4. [Initial setup process](initial-setup.md) — consoles, settings, webhook secret
+5. [Quick start](quick-start.md) · helper `python IDV/scripts/start_local.py`
+6. [End-to-end walkthrough](walkthrough.md)
+7. [Session states](session-states.md)
+8. [Creating a session (API)](api.md)
+9. [Webhook integration](company-webhooks.md)
+10. [Applicant clients](components-clients.md)
+11. [Production](production.md) before go-live
 
-Handbook: `IDV/docs/` (not duplicated here).
+Architecture deep-dive: [Architecture](architecture.md). Offline handbook: `IDV/docs/` (not duplicated here).
