@@ -1,6 +1,6 @@
 ---
 description: >-
-  Detailed Identixia docs for Face Recognition, Liveness, and ID Document SDKs — setup, activation, and full API reference.
+  Identixia docs: Face SDK, ID Document SDK, and IDV platform — clear setup and API guidance.
 ---
 
 # Welcome to Identixia
@@ -9,42 +9,43 @@ description: >-
 
 ## Introduction
 
-Official **Identixia** documentation for on-premise biometric SDKs. Use these pages to integrate every customer-facing function: activation, capture, recognition, matching, liveness, and result handling.
+Identixia documentation is organized into **three products**:
 
-* **Face Recognition** — detect, attributes, quality, templates, 1:1, 1:N; optional passive liveness
-* **Liveness Detection** — passive face presentation-attack detection
-* **ID Document Recognition** — OCR, MRZ, barcode; optional document liveness
-* **ID Document Liveness** — document anti-spoofing API (separate from OCR)
+| Product | Source in monorepo | What you get |
+| --- | --- | --- |
+| [**Face SDK**](face-sdk/) | `repositories/Face*` | Face recognition and passive face liveness |
+| [**ID Document SDK**](id-document-sdk/) | `repositories/ID-Document*` | Document OCR/MRZ and document authenticity |
+| [**IDV**](idv/) | `IDV/` | Verification platform that calls the two SDKs |
 
 Biometric data stays on **your** device or server.
 
 ## How to use these docs
 
-1. Open your **product** section.
-2. Open your **platform** page.
-3. Follow **Quick start** → run the demo → confirm Ready.
-4. Read **License and activation**, then **API reference** for every function you will call.
-5. Use **Troubleshooting** when something fails.
-6. Server integrators: copy machine code → [request a license](request-a-license-and-support.md) → `POST /api/activate`.
+1. Open the **product** (Face, Document, or IDV).
+2. Read the **recognition** and **liveness** guides for that product.
+3. Open your **platform** page → Quick start → Ready → API reference.
+4. For IDV, start engines (Document + Face HTTP APIs), then the IDV server.
 
 {% hint style="info" %}
-Native engine binaries are distributed via GitHub Releases (`/releases/latest/download/…`) or the paths in each README. They are not committed to git. The demo UI is optional in production — call the SDK/API directly.
+Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`). They are not committed to git. Demo UIs are optional — call the SDK/API directly in production.
 {% endhint %}
 
 ## Products
 
 <table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-cover data-type="image">Cover image</th><th data-hidden></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody>
-<tr><td><strong>Face Recognition SDK</strong></td><td>On-premise face recognition for phones and servers. Enroll, 1:N identify, templates, quality, and 1:1 match. Passive liveness when the license includes it.</td><td><a href=".gitbook/assets/face-android-home.png">face-android-home.png</a></td><td></td><td><a href="face-recognition-sdk/">face-recognition-sdk</a></td></tr><tr><td><strong>Liveness Detection SDK</strong></td><td>Passive face presentation-attack detection on device or on your server. Scores a camera frame or still image when the license allows it.</td><td><a href=".gitbook/assets/liveness-mobile.png">liveness-mobile.png</a></td><td></td><td><a href="liveness-detection-sdk/">liveness-detection-sdk</a></td></tr><tr><td><strong>ID Document Recognition SDK</strong></td><td>Passport, national ID, and driver license OCR, MRZ, and barcode extraction. Document liveness runs when the license includes it.</td><td><a href=".gitbook/assets/document-desktop-result.png">document-desktop-result.png</a></td><td></td><td><a href="id-document-recognition-sdk/">id-document-recognition-sdk</a></td></tr><tr><td><strong>ID Document Liveness SDK</strong></td><td>On-premise ID document liveness API for Linux and Docker. Separate from OCR. Document anti-spoofing when the license includes it.</td><td><a href=".gitbook/assets/document-docker-result.png">document-docker-result.png</a></td><td></td><td><a href="id-document-liveness-sdk/">id-document-liveness-sdk</a></td></tr>
+<tr><td><strong>Face SDK</strong></td><td>Detect, templates, 1:1 / 1:N, and passive liveness when licensed. Mobile and server repositories under <code>repositories/</code>.</td><td><a href=".gitbook/assets/face-android-home.png">face-android-home.png</a></td><td></td><td><a href="face-sdk/">face-sdk</a></td></tr>
+<tr><td><strong>ID Document SDK</strong></td><td>Passport and ID OCR, MRZ, barcode, and document authenticity when licensed.</td><td><a href=".gitbook/assets/document-desktop-status.png">document-desktop-status.png</a></td><td></td><td><a href="id-document-sdk/">id-document-sdk</a></td></tr>
+<tr><td><strong>IDV platform</strong></td><td>Sessions, capture clients, Identity Console, company sample, and Hybrid licensing — uses Face + Document engines over HTTP.</td><td><a href=".gitbook/assets/brand-mark.png">brand-mark.png</a></td><td></td><td><a href="idv/">idv</a></td></tr>
 </tbody></table>
 
-## Shared concepts
+## Shared ideas
 
 | Topic | Summary |
 | --- | --- |
-| Control vs process (HTTP) | `/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus` use `{success,code,message,request_id,data}`. Process routes return engine JSON. |
+| Control vs process (HTTP) | `/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus` → `{success,code,message,request_id,data}`. Process routes return engine JSON. |
 | Threading (mobile) | Activate, init, detect, recognize on a **background** thread. |
 | License flags | Face: `recognition` / `liveness`. Document: `recognition` / `authenticity`. Missing flag ⇒ feature not run. |
-| Your storage | Persist templates and document fields in **your** database. |
+| Brand | Logo and favicons: docs `.gitbook/assets/`; IDV consoles `IDV/license-admin/brand/`. |
 
 ## Links
 

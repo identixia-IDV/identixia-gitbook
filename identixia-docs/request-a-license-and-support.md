@@ -1,30 +1,30 @@
 ---
 description: >-
-  How to request an Identixia SDK license for mobile and server products.
+  How to request an Identixia license for Face SDK, ID Document SDK, and IDV.
 ---
 
 # Request a License & Support
 
-## Need a license?
+## Mobile SDK (Face / Document)
 
-### Mobile SDK
+1. Build with **your** applicationId / bundle id (not the demo id).
+2. Contact us with the id and product (Face recognition / Face liveness / Document recognition / Document authenticity).
+3. Activate → init as shown on the platform page.
 
-1. Build your app with **your** applicationId / bundle id (not the demo id).
-2. Contact us (email / WhatsApp / Telegram) with the id and product (Face / Liveness / Document).
-3. Integrate the key with activate → init as shown on the platform page.
+Demo keys work only for demo application ids.
 
-The sample apps ship a **demo key** for the sample id only. Do not reuse it in production.
-
-### Server SDK (Windows / Linux / Docker)
+## Server SDK (Windows / Linux / Docker)
 
 1. Start the API once.
-2. `GET /api/machinecode` and copy `data.machinecode`.
-3. Send that code to Identixia. **Docker and bare metal have different codes.**
-4. `POST /api/activate` with the license file, or place `license.txt` and restart.
+2. `GET /api/machinecode` → copy `data.machinecode`.
+3. Send that code to Identixia. **Docker and bare metal differ.**
+4. `POST /api/activate` or place `license.txt` and restart.
 5. Confirm with `GET /api/licenseStatus`.
 
-## Support
+## IDV
 
-We offer integration help and after-sale support for Identixia biometric solutions.
+IDV uses Hybrid licensing via `license-admin` / `license_v2`. Use the issuer UI on `:14190` (localhost) and the entitlement flow described in `IDV/docs/`.
+
+## Support
 
 {% include "./.gitbook/includes/contact.md" %}

@@ -565,7 +565,7 @@ Top-level concepts (names may be normalized per platform):
 | Checks / tests | Verification + image quality + security |
 | Images | Portrait / document crops (base64) |
 
-See [Document result JSON](document-result-json.md) and [Document security check fields](document-security-check-fields.md).
+See [Result JSON](result-json.md) and [Security check fields](security-fields.md).
 
 ### Integration checklist
 
@@ -676,12 +676,20 @@ def screenshots_section(ctx: ProductCtx, *, nested: bool = True) -> str:
         ]
         return "## Screenshots\n\n" + "\n\n".join(imgs) + "\n"
 
-    # Document products / hub
+    # Document products / hub — use split desktop gallery (no tall stacked duplicate).
     if ctx.family in ("document", "document_liveness") or "Document" in ctx.name:
         imgs = [
-            a("document-desktop-result.png", "Document recognition result UI", 520),
-            a("document-docker-result.png", "Docker document result", 520),
+            a("document-desktop-status.png", "Status", 420),
+            a("document-desktop-fields-visual.png", "Visual fields", 420),
+            a("document-desktop-checks-validity.png", "Validity checks", 420),
+            a("document-desktop-checks-liveness.png", "Liveness checks", 420),
+            a("document-desktop-images.png", "Images", 420),
         ]
+        if ctx.family == "document_liveness":
+            imgs = [
+                a("document-desktop-checks-liveness.png", "Liveness checks", 420),
+                a("document-desktop-status.png", "Status card", 420),
+            ]
         return "## Screenshots\n\n" + "\n\n".join(imgs) + "\n"
 
     # Face recognition (combined, recognition-only, hub)
@@ -753,16 +761,18 @@ def cross_platform_face() -> str:
 
 | Platform | Docs |
 | --- | --- |
-| Android | [Face Recognition Android SDK](face-recognition-android-sdk.md) |
-| iOS | [Face Recognition iOS SDK](face-recognition-ios-sdk.md) |
-| Flutter | [Face Recognition Flutter SDK](face-recognition-android-sdk-2.md) |
-| React Native | [Face Recognition React Native SDK](face-recognition-android-sdk-1.md) |
-| Ionic Capacitor | [Face Recognition Ionic Capacitor SDK](face-recognition-ionic-capacitor-sdk.md) |
-| Ionic Cordova | [Face Recognition Ionic Cordova SDK](face-recognition-android-sdk-3.md) |
-| Windows (+ liveness) | [Face Recognition + Liveness Windows](face-recognition-sdk-windows.md) |
-| Linux / Docker (+ liveness) | [Face Recognition + Liveness Linux](face-recognition-sdk-linux.md) |
-| Windows (recognition only) | [Face Recognition Windows](face-recognition-windows-sdk.md) |
-| Linux (recognition only) | [Face Recognition Linux](face-recognition-linux-sdk.md) |
+| Android (full) | [Android](android.md) |
+| iOS (full) | [iOS](ios.md) |
+| Flutter (full) | [Flutter](flutter.md) |
+| React Native (full) | [React Native](react-native.md) |
+| Ionic Capacitor (full) | [Ionic Capacitor](ionic-capacitor.md) |
+| Ionic Cordova (full) | [Ionic Cordova](ionic-cordova.md) |
+| Windows (full) | [Windows](windows.md) |
+| Linux / Docker (full) | [Linux / Docker](linux-docker.md) |
+| Windows (recognition only) | [Recognition Windows](recognition-windows.md) |
+| Linux (recognition only) | [Recognition Linux / Docker](recognition-linux-docker.md) |
+| Liveness-only | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Docker](liveness-linux-docker.md) |
+| Function guides | [Recognition](recognition.md) · [Liveness](liveness.md) |
 """
 
 

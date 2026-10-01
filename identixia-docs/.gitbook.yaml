@@ -1,0 +1,4 @@
+root: .
+
+# Brand (copied into .gitbook/assets/ by generate.py)
+# Configure the space icon/favicon in GitBook UI to favicon.png if needed.
