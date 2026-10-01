@@ -1,13 +1,13 @@
 ---
 description: >-
-  Sample company-backend: holds the service bearer and starts IDV sessions.
+  Sample company/backend: holds the service bearer and starts IDV sessions.
 ---
 
 # Company backend (server)
 
 ## Role
 
-`IDV/company-backend/` is the **sample company server**. It:
+`IDV/company/backend/` is the **sample company server**. It:
 
 * Holds `IDV_SERVICE_TOKEN` / tenant id
 * Starts verifications against IDV (`POST` session flows)
@@ -25,7 +25,7 @@ description: >-
 ## Run
 
 ```bash
-cd IDV/company-backend
+cd IDV/company/backend
 pip install -r requirements.txt
 set IDV_BASE_URL=http://127.0.0.1:14187
 set IDV_SERVICE_TOKEN=demo
@@ -33,7 +33,7 @@ set IDV_TENANT_ID=ten_demo
 python app.py
 ```
 
-Storage: `company-backend/database/company.sqlite` by default.
+Storage: `company/backend/database/company.sqlite` by default.
 
 ### Example — start via company backend (JS sketch)
 

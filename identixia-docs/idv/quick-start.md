@@ -26,9 +26,9 @@ Preflight checks engine health, starts IDV server + company backend, and prints 
 
 | Project | Default SQLite |
 | --- | --- |
-| `idv-server` | `idv-server/database/idv.sqlite` (or `IDV_SQLITE_PATH`) |
-| `company-backend` | `company-backend/database/company.sqlite` |
-| `license-admin` | `license-admin/database/` |
+| `platform/server` | `platform/server/database/idv.sqlite` (or `IDV_SQLITE_PATH`) |
+| `company/backend` | `company/backend/database/company.sqlite` |
+| `license/admin` | `license/admin/database/` |
 
 PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. See [Project setup](environment.md).
 
@@ -36,29 +36,29 @@ PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. 
 
 ```bash
 # Platform (localhost demo auth only)
-cd IDV/idv-server && python -m venv .venv && .venv/Scripts/activate
+cd IDV/platform/server && python -m venv .venv && .venv/Scripts/activate
 pip install -r requirements.txt
 set IDV_OPEN_API=1
 python app.py
 # → http://127.0.0.1:14187/v1  and  /admin/
 
 # Identity Console (develop)
-cd IDV/idv-server-ui && npm install && npm run dev
+cd IDV/platform/console && npm install && npm run dev
 # → http://127.0.0.1:14188/
 
 # Company server + admin UI
-cd IDV/company-backend && pip install -r requirements.txt
+cd IDV/company/backend && pip install -r requirements.txt
 set IDV_BASE_URL=http://127.0.0.1:14187
 set IDV_SERVICE_TOKEN=demo
 set IDV_TENANT_ID=ten_demo
 python app.py
 # → http://127.0.0.1:14195/  (built admin at /admin/)
 
-cd IDV/company-admin && npm install && npm run dev
+cd IDV/company/admin && npm install && npm run dev
 # → http://127.0.0.1:14189/
 
 # Licence issuer (localhost / private network only — never public)
-cd IDV/license-admin && pip install -r requirements.txt
+cd IDV/license/admin && pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py
 # → http://127.0.0.1:14190/

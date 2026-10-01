@@ -34,11 +34,11 @@ Company backend :14195              Capture app (web / mobile)
 | Concern | Owner |
 | --- | --- |
 | Document OCR / face match / liveness scores | Document SDK + Face SDK |
-| Tenant policy, sessions, reviews, API auth | `idv-server` |
-| Holding service tokens, starting sessions for apps | **Your** backend (sample: `company-backend`) |
-| Hybrid entitlement metering on customer host | `license_v2` inside `idv-server` |
-| Issuing Hybrid licences | `license-admin` (Identixia) |
+| Tenant policy, sessions, reviews, API auth | `platform/server` |
+| Holding service tokens, starting sessions for apps | **Your** backend (sample: `company/backend`) |
+| Hybrid entitlement metering on customer host | `license/license_v2` inside `platform/server` |
+| Issuing Hybrid licences | `license/admin` (Identixia) |
 
 ## Decision rule
 
-Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Missing or error signals never auto-accept (`idv-server/idv/decision/`).
+Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Missing or error signals never auto-accept (`platform/server/idv/decision/`).

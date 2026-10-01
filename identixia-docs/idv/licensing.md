@@ -10,7 +10,7 @@ IDV uses **Hybrid** licensing: day-to-day metering on the customer host, issuanc
 | Piece | Docs |
 | --- | --- |
 | Issuer UI / APIs | [License Admin](license-admin.md) |
-| Shared protocol | [Hybrid protocol (`license_v2`)](license-protocol.md) |
+| Shared protocol | [Hybrid protocol (`license/license_v2`)](license-protocol.md) |
 | Production exposure | Keep issuer on localhost — [Production](production.md) |
 
 ## Operator exchange
@@ -20,4 +20,4 @@ IDV uses **Hybrid** licensing: day-to-day metering on the customer host, issuanc
 | First issue | `license_request.txt` | `license.txt` |
 | Same host again | — | Used count kept (no restore) |
 
-The issuer never sees ID images or biometrics. Brand files for consoles live under `license-admin/brand/`.
+The issuer never sees ID images or biometrics. Brand files for consoles live under `license/admin/brand/`.

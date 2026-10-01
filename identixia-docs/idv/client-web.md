@@ -8,7 +8,7 @@ description: >-
 ## Run locally
 
 ```bash
-cd IDV/client/app/web
+cd IDV/app/demos/web
 npm install && npm run dev
 # http://127.0.0.1:5175/
 ```

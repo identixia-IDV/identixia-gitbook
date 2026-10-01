@@ -37,20 +37,20 @@ Company backend (process env or its own config):
 
 | Env key | Default |
 | --- | --- |
-| `IDV_SERVER_DIR` | `idv-server` |
-| `IDV_SERVER_UI_DIST` | `idv-server-ui/dist` |
-| `IDV_BRAND_DIR` | `license-admin/brand` |
-| `COMPANY_ADMIN_DIST` | `company-admin/dist` |
-| `COMPANY_ADMIN_DIR` | `company-admin` |
-| `LICENSE_ADMIN_DIR` | `license-admin` |
+| `IDV_SERVER_DIR` | `platform/server` |
+| `IDV_SERVER_UI_DIST` | `platform/console/dist` |
+| `IDV_BRAND_DIR` | `license/admin/brand` |
+| `COMPANY_ADMIN_DIST` | `company/admin/dist` |
+| `COMPANY_ADMIN_DIR` | `company/admin` |
+| `LICENSE_ADMIN_DIR` | `license/admin` |
 
 ## 4. Storage
 
 | Project | Default |
 | --- | --- |
-| `idv-server` | SQLite under `database/` (tenant-separated rows) |
-| `company-backend` | `company-backend/database/company.sqlite` |
-| `license-admin` | `license-admin/database/` (issuer ledger) |
+| `platform/server` | SQLite under `database/` (tenant-separated rows) |
+| `company/backend` | `company/backend/database/company.sqlite` |
+| `license/admin` | `license/admin/database/` (issuer ledger) |
 
 Production: `python IDV/setup_database.py` (or `--yes`) for PostgreSQL / media / Valkey / RabbitMQ. Memory stores are for tests only (`IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY`).
 

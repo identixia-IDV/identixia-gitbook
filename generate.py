@@ -69,9 +69,9 @@ ASSET_COPY: list[tuple[str, str]] = [
 ]
 
 BRAND_EXTRA: list[tuple[Path, str]] = [
-    (IDV_DIR / "license-admin" / "brand" / "favicon.ico", "favicon.ico"),
-    (IDV_DIR / "license-admin" / "brand" / "favicon.png", "favicon.png"),
-    (IDV_DIR / "license-admin" / "brand" / "apple-touch-icon.png", "apple-touch-icon.png"),
+    (IDV_DIR / "license" / "admin" / "brand" / "favicon.ico", "favicon.ico"),
+    (IDV_DIR / "license" / "admin" / "brand" / "favicon.png", "favicon.png"),
+    (IDV_DIR / "license" / "admin" / "brand" / "apple-touch-icon.png", "apple-touch-icon.png"),
     (IDV_DIR / "docs" / "audit-console.png", "idv-audit-console.png"),
     (IDV_DIR / "docs" / "device-idv-screen.png", "idv-device-screen.png"),
 ]
@@ -834,8 +834,8 @@ def write_idv_pages() -> None:
 
 | Component | Role | Folder · port |
 | --- | --- | --- |
-| **Platform (Admin)** | Tenant API, reviews, Identity Console | `idv-server/` · `:14187` · UI `:14188` / `/admin` |
-| **Company (Merchant)** | Holds service credentials; starts sessions | `company-backend/` · `:14195` · Admin `:14189` |
+| **Platform (Admin)** | Tenant API, reviews, Identity Console | `platform/server/` · `:14187` · UI `:14188` / `/admin` |
+| **Company (Merchant)** | Holds service credentials; starts sessions | `company/backend/` · `:14195` · Admin `:14189` |
 | **Applicant (User)** | Web / mobile capture apps | `client/` · e.g. web `:5175` |
 | **Engines** | Document + Face HTTP APIs | Document `:14102` · Face `:14103` |
 
@@ -900,14 +900,14 @@ Company backend :14195              Capture app (web / mobile)
 | Concern | Owner |
 | --- | --- |
 | Document OCR / face match / liveness scores | Document SDK + Face SDK |
-| Tenant policy, sessions, reviews, API auth | `idv-server` |
-| Holding service tokens, starting sessions for apps | **Your** backend (sample: `company-backend`) |
-| Hybrid entitlement metering on customer host | `license_v2` inside `idv-server` |
-| Issuing Hybrid licences | `license-admin` (Identixia) |
+| Tenant policy, sessions, reviews, API auth | `platform/server` |
+| Holding service tokens, starting sessions for apps | **Your** backend (sample: `company/backend`) |
+| Hybrid entitlement metering on customer host | `license/license_v2` inside `platform/server` |
+| Issuing Hybrid licences | `license/admin` (Identixia) |
 
 ## Decision rule
 
-Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Missing or error signals never auto-accept (`idv-server/idv/decision/`).
+Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Missing or error signals never auto-accept (`platform/server/idv/decision/`).
 """.strip()
         + "\n",
     )
@@ -937,9 +937,9 @@ Preflight checks engine health, starts IDV server + company backend, and prints 
 
 | Project | Default SQLite |
 | --- | --- |
-| `idv-server` | `idv-server/database/idv.sqlite` (or `IDV_SQLITE_PATH`) |
-| `company-backend` | `company-backend/database/company.sqlite` |
-| `license-admin` | `license-admin/database/` |
+| `platform/server` | `platform/server/database/idv.sqlite` (or `IDV_SQLITE_PATH`) |
+| `company/backend` | `company/backend/database/company.sqlite` |
+| `license/admin` | `license/admin/database/` |
 
 PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. See [Project setup](environment.md).
 
@@ -947,29 +947,29 @@ PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. 
 
 ```bash
 # Platform (localhost demo auth only)
-cd IDV/idv-server && python -m venv .venv && .venv/Scripts/activate
+cd IDV/platform/server && python -m venv .venv && .venv/Scripts/activate
 pip install -r requirements.txt
 set IDV_OPEN_API=1
 python app.py
 # → http://127.0.0.1:14187/v1  and  /admin/
 
 # Identity Console (develop)
-cd IDV/idv-server-ui && npm install && npm run dev
+cd IDV/platform/console && npm install && npm run dev
 # → http://127.0.0.1:14188/
 
 # Company server + admin UI
-cd IDV/company-backend && pip install -r requirements.txt
+cd IDV/company/backend && pip install -r requirements.txt
 set IDV_BASE_URL=http://127.0.0.1:14187
 set IDV_SERVICE_TOKEN=demo
 set IDV_TENANT_ID=ten_demo
 python app.py
 # → http://127.0.0.1:14195/  (built admin at /admin/)
 
-cd IDV/company-admin && npm install && npm run dev
+cd IDV/company/admin && npm install && npm run dev
 # → http://127.0.0.1:14189/
 
 # Licence issuer (localhost / private network only — never public)
-cd IDV/license-admin && pip install -r requirements.txt
+cd IDV/license/admin && pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py
 # → http://127.0.0.1:14190/
@@ -1043,20 +1043,19 @@ Face 1:1 uses the **Face SDK matcher**. Optional vector indexes stay off until i
 
 | Path | Role | Docs |
 | --- | --- | --- |
-| `idv-server/` | Platform API + workers (`:14187`) | [Platform server](platform-server.md) |
-| `idv-server-ui/` | Identity Console (`:14188` / `/admin`) | [Identity Console](platform-console.md) |
-| `company-backend/` | Sample **company server** (`:14195`) | [Company backend](company-backend.md) |
-| `company-admin/` | Company operator UI (`:14189`) | [Company Admin](company-admin.md) |
-| `license-admin/` | Hybrid issuer + brand (`:14190`) | [License Admin](license-admin.md) |
-| `client/` | Applicant SDKs + demos | [Applicant clients](components-clients.md) |
+| `platform/server/` | Platform API + workers (`:14187`) | [Platform server](platform-server.md) |
+| `platform/console/` | Identity Console (`:14188` / `/admin`) | [Identity Console](platform-console.md) |
+| `company/backend/` | Sample **company server** (`:14195`) | [Company backend](company-backend.md) |
+| `company/admin/` | Company operator UI (`:14189`) | [Company Admin](company-admin.md) |
+| `license/admin/` | Hybrid issuer + brand (`:14190`) | [License Admin](license-admin.md) |
+| `app/` | Applicant SDKs + demos | [Applicant clients](components-clients.md) |
 | `packages/` | Shared UI / decision / licence libs | [Shared packages](shared-packages.md) |
-| `license_v2/` | Shared Hybrid protocol | [Hybrid protocol](license-protocol.md) |
+| `license/license_v2/` | Shared Hybrid protocol | [Hybrid protocol](license-protocol.md) |
 | `docs/` | Offline handbook + API notes | [Reference](reference.md) |
-| `services/` | Superseded stubs — use `idv-server` | — |
 
 ## Brand
 
-One pack only: `IDV/license-admin/brand/` → `/brand/*` and docs `.gitbook/assets/`.
+One pack only: `IDV/license/admin/brand/` → `/brand/*` and docs `.gitbook/assets/`.
 
 Org: [`identixia-IDV`]({GH}).
 """.strip()
@@ -1088,7 +1087,7 @@ Demo keys work only for demo application ids.
 
 ## IDV
 
-IDV uses Hybrid licensing via `license-admin` and `license_v2`. The issuer UI listens on `:14190` (localhost). Company systems use `company-backend` (sample `:14195`) to hold the service token and start sessions — see [Company integration](idv/company.md).
+IDV uses Hybrid licensing via `license/admin` and `license/license_v2`. The issuer UI listens on `:14190` (localhost). Company systems use `company/backend` (sample `:14195`) to hold the service token and start sessions — see [Company integration](idv/company.md).
 
 ## Support
 
@@ -1168,7 +1167,7 @@ Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`)
 | Control vs process (HTTP) | `/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus` return `{success,code,message,request_id,data}`. Process routes return engine JSON. |
 | Threading (mobile) | Activate, init, detect, and recognize on a **background** thread. |
 | License flags | Face: `recognition` / `liveness`. Document: `recognition` / `authenticity`. A missing flag means the feature is not evaluated. |
-| Brand | Logo and favicons live in docs `.gitbook/assets/`; IDV consoles use `IDV/license-admin/brand/`. |
+| Brand | Logo and favicons live in docs `.gitbook/assets/`; IDV consoles use `IDV/license/admin/brand/`. |
 
 ## Links
 
@@ -1481,17 +1480,17 @@ IDV is a self-host KYC platform that uses Identixia **SDK-integrated HTTP engine
 
 | Role | What it is | Folder | Typical port |
 | --- | --- | --- | ---: |
-| **Admin (platform)** | Tenant API, workers, Identity Console | `idv-server/`, `idv-server-ui/` | 14187 · 14188 |
-| **Company (merchant)** | Your backend sample + operator UI | `company-backend/`, `company-admin/` | 14195 · 14189 |
-| **Applicant (user)** | Capture SDKs and demo apps | `client/` | e.g. 5175 |
+| **Admin (platform)** | Tenant API, workers, Identity Console | `platform/server/`, `platform/console/` | 14187 · 14188 |
+| **Company (merchant)** | Your backend sample + operator UI | `company/backend/`, `company/admin/` | 14195 · 14189 |
+| **Applicant (user)** | Capture SDKs and demo apps | `app/` | e.g. 5175 |
 | **Engines** | Document + Face recognition / liveness | Face / Document SDK repos | 14102 · 14103 |
 
 ## Supporting folders
 
 | Path | Role |
 | --- | --- |
-| `license-admin/` | Hybrid licence **issuer** (Identixia ops) — `:14190`, private only |
-| `license_v2/` | Shared Hybrid protocol sources |
+| `license/admin/` | Hybrid licence **issuer** (Identixia ops) — `:14190`, private only |
+| `license/license_v2/` | Shared Hybrid protocol sources |
 | `packages/` | Shared admin UI / decision / licence helpers |
 | `docs/` | Offline handbook + API notes |
 
@@ -1526,11 +1525,11 @@ Complete one `onboarding_standard` verification locally and see a `session.compl
 
 ```bash
 # IDV server
-cd IDV/idv-server && set IDV_OPEN_API=1 && python app.py
+cd IDV/platform/server && set IDV_OPEN_API=1 && python app.py
 # → http://127.0.0.1:14187/v1  and  /admin/
 
 # Company backend
-cd IDV/company-backend
+cd IDV/company/backend
 set IDV_BASE_URL=http://127.0.0.1:14187
 set IDV_SERVICE_TOKEN=demo
 set IDV_TENANT_ID=ten_demo
@@ -1570,7 +1569,7 @@ Response includes `sessionId`, `captureToken`, `launchUrl`, and `next_step`. Han
    * Body: `{ "images": ["<base64>"] }` (or the shape the step expects)
 3. Repeat until the session completes (typical: document then face)
 
-Use a [client demo](components-clients.md) or Postman (`IDV/idv-server/postman/IDV-Public.postman_collection.json`).
+Use a [client demo](components-clients.md) or Postman (`IDV/platform/server/postman/IDV-Public.postman_collection.json`).
 
 ## 6. Confirm outcome
 
@@ -1684,9 +1683,9 @@ Register in Identity Console. Events today: `session.created`, `session.complete
 
 | Collection | Path |
 | --- | --- |
-| Public | `IDV/idv-server/postman/IDV-Public.postman_collection.json` |
-| Company sample | `IDV/idv-server/postman/Company-Backend-Sample.postman_collection.json` |
-| Local env | `IDV/idv-server/postman/IDV-Local.postman_environment.json` |
+| Public | `IDV/platform/server/postman/IDV-Public.postman_collection.json` |
+| Company sample | `IDV/platform/server/postman/Company-Backend-Sample.postman_collection.json` |
+| Local env | `IDV/platform/server/postman/IDV-Local.postman_environment.json` |
 
 Full persistence notes: `IDV/docs/API.md` in source. Session meanings: [Session states](session-states.md).
 """,
@@ -1708,7 +1707,7 @@ Full persistence notes: `IDV/docs/API.md` in source. Session meanings: [Session 
 | Database | Prefer PostgreSQL via `python IDV/setup_database.py` (or `--yes` for a guided default). SQLite is fine for local demos only. |
 | Memory store | `IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY` are for tests — not production. |
 | Webhooks | Require `whsec_…` HMAC verification; idempotent handlers; poll session API if a delivery is missed. |
-| Brand | Serve `/brand/*` from `license-admin/brand/` (or the configured `IDV_BRAND_DIR`). |
+| Brand | Serve `/brand/*` from `license/admin/brand/` (or the configured `IDV_BRAND_DIR`). |
 
 ## Reverse proxy (sketch)
 
@@ -1716,17 +1715,17 @@ Full persistence notes: `IDV/docs/API.md` in source. Session meanings: [Session 
 Internet clients
       │
       ▼
- HTTPS terminator  ──►  idv-server :14187  (/v1, /admin)
+ HTTPS terminator  ──►  platform/server :14187  (/v1, /admin)
       │
-      └──►  company-backend :14195  (merchant APIs + /admin)
+      └──►  company/backend :14195  (merchant APIs + /admin)
                  │
-                 ├──► idv-server (service bearer)
+                 ├──► platform/server (service bearer)
                  └──► (optional) capture CDN / static hosting
 
 Internal only:
   document-engine :14102
   face-engine     :14103
-  license-admin   :14190   ← Identixia / ops, not public
+  license/admin   :14190   ← Identixia / ops, not public
 ```
 
 ## Database
@@ -1797,20 +1796,20 @@ Company backend (process env or its own config):
 
 | Env key | Default |
 | --- | --- |
-| `IDV_SERVER_DIR` | `idv-server` |
-| `IDV_SERVER_UI_DIST` | `idv-server-ui/dist` |
-| `IDV_BRAND_DIR` | `license-admin/brand` |
-| `COMPANY_ADMIN_DIST` | `company-admin/dist` |
-| `COMPANY_ADMIN_DIR` | `company-admin` |
-| `LICENSE_ADMIN_DIR` | `license-admin` |
+| `IDV_SERVER_DIR` | `platform/server` |
+| `IDV_SERVER_UI_DIST` | `platform/console/dist` |
+| `IDV_BRAND_DIR` | `license/admin/brand` |
+| `COMPANY_ADMIN_DIST` | `company/admin/dist` |
+| `COMPANY_ADMIN_DIR` | `company/admin` |
+| `LICENSE_ADMIN_DIR` | `license/admin` |
 
 ## 4. Storage
 
 | Project | Default |
 | --- | --- |
-| `idv-server` | SQLite under `database/` (tenant-separated rows) |
-| `company-backend` | `company-backend/database/company.sqlite` |
-| `license-admin` | `license-admin/database/` (issuer ledger) |
+| `platform/server` | SQLite under `database/` (tenant-separated rows) |
+| `company/backend` | `company/backend/database/company.sqlite` |
+| `license/admin` | `license/admin/database/` (issuer ledger) |
 
 Production: `python IDV/setup_database.py` (or `--yes`) for PostgreSQL / media / Valkey / RabbitMQ. Memory stores are for tests only (`IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY`).
 
@@ -1965,18 +1964,18 @@ Company systems integrate **through** this platform — see [Company integration
     hub(
         "idv/platform-server.md",
         "IDV server",
-        "idv-server: platform API, workers, storage, and /admin mount.",
+        "platform/server: platform API, workers, storage, and /admin mount.",
         """
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/idv-server/` |
+| Folder | `IDV/platform/server/` |
 | API | `http://127.0.0.1:14187/v1` |
 | Admin (production build) | `http://127.0.0.1:14187/admin/` |
-| Postman | `IDV/idv-server/postman/` |
+| Postman | `IDV/platform/server/postman/` |
 | OpenAPI notes | `IDV/docs/API.md` |
 
 ```bash
-cd IDV/idv-server
+cd IDV/platform/server
 python -m venv .venv && .venv/Scripts/activate
 pip install -r requirements.txt
 set IDV_OPEN_API=1
@@ -1985,22 +1984,22 @@ python app.py
 
 `IDV_OPEN_API=1` enables the local demo bearer (`demo` / `ten_demo`). Disable it outside local demos — see [Production](production.md).
 
-Integrator routes: [Creating a session (API)](api.md). Decision code: `idv-server/idv/decision/`.
+Integrator routes: [Creating a session (API)](api.md). Decision code: `platform/server/idv/decision/`.
 """,
     )
     hub(
         "idv/platform-console.md",
         "Identity Console",
-        "idv-server-ui — tenant operators: sessions, reviews, webhooks, workflows.",
+        "platform/console — tenant operators: sessions, reviews, webhooks, workflows.",
         """
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/idv-server-ui/` |
+| Folder | `IDV/platform/console/` |
 | Develop | `http://127.0.0.1:14188/` (proxies API to `:14187`) |
-| Production | `npm run build` → served from `idv-server` at `/admin/` |
+| Production | `npm run build` → served from `platform/server` at `/admin/` |
 
 ```bash
-cd IDV/idv-server-ui
+cd IDV/platform/console
 npm install && npm run dev
 ```
 
@@ -2018,8 +2017,8 @@ The sample in this repo:
 
 | Piece | Folder | Port |
 | --- | --- | --- |
-| Company server | `company-backend/` | 14195 |
-| Company Admin UI | `company-admin/` | 14189 (dev) · built into `:14195/admin` |
+| Company server | `company/backend/` | 14195 |
+| Company Admin UI | `company/admin/` | 14189 (dev) · built into `:14195/admin` |
 
 | Page | Topic |
 | --- | --- |
@@ -2035,11 +2034,11 @@ Keep `IDV_SERVICE_TOKEN` on the company server only. Capture apps must not embed
     hub(
         "idv/company-backend.md",
         "Company backend (server)",
-        "Sample company-backend: holds the service bearer and starts IDV sessions.",
+        "Sample company/backend: holds the service bearer and starts IDV sessions.",
         """
 ## Role
 
-`IDV/company-backend/` is the **sample company server**. It:
+`IDV/company/backend/` is the **sample company server**. It:
 
 * Holds `IDV_SERVICE_TOKEN` / tenant id
 * Starts verifications against IDV (`POST` session flows)
@@ -2057,7 +2056,7 @@ Keep `IDV_SERVICE_TOKEN` on the company server only. Capture apps must not embed
 ## Run
 
 ```bash
-cd IDV/company-backend
+cd IDV/company/backend
 pip install -r requirements.txt
 set IDV_BASE_URL=http://127.0.0.1:14187
 set IDV_SERVICE_TOKEN=demo
@@ -2065,7 +2064,7 @@ set IDV_TENANT_ID=ten_demo
 python app.py
 ```
 
-Storage: `company-backend/database/company.sqlite` by default.
+Storage: `company/backend/database/company.sqlite` by default.
 
 ### Example — start via company backend (JS sketch)
 
@@ -2080,16 +2079,16 @@ const start = await IdvApi.startViaCompanyBackend({
     hub(
         "idv/company-admin.md",
         "Company Admin UI",
-        "company-admin React UI for operators on the sample company backend.",
+        "company/admin React UI for operators on the sample company backend.",
         """
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/company-admin/` |
+| Folder | `IDV/company/admin/` |
 | Develop | `http://127.0.0.1:14189/` |
-| Production | `npm run build` → `company-backend` serves `/admin/` |
+| Production | `npm run build` → `company/backend` serves `/admin/` |
 
 ```bash
-cd IDV/company-admin
+cd IDV/company/admin
 npm install && npm run dev
 ```
 
@@ -2174,7 +2173,7 @@ IDV uses **Hybrid** licensing: day-to-day metering on the customer host, issuanc
 | Piece | Docs |
 | --- | --- |
 | Issuer UI / APIs | [License Admin](license-admin.md) |
-| Shared protocol | [Hybrid protocol (`license_v2`)](license-protocol.md) |
+| Shared protocol | [Hybrid protocol (`license/license_v2`)](license-protocol.md) |
 | Production exposure | Keep issuer on localhost — [Production](production.md) |
 
 ## Operator exchange
@@ -2184,22 +2183,22 @@ IDV uses **Hybrid** licensing: day-to-day metering on the customer host, issuanc
 | First issue | `license_request.txt` | `license.txt` |
 | Same host again | — | Used count kept (no restore) |
 
-The issuer never sees ID images or biometrics. Brand files for consoles live under `license-admin/brand/`.
+The issuer never sees ID images or biometrics. Brand files for consoles live under `license/admin/brand/`.
 """,
     )
     hub(
         "idv/license-admin.md",
         "License Admin",
-        "Identixia Hybrid issuer (license-admin) on localhost :14190.",
+        "Identixia Hybrid issuer (license/admin) on localhost :14190.",
         """
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/license-admin/` |
+| Folder | `IDV/license/admin/` |
 | UI | `http://127.0.0.1:14190/` (**localhost only**) |
-| Brand | `license-admin/brand/` → `/brand/*` |
+| Brand | `license/admin/brand/` → `/brand/*` |
 
 ```bash
-cd IDV/license-admin
+cd IDV/license/admin
 pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py
@@ -2220,7 +2219,7 @@ First sign-in enrols an authenticator for the seeded `admin` operator.
     hub(
         "idv/license-protocol.md",
         "Hybrid licence protocol",
-        "license_v2 shared protocol used by idv-server and license-admin.",
+        "license_v2 shared protocol used by platform/server and license/admin.",
         """
 ## Overview
 
@@ -2228,8 +2227,8 @@ IDV uses a **Hybrid** licence model: day-to-day entitlement metering runs on the
 
 | Path | Role |
 | --- | --- |
-| `IDV/license_v2/` | Canonical protocol sources and tests |
-| Vendored copies | Inside `idv-server/` and `license-admin/` for self-contained runs |
+| `IDV/license/license_v2/` | Canonical protocol sources and tests |
+| Vendored copies | Inside `platform/server/` and `license/admin/` for self-contained runs |
 | `IDV/packages/license-core` | Helper package for consoles and shared libraries |
 
 ## Operating model
@@ -2237,7 +2236,7 @@ IDV uses a **Hybrid** licence model: day-to-day entitlement metering runs on the
 | Step | Where it happens |
 | --- | --- |
 | Issue / renew `license.txt` | [License Admin](license-admin.md) (Identixia) |
-| Enforce usage on the host | `license_v2` inside `idv-server` |
+| Enforce usage on the host | `license/license_v2` inside `platform/server` |
 | Sync usage receipts | USB export or `POST /api/v2/online/report` (when exposed) |
 
 There is one commercial Hybrid product. Operators do not choose STRICT/LENIENT tiers in the issuer UI. The issuer never receives ID images or biometrics.
@@ -2257,7 +2256,7 @@ Parent: [Licensing](licensing.md).
 | `license-core` | Hybrid licence helpers |
 | `contracts` / `db` | Shared contracts and DB helpers when used by kits |
 
-Applicant SDKs are **not** here — they live under `IDV/client/packages/`.
+Applicant SDKs are **not** here — they live under `IDV/app/packages/`.
 """,
     )
     hub(
@@ -2270,7 +2269,7 @@ Applicant SDKs are **not** here — they live under `IDV/client/packages/`.
 | Integrator summary (this site) | [Creating a session (API)](api.md) · [Walkthrough](walkthrough.md) · [Production](production.md) |
 | Endpoint / persistence notes | `IDV/docs/API.md` |
 | Offline handbook (chapters) | `IDV/docs/handbook/` · `IDV/docs/index.html` |
-| Postman (public / private / company) | `IDV/idv-server/postman/` |
+| Postman (public / private / company) | `IDV/platform/server/postman/` |
 | Architecture notes | `IDV/docs/architecture.md` |
 
 GitBook covers the integrator path. Deep handbook chapters stay in `IDV/docs/` and are not duplicated page-for-page here.
@@ -2319,11 +2318,11 @@ IDV uses the Face SDK matcher for 1:1 and related steps. Optional vector indexes
     hub(
         "idv/components-clients.md",
         "Applicant clients",
-        "IDV client SDKs and demo apps under IDV/client/.",
+        "IDV client SDKs and demo apps under IDV/app/.",
         """
 Capture SDKs and demos. The **service token stays on the company backend**; apps use capture tokens.
 
-## Packages (`IDV/client/packages/`)
+## Packages (`IDV/app/packages/`)
 
 | Package | Role |
 | --- | --- |
@@ -2342,7 +2341,7 @@ Capture SDKs and demos. The **service token stays on the company backend**; apps
 | Flutter / React Native | [Other demos](client-other.md) |
 
 ```bash
-python IDV/client/tools/refresh_client.py
+python IDV/app/tools/refresh_client.py
 ```
 """,
     )
@@ -2354,7 +2353,7 @@ python IDV/client/tools/refresh_client.py
 ## Run locally
 
 ```bash
-cd IDV/client/app/web
+cd IDV/app/demos/web
 npm install && npm run dev
 # http://127.0.0.1:5175/
 ```
@@ -2374,13 +2373,13 @@ Parent: [Applicant clients](components-clients.md).
 ## Build
 
 ```bash
-cd IDV/client/packages/idv-android
+cd IDV/app/packages/idv-android
 ./gradlew publishToMavenLocal
 cd ../../app/android
 ./gradlew :app:assembleDebug
 ```
 
-Use a capture token from the company backend. Package sources: `IDV/client/packages/idv-android`.
+Use a capture token from the company backend. Package sources: `IDV/app/packages/idv-android`.
 
 Parent: [Applicant clients](components-clients.md).
 """,
@@ -2392,9 +2391,9 @@ Parent: [Applicant clients](components-clients.md).
         """
 ## Run
 
-Open `IDV/client/app/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme on a physical device when testing camera capture.
+Open `IDV/app/demos/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme on a physical device when testing camera capture.
 
-Session client package: `IDV/client/packages/idv-ios`.
+Session client package: `IDV/app/packages/idv-ios`.
 
 Parent: [Applicant clients](components-clients.md).
 """,
@@ -2408,10 +2407,10 @@ Parent: [Applicant clients](components-clients.md).
 
 | App | Path |
 | --- | --- |
-| Flutter | `IDV/client/app/flutter` |
-| React Native | `IDV/client/app/react_native` |
+| Flutter | `IDV/app/demos/flutter` |
+| React Native | `IDV/app/demos/react_native` |
 
-React Native capture helpers align with `packages/idv-web`. See `IDV/client/README.md` for bootstrap details.
+React Native capture helpers align with `packages/idv-web`. See `IDV/app/README.md` for bootstrap details.
 
 Parent: [Applicant clients](components-clients.md).
 """,

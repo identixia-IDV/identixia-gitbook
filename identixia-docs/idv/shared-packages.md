@@ -12,4 +12,4 @@ description: >-
 | `license-core` | Hybrid licence helpers |
 | `contracts` / `db` | Shared contracts and DB helpers when used by kits |
 
-Applicant SDKs are **not** here — they live under `IDV/client/packages/`.
+Applicant SDKs are **not** here — they live under `IDV/app/packages/`.

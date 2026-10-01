@@ -48,7 +48,7 @@ python catalog/gitbook_push.py --no-generate
 |-------|--------|-----------|
 | Logo | `repositories/identixia-assets/brand/logo.png` | `brand-logo.png` |
 | Mark | `repositories/identixia-assets/brand/mark.png` | `brand-mark.png` |
-| Favicons | `IDV/license-admin/brand/` | `favicon.ico`, `favicon.png`, `apple-touch-icon.png` |
+| Favicons | `IDV/license/admin/brand/` | `favicon.ico`, `favicon.png`, `apple-touch-icon.png` |
 
 IDV consoles serve the same brand pack from `license-admin/brand/` as `/brand/*`. Do not copy logos into every product repository.
 

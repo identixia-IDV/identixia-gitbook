@@ -1,18 +1,18 @@
 ---
 description: >-
-  company-admin React UI for operators on the sample company backend.
+  company/admin React UI for operators on the sample company backend.
 ---
 
 # Company Admin UI
 
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/company-admin/` |
+| Folder | `IDV/company/admin/` |
 | Develop | `http://127.0.0.1:14189/` |
-| Production | `npm run build` → `company-backend` serves `/admin/` |
+| Production | `npm run build` → `company/backend` serves `/admin/` |
 
 ```bash
-cd IDV/company-admin
+cd IDV/company/admin
 npm install && npm run dev
 ```
 

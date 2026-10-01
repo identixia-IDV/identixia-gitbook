@@ -46,7 +46,7 @@ Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`)
 | Control vs process (HTTP) | `/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus` return `{success,code,message,request_id,data}`. Process routes return engine JSON. |
 | Threading (mobile) | Activate, init, detect, and recognize on a **background** thread. |
 | License flags | Face: `recognition` / `liveness`. Document: `recognition` / `authenticity`. A missing flag means the feature is not evaluated. |
-| Brand | Logo and favicons live in docs `.gitbook/assets/`; IDV consoles use `IDV/license-admin/brand/`. |
+| Brand | Logo and favicons live in docs `.gitbook/assets/`; IDV consoles use `IDV/license/admin/brand/`. |
 
 ## Links
 

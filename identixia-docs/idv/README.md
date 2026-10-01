@@ -16,8 +16,8 @@ description: >-
 
 | Component | Role | Folder · port |
 | --- | --- | --- |
-| **Platform (Admin)** | Tenant API, reviews, Identity Console | `idv-server/` · `:14187` · UI `:14188` / `/admin` |
-| **Company (Merchant)** | Holds service credentials; starts sessions | `company-backend/` · `:14195` · Admin `:14189` |
+| **Platform (Admin)** | Tenant API, reviews, Identity Console | `platform/server/` · `:14187` · UI `:14188` / `/admin` |
+| **Company (Merchant)** | Holds service credentials; starts sessions | `company/backend/` · `:14195` · Admin `:14189` |
 | **Applicant (User)** | Web / mobile capture apps | `client/` · e.g. web `:5175` |
 | **Engines** | Document + Face HTTP APIs | Document `:14102` · Face `:14103` |
 

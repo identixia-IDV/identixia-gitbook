@@ -17,7 +17,7 @@ description: >-
 | Database | Prefer PostgreSQL via `python IDV/setup_database.py` (or `--yes` for a guided default). SQLite is fine for local demos only. |
 | Memory store | `IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY` are for tests — not production. |
 | Webhooks | Require `whsec_…` HMAC verification; idempotent handlers; poll session API if a delivery is missed. |
-| Brand | Serve `/brand/*` from `license-admin/brand/` (or the configured `IDV_BRAND_DIR`). |
+| Brand | Serve `/brand/*` from `license/admin/brand/` (or the configured `IDV_BRAND_DIR`). |
 
 ## Reverse proxy (sketch)
 
@@ -25,17 +25,17 @@ description: >-
 Internet clients
       │
       ▼
- HTTPS terminator  ──►  idv-server :14187  (/v1, /admin)
+ HTTPS terminator  ──►  platform/server :14187  (/v1, /admin)
       │
-      └──►  company-backend :14195  (merchant APIs + /admin)
+      └──►  company/backend :14195  (merchant APIs + /admin)
                  │
-                 ├──► idv-server (service bearer)
+                 ├──► platform/server (service bearer)
                  └──► (optional) capture CDN / static hosting
 
 Internal only:
   document-engine :14102
   face-engine     :14103
-  license-admin   :14190   ← Identixia / ops, not public
+  license/admin   :14190   ← Identixia / ops, not public
 ```
 
 ## Database

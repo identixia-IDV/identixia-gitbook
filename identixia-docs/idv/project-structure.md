@@ -11,17 +11,17 @@ IDV is a self-host KYC platform that uses Identixia **SDK-integrated HTTP engine
 
 | Role | What it is | Folder | Typical port |
 | --- | --- | --- | ---: |
-| **Admin (platform)** | Tenant API, workers, Identity Console | `idv-server/`, `idv-server-ui/` | 14187 · 14188 |
-| **Company (merchant)** | Your backend sample + operator UI | `company-backend/`, `company-admin/` | 14195 · 14189 |
-| **Applicant (user)** | Capture SDKs and demo apps | `client/` | e.g. 5175 |
+| **Admin (platform)** | Tenant API, workers, Identity Console | `platform/server/`, `platform/console/` | 14187 · 14188 |
+| **Company (merchant)** | Your backend sample + operator UI | `company/backend/`, `company/admin/` | 14195 · 14189 |
+| **Applicant (user)** | Capture SDKs and demo apps | `app/` | e.g. 5175 |
 | **Engines** | Document + Face recognition / liveness | Face / Document SDK repos | 14102 · 14103 |
 
 ## Supporting folders
 
 | Path | Role |
 | --- | --- |
-| `license-admin/` | Hybrid licence **issuer** (Identixia ops) — `:14190`, private only |
-| `license_v2/` | Shared Hybrid protocol sources |
+| `license/admin/` | Hybrid licence **issuer** (Identixia ops) — `:14190`, private only |
+| `license/license_v2/` | Shared Hybrid protocol sources |
 | `packages/` | Shared admin UI / decision / licence helpers |
 | `docs/` | Offline handbook + API notes |
 

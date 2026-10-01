@@ -11,8 +11,8 @@ The sample in this repo:
 
 | Piece | Folder | Port |
 | --- | --- | --- |
-| Company server | `company-backend/` | 14195 |
-| Company Admin UI | `company-admin/` | 14189 (dev) · built into `:14195/admin` |
+| Company server | `company/backend/` | 14195 |
+| Company Admin UI | `company/admin/` | 14189 (dev) · built into `:14195/admin` |
 
 | Page | Topic |
 | --- | --- |

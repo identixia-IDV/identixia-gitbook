@@ -9,9 +9,9 @@ description: >-
 
 | App | Path |
 | --- | --- |
-| Flutter | `IDV/client/app/flutter` |
-| React Native | `IDV/client/app/react_native` |
+| Flutter | `IDV/app/demos/flutter` |
+| React Native | `IDV/app/demos/react_native` |
 
-React Native capture helpers align with `packages/idv-web`. See `IDV/client/README.md` for bootstrap details.
+React Native capture helpers align with `packages/idv-web`. See `IDV/app/README.md` for bootstrap details.
 
 Parent: [Applicant clients](components-clients.md).

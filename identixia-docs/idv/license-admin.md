@@ -1,18 +1,18 @@
 ---
 description: >-
-  Identixia Hybrid issuer (license-admin) on localhost :14190.
+  Identixia Hybrid issuer (license/admin) on localhost :14190.
 ---
 
 # License Admin
 
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/license-admin/` |
+| Folder | `IDV/license/admin/` |
 | UI | `http://127.0.0.1:14190/` (**localhost only**) |
-| Brand | `license-admin/brand/` → `/brand/*` |
+| Brand | `license/admin/brand/` → `/brand/*` |
 
 ```bash
-cd IDV/license-admin
+cd IDV/license/admin
 pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py
