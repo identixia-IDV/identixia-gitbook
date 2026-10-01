@@ -1,6 +1,6 @@
 ---
 description: >-
-  Identixia IDV: customer-run verification server, consoles, licensing, and applicant clients.
+  Identixia IDV: platform server, company integration, licensing, engines, and applicant clients.
 ---
 
 # IDV platform
@@ -10,28 +10,36 @@ description: >-
 
 ## What IDV is
 
-**IDV** is the Identixia identity-verification **platform** (folder `IDV/` in the monorepo). It is not a replacement for the Face or Document SDKs — it **orchestrates** them.
+**IDV** is the Identixia identity-verification **platform** (`IDV/` in the monorepo). It does **not** replace the Face or Document SDKs — it **orchestrates** them and sits between your company systems and capture apps.
 
-| Piece | Role |
-| --- | --- |
-| `idv-server` | Platform API + workers (`:14187`) |
-| `idv-server-ui` | Identity Console (dev `:14188`, production `/admin`) |
-| `company-backend` + `company-admin` | Sample merchant backend + UI |
-| `license-admin` | Hybrid licence issuer (`:14190`) |
-| `client/` | Applicant SDKs and demo apps |
-| `license_v2` / `packages/` | Shared protocol and libraries |
+## Who runs what
 
-Brand logo and favicons for the consoles live in `IDV/license-admin/brand/` and are served at `/brand/*`.
+| Role | Folders | Typical ports |
+| --- | --- | --- |
+| **Platform** (tenant API, workers, reviews) | `idv-server/`, `idv-server-ui/` | 14187 · 14188 |
+| **Company / merchant sample** | `company-backend/`, `company-admin/` | 14195 · 14189 |
+| **Identixia licence issuer** | `license-admin/` (+ brand) | 14190 |
+| **Applicant capture** | `client/` | e.g. web 5175 |
+| **Shared libraries** | `packages/`, `license_v2/` | — |
+| **Biometric engines** | Face SDK + Document SDK (HTTP) | 14103 · 14102 |
+
+```text
+Applicant app ──► Company backend :14195 ──► IDV server :14187 ──► Face/Document engines
+                      │                         │
+               Company Admin :14189      Identity Console :14188 /admin
+                                                    │
+                                           License Admin :14190 (issuer)
+```
 
 ## Read next
 
-1. [Architecture](architecture.md) — who owns what
-2. [Quick start](quick-start.md) — run locally
-3. [Document & Face engines](engines.md) — HTTP wiring to the SDKs
-4. [Components & clients](components.md) — packages and demos
+1. [Architecture](architecture.md)
+2. [Getting started](getting-started.md) → [Quick start](quick-start.md)
+3. [Platform](platform.md) · [Company integration](company.md) · [Licensing](licensing.md)
+4. [Engines](engines.md) · [Applicant clients](components-clients.md)
 
-Deep offline handbook (chapters, Postman, schema): see `IDV/docs/` in the source tree — not duplicated here.
+Deep handbook / Postman: `IDV/docs/` and `IDV/idv-server/postman/` in source — not copied here.
 
 {% hint style="info" %}
-With `IDV_ENGINES=http`, IDV calls your local Document and Face HTTP APIs. Start those SDK servers first (or point env URLs at your deployment).
+The **service bearer token stays on the company backend**. Capture apps use a short-lived **capture token**, not the company service secret.
 {% endhint %}

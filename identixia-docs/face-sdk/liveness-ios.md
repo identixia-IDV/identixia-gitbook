@@ -252,9 +252,9 @@ Licenses are **offline** and bound to your bundle identifier.
 
 The code below shows how to use the license:
 
-[https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/bee2f1bfef8c91cb0ef8f94c4212a8a9ddf57d20/FaceLivenessSDK/Home/ViewController.swift#L7-L8](https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/bee2f1bfef8c91cb0ef8f94c4212a8a9ddf57d20/FaceLivenessSDK/Home/ViewController.swift#L7-L8)
+[https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/b5abb286cfd872240008bf94d9b15e624ca27dda/FaceLivenessSDK/Home/ViewController.swift#L7-L8](https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/b5abb286cfd872240008bf94d9b15e624ca27dda/FaceLivenessSDK/Home/ViewController.swift#L7-L8)
 
-[https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/bee2f1bfef8c91cb0ef8f94c4212a8a9ddf57d20/FaceLivenessSDK/Home/ViewController.swift#L150-L158](https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/bee2f1bfef8c91cb0ef8f94c4212a8a9ddf57d20/FaceLivenessSDK/Home/ViewController.swift#L150-L158)
+[https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/b5abb286cfd872240008bf94d9b15e624ca27dda/FaceLivenessSDK/Home/ViewController.swift#L150-L158](https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/b5abb286cfd872240008bf94d9b15e624ca27dda/FaceLivenessSDK/Home/ViewController.swift#L150-L158)
 
 Please [contact us](#contact) to get a license for **your own app**.
 

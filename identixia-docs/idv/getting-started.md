@@ -1,15 +1,17 @@
 ---
 description: >-
-  How to approach Identixia IDV before running services.
+  Recommended path before wiring company systems and capture apps.
 ---
 
 # Getting started
 
 ## Path
 
-1. Skim [Architecture](architecture.md) (who owns what).
-2. Start Document + Face HTTP engines ([Engines](engines.md)).
-3. Follow [Quick start](quick-start.md) for `idv-server` and the console.
-4. Wire an applicant client from [Components](components.md).
+1. [Architecture](architecture.md) — company vs platform vs engines
+2. [Environment & storage](environment.md) — `.env`, SQLite, PostgreSQL
+3. Start [engines](engines.md), then [Quick start](quick-start.md)
+4. Platform: [IDV server](platform-server.md) + [Identity Console](platform-console.md)
+5. Company: [Company backend](company-backend.md) + [Company Admin](company-admin.md) + [Webhooks](company-webhooks.md)
+6. Capture: [Applicant clients](components-clients.md)
 
-Deep handbook chapters stay in the source tree under `IDV/docs/` (not duplicated here).
+Handbook: `IDV/docs/` (not duplicated here).

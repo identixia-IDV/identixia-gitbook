@@ -1,62 +1,57 @@
 ---
 description: >-
-  Run IDV server, console, company sample, and licence admin locally.
+  Run IDV server, Identity Console, company backend/admin, and licence admin locally.
 ---
 
 # Quick start
 
+## Order that works locally
+
+1. Document engine `:14102` + Face engine `:14103` (see [Engines](engines.md))
+2. [IDV server](platform-server.md) `:14187`
+3. [Identity Console](platform-console.md) `:14188` (optional in prod — built into `/admin`)
+4. [Company backend](company-backend.md) `:14195` + [Company Admin](company-admin.md) `:14189`
+5. [License Admin](license-admin.md) `:14190` when testing Hybrid issue
+6. An [applicant demo](components-clients.md)
+
 ## Storage defaults
 
-Local durable storage defaults to **SQLite** under each project’s `database/` folder.
-
-| Project | Default |
+| Project | Default SQLite |
 | --- | --- |
 | `idv-server` | `idv-server/database/idv.sqlite` (or `IDV_SQLITE_PATH`) |
 | `company-backend` | `company-backend/database/company.sqlite` |
 | `license-admin` | `license-admin/database/` |
 
-For PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`.
+PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. See [Environment & storage](environment.md).
 
-## 1. IDV server
+## Minimal commands
 
 ```bash
-cd IDV/idv-server
-python -m venv .venv && .venv/Scripts/activate   # or source .venv/bin/activate
+# Platform
+cd IDV/idv-server && python -m venv .venv && .venv/Scripts/activate
 pip install -r requirements.txt
-set IDV_OPEN_API=1                               # Windows; export on Unix
+set IDV_OPEN_API=1
 python app.py
-```
+# → http://127.0.0.1:14187/v1  and  /admin/
 
-* API: `http://127.0.0.1:14187/v1`
-* Admin: `http://127.0.0.1:14187/admin/`
+# Identity Console (develop)
+cd IDV/idv-server-ui && npm install && npm run dev
+# → http://127.0.0.1:14188/
 
-## 2. Identity Console (develop)
+# Company server + admin UI
+cd IDV/company-backend && pip install -r requirements.txt
+set IDV_BASE_URL=http://127.0.0.1:14187
+set IDV_SERVICE_TOKEN=demo
+set IDV_TENANT_ID=ten_demo
+python app.py
+# → http://127.0.0.1:14195/  (built admin at /admin/)
 
-```bash
-cd IDV/idv-server-ui
-npm install && npm run dev
-```
+cd IDV/company-admin && npm install && npm run dev
+# → http://127.0.0.1:14189/
 
-Open `http://127.0.0.1:14188/` (proxies API to `:14187`). Production build is served from the server at `/admin/`.
-
-## 3. Company sample
-
-```bash
-cd IDV/company-backend && pip install -r requirements.txt && python app.py
-# UI: cd IDV/company-admin && npm install && npm run dev  → :14189
-```
-
-## 4. Licence admin
-
-```bash
-cd IDV/license-admin
-pip install -r requirements.txt
+# Licence issuer (localhost only)
+cd IDV/license-admin && pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py
+# → http://127.0.0.1:14190/
 ```
-
-Open `http://127.0.0.1:14190` (localhost only). Favicon and logo: `license-admin/brand/`.
-
-## 5. Applicant demos
-
-See [Components & clients](components.md) and `IDV/client/README.md`.

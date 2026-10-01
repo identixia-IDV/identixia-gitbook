@@ -10,4 +10,4 @@ description: >-
 | Flutter | `IDV/client/app/flutter` |
 | React Native | `IDV/client/app/react_native` |
 
-Capture helpers for RN come from `packages/idv-web`. See `IDV/client/README.md`.
+RN capture math comes from `packages/idv-web`. See `IDV/client/README.md`.

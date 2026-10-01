@@ -23,7 +23,7 @@ Demo keys work only for demo application ids.
 
 ## IDV
 
-IDV uses Hybrid licensing via `license-admin` / `license_v2`. Use the issuer UI on `:14190` (localhost) and the entitlement flow described in `IDV/docs/`.
+IDV uses Hybrid licensing via `license-admin` / `license_v2`. Issuer UI: `:14190` (localhost). Company systems use `company-backend` (sample `:14195`) to hold the service token and start sessions — see the [IDV → Company integration](idv/company.md) docs.
 
 ## Support
 
