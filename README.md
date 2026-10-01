@@ -10,6 +10,8 @@ Source tree for the Identixia docs site. Docs follow **three products**:
 
 Each SDK section explains **recognition** and **liveness**, then platform implementations (repositories). IDV explains the platform that calls Face + Document HTTP engines — without dumping the offline handbook from `IDV/docs/`.
 
+The GitBook sidebar is **4–5 levels deep**: product → function → product line → channel → platform (see `identixia-docs/SUMMARY.md`). Catalog homepage URLs for platform leaves stay stable.
+
 ## Regenerate
 
 ```bash

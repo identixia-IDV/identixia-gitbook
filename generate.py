@@ -103,45 +103,6 @@ TITLES: dict[str, str] = {
     "components": "Components & clients",
 }
 
-# SUMMARY order inside each pillar (leaf stem → label override optional).
-FACE_ORDER = [
-    "recognition",
-    "liveness",
-    "android",
-    "ios",
-    "flutter",
-    "react-native",
-    "ionic-capacitor",
-    "ionic-cordova",
-    "windows",
-    "linux-docker",
-    "recognition-windows",
-    "recognition-linux-docker",
-    "liveness-android",
-    "liveness-ios",
-    "liveness-windows",
-    "liveness-linux-docker",
-]
-
-DOC_ORDER = [
-    "recognition",
-    "liveness",
-    "android",
-    "ios",
-    "flutter",
-    "react-native",
-    "ionic-capacitor",
-    "ionic-cordova",
-    "windows",
-    "linux-docker",
-    "liveness-linux-docker",
-    "result-json",
-    "security-fields",
-]
-
-IDV_ORDER = ["architecture", "quick-start", "engines", "components"]
-
-# Hub catalog repos: do not overwrite custom section README with product README dump.
 # Catalog hubs: custom section/concept pages win (do not dump product README over them).
 HUB_REPOS = {
     "Face-Recognition-SDK",  # -> face-sdk/
@@ -1061,10 +1022,13 @@ Biometric data stays on **your** device or server.
 
 ## How to use these docs
 
+The left sidebar is **multi-level** (product → function → product line → channel → platform).
+
 1. Open the **product** (Face, Document, or IDV).
-2. Read the **recognition** and **liveness** guides for that product.
-3. Open your **platform** page → Quick start → Ready → API reference.
-4. For IDV, start engines (Document + Face HTTP APIs), then the IDV server.
+2. Open **Recognition** or **Liveness** (or IDV → Getting started / Engines / Components).
+3. Pick **full product**, **recognition-only**, or **liveness-only**, then **Mobile** or **Server**.
+4. Open your **platform** page → Quick start → Ready → API reference.
+5. For IDV, start Document + Face engines, then the IDV server and a client demo.
 
 {% hint style="info" %}
 Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`). They are not committed to git. Demo UIs are optional — call the SDK/API directly in production.
@@ -1102,34 +1066,442 @@ Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`)
     )
 
 
-def write_summary(structure: dict[str, list[tuple[str, str]]]) -> None:
+def write_nav_hubs() -> None:
+    """Intermediate sidebar pages (levels 3–4). Leaf platform URLs stay catalog-stable."""
+
+    def hub(rel: str, title: str, desc: str, body: str) -> None:
+        write_page(OUT / rel, title, desc, body.strip() + "\n")
+
+    # —— Face SDK ——
+    hub(
+        "face-sdk/full-product.md",
+        "Full product (recognition + liveness)",
+        "Face SDK repositories that ship recognition and passive liveness together.",
+        """
+## When to use this line
+
+Choose **full product** when one app or one API must do both:
+
+* face recognition (detect, template, 1:1, 1:N)
+* passive face liveness (when the license includes `liveness`)
+
+## Where to go next
+
+| Channel | Page |
+| --- | --- |
+| Phones & cross-platform | [Mobile](full-mobile.md) |
+| Windows & Docker | [Server](full-server.md) |
+
+Function guides: [Recognition](recognition.md) · [Liveness](liveness.md)
+""",
+    )
+    hub(
+        "face-sdk/full-mobile.md",
+        "Mobile & cross-platform",
+        "Full Face SDK samples for Android, iOS, Flutter, React Native, and Ionic.",
+        """
+## Platforms
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | `FaceRecognition-LivenessDetection-Android` |
+| iOS | [iOS](ios.md) | `FaceRecognition-LivenessDetection-iOS` |
+| Flutter | [Flutter](flutter.md) | `FaceRecognition-LivenessDetection-Flutter` |
+| React Native | [React Native](react-native.md) | `FaceRecognition-LivenessDetection-React-Native` |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | `…-Ionic-Capacitor` |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | `…-Ionic-Cordova` |
+
+Open the platform page → Quick start → Ready → API reference.
+""",
+    )
+    hub(
+        "face-sdk/full-server.md",
+        "Server (Windows & Docker)",
+        "Full Face SDK HTTP APIs for Windows and Linux/Docker.",
+        """
+## Platforms
+
+| Platform | Docs | Default port |
+| --- | --- | --- |
+| Windows | [Windows](windows.md) | 14103 |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | 14103 |
+
+Control routes use `{success,code,message,request_id,data}`. Process routes return engine JSON.
+""",
+    )
+    hub(
+        "face-sdk/recognition-only.md",
+        "Recognition-only products",
+        "Face recognition without liveness packs — Windows and Linux/Docker.",
+        """
+## When to use
+
+Use these when your license is **recognition only** (no `liveness` flag / no liveness packs).
+
+| Platform | Docs |
+| --- | --- |
+| Windows | [Windows (recognition only)](recognition-windows.md) |
+| Linux / Docker | [Linux / Docker (recognition only)](recognition-linux-docker.md) |
+
+For recognition **with** liveness in one build, use the [full product](full-product.md) instead.
+""",
+    )
+    hub(
+        "face-sdk/liveness-only.md",
+        "Liveness-only products",
+        "Standalone face liveness SDKs without the full recognition gallery stack.",
+        """
+## When to use
+
+Score a face for presentation-attack detection without shipping the full enroll / 1:N stack.
+
+### Mobile
+
+| Platform | Docs |
+| --- | --- |
+| Android | [Android](liveness-android.md) |
+| iOS | [iOS](liveness-ios.md) |
+
+### Server
+
+| Platform | Docs |
+| --- | --- |
+| Windows | [Windows](liveness-windows.md) |
+| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) |
+
+Concept guide: [Face liveness](liveness.md).
+""",
+    )
+    hub(
+        "face-sdk/liveness-only-mobile.md",
+        "Liveness-only — mobile",
+        "Android and iOS standalone face liveness samples.",
+        """
+| Platform | Docs |
+| --- | --- |
+| Android | [Android](liveness-android.md) |
+| iOS | [iOS](liveness-ios.md) |
+""",
+    )
+    hub(
+        "face-sdk/liveness-only-server.md",
+        "Liveness-only — server",
+        "Windows and Linux/Docker standalone face liveness APIs.",
+        """
+| Platform | Docs |
+| --- | --- |
+| Windows | [Windows](liveness-windows.md) |
+| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) |
+""",
+    )
+
+    # —— ID Document SDK ——
+    hub(
+        "id-document-sdk/full-product.md",
+        "Full product (recognition + liveness)",
+        "Document repositories that ship OCR/MRZ and authenticity together.",
+        """
+## When to use
+
+One sample / API for document **recognition** and document **authenticity** (when licensed).
+
+| Channel | Page |
+| --- | --- |
+| Phones & cross-platform | [Mobile](full-mobile.md) |
+| Windows & Docker | [Server](full-server.md) |
+
+Guides: [Recognition](recognition.md) · [Liveness](liveness.md) · [Result JSON](result-json.md)
+""",
+    )
+    hub(
+        "id-document-sdk/full-mobile.md",
+        "Mobile & cross-platform",
+        "Full Document SDK samples for Android, iOS, Flutter, React Native, and Ionic.",
+        """
+| Platform | Docs |
+| --- | --- |
+| Android | [Android](android.md) |
+| iOS | [iOS](ios.md) |
+| Flutter | [Flutter](flutter.md) |
+| React Native | [React Native](react-native.md) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) |
+""",
+    )
+    hub(
+        "id-document-sdk/full-server.md",
+        "Server (Windows & Docker)",
+        "Full Document SDK HTTP APIs for Windows and Linux/Docker.",
+        """
+| Platform | Docs | Default port |
+| --- | --- | --- |
+| Windows | [Windows](windows.md) | 14102 |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | 14102 |
+
+Routes: `/api/documentProcess`, `/api/documentRecognition`, `/api/documentLiveness`.
+""",
+    )
+    hub(
+        "id-document-sdk/liveness-only.md",
+        "Liveness-only products",
+        "Document authenticity API without the full OCR product surface.",
+        """
+## When to use
+
+You only need document anti-spoofing (authenticity), not a full OCR UI.
+
+| Platform | Docs |
+| --- | --- |
+| Linux / Docker | [Document liveness Docker](liveness-linux-docker.md) |
+
+Concept guide: [Document liveness](liveness.md).
+""",
+    )
+    hub(
+        "id-document-sdk/reference.md",
+        "Reference",
+        "Shared Document SDK result shapes and security fields.",
+        """
+| Topic | Page |
+| --- | --- |
+| Process / recognize JSON | [Result JSON](result-json.md) |
+| Authenticity fields | [Security check fields](security-fields.md) |
+
+Parse JSON in your app — do not scrape the demo Result screen.
+""",
+    )
+
+    # —— IDV ——
+    hub(
+        "idv/getting-started.md",
+        "Getting started",
+        "How to approach Identixia IDV before running services.",
+        """
+## Path
+
+1. Skim [Architecture](architecture.md) (who owns what).
+2. Start Document + Face HTTP engines ([Engines](engines.md)).
+3. Follow [Quick start](quick-start.md) for `idv-server` and the console.
+4. Wire an applicant client from [Components](components.md).
+
+Deep handbook chapters stay in the source tree under `IDV/docs/` (not duplicated here).
+""",
+    )
+    hub(
+        "idv/engines-document.md",
+        "Document engine",
+        "How IDV calls the ID Document SDK HTTP API.",
+        """
+## Default
+
+| Setting | Value |
+| --- | --- |
+| Base URL | `http://127.0.0.1:14102` |
+| Modes | `documentProcess` · `documentRecognition` · `documentLiveness` |
+
+Docs for that server: [ID Document SDK → Server](../id-document-sdk/full-server.md).
+
+Parent: [Document & Face engines](engines.md).
+""",
+    )
+    hub(
+        "idv/engines-face.md",
+        "Face engine",
+        "How IDV calls the Face SDK HTTP API.",
+        """
+## Default
+
+| Setting | Value |
+| --- | --- |
+| Base URL | `http://127.0.0.1:14103` |
+| Modes | compare · boxes · template · score · liveness |
+
+Docs for that server: [Face SDK → Server](../face-sdk/full-server.md).
+
+Parent: [Document & Face engines](engines.md).
+""",
+    )
+    hub(
+        "idv/components-server.md",
+        "Platform server",
+        "idv-server API, workers, and admin mount.",
+        """
+| Item | Detail |
+| --- | --- |
+| Folder | `IDV/idv-server/` |
+| API | `http://127.0.0.1:14187/v1` |
+| Admin UI (prod) | `http://127.0.0.1:14187/admin/` |
+
+See [Quick start](quick-start.md) for venv + `IDV_OPEN_API=1`.
+""",
+    )
+    hub(
+        "idv/components-consoles.md",
+        "Consoles & admin UIs",
+        "Identity Console, company admin, and licence admin.",
+        """
+| UI | Folder | Dev port |
+| --- | --- | --- |
+| Identity Console | `idv-server-ui/` | 14188 |
+| Company Admin | `company-admin/` | 14189 |
+| Licence Admin | `license-admin/` | 14190 |
+
+Brand (logo / favicon): `license-admin/brand/` → `/brand/*`.
+""",
+    )
+    hub(
+        "idv/components-clients.md",
+        "Applicant clients",
+        "IDV client SDKs and demo apps under IDV/client/.",
+        """
+## Packages
+
+| Package | Role |
+| --- | --- |
+| `packages/idv-web` | Embeddable web capture UI |
+| `packages/idv-react` | React wrapper |
+| `packages/idv-android` | Android SDK |
+| `packages/idv-ios` | Swift package |
+
+## Demo hosts
+
+| App | Path |
+| --- | --- |
+| Web | [Web demo](client-web.md) |
+| Android | [Android demo](client-android.md) |
+| iOS | [iOS demo](client-ios.md) |
+| Flutter / React Native | [Other demos](client-other.md) |
+
+Refresh engines into demos: `python IDV/client/tools/refresh_client.py`.
+""",
+    )
+    hub(
+        "idv/client-web.md",
+        "Web demo",
+        "Run the IDV web applicant demo.",
+        """
+```bash
+cd IDV/client/app/web
+npm install && npm run dev
+# http://127.0.0.1:5175/
+```
+
+Package: `IDV/client/packages/idv-web`.
+""",
+    )
+    hub(
+        "idv/client-android.md",
+        "Android demo",
+        "Build the IDV Android applicant demo.",
+        """
+```bash
+cd IDV/client/packages/idv-android
+./gradlew publishToMavenLocal
+cd ../../app/android
+./gradlew :app:assembleDebug
+```
+""",
+    )
+    hub(
+        "idv/client-ios.md",
+        "iOS demo",
+        "Run the IDV iOS applicant demo.",
+        """
+Open `IDV/client/app/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme.
+
+Session client: `IDV/client/packages/idv-ios`.
+""",
+    )
+    hub(
+        "idv/client-other.md",
+        "Flutter & React Native demos",
+        "Other IDV applicant demo hosts.",
+        """
+| App | Path |
+| --- | --- |
+| Flutter | `IDV/client/app/flutter` |
+| React Native | `IDV/client/app/react_native` |
+
+Capture helpers for RN come from `packages/idv-web`. See `IDV/client/README.md`.
+""",
+    )
+
+
+def write_summary(_structure: dict[str, list[tuple[str, str]]] | None = None) -> None:
+    """4–5 level GitBook sidebar. Leaf platform files keep stable catalog URLs."""
     lines = [
         "# Table of contents",
         "",
         "",
         "* [Welcome to Identixia](README.md)",
         "* [Face SDK](face-sdk/README.md)",
+        "  * [Recognition](face-sdk/recognition.md)",
+        "    * [Full product (recognition + liveness)](face-sdk/full-product.md)",
+        "      * [Mobile & cross-platform](face-sdk/full-mobile.md)",
+        "        * [Android](face-sdk/android.md)",
+        "        * [iOS](face-sdk/ios.md)",
+        "        * [Flutter](face-sdk/flutter.md)",
+        "        * [React Native](face-sdk/react-native.md)",
+        "        * [Ionic Capacitor](face-sdk/ionic-capacitor.md)",
+        "        * [Ionic Cordova](face-sdk/ionic-cordova.md)",
+        "      * [Server (Windows & Docker)](face-sdk/full-server.md)",
+        "        * [Windows](face-sdk/windows.md)",
+        "        * [Linux / Docker](face-sdk/linux-docker.md)",
+        "    * [Recognition-only products](face-sdk/recognition-only.md)",
+        "      * [Windows](face-sdk/recognition-windows.md)",
+        "      * [Linux / Docker](face-sdk/recognition-linux-docker.md)",
+        "  * [Liveness](face-sdk/liveness.md)",
+        "    * [In the full product](face-sdk/full-product.md)",
+        "      * [Mobile & cross-platform](face-sdk/full-mobile.md)",
+        "      * [Server (Windows & Docker)](face-sdk/full-server.md)",
+        "    * [Liveness-only products](face-sdk/liveness-only.md)",
+        "      * [Mobile](face-sdk/liveness-only-mobile.md)",
+        "        * [Android](face-sdk/liveness-android.md)",
+        "        * [iOS](face-sdk/liveness-ios.md)",
+        "      * [Server](face-sdk/liveness-only-server.md)",
+        "        * [Windows](face-sdk/liveness-windows.md)",
+        "        * [Linux / Docker](face-sdk/liveness-linux-docker.md)",
+        "* [ID Document SDK](id-document-sdk/README.md)",
+        "  * [Recognition](id-document-sdk/recognition.md)",
+        "    * [Full product (recognition + liveness)](id-document-sdk/full-product.md)",
+        "      * [Mobile & cross-platform](id-document-sdk/full-mobile.md)",
+        "        * [Android](id-document-sdk/android.md)",
+        "        * [iOS](id-document-sdk/ios.md)",
+        "        * [Flutter](id-document-sdk/flutter.md)",
+        "        * [React Native](id-document-sdk/react-native.md)",
+        "        * [Ionic Capacitor](id-document-sdk/ionic-capacitor.md)",
+        "        * [Ionic Cordova](id-document-sdk/ionic-cordova.md)",
+        "      * [Server (Windows & Docker)](id-document-sdk/full-server.md)",
+        "        * [Windows](id-document-sdk/windows.md)",
+        "        * [Linux / Docker](id-document-sdk/linux-docker.md)",
+        "  * [Liveness](id-document-sdk/liveness.md)",
+        "    * [In the full product](id-document-sdk/full-product.md)",
+        "      * [Mobile & cross-platform](id-document-sdk/full-mobile.md)",
+        "      * [Server (Windows & Docker)](id-document-sdk/full-server.md)",
+        "    * [Liveness-only products](id-document-sdk/liveness-only.md)",
+        "      * [Linux / Docker](id-document-sdk/liveness-linux-docker.md)",
+        "  * [Reference](id-document-sdk/reference.md)",
+        "    * [Result JSON](id-document-sdk/result-json.md)",
+        "    * [Security check fields](id-document-sdk/security-fields.md)",
+        "* [IDV platform](idv/README.md)",
+        "  * [Getting started](idv/getting-started.md)",
+        "    * [Quick start](idv/quick-start.md)",
+        "  * [Architecture](idv/architecture.md)",
+        "  * [Engines](idv/engines.md)",
+        "    * [Document engine](idv/engines-document.md)",
+        "    * [Face engine](idv/engines-face.md)",
+        "  * [Components](idv/components.md)",
+        "    * [Platform server](idv/components-server.md)",
+        "    * [Consoles & admin UIs](idv/components-consoles.md)",
+        "    * [Applicant clients](idv/components-clients.md)",
+        "      * [Web demo](idv/client-web.md)",
+        "      * [Android demo](idv/client-android.md)",
+        "      * [iOS demo](idv/client-ios.md)",
+        "      * [Flutter & React Native](idv/client-other.md)",
+        "* [Request a License & Support](request-a-license-and-support.md)",
+        "* [Contact](contact-us.md)",
+        "",
     ]
-    for leaf in FACE_ORDER:
-        for label, link in structure.get("face-sdk", []):
-            if Path(link).stem == leaf:
-                lines.append(f"  * [{label}](face-sdk/{link})")
-                break
-    lines.append("* [ID Document SDK](id-document-sdk/README.md)")
-    for leaf in DOC_ORDER:
-        for label, link in structure.get("id-document-sdk", []):
-            if Path(link).stem == leaf:
-                lines.append(f"  * [{label}](id-document-sdk/{link})")
-                break
-    lines.append("* [IDV platform](idv/README.md)")
-    for leaf in IDV_ORDER:
-        for label, link in structure.get("idv", []):
-            if Path(link).stem == leaf:
-                lines.append(f"  * [{label}](idv/{link})")
-                break
-    lines.append("* [Request a License & Support](request-a-license-and-support.md)")
-    lines.append("* [Contact](contact-us.md)")
-    lines.append("")
     (OUT / "SUMMARY.md").write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
@@ -1183,31 +1555,9 @@ def main() -> int:
     write_document_hub()
     write_document_concepts()
     write_idv_pages()
+    write_nav_hubs()
     write_static_pages()
     write_gitbook_yaml()
-
-    structure["face-sdk"].extend(
-        [
-            ("Face recognition", "recognition.md"),
-            ("Face liveness", "liveness.md"),
-        ]
-    )
-    structure["id-document-sdk"].extend(
-        [
-            ("Document recognition", "recognition.md"),
-            ("Document liveness", "liveness.md"),
-            ("Result JSON", "result-json.md"),
-            ("Security check fields", "security-fields.md"),
-        ]
-    )
-    structure["idv"].extend(
-        [
-            ("Architecture", "architecture.md"),
-            ("Quick start", "quick-start.md"),
-            ("Document & Face engines", "engines.md"),
-            ("Components & clients", "components.md"),
-        ]
-    )
 
     for item in about["repositories"]:
         name = item["name"]

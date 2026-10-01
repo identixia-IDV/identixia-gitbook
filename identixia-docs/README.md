@@ -21,10 +21,13 @@ Biometric data stays on **your** device or server.
 
 ## How to use these docs
 
+The left sidebar is **multi-level** (product → function → product line → channel → platform).
+
 1. Open the **product** (Face, Document, or IDV).
-2. Read the **recognition** and **liveness** guides for that product.
-3. Open your **platform** page → Quick start → Ready → API reference.
-4. For IDV, start engines (Document + Face HTTP APIs), then the IDV server.
+2. Open **Recognition** or **Liveness** (or IDV → Getting started / Engines / Components).
+3. Pick **full product**, **recognition-only**, or **liveness-only**, then **Mobile** or **Server**.
+4. Open your **platform** page → Quick start → Ready → API reference.
+5. For IDV, start Document + Face engines, then the IDV server and a client demo.
 
 {% hint style="info" %}
 Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`). They are not committed to git. Demo UIs are optional — call the SDK/API directly in production.
