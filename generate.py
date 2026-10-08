@@ -3261,6 +3261,9 @@ def main() -> int:
         if updated != original:
             page.write_text(updated, encoding="utf-8", newline="\n")
     print(f"Wrote docs under {OUT}")
+    from editorial import refresh_copy
+
+    refresh_copy(OUT)
     from sections import publish
 
     publish()

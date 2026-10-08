@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass
@@ -1019,21 +1020,75 @@ LOCAL_TO_REMOTE = {
 _ASSET_SRC = re.compile(r"(?:\.\./)*\.gitbook/assets/([^\"'\s)]+)")
 
 
+ASSETS_DIR = Path(__file__).resolve().parents[1] / "repositories" / "identixia-assets"
+
+_FIGURE = re.compile(
+    r"<figure><img src=\"(?P<src>[^\"]+)\" alt=\"(?P<alt>[^\"]*)\"[^>]*>\s*"
+    r"<figcaption>(?:<p>)?(?P<cap>.*?)(?:</p>)?</figcaption></figure>",
+    re.S,
+)
+_HTML_IMG = re.compile(
+    r"<p align=\"center\">\s*(<img\b[^>]*>)\s*</p>|"
+    r"<img src=\"(?P<src>https://raw\.githubusercontent\.com/identixia-IDV/identixia-assets/main/[^\"]+)\"[^>]*>",
+    re.I,
+)
+
+
+def asset_rel(name: str) -> str:
+    return LOCAL_TO_REMOTE.get(name, f"screenshots/{name}")
+
+
 def asset_url(name: str) -> str:
-    rel = LOCAL_TO_REMOTE.get(name, f"screenshots/{name}")
-    return f"{ASSETS_BASE}/{rel}"
+    return f"{ASSETS_BASE}/{asset_rel(name)}"
+
+
+def asset_file_exists(rel: str) -> bool:
+    return (ASSETS_DIR / rel).is_file()
+
+
+def rel_from_asset_url(url: str) -> str | None:
+    prefix = ASSETS_BASE + "/"
+    if url.startswith(prefix):
+        return url[len(prefix) :].split("?", 1)[0]
+    return None
+
+
+def render_image(rel: str | None, alt: str) -> str:
+    """GitBook image block when the file is in identixia-assets; otherwise the alt text."""
+    label = alt.strip() or "Image"
+    if rel and asset_file_exists(rel):
+        return f"![{label}]({ASSETS_BASE}/{rel})"
+    return "{% hint style=\"info\" %}\n" + label + "\n{% endhint %}"
 
 
 def rewrite_asset_srcs(text: str) -> str:
-    return _ASSET_SRC.sub(lambda match: asset_url(match.group(1)), text)
+    text = _ASSET_SRC.sub(lambda match: asset_url(match.group(1)), text)
+
+    def figure_repl(match: re.Match[str]) -> str:
+        alt = match.group("alt") or match.group("cap") or "Image"
+        return render_image(rel_from_asset_url(match.group("src")), alt)
+
+    text = _FIGURE.sub(figure_repl, text)
+
+    def img_repl(match: re.Match[str]) -> str:
+        tag = match.group(0)
+        src_match = re.search(r'src="([^"]+)"', tag)
+        alt_match = re.search(r'alt="([^"]*)"', tag)
+        if not src_match:
+            return tag
+        alt = alt_match.group(1) if alt_match else "Image"
+        rel = rel_from_asset_url(src_match.group(1))
+        if rel is None:
+            return tag
+        return render_image(rel, alt)
+
+    return _HTML_IMG.sub(img_repl, text)
 
 
 def _asset(name: str, alt: str, width: int = 180) -> str:
-    """Remote image on identixia-assets. Alt text shows when the file is absent."""
-    return (
-        f'<figure><img src="{asset_url(name)}" alt="{alt}" width="{width}">'
-        f"<figcaption>{alt}</figcaption></figure>"
-    )
+    """Screenshot from identixia-assets. Missing files keep the alt text, with no broken image."""
+    del width
+    return render_image(asset_rel(name), alt)
 
 
 def _asset_root(name: str, alt: str, width: int = 180) -> str:

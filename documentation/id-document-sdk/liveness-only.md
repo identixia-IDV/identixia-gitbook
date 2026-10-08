@@ -1,10 +1,10 @@
 ---
 description: >-
-  Document authenticity API without the full OCR product surface.
+  Choose a standalone Identixia ID document liveness detection SDK for anti-spoofing checks, separate from recognition.
 icon: eye
 ---
 
-# Liveness-only products
+# Standalone ID Document Liveness Detection SDKs
 
 ## When to use
 

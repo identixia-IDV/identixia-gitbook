@@ -1,9 +1,9 @@
 ---
 description: >-
-  ID document liveness API for Linux and Docker. On-premise presentation-attack checks for passports and ID cards, separate from OCR. Runs when the license includes it.
+  Integrate Identixia ID document liveness detection on Linux and Docker. Follow setup and license activation steps for document presentation attack checks.
 ---
 
-# Document liveness — Linux / Docker
+# ID Document Liveness Detection SDK for Linux and Docker
 
 
 ## Overview
@@ -43,7 +43,7 @@ Processing runs **on your server (or in your container)**. Identixia does **not*
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -71,7 +71,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -186,9 +186,9 @@ This product is **PAD / authenticity**, not OCR. Pair with ID Document Recogniti
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
+![Liveness checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Status card" width="420"><figcaption>Status card</figcaption></figure>
+![Status card](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)
 
 ## Resources
 
@@ -224,17 +224,19 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia ID Document Liveness — Linux / Docker
+## ID Document Liveness Detection SDK for Linux / Docker — HTTP API Demo | Identixia
 
-**On-premise document liveness / authenticity** API for KYC and eKYC: detect screen replay, print attacks, and photo-swap style presentation attacks on ID documents. Complements full OCR recognition — this image focuses on **document PAD** so you can reject spoofed IDs before (or after) MRZ / barcode extraction.
+Integrate **document liveness detection and anti-spoofing** with the **Identixia Linux / Docker SDK**. This repository provides a self-hosted Linux / Docker HTTP API for checking ID documents for presentation attacks such as screen replays, printed copies, and replaced photos. Document presentation attack detection (PAD) adds an authenticity check to identity verification workflows. This liveness-only sample does not include OCR or MRZ text extraction.
+
+Use the sample to add document anti-spoofing checks to customer onboarding and Know Your Customer (KYC) workflows alongside a separate document recognition service. Processing runs on your own server; images are not sent to the Identixia cloud.
 
 Image: [`identixia/document-liveness`](https://hub.docker.com/r/identixia/document-liveness).
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/id-document-sdk/liveness-linux-docker). This page covers the sample repository.
+> For setup, integration, and API guides, see the [ID Document Liveness Detection SDK documentation for Linux / Docker](https://docs.identixia.com/developers/id-document-sdk/liveness-linux-docker). This page covers the sample repository.
 
-## Basics
+## SDK overview
 
-Start the server, copy the machine code, and contact us with that code to get a license. Then set `LICENSE=` in `.env` and activate (or POST `/api/activate`).
+Start the server and request its machine code using `GET /api/machinecode`. Send that code to [contact@identixia.com](mailto:contact@identixia.com) to request a license for this machine. Apply the returned key using the activation instructions below.
 
 | Topic | Basic information |
 | --- | --- |
@@ -250,15 +252,15 @@ Start the server, copy the machine code, and contact us with that code to get a 
 
 ---
 
-## Install
+## SDK installation
 
-Download the native engine files from this repository’s GitHub Release. The helper script places libraries and database packs in the correct folders.
+Run the following script to download the native SDK libraries and model files from this repository’s GitHub Releases. The script places each file in the folder used by the sample.
 
 ```bash
 python scripts/get_runtime.py
 ```
 
-To download a specific Release tag instead of the latest build:
+To select a release explicitly, pass its tag with `--tag`. For example:
 
 ```bash
 python scripts/get_runtime.py --tag 1.0.0
@@ -266,7 +268,7 @@ python scripts/get_runtime.py --tag 1.0.0
 
 ---
 
-## Initial commands
+## Quick start
 
 ```bash
 docker pull identixia/document-liveness:latest
@@ -276,17 +278,17 @@ docker run -d --name identixia-document-liveness \
   -v /etc/machine-id:/etc/machine-id:ro \
   identixia/document-liveness:latest
 ```
-Configuration lives in **`.env`** (see `.env.example`): `PORT`, `LICENSE`, `API_BASE`, `DEMO_PORT`. Copy `.env.example` → `.env` and edit. Shell / Compose `environment:` values still win over `.env`.
+Copy `.env.example` to `.env` and edit the settings for your installation: `PORT`, `LICENSE`, `API_BASE`, and `DEMO_PORT`. Values set in the shell or in Compose’s `environment:` section take precedence over values in `.env`.
 
 ```bash
 curl -s http://127.0.0.1:14107/api/machinecode
 ```
 
-The response is JSON. Your machine code is `data.machinecode`.
+The JSON response contains your machine code in `data.machinecode`. This value identifies the machine for licensing.
 
-Please [contact us](#-contact) with the machine code to get a license.
+Email the machine code and the product you want to use to [contact@identixia.com](mailto:contact@identixia.com) to request a license key.
 
-Set `LICENSE=` in `.env` to the key we send you (or POST it below — activate writes `.env`). From the repository folder:
+Replace `YOUR_KEY` in the request below with the license key issued for this machine. The activation endpoint saves the key to the server’s `.env` file and attempts to initialize the SDK. For a local installation, you can also set `LICENSE=YOUR_KEY` in the repository’s `.env` file and restart the server.
 
 ```bash
 curl -s -X POST http://127.0.0.1:14107/api/activate -H "Content-Type: application/json" -d "{\"license\":\"YOUR_KEY\"}"
@@ -313,7 +315,7 @@ Open http://127.0.0.1:14207
 
 ---
 
-## What you get
+## Features
 
 | Capability | Notes |
 | --- | --- |
@@ -325,7 +327,7 @@ Open http://127.0.0.1:14207
 
 ---
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -352,13 +354,13 @@ Full OCR product: [ID-Document-Recognition-Liveness-Detection-Docker](https://gi
 
 ## API
 
-HTTP API on port **14107**. Send a JPEG as base64 JSON.
+HTTP API on port **14107**. For image-processing requests, encode the JPEG image as base64 and include it in the JSON request body.
 
 | Call | Route |
 | --- | --- |
 | Health | `GET /api/health` |
 | Machine code | `GET /api/machinecode` |
-| Activate | `POST /api/activate` with your `license.txt` |
+| Activate | `POST /api/activate` with a JSON body containing your license key: `{"license":"YOUR_KEY"}` |
 | Process | `POST /api/document/liveness` |
 
 Send the document image. This build does not extract MRZ or barcodes.

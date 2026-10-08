@@ -1,9 +1,9 @@
 ---
 description: >-
-  Sample merchant company server and admin UI that talk to IDV.
+  Connect company systems to Identixia IDV using the sample backend and admin interface for identity verification sessions.
 ---
 
-# Company integration
+# Company Integration with the IDV Platform
 
 Your **company** (bank, fintech, marketplace) owns applicant UX launch and service credentials.
 

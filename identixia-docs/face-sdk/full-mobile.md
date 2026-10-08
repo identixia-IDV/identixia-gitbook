@@ -1,9 +1,9 @@
 ---
 description: >-
-  Full Face SDK samples for Android, iOS, Flutter, React Native, and Ionic.
+  Compare Android, iOS, Flutter, React Native, and Ionic samples for Identixia face recognition with licensed liveness checks.
 ---
 
-# Mobile & cross-platform
+# Face Recognition SDKs for Mobile Apps
 
 ## Platforms
 

@@ -1,9 +1,9 @@
 ---
 description: >-
-  IDV_console — tenant operators: sessions, reviews, webhooks, workflows.
+  Use Identity Console to manage IDV sessions, manual reviews, webhooks, and identity verification workflows.
 ---
 
-# Identity Console
+# Identity Console for Verification Operations
 
 | Item | Detail |
 | --- | --- |

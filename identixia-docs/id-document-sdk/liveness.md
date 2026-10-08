@@ -1,26 +1,26 @@
 ---
 description: >-
-  Document authenticity / anti-spoofing — separate from OCR, license-gated.
+  Understand Identixia ID document liveness detection, presentation attack checks, license requirements, and how to interpret results.
 ---
 
-# Document liveness
+# ID Document Liveness Detection and Anti-Spoofing
 
 ## Overview
 
-Document **liveness** (authenticity) checks whether the ID is likely a physical document versus:
+Document **liveness**, also called document presentation attack detection (PAD), checks for signs that an ID image comes from a spoofed presentation, such as:
 
 * A screen replay
 * A printout or paper copy
 * Portrait or document substitution (when the engine supports it)
 
-It does **not** replace OCR. You can run authenticity alone or together with recognition.
+Document liveness checks evaluate authenticity; optical character recognition (OCR) extracts text. Run liveness checks separately or alongside document recognition, depending on the SDK and license you choose.
 
 ## License rule
 
 | License | What you get |
 | --- | --- |
 | `authenticity` present | `security` / related checks populate in result JSON |
-| Missing | Empty or omitted security — **not** a pass |
+| Missing | Security results are empty or omitted; an unavailable check does **not** mean the document passed |
 
 See [Security check fields](security-fields.md).
 
@@ -39,4 +39,4 @@ curl -s -X POST http://127.0.0.1:14102/api/document/liveness \
   -d '{"images":["BASE64_FRONT"]}'
 ```
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png" alt="Liveness checks UI" width="480"><figcaption>Desktop demo — liveness checks</figcaption></figure>
+![Liveness checks UI](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)

@@ -1,10 +1,10 @@
 ---
 description: >-
-  Face recognition SDK for Windows. On-premise detection, landmarks, attributes, quality, templates, and 1:1 match through a local REST API. Sample and docs included.
+  Integrate Identixia face recognition on Windows. Follow setup and license activation steps for face detection, templates, and matching.
 icon: desktop
 ---
 
-# Face recognition — Windows
+# Face Recognition SDK for Windows
 
 
 ## Overview
@@ -33,7 +33,7 @@ Processing runs **on your server (or in your container)**. Identixia does **not*
 | Face detection | Bounding box, landmarks, and pose |
 | Attributes | Age, gender, and related traits when enabled |
 | Quality | ICAO-style image and face quality scores |
-| Templates | Compact feature vectors stored in **your** database |
+| Templates | Numerical representations of faces that you can store in **your** database for comparison |
 | 1:1 match | Compare two images or two templates |
 
 ## Prerequisites
@@ -48,7 +48,7 @@ Processing runs **on your server (or in your container)**. Identixia does **not*
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -76,7 +76,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/FaceRecognition-Windows/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -274,13 +274,13 @@ Keep the same license product line across stacks. From the [Face SDK](https://do
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-detect.png" alt="Desktop detect" width="360"><figcaption>Desktop detect</figcaption></figure>
+![Desktop detect](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-detect.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-match.png" alt="Desktop 1:1 match" width="360"><figcaption>Desktop 1:1 match</figcaption></figure>
+![Desktop 1:1 match](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-match.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-liveness.png" alt="Desktop liveness" width="360"><figcaption>Desktop liveness</figcaption></figure>
+![Desktop liveness](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-identify.png" alt="Desktop identify" width="360"><figcaption>Desktop identify</figcaption></figure>
+![Desktop identify](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-identify.png)
 
 ## Resources
 
@@ -316,15 +316,17 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia Face Recognition — Windows
+## Face Recognition SDK for Windows — HTTP API Demo | Identixia
 
-On-premise **face recognition** for Windows (recognition packs only). Passive liveness is a separate app: `FaceLivenessDetection-Windows`.
+Integrate **face recognition and face matching** with the **Identixia Windows SDK**. This repository provides a self-hosted Windows HTTP API for face detection, face template extraction, and face matching. Face templates are numerical representations used to compare faces. Use one-to-one (1:1) face comparison through the HTTP API. This recognition-only sample does not include face liveness checks.
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/recognition-windows). This page covers the sample repository.
+Use the sample as a starting point for biometric identity verification, face-based access control, and customer onboarding. Processing runs on your own server; images are not sent to the Identixia cloud.
 
-## Basics
+> For setup, integration, and API guides, see the [Face Recognition SDK documentation for Windows](https://docs.identixia.com/developers/face-sdk/recognition-windows). This page covers the sample repository.
 
-Start the server, copy the machine code, and contact us with that code to get a license. Then set `LICENSE=` in `.env` and activate (or POST `/api/activate`).
+## SDK overview
+
+Start the server and request its machine code using `GET /api/machinecode`. Send that code to [contact@identixia.com](mailto:contact@identixia.com) to request a license for this machine. Apply the returned key using the activation instructions below.
 
 | Topic | Basic information |
 | --- | --- |
@@ -336,15 +338,15 @@ Start the server, copy the machine code, and contact us with that code to get a 
 
 ---
 
-## Install
+## SDK installation
 
-Download the native engine files from this repository’s GitHub Release. The helper script places libraries and database packs in the correct folders.
+Run the following script to download the native SDK libraries and model files from this repository’s GitHub Releases. The script places each file in the folder used by the sample.
 
 ```bash
 python scripts/get_runtime.py
 ```
 
-To download a specific Release tag instead of the latest build:
+To select a release explicitly, pass its tag with `--tag`. For example:
 
 ```bash
 python scripts/get_runtime.py --tag 1.0.0
@@ -354,7 +356,7 @@ Unzip **directly** into `lib\cpu\`.
 
 ---
 
-## Initial commands
+## Quick start
 
 ```bash
 git clone https://github.com/identixia-IDV/FaceRecognition-Windows.git
@@ -364,17 +366,17 @@ pip install -r requirements.txt
 python run_server.py
 ```
 
-Configuration lives in **`.env`** (see `.env.example`): `PORT`, `LICENSE`, `API_BASE`, `DEMO_PORT`. Copy `.env.example` → `.env` and edit. Shell variables already set still win over `.env`.
+Copy `.env.example` to `.env` and edit the settings for your installation: `PORT`, `LICENSE`, `API_BASE`, and `DEMO_PORT`. Environment variables already set in the shell take precedence over values in `.env`.
 
 ```bash
 curl -s http://127.0.0.1:14103/api/machinecode
 ```
 
-The response is JSON. Your machine code is `data.machinecode`.
+The JSON response contains your machine code in `data.machinecode`. This value identifies the machine for licensing.
 
-Please [contact us](#-contact) with the machine code to get a license.
+Email the machine code and the product you want to use to [contact@identixia.com](mailto:contact@identixia.com) to request a license key.
 
-Set `LICENSE=` in `.env` to the key we send you (or POST it below — activate writes `.env`):
+Replace `YOUR_KEY` in the request below with the license key issued for this machine. The activation endpoint saves the key to the server’s `.env` file and attempts to initialize the SDK. For a local installation, you can also set `LICENSE=YOUR_KEY` in the repository’s `.env` file and restart the server.
 
 ```bash
 curl -s -X POST http://127.0.0.1:14103/api/activate -H "Content-Type: application/json" -d "{\"license\":\"YOUR_KEY\"}"
@@ -388,7 +390,7 @@ Use the face analyze / compare endpoints after activation. See [docs](https://do
 
 ---
 
-## What you get
+## Features
 
 | Capability | What it does |
 | --- | --- |
@@ -398,7 +400,7 @@ Use the face analyze / compare endpoints after activation. See [docs](https://do
 
 ---
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -421,13 +423,13 @@ Open http://127.0.0.1:14203
 
 ## API
 
-HTTP API on port **14104**. Send a JPEG as base64 JSON. Control routes return `{success, code, message, request_id, data}`.
+HTTP API on port **14104**. For image-processing requests, encode the JPEG image as base64 and include it in the JSON request body. Control routes return `{success, code, message, request_id, data}`.
 
 | Call | Route |
 | --- | --- |
 | Health | `GET /api/health` |
 | Machine code | `GET /api/machinecode` |
-| Activate | `POST /api/activate` with your `license.txt` |
+| Activate | `POST /api/activate` with a JSON body containing your license key: `{"license":"YOUR_KEY"}` |
 | License status | `GET /api/licenseStatus` |
 | Detect | `POST /api/face/analyze` |
 | 1:1 match | `POST /api/face/compare` |
@@ -440,7 +442,7 @@ curl -s http://127.0.0.1:14104/api/health
 
 ---
 
-## Platforms
+## SDKs for other platforms
 
 | | Platform | Repo |
 | --- | --- | --- |

@@ -1,10 +1,10 @@
 ---
 description: >-
-  Run the IDV web applicant demo.
+  Run the web IDV sample and connect browser-based applicant capture to your company backend and verification sessions.
 icon: globe
 ---
 
-# Web demo
+# Web Identity Verification Sample App
 
 ## Run locally
 

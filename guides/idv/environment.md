@@ -1,10 +1,10 @@
 ---
 description: >-
-  Configure IDV .env, engine URLs, tokens, and storage — keep secrets out of apps and git.
+  Configure IDV environment variables, engine URLs, service tokens, and storage for your identity verification deployment.
 icon: sliders
 ---
 
-# Project setup
+# IDV Environment and Backend Configuration
 
 ## 1. Copy environment file
 

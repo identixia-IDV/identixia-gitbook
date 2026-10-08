@@ -1,9 +1,9 @@
 ---
 description: >-
-  IDV folders mapped to Admin, Company, Applicant, and Engines roles.
+  Find the platform, company, applicant, and engine components in the Identixia IDV repository before setting up your deployment.
 ---
 
-# Project structure
+# IDV Project Structure and Service Roles
 
 ## Components
 

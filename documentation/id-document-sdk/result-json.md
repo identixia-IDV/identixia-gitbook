@@ -1,10 +1,10 @@
 ---
 description: >-
-  Customer process JSON for mobile recognize and server document APIs.
+  Read document recognition results from mobile and server APIs, including identity fields, MRZ data, barcodes, images, and checks.
 icon: brackets-curly
 ---
 
-# Result JSON
+# ID Document OCR Result JSON Reference
 
 ## Purpose
 

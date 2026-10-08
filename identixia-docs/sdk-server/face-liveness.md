@@ -1,9 +1,9 @@
 ---
 description: >-
-  Full HTTP integration guide for passive face liveness (+ deepfake).
+  Integrate the self-hosted Identixia face liveness detection HTTP API on Windows or Docker. Follow setup, activation, and request examples.
 ---
 
-# Face Liveness
+# Face Liveness Detection HTTP API
 
 Start Face Liveness Windows/Docker on port **14105** (the full Face product also exposes liveness on **14103**).
 

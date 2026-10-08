@@ -1,10 +1,10 @@
 ---
 description: >-
-  Where to find IDV API tables, Postman, and the offline handbook.
+  Find IDV API tables, Postman requests, and the offline handbook for implementing your identity verification integration.
 icon: book
 ---
 
-# Reference
+# Identity Verification API and Integration Reference
 
 | Resource | Location |
 | --- | --- |

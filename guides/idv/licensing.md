@@ -1,10 +1,10 @@
 ---
 description: >-
-  Hybrid licence issuer and protocol used by the IDV platform.
+  Understand the license issuer and Hybrid licensing components used by the self-hosted Identixia IDV platform.
 icon: key
 ---
 
-# Licensing
+# IDV Platform Licensing and Activation
 
 IDV uses **Hybrid** licensing: day-to-day metering on the customer host, issuance by Identixia.
 

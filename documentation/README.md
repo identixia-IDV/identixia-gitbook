@@ -1,15 +1,15 @@
 ---
 description: >-
-  Identixia documentation for Face SDK, ID Document SDK, SDK Server, and IDV.
+  Explore face recognition, liveness detection, ID document OCR, and self-hosted KYC. Find SDK setup guides, HTTP APIs, and licensing instructions.
 icon: house
 ---
 
-# Welcome to Identixia
+# Identixia Identity Verification SDK Documentation
 
-<p align="center"><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/brand/logo.png" alt="Identixia" width="280"></p>
+![Identixia](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/brand/logo.png)
 
 {% hint style="success" %}
-Face recognition, face liveness, and ID document capture run on **your** device or server. Identixia does not receive the images.
+Build identity verification with face recognition, passive liveness detection, and ID document capture. Processing runs on **your** device or server; images are not sent to Identixia.
 {% endhint %}
 
 ## Products
@@ -23,15 +23,15 @@ Face recognition, face liveness, and ID document capture run on **your** device 
   </thead>
   <tbody>
     <tr>
-      <td><strong>Face</strong> — recognition and passive liveness.</td>
+      <td><strong>Face</strong> — face recognition, matching, and passive liveness detection.</td>
       <td><a href="face-sdk/README.md">Face SDK</a></td>
     </tr>
     <tr>
-      <td><strong>ID documents</strong> — OCR, MRZ, barcode, and document liveness.</td>
+      <td><strong>ID documents</strong> — passport and ID card OCR, MRZ reading, barcode extraction, and document liveness.</td>
       <td><a href="id-document-sdk/README.md">ID Document SDK</a></td>
     </tr>
     <tr>
-      <td><strong>IDV</strong> — self-hosted KYC sessions on your own stack.</td>
+      <td><strong>IDV</strong> — self-hosted identity verification and Know Your Customer (KYC) sessions.</td>
       <td><a href="idv/README.md">IDV platform</a></td>
     </tr>
     <tr>
@@ -45,14 +45,14 @@ Face recognition, face liveness, and ID document capture run on **your** device 
 {% column %}
 ### On a phone or desktop
 
-Use the sample app, then embed the SDK.
+Run the sample app for your platform, then integrate its capture and SDK calls into your application.
 
 <a href="https://docs.identixia.com/developers" class="button primary" data-icon="code">Developers</a>
 {% endcolumn %}
 {% column %}
 ### First run
 
-Pick the repository that matches the license, then activate.
+Choose a sample that supports the features you need, download its runtime, and activate the matching SDK license.
 
 <a href="https://docs.identixia.com/guides" class="button secondary" data-icon="compass">Guides</a>
 {% endcolumn %}
@@ -71,7 +71,7 @@ Clone the repository and follow the platform page. Android and iOS are separate 
 {% endstep %}
 {% step %}
 ### Activate
-Send the application id, bundle id, or machine code, then call activate before init.
+Request a license using your Android application ID, iOS bundle identifier, or server machine code. Activate the returned key before initializing the SDK.
 {% endstep %}
 {% endstepper %}
 

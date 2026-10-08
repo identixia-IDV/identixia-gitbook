@@ -1,9 +1,9 @@
 ---
 description: >-
-  Run IDV server, Identity Console, company backend/admin, and licence admin locally.
+  Run the IDV server, Identity Console, company backend, and license administration service in a local development environment.
 ---
 
-# Quick start
+# IDV Platform Quick Start
 
 ## Order that works locally
 

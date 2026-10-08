@@ -1,10 +1,10 @@
 ---
 description: >-
-  Session status and identity trust_state through an Identixia IDV verification.
+  Understand IDV session status and identity trust states as applicants move through capture, processing, and review.
 icon: list-ol
 ---
 
-# Session states
+# Identity Verification Session States and Results
 
 ## Session status
 

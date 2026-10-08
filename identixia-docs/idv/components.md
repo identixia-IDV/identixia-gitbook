@@ -1,9 +1,9 @@
 ---
 description: >-
-  Index of every major IDV folder and where it is documented.
+  Find the IDV server, company backend, applicant clients, admin consoles, and biometric engines in the project structure.
 ---
 
-# Map of components
+# Identity Verification Platform Components
 
 ## Top-level layout (`IDV/`)
 

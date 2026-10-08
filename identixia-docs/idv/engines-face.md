@@ -1,9 +1,9 @@
 ---
 description: >-
-  How IDV calls the Face SDK HTTP API.
+  Connect the Face SDK HTTP API to IDV for face matching and licensed face liveness checks during identity verification.
 ---
 
-# Face engine
+# Face Recognition Engine Integration with IDV
 
 ## Default configuration
 

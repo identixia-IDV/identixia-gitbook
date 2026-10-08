@@ -1,10 +1,10 @@
 ---
 description: >-
-  Face recognition SDK for Ionic Cordova on Android and iOS. Enrollment, 1:N identification, and face attributes, plus passive liveness when licensed.
+  Integrate Identixia face recognition and liveness detection on Ionic Cordova. Follow setup and license activation steps for face detection, templates, and matching.
 icon: bolt
 ---
 
-# Face SDK — Ionic Cordova
+# Face Recognition and Liveness Detection SDK for Ionic Cordova
 
 
 ## Overview
@@ -33,10 +33,10 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 | Face detection | Bounding box, landmarks, and pose |
 | Attributes | Age, gender, and related traits when enabled |
 | Quality | ICAO-style image and face quality scores |
-| Templates | Compact feature vectors stored in **your** database |
+| Templates | Numerical representations of faces that you can store in **your** database for comparison |
 | 1:1 match | Compare two images or two templates |
-| 1:N identify | Enroll a gallery and search (mobile VideoWorker / server gallery) |
-| Passive liveness + deepfake | PAD and deepfake together when the license includes `liveness`; REAL only if both pass |
+| 1:N identify | Save face templates in a gallery, then search for the closest match using the platform's gallery API |
+| Passive liveness + deepfake | Run presentation attack detection (PAD) and deepfake checks when the license includes `liveness`; report REAL only when both pass |
 
 ## Prerequisites
 
@@ -49,7 +49,7 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -77,7 +77,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -148,7 +148,7 @@ On iOS: `npm run setup:ios && npm run ios`.
 | `-13` | No document |
 | `-16` | Liveness failed (when gated) |
 
-Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
 
 
 ## API reference — mobile face SDK
@@ -266,29 +266,29 @@ Keep the same license product line across stacks. From the [Face SDK](https://do
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png" alt="Home" width="150"><figcaption>Home</figcaption></figure>
+![Home](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/capture.png" alt="Capture" width="150"><figcaption>Capture</figcaption></figure>
+![Capture](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/capture.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/enroll.png" alt="Enroll" width="150"><figcaption>Enroll</figcaption></figure>
+![Enroll](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/enroll.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/identify.png" alt="Identify" width="150"><figcaption>Identify</figcaption></figure>
+![Identify](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/identify.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/detect.png" alt="Detect" width="150"><figcaption>Detect</figcaption></figure>
+![Detect](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/detect.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute.png" alt="Attributes" width="150"><figcaption>Attributes</figcaption></figure>
+![Attributes](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute-quality.png" alt="Quality" width="150"><figcaption>Quality</figcaption></figure>
+![Quality](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute-quality.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/landmarks.png" alt="Landmarks" width="150"><figcaption>Landmarks</figcaption></figure>
+![Landmarks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/landmarks.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/match.png" alt="Match" width="150"><figcaption>Match</figcaption></figure>
+![Match](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/match.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute-liveness.png" alt="Liveness" width="150"><figcaption>Liveness</figcaption></figure>
+![Liveness](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute-liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/settings.png" alt="Settings" width="150"><figcaption>Settings</figcaption></figure>
+![Settings](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/settings.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/about.png" alt="About" width="150"><figcaption>About</figcaption></figure>
+![About](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/about.png)
 
 ## Resources
 
@@ -324,19 +324,21 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia Face Recognition — Ionic Cordova
+## Face Recognition and Liveness Detection SDK for Ionic Cordova — Plugin and Sample App | Identixia
 
-**On-device face recognition SDK** plugin: enroll, **1:N identification**, guided capture, attributes, and optional **passive face liveness + deepfake** (authenticity REAL only if both pass). Face template matching runs on the device — **no** biometric frames uploaded to Identixia cloud. Ideal for KYC selfie checks and private galleries inside your mobile app.
+Integrate **face recognition and liveness detection** with the **Identixia Ionic Cordova SDK**. This repository provides a Ionic Cordova plugin for Android and iOS for face detection, face template extraction, and face matching. Face templates are numerical representations used to compare faces. Enroll faces in a local gallery and search for a match with one-to-many (1:N) identification. Passive liveness, also called presentation attack detection (PAD), and deepfake detection are available when licensed. The combined authenticity result is REAL only when both checks pass.
+
+Use the sample as a starting point for biometric identity verification, face-based access control, and customer onboarding. Processing runs on the device; images are not sent to the Identixia cloud.
 
 Package: `face-recognition-cordova`. Demo modes: **Enroll · Identify · Capture · Attribute**.
 
 **Cordova**. Capacitor: [FaceRecognition-LivenessDetection-Ionic-Capacitor](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Capacitor).
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/ionic-cordova). This page covers the sample repository.
+> For setup, integration, and API guides, see the [Face Recognition and Liveness Detection SDK documentation for Ionic Cordova](https://docs.identixia.com/developers/face-sdk/ionic-cordova). This page covers the sample repository.
 
-## Basics
+## SDK overview
 
-Read this once before cloning. Plugin demos ship a **bundled license** for the sample Android / iOS ids. Production apps need a new key. [Initial commands](#-initial-commands) lists clone → place runtime → run → activate options.
+The sample includes a demo license. Your own application requires a key issued for its application identifier.
 
 | Topic | Basic information |
 | --- | --- |
@@ -346,21 +348,21 @@ Read this once before cloning. Plugin demos ship a **bundled license** for the s
 | **Runtime** | Android AAR + iOS frameworks via `python scripts/get_runtime.py` (GitHub Release) |
 | **Demo id** | `com.identixia.facefullsdk` (see `config.xml`) |
 | **Tools** | npm · Cordova · physical arm64 Android / iPhone |
-| **UI** | Four demo modes after Ready |
+| **UI** | Four demo modes become available after SDK initialization completes |
 | **Privacy** | Templates stay on device — no Identixia cloud |
 
 ---
 
-## Initial commands
+## Quick start
 
-Run **one** platform. Android and iOS are separate commands. Pasting both into one shell does not test both phones.
+Choose the instructions for your device below. Run the Android and iOS steps separately; iOS builds require a Mac.
 
 ```bash
 git clone https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova.git
 cd FaceRecognition-LivenessDetection-Ionic-Cordova
 ```
 
-Native engines are already in the clone when this repository includes them. If a library file is missing, download the GitHub Release into the folders this sample expects:
+If the required native SDK libraries are missing from your checkout, run the following script to download them from this repository’s GitHub Releases and place them in the expected folders:
 
 ```bash
 python scripts/get_runtime.py
@@ -392,18 +394,18 @@ npm run ios
 
 `npm run ios` builds the app and installs it on the connected iPhone.
 
-Please [contact us](#-contact) to get a license for your own app. The sample already includes a demo license for its application id.
+The sample includes a demo license for its existing application identifier. Keep that identifier and the bundled key when running the demo. For your own app, request a key from [contact@identixia.com](mailto:contact@identixia.com), replace the demo key, and rebuild. See [SDK license and activation](#-sdk-license-and-activation) below for the source files and activation steps.
 
-Wait until Home = **Ready**, then open **Enroll**, **Identify**, **Capture**, or **Attribute**.
+Wait for the Home screen to show **Ready**, then open **Enroll**, **Identify**, **Capture**, or **Attribute**.
 
 ---
 
-## What you get
+## Features
 
 | Capability | What it does |
 | --- | --- |
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -413,14 +415,14 @@ Wait until Home = **Ready**, then open **Enroll**, **Identify**, **Capture**, or
 
 ---
 
-## Install
+## SDK installation
 
 The example builds with native runtimes already in the clone when present. Run `python scripts/get_runtime.py` (or pin `--tag 1.0.0`) to fetch GitHub Release engines when missing. Gradle may also download Latest when a file is absent.
 
 - `Identixia/src/android/facefullsdk.aar`
 - `Identixia/src/ios/Frameworks/`
 
-Customer apps depend on `face-recognition-cordova` from this repo at tag `v1.0.0` (Flutter: git dependency; React Native / Ionic: npm / github package). Do **not** use a monorepo `path:` dependency in shipping apps.
+For your own app, add `face-recognition-cordova` as a dependency from this repository and pin it to the `v1.0.0` tag. Use your package manager’s GitHub dependency syntax. Avoid dependencies on local folders when distributing the app.
 
 Android: keep `packaging { jniLibs { useLegacyPackaging = true } }` so `libFaceRecognitionEngine.so` is extracted for `nativeInitEngine`.
 
@@ -428,7 +430,7 @@ Android: keep `packaging { jniLibs { useLegacyPackaging = true } }` so `libFaceR
 
 ## Run
 
-Run **one** platform from the repository root. These are the same commands as [Initial commands](#-initial-commands).
+Start in the repository root and follow the commands for your target platform. These commands are also listed in [Quick start](#-quick-start).
 
 **Android** — physical arm64 phone, USB debugging on:
 
@@ -448,36 +450,50 @@ npm run ios
 
 ---
 
-## License
+## SDK license and activation
 
-See `config.xml` for demo application / bundle ids (typically `com.identixia.facefullsdk`).
+<p align="center">
+<a href="#-contact"><img src="https://img.shields.io/badge/Your%20app-Request%20a%20key-0F766E?style=for-the-badge&logo=gmail&logoColor=white" alt="Request a key" /></a>
+</p>
 
-The code below shows how to use the license:
+<p align="center">
+</p>
 
-[https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/blob/e608432aca680ff4742727842dad366402f07c85/src/license.ts#L7-L15](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/blob/e608432aca680ff4742727842dad366402f07c85/src/license.ts#L7-L15)
+<p align="center"><img src="https://img.shields.io/badge/Sample%20code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Sample code" /></p>
 
-[https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/blob/e608432aca680ff4742727842dad366402f07c85/src/SdkContext.tsx#L63-L73](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/blob/e608432aca680ff4742727842dad366402f07c85/src/SdkContext.tsx#L63-L73)
+The sample includes a demo license tied to its application identifier. Keep the sample’s identifier and bundled key when evaluating the app. License validation runs locally.
 
-Capabilities: face recognition (detect / templates / match) and/or passive face liveness + deepfake. Please [contact us](#-contact) to get a license for **your own app**.
+The demo uses these identifiers:
+
+- Android application ID: `com.identixia.facefullsdk`.
+- iOS bundle identifier: `com.identixia.facefullsdk.app`.
+
+To use the SDK in your own app, email [contact@identixia.com](mailto:contact@identixia.com) with your platform, application ID or bundle identifier, and the SDK features you need. Request a key for your app, replace the demo key in the source file below, and rebuild the app. For apps targeting both Android and iOS, use the key issued for each platform.
+
+Activate the license before initializing the SDK, following the sample’s startup code. Check the license status before using SDK features. If activation fails, verify that the key matches your app identifier and contact Identixia if you need a replacement.
+
+[Demo license definition](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/blob/main/src/license.ts#L13-L34)
+
+[SDK activation call](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/blob/main/src/SdkContext.tsx#L86-L86)
 
 ## API
 
-The sample and your app use the same method names.
+The following SDK methods are used by the sample and can also be called from your application.
 
-| API | What it returns |
+| API | Purpose |
 | --- | --- |
-| `activate(license)` then `init()` | Load the engine. Call both on one background thread. |
-| `getLicenseStatus()` | Read flags before opening the camera. |
-| `detect` / `faceAttribute` / `landmarks` | Still-image face, attributes, and landmarks. |
-| `templateExtraction` / `similarity` | Template bytes and a 1:1 score. |
-| `enroll` / `bestMatch` | On-device gallery and 1:N search. |
-| `liveness` / `deepfake` | PAD and deepfake. REAL only if both pass. |
+| `activate(license)` then `init()` | Activate the license, then initialize the engine. Run these calls in order on one background thread. |
+| `getLicenseStatus()` | Check the license status and enabled features before opening the camera. |
+| `detect` / `faceAttribute` / `landmarks` | Detect faces in an image and return facial attributes and landmark coordinates. |
+| `templateExtraction` / `similarity` | Create a numerical representation of a face and compare two faces to obtain a similarity score. |
+| `enroll` / `bestMatch` | Save faces in a local gallery and search it for the closest match. |
+| `liveness` / `deepfake` | Run presentation attack detection and deepfake checks. Report REAL only when both pass. |
 
-Camera frames stay on the UI thread. Engine calls stay on one background thread. The engine is not concurrent.
+Keep camera preview updates on the UI thread. Run SDK operations sequentially on a single background thread; the engine does not support simultaneous calls.
 
 ---
 
-## Platforms
+## SDKs for other platforms
 
 | | Platform | Repo |
 | --- | --- | --- |

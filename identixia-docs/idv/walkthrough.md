@@ -1,9 +1,9 @@
 ---
 description: >-
-  Run one verification: engines, IDV server, company backend, capture, webhook, review.
+  Follow one IDV verification from engine startup and applicant capture through webhook delivery and operator review.
 ---
 
-# End-to-end walkthrough
+# Complete an Identity Verification Session
 
 ## Goal
 

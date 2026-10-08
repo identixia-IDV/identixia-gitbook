@@ -1,10 +1,10 @@
 ---
 description: >-
-  company/admin React UI for operators on the sample company backend.
+  Use the sample Company Admin interface to manage your company integration with the Identixia identity verification platform.
 icon: user-gear
 ---
 
-# Company Admin UI
+# Company Admin Console for Identity Verification
 
 | Item | Detail |
 | --- | --- |

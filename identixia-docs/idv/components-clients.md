@@ -1,9 +1,9 @@
 ---
 description: >-
-  IDV client SDKs and demo apps under IDV/demo_clients/.
+  Choose web, Android, iOS, Flutter, or React Native applicant clients for document and selfie capture with Identixia IDV.
 ---
 
-# Applicant clients
+# Identity Verification Client SDKs and Sample Apps
 
 Capture SDKs and demos. The **service token stays on the company backend**; apps use capture tokens.
 

@@ -1,9 +1,9 @@
 ---
 description: >-
-  What Identixia face recognition does, which APIs to call, and which repositories ship it.
+  Learn how Identixia face recognition works, which APIs to use, and which sample repositories match your platform.
 ---
 
-# Face recognition
+# Face Recognition SDK Features and Integration
 
 ## Overview
 

@@ -1,9 +1,9 @@
 ---
 description: >-
-  Build the IDV Android applicant demo.
+  Build and run the Android IDV sample app for applicant document and selfie capture in an identity verification session.
 ---
 
-# Android demo
+# Android Identity Verification Sample App
 
 ## Build
 

@@ -1,9 +1,9 @@
 ---
 description: >-
-  ID document recognition SDK for Flutter on Android and iOS. Passport, national ID, and driver license OCR, MRZ, and barcode capture. Document liveness runs when licensed.
+  Integrate Identixia ID document OCR and liveness detection on Flutter. Follow setup and license activation steps for passport and ID card OCR, MRZ, and barcode reading.
 ---
 
-# ID Document SDK — Flutter
+# ID Document OCR and Liveness Detection SDK for Flutter
 
 
 ## Overview
@@ -30,8 +30,8 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 | Capability | Description |
 | --- | --- |
 | Locate and crop | Find the ID document in a camera frame or still image |
-| OCR | Visual-zone fields (name, document number, dates, and related data) |
-| MRZ | Machine-readable zone parse and checksum checks |
+| OCR | Read printed document fields such as the name, document number, and dates using optical character recognition |
+| MRZ | Read the machine-readable zone (MRZ) and validate its check digits |
 | Barcode / QR | Extracted when present on the document |
 | Front and back | Capture both sides when your workflow requires it |
 | Document authenticity | Anti-spoof checks when the license includes `authenticity` |
@@ -48,7 +48,7 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -76,7 +76,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -147,7 +147,7 @@ Use a physical device for camera demos.
 | `-13` | No document |
 | `-16` | Liveness failed (when gated) |
 
-Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
 
 
 ## API reference — mobile document SDK
@@ -211,15 +211,15 @@ See [Result JSON](result-json.md) and [Security check fields](security-fields.md
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Status" width="420"><figcaption>Status</figcaption></figure>
+![Status](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-fields-visual.png" alt="Visual fields" width="420"><figcaption>Visual fields</figcaption></figure>
+![Visual fields](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-fields-visual.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-validity.png" alt="Validity checks" width="420"><figcaption>Validity checks</figcaption></figure>
+![Validity checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-validity.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
+![Liveness checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
+![Images](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png)
 
 ## Resources
 
@@ -255,17 +255,19 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia ID Document Recognition and Liveness Detection — Flutter
+## ID Document Recognition and Liveness Detection SDK for Flutter — Plugin and Sample App | Identixia
 
-**On-device ID document recognition** plugin for Android and iOS: passport MRZ OCR, ID card barcode, live capture, and optional document liveness / authenticity for KYC and eKYC. Processing stays on the device — **no** document images go to Identixia cloud.
+Integrate **ID document OCR and liveness detection** with the **Identixia Flutter SDK**. This repository provides a Flutter plugin for Android and iOS for reading passports, national ID cards, and driver licenses. Extract identity fields using optical character recognition (OCR), read the machine-readable zone (MRZ), and decode supported document barcodes. Add document liveness checks for screen replays, printed copies, and replaced photos when enabled by your license.
+
+Use the sample to build document capture and data extraction into customer onboarding, Know Your Customer (KYC), and electronic KYC (eKYC) workflows. Processing runs on the device; images are not sent to the Identixia cloud.
 
 Package: `document_reader_sdk`.
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/id-document-sdk/flutter). This page covers the sample repository.
+> For setup, integration, and API guides, see the [ID Document Recognition and Liveness Detection SDK documentation for Flutter](https://docs.identixia.com/developers/id-document-sdk/flutter). This page covers the sample repository.
 
-## Basics
+## SDK overview
 
-Read this once before cloning. Plugin demos ship a **bundled license** for the sample Android / iOS ids. Production apps need a new key. [Initial commands](#-initial-commands) lists clone → place runtime → run → activate options.
+The sample includes a demo license. Your own application requires a key issued for its application identifier.
 
 | Topic | Basic information |
 | --- | --- |
@@ -275,21 +277,21 @@ Read this once before cloning. Plugin demos ship a **bundled license** for the s
 | **Runtime** | Local example engines, or the `v1.0.0` GitHub Release when missing |
 | **Demo id** | `com.identixia.documentreader` / `.app` (until **12 Aug 2027**) |
 | **Tools** | Flutter 3.44+ · physical arm64 Android / iPhone |
-| **UI** | Wide Camera Home · Gallery / About · one-scroll Result |
+| **UI** | Home screen with Camera, Gallery, and About options; results on one scrollable screen |
 | **Privacy** | All processing on device — no Identixia cloud for document data |
 
 ---
 
-## Initial commands
+## Quick start
 
-Run **one** platform. Android and iOS are separate commands. Pasting both into one shell does not test both phones.
+Choose the instructions for your device below. Run the Android and iOS steps separately; iOS builds require a Mac.
 
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter.git
 cd ID-Document-Recognition-Liveness-Detection-Flutter
 ```
 
-Native engines are already in the clone when this repository includes them. If a library file is missing, download the GitHub Release into the folders this sample expects:
+If the required native SDK libraries are missing from your checkout, run the following script to download them from this repository’s GitHub Releases and place them in the expected folders:
 
 ```bash
 python scripts/get_runtime.py
@@ -328,20 +330,20 @@ flutter run -d ios
 
 When more than one iPhone is listed, pass that device id instead of `ios`.
 
-Please [contact us](#-contact) to get a license for your own app. The sample already includes a demo license for its application id.
+The sample includes a demo license for its existing application identifier. Keep that identifier and the bundled key when running the demo. For your own app, request a key from [contact@identixia.com](mailto:contact@identixia.com), replace the demo key, and rebuild. See [SDK license and activation](#-sdk-license-and-activation) below for the source files and activation steps.
 
-Wait until Home = **Ready**, then Camera / Gallery. Confirm Result / About shows a licensed state.
+Wait for the Home screen to show **Ready**, then choose **Camera** to capture a document or **Gallery** to select an image. Check the license status on the Result or About screen.
 
 ---
 
-## What you get
+## Features
 
 | Capability | What it does |
 | --- | --- |
 
 ---
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -352,22 +354,22 @@ Wait until Home = **Ready**, then Camera / Gallery. Confirm Result / About shows
 
 ---
 
-## Install
+## SDK installation
 
 The example builds with native runtimes already in the clone when present. Missing files are fetched from the `v1.0.0` GitHub Releases.
 
 | | Path after unzip |
 | --- | --- |
 
-Customer apps depend on `document_reader_sdk` from this repo at tag `v1.0.0` (Flutter: git; React Native / Ionic: npm / github). Do **not** use a monorepo `path:` dependency in shipping apps.
+For your own app, add `document_reader_sdk` as a dependency from this repository and pin it to the `v1.0.0` tag. Use a Git dependency in `pubspec.yaml`. Avoid dependencies on local folders when distributing the app.
 
-Prefer package kits (`DocumentCapture`, `ResultParser`) for the same camera / Result path as the sample. Keep `useLegacyPackaging = true` on Android when required by the engine.
+Use `DocumentCapture` and `ResultParser` to reuse the sample’s capture and result-handling components. Keep `useLegacyPackaging = true` in the Android build configuration when the engine requires it.
 
 ---
 
 ## Run
 
-Run **one** platform from the repository root. These are the same commands as [Initial commands](#-initial-commands).
+Start in the repository root and follow the commands for your target platform. These commands are also listed in [Quick start](#-quick-start).
 
 **Android** — physical arm64 phone, USB debugging on:
 
@@ -390,25 +392,39 @@ flutter run -d ios
 
 ---
 
-## License
+## SDK license and activation
 
-Demo ids: Android `com.identixia.documentreader` · iOS `com.identixia.documentreader.app`. Bundled demo license until **12 Aug 2027** for those ids.
+<p align="center">
+<a href="#-contact"><img src="https://img.shields.io/badge/Your%20app-Request%20a%20key-0F766E?style=for-the-badge&logo=gmail&logoColor=white" alt="Request a key" /></a>
+</p>
 
-The code below shows how to use the license:
+<p align="center">
+</p>
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/5f5f5a6b16796bbb0f054d9301c0b05473d66b6d/example/lib/core/constants/license.dart#L9-L15](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/5f5f5a6b16796bbb0f054d9301c0b05473d66b6d/example/lib/core/constants/license.dart#L9-L15)
+<p align="center"><img src="https://img.shields.io/badge/Sample%20code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Sample code" /></p>
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/5f5f5a6b16796bbb0f054d9301c0b05473d66b6d/example/lib/services/sdk_service.dart#L25-L39](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/5f5f5a6b16796bbb0f054d9301c0b05473d66b6d/example/lib/services/sdk_service.dart#L25-L39)
+The sample includes a demo license tied to its application identifier. Keep the sample’s identifier and bundled key when evaluating the app. License validation runs locally.
 
-Capabilities: document recognition and/or document liveness. Please [contact us](#-contact) to get a license for **your own app**.
+The demo uses these identifiers:
+
+- Android application ID: `com.identixia.documentreader`.
+- iOS bundle identifier: `com.identixia.documentreader.app`.
+
+To use the SDK in your own app, email [contact@identixia.com](mailto:contact@identixia.com) with your platform, application ID or bundle identifier, and the SDK features you need. Request a key for your app, replace the demo key in the source file below, and rebuild the app. For apps targeting both Android and iOS, use the key issued for each platform.
+
+Activate the license before initializing the SDK, following the sample’s startup code. Check the license status before using SDK features. If activation fails, verify that the key matches your app identifier and contact Identixia if you need a replacement.
+
+[Demo license definition](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/main/example/lib/core/constants/license.dart#L9-L15)
+
+[SDK activation call](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter/blob/main/example/lib/services/sdk_service.dart#L37-L37)
 
 ## API
 
-The sample and your app use the same method names.
+The following SDK methods are used by the sample and can also be called from your application.
 
-| API | What it returns |
+| API | Purpose |
 | --- | --- |
-| `activate(license)` then `init()` | Load the engine. Call both on one background thread. |
+| `activate(license)` then `init()` | Activate the license, then initialize the engine. Run these calls in order on one background thread. |
 | Camera | Live capture from the sample Home screen. |
 | Gallery | Still image of a passport, national ID, or driver license. |
 | `recognize` / document process | Identity, MRZ, barcode, and field text. |
@@ -416,7 +432,7 @@ The sample and your app use the same method names.
 
 ---
 
-## Platforms
+## SDKs for other platforms
 
 | | Platform | Repo |
 | --- | --- | --- |

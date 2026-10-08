@@ -1,10 +1,10 @@
 ---
 description: >-
-  ID document recognition SDK for Linux and Docker. On-premise passport, national ID, and driver license OCR, MRZ, and barcode capture through a local REST API.
+  Integrate Identixia ID document recognition and OCR on Linux and Docker. Follow setup and license activation steps for passport and ID card OCR, MRZ, and barcode reading.
 icon: box
 ---
 
-# ID Document SDK — Linux / Docker (recognition only)
+# ID Document Recognition and OCR SDK for Linux and Docker
 
 
 ## Overview
@@ -31,8 +31,8 @@ Processing runs **on your server (or in your container)**. Identixia does **not*
 | Capability | Description |
 | --- | --- |
 | Locate and crop | Find the ID document in a camera frame or still image |
-| OCR | Visual-zone fields (name, document number, dates, and related data) |
-| MRZ | Machine-readable zone parse and checksum checks |
+| OCR | Read printed document fields such as the name, document number, and dates using optical character recognition |
+| MRZ | Read the machine-readable zone (MRZ) and validate its check digits |
 | Barcode / QR | Extracted when present on the document |
 | Front and back | Capture both sides when your workflow requires it |
 | Document authenticity | Anti-spoof checks when the license includes `authenticity` |
@@ -49,7 +49,7 @@ Processing runs **on your server (or in your container)**. Identixia does **not*
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -77,7 +77,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -207,15 +207,15 @@ curl -s -X POST http://127.0.0.1:14102/api/document/process \
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Status" width="420"><figcaption>Status</figcaption></figure>
+![Status](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-fields-visual.png" alt="Visual fields" width="420"><figcaption>Visual fields</figcaption></figure>
+![Visual fields](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-fields-visual.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-validity.png" alt="Validity checks" width="420"><figcaption>Validity checks</figcaption></figure>
+![Validity checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-validity.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
+![Liveness checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
+![Images](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png)
 
 ## Resources
 
@@ -251,15 +251,17 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia ID Document Recognition — Linux / Docker
+## ID Document Recognition SDK for Linux / Docker — HTTP API Demo | Identixia
 
-On-premise **ID document recognition** for Linux / Docker (OCR / MRZ / barcode). Document-liveness-only packaging is a separate image when you need PAD without OCR.
+Integrate **ID document recognition and OCR** with the **Identixia Linux / Docker SDK**. This repository provides a self-hosted Linux / Docker HTTP API for reading passports, national ID cards, and driver licenses. Extract identity fields using optical character recognition (OCR), read the machine-readable zone (MRZ), and decode supported document barcodes. This recognition-only sample does not include document liveness checks.
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/id-document-sdk/recognition-linux-docker). This page covers the sample repository.
+Use the sample to build document capture and data extraction into customer onboarding, Know Your Customer (KYC), and electronic KYC (eKYC) workflows. Processing runs on your own server; images are not sent to the Identixia cloud.
 
-## Basics
+> For setup, integration, and API guides, see the [ID Document Recognition SDK documentation for Linux / Docker](https://docs.identixia.com/developers/id-document-sdk/recognition-linux-docker). This page covers the sample repository.
 
-Start the server, copy the machine code, and contact us with that code to get a license. Then set `LICENSE=` in `.env` and activate (or POST `/api/activate`).
+## SDK overview
+
+Start the server and request its machine code using `GET /api/machinecode`. Send that code to [contact@identixia.com](mailto:contact@identixia.com) to request a license for this machine. Apply the returned key using the activation instructions below.
 
 | Topic | Basic information |
 | --- | --- |
@@ -269,15 +271,15 @@ Start the server, copy the machine code, and contact us with that code to get a 
 
 ---
 
-## Install
+## SDK installation
 
-Download the native engine files from this repository’s GitHub Release. The helper script places libraries and database packs in the correct folders.
+Run the following script to download the native SDK libraries and model files from this repository’s GitHub Releases. The script places each file in the folder used by the sample.
 
 ```bash
 python scripts/get_runtime.py
 ```
 
-To download a specific Release tag instead of the latest build:
+To select a release explicitly, pass its tag with `--tag`. For example:
 
 ```bash
 python scripts/get_runtime.py --tag 1.0.0
@@ -287,7 +289,7 @@ Docker Hub images include the runtime. Host installs use `python scripts/get_run
 
 ---
 
-## Initial commands
+## Quick start
 
 ```bash
 docker pull identixia/document-recognition:latest
@@ -298,17 +300,17 @@ docker run -d --name identixia-document-recognition \
   identixia/document-recognition:latest
 ```
 
-Configuration lives in **`.env`** (see `.env.example`): `PORT`, `LICENSE`, `API_BASE`, `DEMO_PORT`. Copy `.env.example` → `.env` and edit. Shell variables already set still win over `.env`.
+Copy `.env.example` to `.env` and edit the settings for your installation: `PORT`, `LICENSE`, `API_BASE`, and `DEMO_PORT`. Environment variables already set in the shell take precedence over values in `.env`.
 
 ```bash
 curl -s http://127.0.0.1:14106/api/machinecode
 ```
 
-The response is JSON. Your machine code is `data.machinecode`.
+The JSON response contains your machine code in `data.machinecode`. This value identifies the machine for licensing.
 
-Please [contact us](#-contact) with the machine code to get a license.
+Email the machine code and the product you want to use to [contact@identixia.com](mailto:contact@identixia.com) to request a license key.
 
-Set `LICENSE=` in `.env` to the key we send you (or POST it below — activate writes `.env`):
+Replace `YOUR_KEY` in the request below with the license key issued for this machine. The activation endpoint saves the key to the server’s `.env` file and attempts to initialize the SDK. For a local installation, you can also set `LICENSE=YOUR_KEY` in the repository’s `.env` file and restart the server.
 
 ```bash
 curl -s -X POST http://127.0.0.1:14106/api/activate -H "Content-Type: application/json" -d "{\"license\":\"YOUR_KEY\"}"
@@ -322,7 +324,7 @@ Process a document through the recognize / process endpoints after activation. S
 
 ---
 
-## What you get
+## Features
 
 | Capability | What it does |
 | --- | --- |
@@ -331,7 +333,7 @@ Process a document through the recognize / process endpoints after activation. S
 
 ---
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -341,13 +343,13 @@ Process a document through the recognize / process endpoints after activation. S
 
 ## API
 
-HTTP API on port **14106**. Send a JPEG as base64 JSON.
+HTTP API on port **14106**. For image-processing requests, encode the JPEG image as base64 and include it in the JSON request body.
 
 | Call | Route |
 | --- | --- |
 | Health | `GET /api/health` |
 | Machine code | `GET /api/machinecode` |
-| Activate | `POST /api/activate` with your `license.txt` |
+| Activate | `POST /api/activate` with a JSON body containing your license key: `{"license":"YOUR_KEY"}` |
 | Process | `POST /api/document/process` |
 
 Returns identity, fields, and images. Document liveness is not in this build.
@@ -358,7 +360,7 @@ curl -s http://127.0.0.1:14106/api/health
 
 ---
 
-## Platforms
+## SDKs for other platforms
 
 | | Platform | Repo |
 | --- | --- | --- |

@@ -1,10 +1,10 @@
 ---
 description: >-
-  Subscribe to session events, verify HMAC signatures, and handle deliveries safely.
+  Receive IDV session events, verify webhook signatures, and handle identity verification event deliveries in your backend.
 icon: bell
 ---
 
-# Webhook integration
+# Identity Verification Webhooks and Event Delivery
 
 ## Subscribe to events
 

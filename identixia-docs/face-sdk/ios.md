@@ -1,9 +1,9 @@
 ---
 description: >-
-  Face recognition SDK for iOS. On-device enrollment, 1:N identification, and face attributes for KYC, plus passive liveness when the license includes it.
+  Integrate Identixia face recognition and liveness detection on iOS. Follow setup and license activation steps for face detection, templates, and matching.
 ---
 
-# Face SDK — iOS
+# Face Recognition and Liveness Detection SDK for iOS
 
 
 ## Overview
@@ -32,10 +32,10 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 | Face detection | Bounding box, landmarks, and pose |
 | Attributes | Age, gender, and related traits when enabled |
 | Quality | ICAO-style image and face quality scores |
-| Templates | Compact feature vectors stored in **your** database |
+| Templates | Numerical representations of faces that you can store in **your** database for comparison |
 | 1:1 match | Compare two images or two templates |
-| 1:N identify | Enroll a gallery and search (mobile VideoWorker / server gallery) |
-| Passive liveness + deepfake | PAD and deepfake together when the license includes `liveness`; REAL only if both pass |
+| 1:N identify | Save face templates in a gallery, then search for the closest match using the platform's gallery API |
+| Passive liveness + deepfake | Run presentation attack detection (PAD) and deepfake checks when the license includes `liveness`; report REAL only when both pass |
 
 ## Prerequisites
 
@@ -48,7 +48,7 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -76,7 +76,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -144,7 +144,7 @@ Wait until Home status shows **Ready** before opening camera modes.
 | `-13` | No document |
 | `-16` | Liveness failed (when gated) |
 
-Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
 
 
 ## API reference — mobile face SDK
@@ -262,17 +262,17 @@ Keep the same license product line across stacks. From the [Face SDK](README.md)
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/home.png" alt="iOS home" width="160"><figcaption>iOS home</figcaption></figure>
+![iOS home](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/home.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/capture.png" alt="iOS capture" width="160"><figcaption>iOS capture</figcaption></figure>
+![iOS capture](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/capture.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/identify.jpg" alt="iOS identify" width="160"><figcaption>iOS identify</figcaption></figure>
+![iOS identify](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/identify.jpg)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/attribute.png" alt="iOS attributes" width="160"><figcaption>iOS attributes</figcaption></figure>
+![iOS attributes](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/attribute.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/attribute-liveness.png" alt="iOS liveness" width="160"><figcaption>iOS liveness</figcaption></figure>
+![iOS liveness](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/attribute-liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/about.png" alt="iOS about" width="160"><figcaption>iOS about</figcaption></figure>
+![iOS about](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/about.png)
 
 ## Resources
 
@@ -308,32 +308,34 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia Face Recognition — iOS
+## Face Recognition and Liveness Detection SDK for iOS — Sample App | Identixia
 
-**On-device face recognition SDK** for iPhone: enroll, **1:N identification**, capture, attributes, and optional **passive face liveness + deepfake** (authenticity REAL only if both pass). Face template matching stays on device — Identixia cloud never sees your biometric frames. Built for private KYC selfie flows and on-device galleries.
+Integrate **face recognition and liveness detection** with the **Identixia iOS SDK**. This repository provides a native iOS sample app for face detection, face template extraction, and face matching. Face templates are numerical representations used to compare faces. Enroll faces in a local gallery and search for a match with one-to-many (1:N) identification. Passive liveness, also called presentation attack detection (PAD), and deepfake detection are available when licensed. The combined authenticity result is REAL only when both checks pass.
+
+Use the sample as a starting point for biometric identity verification, face-based access control, and customer onboarding. Processing runs on the device; images are not sent to the Identixia cloud.
 
 Demo modes: **Enroll · Identify · Capture · Attribute**.
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/ios). This page covers the sample repository.
+> For setup, integration, and API guides, see the [Face Recognition and Liveness Detection SDK documentation for iOS](https://docs.identixia.com/developers/face-sdk/ios). This page covers the sample repository.
 
-## Basics
+## SDK overview
 
-Read this once before cloning. Mobile demos ship a **bundled license** for the sample application / bundle id. Production apps need a new key from Identixia. [Initial commands](#-initial-commands) lists clone → place runtime → run → activate options.
+The sample includes a demo license. Your own application requires a key issued for its application identifier.
 
 | Topic | Basic information |
 | --- | --- |
 | **Product** | On-device **face recognition SDK** for iOS |
 | **Modes** | Enroll · Identify (1:N) · Capture · Attribute · optional passive liveness |
-| **Runtime zip** | Three frameworks at repo root from Drive zip `PENDING` |
+| **Runtime zip** | Place the three frameworks listed below in the repository root after downloading the SDK runtime |
 | **Demo id / license** | `com.identixia.facefullsdk.app` — use the sample id with the bundled demo license |
-| **Activate** | Sample app: keep the demo id and bundled key. Your app: new applicationId / bundle id → [contact](#-contact) → call the SDK activate API (see docs). |
+| **Activate** | Keep the sample’s application identifier and bundled key for evaluation. For your own app, request a key for its Android application ID or iOS bundle identifier and activate it before initializing the SDK. |
 | **Tools** | **Xcode 15+** · physical **iPhone** |
-| **UI** | Four demo modes after Ready |
+| **UI** | Four demo modes become available after SDK initialization completes |
 | **Privacy** | Templates stay on device — no Identixia cloud |
 
 ---
 
-## Initial commands
+## Quick start
 
 Clone the sample, place the runtime, and run it.
 
@@ -353,18 +355,18 @@ onnxruntime.framework
 
 Open `FaceFullSDK.xcodeproj` → Signing Team → Run on a physical iPhone.
 
-Please [contact us](#-contact) to get a license for your own app. The sample already includes a demo license for its application id.
+The sample includes a demo license for its existing application identifier. Keep that identifier and the bundled key when running the demo. For your own app, request a key from [contact@identixia.com](mailto:contact@identixia.com), replace the demo key, and rebuild. See [SDK license and activation](#-sdk-license-and-activation) below for the source files and activation steps.
 
-Wait until Home status = **Ready**, then use Camera / Gallery (or the face mode tiles). Confirm Result / About shows a licensed state before integrating into your own app.
+Wait for the Home screen to show **Ready**, then select a capture option. Check the license status on the Result or About screen before integrating the SDK into your own app.
 
 ---
 
-## What you get
+## Features
 
 | Capability | What it does |
 | --- | --- |
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -375,7 +377,7 @@ Wait until Home status = **Ready**, then use Camera / Gallery (or the face mode 
 
 ---
 
-## Install
+## SDK installation
 
 > **GitHub Release:** `python scripts/get_runtime.py` (or `--tag 1.0.0`)
 
@@ -401,39 +403,49 @@ onnxruntime.framework
 
 ---
 
-## License
+## SDK license and activation
 
-| | |
-| --- | --- |
-| Demo bundle id | `com.identixia.facefullsdk.app` |
-| Capabilities | Face recognition and/or passive face liveness + deepfake |
+<p align="center">
+<a href="#-contact"><img src="https://img.shields.io/badge/Your%20app-Request%20a%20key-0F766E?style=for-the-badge&logo=gmail&logoColor=white" alt="Request a key" /></a>
+</p>
 
-The code below shows how to use the license:
+<p align="center">
+</p>
 
-[https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/blob/1946743e92f39e4d01740992b31cddf8c7c246ed/FaceFullSDK/Home/ViewController.swift#L8-L10](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/blob/1946743e92f39e4d01740992b31cddf8c7c246ed/FaceFullSDK/Home/ViewController.swift#L8-L10)
+<p align="center"><img src="https://img.shields.io/badge/Sample%20code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Sample code" /></p>
 
-[https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/blob/1946743e92f39e4d01740992b31cddf8c7c246ed/FaceFullSDK/Home/ViewController.swift#L167-L191](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/blob/1946743e92f39e4d01740992b31cddf8c7c246ed/FaceFullSDK/Home/ViewController.swift#L167-L191)
+The sample includes a demo license tied to its application identifier. Keep the sample’s identifier and bundled key when evaluating the app. License validation runs locally.
 
-Please [contact us](#-contact) to get a license for **your own app**.
+The demo uses these identifiers:
+
+- iOS bundle identifier: `com.identixia.facefullsdk.app`.
+
+To use the SDK in your own app, email [contact@identixia.com](mailto:contact@identixia.com) with your platform, application ID or bundle identifier, and the SDK features you need. Request a key for your app, replace the demo key in the source file below, and rebuild the app. For apps targeting both Android and iOS, use the key issued for each platform.
+
+Activate the license before initializing the SDK, following the sample’s startup code. Check the license status before using SDK features. If activation fails, verify that the key matches your app identifier and contact Identixia if you need a replacement.
+
+[Demo license definition](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/blob/main/FaceFullSDK/Home/ViewController.swift#L7-L8)
+
+[SDK activation call](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/blob/main/FaceFullSDK/Home/ViewController.swift#L266-L266)
 
 ## API
 
-The sample and your app use the same method names.
+The following SDK methods are used by the sample and can also be called from your application.
 
-| API | What it returns |
+| API | Purpose |
 | --- | --- |
-| `activate(license)` then `init()` | Load the engine. Call both on one background thread. |
-| `getLicenseStatus()` | Read flags before opening the camera. |
-| `detect` / `faceAttribute` / `landmarks` | Still-image face, attributes, and landmarks. |
-| `templateExtraction` / `similarity` | Template bytes and a 1:1 score. |
-| `enroll` / `bestMatch` | On-device gallery and 1:N search. |
-| `liveness` / `deepfake` | PAD and deepfake. REAL only if both pass. |
+| `activate(license)` then `init()` | Activate the license, then initialize the engine. Run these calls in order on one background thread. |
+| `getLicenseStatus()` | Check the license status and enabled features before opening the camera. |
+| `detect` / `faceAttribute` / `landmarks` | Detect faces in an image and return facial attributes and landmark coordinates. |
+| `templateExtraction` / `similarity` | Create a numerical representation of a face and compare two faces to obtain a similarity score. |
+| `enroll` / `bestMatch` | Save faces in a local gallery and search it for the closest match. |
+| `liveness` / `deepfake` | Run presentation attack detection and deepfake checks. Report REAL only when both pass. |
 
-Camera frames stay on the UI thread. Engine calls stay on one background thread. The engine is not concurrent.
+Keep camera preview updates on the UI thread. Run SDK operations sequentially on a single background thread; the engine does not support simultaneous calls.
 
 ---
 
-## Platforms
+## SDKs for other platforms
 
 | | Platform | Repo |
 | --- | --- | --- |

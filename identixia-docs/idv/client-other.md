@@ -1,9 +1,9 @@
 ---
 description: >-
-  Other IDV applicant demo hosts.
+  Explore Flutter and React Native sample clients for connecting mobile applicant capture to Identixia IDV sessions.
 ---
 
-# Flutter & React Native demos
+# Flutter and React Native Identity Verification Samples
 
 ## Demo hosts
 

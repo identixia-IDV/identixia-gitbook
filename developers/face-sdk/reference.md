@@ -1,10 +1,10 @@
 ---
 description: >-
-  Documentation for Face Recognition and Face Liveness Detection SDKs by platform.
+  Find platform guides and sample repositories for Identixia face recognition and liveness detection SDKs.
 icon: book
 ---
 
-# Reference
+# Face Recognition SDK Platform Reference
 
 Documentation for Face Recognition and Face Liveness Detection SDKs.
 

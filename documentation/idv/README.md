@@ -1,14 +1,14 @@
 ---
 description: >-
-  IDV is Identixia's self-host web & mobile KYC platform. It uses SDK Server as the biometric backend.
+  Build web and mobile identity verification with Identixia IDV. Connect document OCR, face matching, capture apps, verification sessions, and reviews.
 icon: building
 ---
 
-# IDV: Self-Host KYC Platform
+# Self-Hosted Identity Verification and KYC Platform
 
-**IDV** is Identixia's open web & mobile KYC platform. It uses [SDK Server](../sdk-server/) (Face + Document HTTP engines) as the biometric backend.
+**IDV** is Identixia's self-hosted identity verification platform for web and mobile Know Your Customer (KYC) workflows. It uses [SDK Server](../sdk-server/) (Face + Document HTTP engines) as the biometric backend.
 
-It does not replace those SDKs — it orchestrates them between your company systems and applicant capture apps.
+The IDV platform connects your company backend and applicant capture apps to the Face and Document SDK services. It manages the verification workflow while those SDKs perform biometric and document processing.
 
 ## Project components
 
@@ -37,7 +37,9 @@ Applicant app ──► Company backend :14195 ──► IDV server :14187 ─�
 8. [Quick start](https://docs.identixia.com/guides/idv/quick-start) · [Walkthrough](https://docs.identixia.com/guides/idv/walkthrough)
 9. [Production](https://docs.identixia.com/guides/idv/production) · [Reference](reference.md)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/idv/audit-console.png" alt="Identity Console" width="520"><figcaption>Identity Console</figcaption></figure>
+{% hint style="info" %}
+Identity Console
+{% endhint %}
 
 {% hint style="danger" %}
 **Safety:** Keep the company **service bearer** on the company backend only. Capture apps receive a short-lived **capture token**. Never commit secrets. `IDV_OPEN_API=1` / bearer `demo` is for **localhost demos only**.

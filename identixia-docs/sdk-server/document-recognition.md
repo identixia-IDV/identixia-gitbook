@@ -1,9 +1,9 @@
 ---
 description: >-
-  Full HTTP integration guide for ID document recognition (+ optional authenticity).
+  Integrate the self-hosted Identixia ID document recognition and OCR HTTP API on Windows or Docker. Follow setup, activation, and request examples.
 ---
 
-# Document Recognition
+# ID Document Recognition and OCR HTTP API
 
 Start Document full product on port **14102** (recognition-only uses **14106**).
 

@@ -1,9 +1,9 @@
 ---
 description: >-
-  Full Face SDK HTTP APIs for Windows and Linux/Docker.
+  Deploy Identixia face recognition with licensed liveness checks using self-hosted HTTP APIs on Windows or Linux and Docker.
 ---
 
-# Server (Windows & Docker)
+# Face Recognition APIs for Windows and Docker
 
 ## Platforms
 

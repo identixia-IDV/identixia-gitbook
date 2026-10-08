@@ -1,10 +1,10 @@
 ---
 description: >-
-  Face recognition SDK for Android. On-device enrollment, 1:N identification, and face attributes for KYC, plus passive liveness when the license includes it.
+  Integrate Identixia face recognition and liveness detection on Android. Follow setup and license activation steps for face detection, templates, and matching.
 icon: mobile
 ---
 
-# Face SDK — Android
+# Face Recognition and Liveness Detection SDK for Android
 
 
 ## Overview
@@ -33,10 +33,10 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 | Face detection | Bounding box, landmarks, and pose |
 | Attributes | Age, gender, and related traits when enabled |
 | Quality | ICAO-style image and face quality scores |
-| Templates | Compact feature vectors stored in **your** database |
+| Templates | Numerical representations of faces that you can store in **your** database for comparison |
 | 1:1 match | Compare two images or two templates |
-| 1:N identify | Enroll a gallery and search (mobile VideoWorker / server gallery) |
-| Passive liveness + deepfake | PAD and deepfake together when the license includes `liveness`; REAL only if both pass |
+| 1:N identify | Save face templates in a gallery, then search for the closest match using the platform's gallery API |
+| Passive liveness + deepfake | Run presentation attack detection (PAD) and deepfake checks when the license includes `liveness`; report REAL only when both pass |
 
 ## Prerequisites
 
@@ -51,7 +51,7 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -79,7 +79,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -157,7 +157,7 @@ That line pulls the engine and, for face recognition, the reusable **kit** (`lib
 | `-13` | No document |
 | `-16` | Liveness failed (when gated) |
 
-Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
 
 
 ## API reference — mobile face SDK
@@ -275,29 +275,29 @@ Keep the same license product line across stacks. From the [Face SDK](https://do
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png" alt="Home" width="150"><figcaption>Home</figcaption></figure>
+![Home](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/capture.png" alt="Capture" width="150"><figcaption>Capture</figcaption></figure>
+![Capture](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/capture.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/enroll.png" alt="Enroll" width="150"><figcaption>Enroll</figcaption></figure>
+![Enroll](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/enroll.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/identify.png" alt="Identify" width="150"><figcaption>Identify</figcaption></figure>
+![Identify](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/identify.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/detect.png" alt="Detect" width="150"><figcaption>Detect</figcaption></figure>
+![Detect](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/detect.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute.png" alt="Attributes" width="150"><figcaption>Attributes</figcaption></figure>
+![Attributes](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute-quality.png" alt="Quality" width="150"><figcaption>Quality</figcaption></figure>
+![Quality](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute-quality.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/landmarks.png" alt="Landmarks" width="150"><figcaption>Landmarks</figcaption></figure>
+![Landmarks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/landmarks.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/match.png" alt="Match" width="150"><figcaption>Match</figcaption></figure>
+![Match](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/match.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute-liveness.png" alt="Liveness" width="150"><figcaption>Liveness</figcaption></figure>
+![Liveness](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/attribute-liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/settings.png" alt="Settings" width="150"><figcaption>Settings</figcaption></figure>
+![Settings](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/settings.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/about.png" alt="About" width="150"><figcaption>About</figcaption></figure>
+![About](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/about.png)
 
 ## Resources
 
@@ -333,17 +333,19 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia Face Recognition — Android
+## Face Recognition and Liveness Detection SDK for Android — Sample App | Identixia
 
-**On-device face recognition SDK** for Android: enroll, **1:N identification**, guided capture, attributes, and optional **passive face liveness + deepfake** (authenticity REAL only if both pass). Face template matching and images stay on the phone — nothing is sent to Identixia cloud. Use it for KYC selfie checks, workforce access, or private 1:N galleries without a biometrics SaaS hop.
+Integrate **face recognition and liveness detection** with the **Identixia Android SDK**. This repository provides a native Android sample app for face detection, face template extraction, and face matching. Face templates are numerical representations used to compare faces. Enroll faces in a local gallery and search for a match with one-to-many (1:N) identification. Passive liveness, also called presentation attack detection (PAD), and deepfake detection are available when licensed. The combined authenticity result is REAL only when both checks pass.
+
+Use the sample as a starting point for biometric identity verification, face-based access control, and customer onboarding. Processing runs on the device; images are not sent to the Identixia cloud.
 
 Modes in the demo: **Enroll · Identify · Capture · Attribute**.
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/android). This page covers the sample repository.
+> For setup, integration, and API guides, see the [Face Recognition and Liveness Detection SDK documentation for Android](https://docs.identixia.com/developers/face-sdk/android). This page covers the sample repository.
 
-## Basics
+## SDK overview
 
-Read this once before cloning. Mobile demos ship a **bundled license** for the sample application / bundle id. Production apps need a new key from Identixia. [Initial commands](#-initial-commands) lists clone → place runtime → run → activate options.
+The sample includes a demo license. Your own application requires a key issued for its application identifier.
 
 | Topic | Basic information |
 | --- | --- |
@@ -351,14 +353,14 @@ Read this once before cloning. Mobile demos ship a **bundled license** for the s
 | **Modes** | Enroll · Identify (1:N) · Capture · Attribute · optional passive liveness |
 | **Runtime zip** | `install.gradle` uses `libfacefullsdk/` when `facefullsdk.aar` is already in this repo |
 | **Demo id / license** | `com.identixia.facefullsdk` — use the sample id with the bundled demo license |
-| **Activate** | Sample app: keep the demo id and bundled key. Your app: new applicationId / bundle id → [contact](#-contact) → call the SDK activate API (see docs). |
+| **Activate** | Keep the sample’s application identifier and bundled key for evaluation. For your own app, request a key for its Android application ID or iOS bundle identifier and activate it before initializing the SDK. |
 | **Tools** | Android Studio · **JDK 17** · physical **arm64** phone |
-| **UI** | Four demo modes after SDK Ready |
+| **UI** | Four demo modes become available after SDK initialization completes |
 | **Privacy** | Templates stay on device — no Identixia cloud |
 
 ---
 
-## Initial commands
+## Quick start
 
 Clone the sample, place the runtime, and run it.
 
@@ -372,18 +374,18 @@ The sample applies `install.gradle`. When `libfacefullsdk/facefullsdk.aar` is al
 
 Open this folder in **Android Studio** (JDK 17) → Run on a physical **arm64** device.
 
-Please [contact us](#-contact) to get a license for your own app. The sample already includes a demo license for its application id.
+The sample includes a demo license for its existing application identifier. Keep that identifier and the bundled key when running the demo. For your own app, request a key from [contact@identixia.com](mailto:contact@identixia.com), replace the demo key, and rebuild. See [SDK license and activation](#-sdk-license-and-activation) below for the source files and activation steps.
 
-Wait until Home status = **Ready**, then use Camera / Gallery (or the face mode tiles). Confirm Result / About shows a licensed state before integrating into your own app.
+Wait for the Home screen to show **Ready**, then select a capture option. Check the license status on the Result or About screen before integrating the SDK into your own app.
 
 ---
 
-## What you get
+## Features
 
 | Capability | What it does |
 | --- | --- |
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -394,7 +396,7 @@ Wait until Home status = **Ready**, then use Camera / Gallery (or the face mode 
 
 ---
 
-## Install
+## SDK installation
 
 The sample builds with the AAR already in `libfacefullsdk/`. Your own app adds one line to the app module:
 
@@ -419,39 +421,49 @@ Keep `minSdk 24`, `abiFilters` `arm64-v8a` and `armeabi-v7a`, and `packaging { j
 
 ---
 
-## License
+## SDK license and activation
 
-| | |
-| --- | --- |
-| Demo id | `com.identixia.facefullsdk` |
-| Capabilities | Face recognition (detect / templates / match) and/or passive face liveness + deepfake |
+<p align="center">
+<a href="#-contact"><img src="https://img.shields.io/badge/Your%20app-Request%20a%20key-0F766E?style=for-the-badge&logo=gmail&logoColor=white" alt="Request a key" /></a>
+</p>
 
-The code below shows how to use the license:
+<p align="center">
+</p>
 
-[https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/blob/e8782d9082a02bddd139bf90abcc8ac737ecda4b/app/src/main/java/com/identixia/facefullsdk/ui/MainActivity.kt#L34-L36](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/blob/e8782d9082a02bddd139bf90abcc8ac737ecda4b/app/src/main/java/com/identixia/facefullsdk/ui/MainActivity.kt#L34-L36)
+<p align="center"><img src="https://img.shields.io/badge/Sample%20code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Sample code" /></p>
 
-[https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/blob/e8782d9082a02bddd139bf90abcc8ac737ecda4b/app/src/main/java/com/identixia/facefullsdk/ui/MainActivity.kt#L105-L122](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/blob/e8782d9082a02bddd139bf90abcc8ac737ecda4b/app/src/main/java/com/identixia/facefullsdk/ui/MainActivity.kt#L105-L122)
+The sample includes a demo license tied to its application identifier. Keep the sample’s identifier and bundled key when evaluating the app. License validation runs locally.
 
-Please [contact us](#-contact) to get a license for **your own app**.
+The demo uses these identifiers:
+
+- Android application ID: `com.identixia.facefullsdk`.
+
+To use the SDK in your own app, email [contact@identixia.com](mailto:contact@identixia.com) with your platform, application ID or bundle identifier, and the SDK features you need. Request a key for your app, replace the demo key in the source file below, and rebuild the app. For apps targeting both Android and iOS, use the key issued for each platform.
+
+Activate the license before initializing the SDK, following the sample’s startup code. Check the license status before using SDK features. If activation fails, verify that the key matches your app identifier and contact Identixia if you need a replacement.
+
+[Demo license definition](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/blob/main/app/src/main/java/com/identixia/facefullsdk/ui/MainActivity.kt#L23-L23)
+
+[SDK activation call](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/blob/main/app/src/main/java/com/identixia/facefullsdk/ui/MainActivity.kt#L136-L136)
 
 ## API
 
-The sample and your app use the same method names.
+The following SDK methods are used by the sample and can also be called from your application.
 
-| API | What it returns |
+| API | Purpose |
 | --- | --- |
-| `activate(license)` then `init()` | Load the engine. Call both on one background thread. |
-| `getLicenseStatus()` | Read flags before opening the camera. |
-| `detect` / `faceAttribute` / `landmarks` | Still-image face, attributes, and landmarks. |
-| `templateExtraction` / `similarity` | Template bytes and a 1:1 score. |
-| `enroll` / `bestMatch` | On-device gallery and 1:N search. |
-| `liveness` / `deepfake` | PAD and deepfake. REAL only if both pass. |
+| `activate(license)` then `init()` | Activate the license, then initialize the engine. Run these calls in order on one background thread. |
+| `getLicenseStatus()` | Check the license status and enabled features before opening the camera. |
+| `detect` / `faceAttribute` / `landmarks` | Detect faces in an image and return facial attributes and landmark coordinates. |
+| `templateExtraction` / `similarity` | Create a numerical representation of a face and compare two faces to obtain a similarity score. |
+| `enroll` / `bestMatch` | Save faces in a local gallery and search it for the closest match. |
+| `liveness` / `deepfake` | Run presentation attack detection and deepfake checks. Report REAL only when both pass. |
 
-Camera frames stay on the UI thread. Engine calls stay on one background thread. The engine is not concurrent.
+Keep camera preview updates on the UI thread. Run SDK operations sequentially on a single background thread; the engine does not support simultaneous calls.
 
 ---
 
-## Platforms
+## SDKs for other platforms
 
 | | Platform | Repo |
 | --- | --- | --- |

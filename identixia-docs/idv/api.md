@@ -1,9 +1,9 @@
 ---
 description: >-
-  Create a verification session, mint a capture token, and hand launchUrl to the applicant.
+  Create IDV verification sessions, issue capture tokens, and open applicant capture flows through your company backend.
 ---
 
-# Creating a session (API)
+# Identity Verification Session API
 
 ## Step 1 — Get a service credential
 

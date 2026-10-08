@@ -1,9 +1,9 @@
 ---
 description: >-
-  Document repositories that ship OCR/MRZ and authenticity together.
+  Choose Identixia SDKs that combine ID document recognition and OCR with licensed liveness checks for mobile or server integration.
 ---
 
-# Full product (recognition + liveness)
+# ID Document Recognition and OCR with Liveness Detection
 
 ## When to use
 

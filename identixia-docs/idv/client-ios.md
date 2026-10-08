@@ -1,9 +1,9 @@
 ---
 description: >-
-  Run the IDV iOS applicant demo.
+  Run the iOS IDV sample app and connect applicant document and selfie capture to your identity verification backend.
 ---
 
-# iOS demo
+# iOS Identity Verification Sample App
 
 ## Run
 

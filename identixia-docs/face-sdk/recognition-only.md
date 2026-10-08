@@ -1,9 +1,9 @@
 ---
 description: >-
-  Face recognition without liveness packs — Windows and Linux/Docker.
+  Choose a recognition-only Identixia SDK for face recognition. Compare available repositories and integration options.
 ---
 
-# Recognition-only products
+# Face Recognition SDKs without Liveness
 
 ## When to use
 

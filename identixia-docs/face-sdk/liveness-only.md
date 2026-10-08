@@ -1,9 +1,9 @@
 ---
 description: >-
-  Standalone face liveness SDKs without the full recognition gallery stack.
+  Choose a standalone Identixia face liveness detection SDK for anti-spoofing checks, separate from recognition.
 ---
 
-# Liveness-only products
+# Standalone Face Liveness Detection SDKs
 
 ## When to use
 

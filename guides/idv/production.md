@@ -1,10 +1,10 @@
 ---
 description: >-
-  Hardening checklist: auth, TLS, databases, engines, and what not to expose.
+  Prepare an IDV deployment with authentication, TLS, database configuration, engine connectivity, and restricted service access.
 icon: industry
 ---
 
-# Production
+# Deploy the IDV Platform to Production
 
 ## Checklist
 

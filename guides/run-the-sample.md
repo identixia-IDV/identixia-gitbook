@@ -1,12 +1,13 @@
 ---
-description: Android and iOS commands for the Identixia sample apps.
+description: >-
+  Set up Identixia SDK sample apps for Android, iOS, Flutter, React Native, and Ionic, then download the runtime and activate your license.
 icon: play
 ---
 
-# Run the sample
+# Run the Identixia SDK Sample Apps
 
 {% hint style="info" %}
-Clone the product repository, then open the tab for your stack. Android and iOS are separate setups. On macOS use `python3`.
+Clone the repository for your chosen product and follow the tab for your development framework. Complete Android and iOS setup separately; iOS requires a Mac. Use `python3` on macOS.
 {% endhint %}
 
 ```bash
@@ -84,7 +85,7 @@ npm run ios
 {% endtabs %}
 
 {% hint style="success" %}
-Wait until the sample shows **Ready**, then open the capture, enroll, or recognize action that the product includes.
+Wait for the sample to show **Ready**, then select one of its supported features, such as image capture, face enrollment, or document recognition.
 {% endhint %}
 
 {% include "./.gitbook/includes/footer.md" %}

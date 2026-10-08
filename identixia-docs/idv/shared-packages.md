@@ -1,9 +1,9 @@
 ---
 description: >-
-  IDV/packages libraries shared by platform and company UIs.
+  Locate the shared libraries used by the Identixia platform and company interfaces in IDV/packages.
 ---
 
-# Shared packages
+# Shared IDV Platform and Console Packages
 
 | Package | Role |
 | --- | --- |

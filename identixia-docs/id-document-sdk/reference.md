@@ -1,9 +1,9 @@
 ---
 description: >-
-  Documentation for ID Document Recognition and Document Liveness SDKs by platform.
+  Find platform guides and sample repositories for Identixia ID document recognition and OCR and liveness detection SDKs.
 ---
 
-# Reference
+# ID Document Recognition and OCR SDK Platform Reference
 
 Documentation for ID Document Recognition and Document Liveness SDKs.
 

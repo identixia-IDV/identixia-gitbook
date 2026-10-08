@@ -1,9 +1,9 @@
 ---
 description: >-
-  Full HTTP integration guide for face recognition (+ optional liveness).
+  Integrate the self-hosted Identixia face recognition HTTP API on Windows or Docker. Follow setup, activation, and request examples.
 ---
 
-# Face Recognition
+# Face Recognition HTTP API
 
 Start Face Recognition (+ Liveness) Windows/Docker on port **14103** (recognition-only uses **14104**).
 

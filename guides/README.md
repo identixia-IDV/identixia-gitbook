@@ -1,9 +1,10 @@
 ---
-description: Choose a product, run the sample, and activate a license.
+description: >-
+  Choose an Identixia product, run a sample app, request an SDK license, and configure your identity verification deployment.
 icon: compass
 ---
 
-# Guides
+# Identity Verification SDK Setup and Licensing Guides
 
 {% hint style="info" %}
 Get a sample running before you embed the SDK. API details stay in [Developers](https://docs.identixia.com/developers).

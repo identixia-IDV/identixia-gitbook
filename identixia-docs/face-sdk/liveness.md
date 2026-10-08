@@ -1,9 +1,9 @@
 ---
 description: >-
-  Passive face liveness: when it runs, which products include it, and how to read the score.
+  Understand Identixia face liveness detection, presentation attack checks, license requirements, and how to interpret results.
 ---
 
-# Face liveness
+# Face Liveness Detection and Anti-Spoofing
 
 ## Overview
 
@@ -45,4 +45,4 @@ Liveness-only Docker uses the same `/api/face/liveness` path on port **14105** �
 
 Run activate → init → liveness on a **background** thread. Keep the camera preview on the UI thread. If VideoWorker / tracking is used, start it when the camera screen appears and stop it when the screen closes.
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/mobile/liveness.png" alt="Mobile liveness" width="200"><figcaption>Mobile liveness result</figcaption></figure>
+![Mobile liveness](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/mobile/liveness.png)

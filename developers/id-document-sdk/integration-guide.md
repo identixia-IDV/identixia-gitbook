@@ -1,10 +1,10 @@
 ---
 description: >-
-  How to start a Document project, download runtime, place document.xdb, and call every API.
+  Set up the Identixia ID document recognition and OCR SDK, download native libraries and models, activate a license, and call the APIs.
 icon: code
 ---
 
-# ID Document SDK — Integration guide
+# ID Document Recognition and OCR SDK Integration Guide
 
 This is the **full ID Document SDK integration path**. Open the platform page for your stack after you finish these steps.
 

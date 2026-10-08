@@ -1,12 +1,12 @@
 ---
 description: >-
-  How to request an Identixia license for Face SDK, ID Document SDK, and IDV.
+  Request a license for Face SDK, ID Document SDK, or IDV. Learn which app identifier or machine code to provide and how to activate.
 ---
 
-# Request a License & Support
+# Request an Identixia SDK License and Technical Support
 
 {% hint style="warning" %}
-Demo keys work only with the demo application id. A production key must match the id or machine code you send.
+The bundled demo key is tied to the sample application's identifier. For your own app or server, request a license issued for its application ID, bundle identifier, or machine code.
 {% endhint %}
 
 ## Mobile SDK (Face / Document)
@@ -14,15 +14,15 @@ Demo keys work only with the demo application id. A production key must match th
 {% stepper %}
 {% step %}
 ### Build with your id
-Use your applicationId or bundle id, not the demo id.
+For your own app, configure its Android application ID or iOS bundle identifier before requesting a license. Keep the original identifier when evaluating the sample with its bundled demo key.
 {% endstep %}
 {% step %}
 ### Send the id
-Contact Identixia with that id and the product: Face recognition, Face liveness, Document recognition, or Document authenticity.
+Send Identixia your application identifier, target platform, and required features: face recognition, face liveness, document OCR, or document liveness. The license must match the app and features you intend to use.
 {% endstep %}
 {% step %}
 ### Activate
-Call activate, then init, as shown on the platform page.
+Replace the demo key with the key issued for your app. Follow the platform sample to activate the license before initializing the SDK, then check the license status before using its features.
 {% endstep %}
 {% endstepper %}
 
@@ -31,15 +31,15 @@ Call activate, then init, as shown on the platform page.
 {% stepper %}
 {% step %}
 ### Start the API
-Start the container or Windows service once.
+Start the Docker container or Windows API service so you can request the machine code used for licensing.
 {% endstep %}
 {% step %}
 ### Copy the machine code
-Call `GET /api/machinecode` and copy `data.machinecode`. Docker and bare-metal codes differ.
+Call `GET /api/machinecode` in the environment where the SDK will run and copy `data.machinecode` from the JSON response. Send this code to Identixia with the product you need; a container may report a different code from its host.
 {% endstep %}
 {% step %}
 ### Activate
-Call `POST /api/activate`, or set `LICENSE=` in `.env` and restart. Confirm with `GET /api/licenseStatus`.
+Submit your issued key to `POST /api/activate`, or set the `LICENSE` value in the server's `.env` file and restart. Check `GET /api/licenseStatus` to confirm activation and the features enabled by your license.
 {% endstep %}
 {% endstepper %}
 

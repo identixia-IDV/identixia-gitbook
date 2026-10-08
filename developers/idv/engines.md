@@ -1,10 +1,10 @@
 ---
 description: >-
-  Start and activate Document and Face HTTP engines before running IDV.
+  Start and activate the Face and ID Document HTTP engines before connecting them to your self-hosted IDV platform.
 icon: microchip
 ---
 
-# Prerequisites: engines
+# Set Up Face and Document Engines for IDV
 
 ## Why this comes first
 

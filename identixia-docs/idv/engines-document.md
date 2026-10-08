@@ -1,9 +1,9 @@
 ---
 description: >-
-  How IDV calls the ID Document SDK HTTP API.
+  Connect the ID Document SDK HTTP API to IDV for document recognition, OCR, and licensed document authenticity checks.
 ---
 
-# Document engine
+# Document OCR Engine Integration with IDV
 
 ## Default configuration
 

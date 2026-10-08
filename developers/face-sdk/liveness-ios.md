@@ -1,10 +1,10 @@
 ---
 description: >-
-  Passive face liveness SDK for iOS. On-device presentation-attack and deepfake checks for KYC. A face is REAL only when both pass. Sample app and docs included.
+  Integrate Identixia face liveness detection on iOS. Follow setup and license activation steps for passive anti-spoofing and deepfake checks.
 icon: shield-halved
 ---
 
-# Face liveness — iOS
+# Face Liveness Detection SDK for iOS
 
 
 ## Overview
@@ -30,7 +30,7 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 
 | Capability | Description |
 | --- | --- |
-| Passive face liveness + deepfake | Score one RGB face for PAD and deepfake; REAL only when both engines say real |
+| Passive face liveness + deepfake | Check a color face image for presentation attacks and deepfakes; report REAL only when both checks pass |
 | License gating | Liveness / deepfake run only when the license includes `liveness` |
 
 ## Prerequisites
@@ -44,7 +44,7 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -72,7 +72,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/FaceLivenessDetection-iOS/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -140,7 +140,7 @@ Wait until Home status shows **Ready** before opening camera modes.
 | `-13` | No document |
 | `-16` | Liveness failed (when gated) |
 
-Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
 
 
 ## API reference — mobile face liveness
@@ -184,7 +184,7 @@ Without a liveness entitlement the score is omitted — treat as **not evaluated
 | `-13` | No document |
 | `-16` | Liveness failed (when gated) |
 
-Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
 
 ## Troubleshooting
 
@@ -199,9 +199,9 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/mobile/liveness.png" alt="Mobile liveness result" width="220"><figcaption>Mobile liveness result</figcaption></figure>
+![Mobile liveness result](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/mobile/liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/desktop/demo-ui.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
+![Desktop liveness demo](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/desktop/demo-ui.png)
 
 ## Resources
 
@@ -237,15 +237,17 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia Face Liveness Detection — iOS
+## Face Liveness Detection SDK for iOS — Sample App | Identixia
 
-**On-device face liveness SDK** for iOS: passive face PAD and deepfake checks (authenticity is **REAL** only if both pass). All processing stays on the iPhone — no biometric data is sent to Identixia cloud.
+Integrate **face liveness detection and anti-spoofing** with the **Identixia iOS SDK**. This repository provides a native iOS sample app for passive face liveness detection and deepfake detection. Use presentation attack detection (PAD) to check for face spoofing and deepfake detection to check for manipulated face images. The combined authenticity result is REAL only when both checks pass. Face recognition and matching are not included.
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/liveness-ios). This page covers the sample repository.
+Use the sample to add selfie liveness checks to remote onboarding and biometric identity verification alongside a separate face matching service. Processing runs on the device; images are not sent to the Identixia cloud.
 
-## Basics
+> For setup, integration, and API guides, see the [Face Liveness Detection SDK documentation for iOS](https://docs.identixia.com/developers/face-sdk/liveness-ios). This page covers the sample repository.
 
-Read this once before cloning. Mobile demos may ship a **bundled license** for the sample application id. Production apps need a new key from Identixia.
+## SDK overview
+
+The sample includes a demo license. Your own application requires a key issued for its application identifier.
 
 | Topic | Basic information |
 | --- | --- |
@@ -258,7 +260,7 @@ Read this once before cloning. Mobile demos may ship a **bundled license** for t
 
 ---
 
-## Initial commands
+## Quick start
 
 ```bash
 git clone https://github.com/identixia-IDV/FaceLivenessDetection-iOS.git
@@ -268,13 +270,13 @@ python scripts/get_runtime.py
 
 Open `FaceLivenessSDK.xcodeproj` in **Xcode**, set your Team, and run on a physical iPhone. Home status should show ready, then **Liveness / Settings / About** unlock.
 
-Please [contact us](#-contact) to get a license for your own app. The sample may already include a demo license for its application id.
+The sample includes a demo license for its existing application identifier. Keep that identifier and the bundled key when running the demo. For your own app, request a key from [contact@identixia.com](mailto:contact@identixia.com), replace the demo key, and rebuild. See [SDK license and activation](#-sdk-license-and-activation) below for the source files and activation steps.
 
-Wait until Home status shows **Ready**, then try the demo tiles. Confirm Result / About shows a licensed state before integrating into your own app.
+Wait for the Home screen to show **Ready**, then select a demo feature. Check the license status on the Result or About screen before integrating the SDK into your own app.
 
 ---
 
-## What you get
+## Features
 
 | Capability | What it does |
 | --- | --- |
@@ -282,7 +284,7 @@ Wait until Home status shows **Ready**, then try the demo tiles. Confirm Result 
 | **Settings** | Camera lens and liveness threshold |
 | **About** | SDK status and on-device anti-spoofing summary |
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -292,15 +294,15 @@ Wait until Home status shows **Ready**, then try the demo tiles. Confirm Result 
 
 ---
 
-## Install
+## SDK installation
 
-Download the native engine files from this repository’s GitHub Release. The helper script places libraries and database packs in the correct folders.
+Run the following script to download the native SDK libraries and model files from this repository’s GitHub Releases. The script places each file in the folder used by the sample.
 
 ```bash
 python scripts/get_runtime.py
 ```
 
-To download a specific Release tag instead of the latest build:
+To select a release explicitly, pass its tag with `--tag`. For example:
 
 ```bash
 python scripts/get_runtime.py --tag 1.0.0
@@ -316,26 +318,47 @@ Open `FaceLivenessSDK.xcodeproj` in **Xcode**, set your Team, and run on a physi
 
 ---
 
-## License
+## SDK license and activation
 
-Licenses are offline and bound to your bundle id. Please [contact us](#-contact) to get a license for **your own app**. Keep the sample bundle id only while using the bundled demo key.
+<p align="center">
+<a href="#-contact"><img src="https://img.shields.io/badge/Your%20app-Request%20a%20key-0F766E?style=for-the-badge&logo=gmail&logoColor=white" alt="Request a key" /></a>
+</p>
+
+<p align="center">
+</p>
+
+<p align="center"><img src="https://img.shields.io/badge/Sample%20code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Sample code" /></p>
+
+The sample includes a demo license tied to its application identifier. Keep the sample’s identifier and bundled key when evaluating the app. License validation runs locally.
+
+The demo uses these identifiers:
+
+- iOS bundle identifier: `com.identixia.faceliveness.app`.
+
+To use the SDK in your own app, email [contact@identixia.com](mailto:contact@identixia.com) with your platform, application ID or bundle identifier, and the SDK features you need. Request a key for your app, replace the demo key in the source file below, and rebuild the app. For apps targeting both Android and iOS, use the key issued for each platform.
+
+Activate the license before initializing the SDK, following the sample’s startup code. Check the license status before using SDK features. If activation fails, verify that the key matches your app identifier and contact Identixia if you need a replacement.
+
+[Demo license definition](https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/main/FaceLivenessSDK/Home/ViewController.swift#L8-L11)
+
+[SDK activation call](https://github.com/identixia-IDV/FaceLivenessDetection-iOS/blob/main/FaceLivenessSDK/Home/ViewController.swift#L154-L154)
 
 ## API
 
-The sample and your app use the same method names.
+The following SDK methods are used by the sample and can also be called from your application.
 
-| API | What it returns |
+| API | Purpose |
 | --- | --- |
-| `activate(license)` then `init()` | Load the engine. Call both on one background thread. |
-| `getLicenseStatus()` | Read flags before opening the camera. |
-| `liveness` / `deepfake` | PAD and deepfake. REAL only if both pass. |
+| `activate(license)` then `init()` | Activate the license, then initialize the engine. Run these calls in order on one background thread. |
+| `getLicenseStatus()` | Check the license status and enabled features before opening the camera. |
+| `liveness` / `deepfake` | Run presentation attack detection and deepfake checks. Report REAL only when both pass. |
 | Enroll / 1:N | Not included. Use a Face Recognition repository for templates. |
 
-Camera frames stay on the UI thread. Engine calls stay on one background thread. The engine is not concurrent.
+Keep camera preview updates on the UI thread. Run SDK operations sequentially on a single background thread; the engine does not support simultaneous calls.
 
 ---
 
-## Platforms
+## SDKs for other platforms
 
 | | Platform | Repo |
 | --- | --- | --- |

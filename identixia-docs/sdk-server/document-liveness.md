@@ -1,9 +1,9 @@
 ---
 description: >-
-  Full HTTP integration guide for document authenticity / PAD.
+  Integrate the self-hosted Identixia ID document liveness detection HTTP API on Windows or Docker. Follow setup, activation, and request examples.
 ---
 
-# Document Liveness
+# ID Document Liveness Detection HTTP API
 
 Start Document Liveness Windows/Docker on port **14107** (the full Document product also exposes authenticity on **14102**).
 

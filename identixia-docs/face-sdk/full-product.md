@@ -1,9 +1,9 @@
 ---
 description: >-
-  Face SDK repositories that ship recognition and passive liveness together.
+  Choose Identixia SDKs that combine face recognition with licensed liveness checks for mobile or server integration.
 ---
 
-# Full product (recognition + liveness)
+# Face Recognition with Liveness Detection
 
 ## When to use this line
 

@@ -1,10 +1,10 @@
 ---
 description: >-
-  IDV runtime flow across company backend, platform server, engines, and consoles.
+  Understand how the IDV server, company backend, capture apps, biometric engines, and admin consoles work together.
 icon: diagram-project
 ---
 
-# Architecture
+# Identity Verification Platform Architecture
 
 ## Runtime flow
 

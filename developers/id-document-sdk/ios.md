@@ -1,10 +1,10 @@
 ---
 description: >-
-  ID document recognition SDK for iOS. On-device passport, national ID, and driver license OCR, MRZ, and barcode capture for KYC. Document liveness runs when licensed.
+  Integrate Identixia ID document OCR and liveness detection on iOS. Follow setup and license activation steps for passport and ID card OCR, MRZ, and barcode reading.
 icon: mobile
 ---
 
-# ID Document SDK — iOS
+# ID Document OCR and Liveness Detection SDK for iOS
 
 
 ## Overview
@@ -31,8 +31,8 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 | Capability | Description |
 | --- | --- |
 | Locate and crop | Find the ID document in a camera frame or still image |
-| OCR | Visual-zone fields (name, document number, dates, and related data) |
-| MRZ | Machine-readable zone parse and checksum checks |
+| OCR | Read printed document fields such as the name, document number, and dates using optical character recognition |
+| MRZ | Read the machine-readable zone (MRZ) and validate its check digits |
 | Barcode / QR | Extracted when present on the document |
 | Front and back | Capture both sides when your workflow requires it |
 | Document authenticity | Anti-spoof checks when the license includes `authenticity` |
@@ -49,7 +49,7 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
 
 ### Download (recommended)
 
@@ -77,7 +77,7 @@ Open the repository **Releases** page and download the asset named above:
 https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/latest/download/<asset>
 ```
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
@@ -145,7 +145,7 @@ Wait until Home status shows **Ready** before opening camera modes.
 | `-13` | No document |
 | `-16` | Liveness failed (when gated) |
 
-Serialize native SDK calls on **one background thread**. The engine is not concurrent.
+Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
 
 
 ## API reference — mobile document SDK
@@ -209,15 +209,15 @@ See [Result JSON](https://docs.identixia.com/id-document-sdk/result-json) and [S
 
 ## Screenshots
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Status" width="420"><figcaption>Status</figcaption></figure>
+![Status](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-fields-visual.png" alt="Visual fields" width="420"><figcaption>Visual fields</figcaption></figure>
+![Visual fields](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-fields-visual.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-validity.png" alt="Validity checks" width="420"><figcaption>Validity checks</figcaption></figure>
+![Validity checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-validity.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
+![Liveness checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
+![Images](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png)
 
 ## Resources
 
@@ -253,15 +253,17 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
-## Identixia ID Document Recognition and Liveness Detection — iOS
+## ID Document Recognition and Liveness Detection SDK for iOS — Sample App | Identixia
 
-**On-device ID document recognition** for iPhone: passports, national IDs, and driver licenses with passport MRZ OCR, ID card barcode, live capture, and optional document liveness / authenticity. Designed for KYC and eKYC — **all recognition runs on device**; Identixia never receives your document images.
+Integrate **ID document OCR and liveness detection** with the **Identixia iOS SDK**. This repository provides a native iOS sample app for reading passports, national ID cards, and driver licenses. Extract identity fields using optical character recognition (OCR), read the machine-readable zone (MRZ), and decode supported document barcodes. Add document liveness checks for screen replays, printed copies, and replaced photos when enabled by your license.
 
-> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/id-document-sdk/ios). This page covers the sample repository.
+Use the sample to build document capture and data extraction into customer onboarding, Know Your Customer (KYC), and electronic KYC (eKYC) workflows. Processing runs on the device; images are not sent to the Identixia cloud.
 
-## Basics
+> For setup, integration, and API guides, see the [ID Document Recognition and Liveness Detection SDK documentation for iOS](https://docs.identixia.com/developers/id-document-sdk/ios). This page covers the sample repository.
 
-Read this once before cloning. Mobile demos ship a **bundled license** for the sample application / bundle id. Production apps need a new key from Identixia. [Initial commands](#-initial-commands) lists clone → place runtime → run → activate options.
+## SDK overview
+
+The sample includes a demo license. Your own application requires a key issued for its application identifier.
 
 | Topic | Basic information |
 | --- | --- |
@@ -269,14 +271,14 @@ Read this once before cloning. Mobile demos ship a **bundled license** for the s
 | **Documents** | Passport, national ID, driver license — OCR · passport MRZ · barcode / QR · optional document liveness |
 | **Runtime zip** | `documentfullsdk.framework` via `python scripts/get_runtime.py` (GitHub Release) |
 | **Demo id / license** | `com.identixia.documentreader.app` — bundled demo license until **12 Aug 2027** |
-| **Activate** | Sample app: keep the demo id and bundled key. Your app: new applicationId / bundle id → [contact](#-contact) → call the SDK activate API (see docs). |
+| **Activate** | Keep the sample’s application identifier and bundled key for evaluation. For your own app, request a key for its Android application ID or iOS bundle identifier and activate it before initializing the SDK. |
 | **Tools** | **Xcode 15+** · physical **iPhone** |
-| **UI** | Wide Camera Home · Gallery / About · one-scroll Result |
+| **UI** | Home screen with Camera, Gallery, and About options; results on one scrollable screen |
 | **Privacy** | All processing on device — no Identixia cloud for document data |
 
 ---
 
-## Initial commands
+## Quick start
 
 Clone the sample, place the runtime, and run it.
 
@@ -294,20 +296,20 @@ documentfullsdk.framework
 
 Open `DocumentReader.xcodeproj` in **Xcode 15+** → set Signing Team → Run on a physical iPhone.
 
-Please [contact us](#-contact) to get a license for your own app. The sample already includes a demo license for its application id.
+The sample includes a demo license for its existing application identifier. Keep that identifier and the bundled key when running the demo. For your own app, request a key from [contact@identixia.com](mailto:contact@identixia.com), replace the demo key, and rebuild. See [SDK license and activation](#-sdk-license-and-activation) below for the source files and activation steps.
 
-Wait until Home status = **Ready**, then use Camera / Gallery (or the face mode tiles). Confirm Result / About shows a licensed state before integrating into your own app.
+Wait for the Home screen to show **Ready**, then select a capture option. Check the license status on the Result or About screen before integrating the SDK into your own app.
 
 ---
 
-## What you get
+## Features
 
 | Capability | What it does |
 | --- | --- |
 
 ---
 
-## Requirements
+## System requirements
 
 | | |
 | --- | --- |
@@ -317,7 +319,7 @@ Wait until Home status = **Ready**, then use Camera / Gallery (or the face mode 
 
 ---
 
-## Install
+## SDK installation
 
 > **GitHub Release:** `python scripts/get_runtime.py` (or `--tag 1.0.0`)
 
@@ -342,29 +344,38 @@ DocumentReader.xcodeproj
 
 ---
 
-## License
+## SDK license and activation
 
-| | |
-| --- | --- |
-| Demo bundle id | `com.identixia.documentreader.app` |
-| Bundled demo license | Until **12 Aug 2027** for that id |
-| Capabilities | Recognition and/or document liveness per key |
+<p align="center">
+<a href="#-contact"><img src="https://img.shields.io/badge/Your%20app-Request%20a%20key-0F766E?style=for-the-badge&logo=gmail&logoColor=white" alt="Request a key" /></a>
+</p>
 
-The code below shows how to use the license:
+<p align="center">
+</p>
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/blob/cdb1f37a10f8f4a04a6726e22bc565733e8b1f6c/DocumentReader/ViewController.swift#L14-L15](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/blob/cdb1f37a10f8f4a04a6726e22bc565733e8b1f6c/DocumentReader/ViewController.swift#L14-L15)
+<p align="center"><img src="https://img.shields.io/badge/Sample%20code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Sample code" /></p>
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/blob/cdb1f37a10f8f4a04a6726e22bc565733e8b1f6c/DocumentReader/ViewController.swift#L147-L149](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/blob/cdb1f37a10f8f4a04a6726e22bc565733e8b1f6c/DocumentReader/ViewController.swift#L147-L149)
+The sample includes a demo license tied to its application identifier. Keep the sample’s identifier and bundled key when evaluating the app. License validation runs locally.
 
-Please [contact us](#-contact) to get a license for **your own app**.
+The demo uses these identifiers:
+
+- iOS bundle identifier: `com.identixia.documentreader.app`.
+
+To use the SDK in your own app, email [contact@identixia.com](mailto:contact@identixia.com) with your platform, application ID or bundle identifier, and the SDK features you need. Request a key for your app, replace the demo key in the source file below, and rebuild the app. For apps targeting both Android and iOS, use the key issued for each platform.
+
+Activate the license before initializing the SDK, following the sample’s startup code. Check the license status before using SDK features. If activation fails, verify that the key matches your app identifier and contact Identixia if you need a replacement.
+
+[Demo license definition](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/blob/main/DocumentReader/ViewController.swift#L11-L12)
+
+[SDK activation call](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/blob/main/DocumentReader/ViewController.swift#L216-L216)
 
 ## API
 
-The sample and your app use the same method names.
+The following SDK methods are used by the sample and can also be called from your application.
 
-| API | What it returns |
+| API | Purpose |
 | --- | --- |
-| `activate(license)` then `init()` | Load the engine. Call both on one background thread. |
+| `activate(license)` then `init()` | Activate the license, then initialize the engine. Run these calls in order on one background thread. |
 | Camera | Live capture from the sample Home screen. |
 | Gallery | Still image of a passport, national ID, or driver license. |
 | `recognize` / document process | Identity, MRZ, barcode, and field text. |
@@ -372,7 +383,7 @@ The sample and your app use the same method names.
 
 ---
 
-## Platforms
+## SDKs for other platforms
 
 | | Platform | Repo |
 | --- | --- | --- |

@@ -1,10 +1,10 @@
 ---
 description: >-
-  Identixia Hybrid issuer (license) on localhost :14190.
+  Use the local Identixia license administration service to manage licenses for your IDV platform deployment.
 icon: key
 ---
 
-# License Admin
+# IDV License Administration
 
 | Item | Detail |
 | --- | --- |

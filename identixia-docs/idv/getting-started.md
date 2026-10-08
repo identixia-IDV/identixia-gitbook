@@ -1,9 +1,9 @@
 ---
 description: >-
-  IDKIT-style setup path: structure, engines, env, first admin, sessions, API, webhooks.
+  Set up Identixia IDV step by step, from biometric engines and configuration to your first verification session and webhook.
 ---
 
-# Getting started
+# Get Started with Self-Hosted Identity Verification
 
 ## Setup guide (follow in order)
 
@@ -11,7 +11,7 @@ description: >-
 2. [Prerequisites: engines](engines.md) — Document `:14102` + Face `:14103`
 3. [Project setup](environment.md) — `.env`, tokens, storage
 4. [Initial setup process](initial-setup.md) — consoles, settings, webhook secret
-5. [Quick start](quick-start.md) · helper `python IDV/IDV_server (then company)`
+5. [Quick start](quick-start.md) — start the IDV services, then the company integration, using the commands in the guide
 6. [End-to-end walkthrough](walkthrough.md)
 7. [Session states](session-states.md)
 8. [Creating a session (API)](api.md)

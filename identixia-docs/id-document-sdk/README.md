@@ -1,13 +1,13 @@
 ---
 description: >-
-  On-premises ID Document Recognition and Document Liveness SDKs.
+  Read passports and ID cards with Identixia document OCR, MRZ, and barcode SDKs. Add licensed document liveness checks on mobile or self-hosted servers.
 ---
 
-# Introduction
+# ID Document OCR and Liveness Detection SDKs
 
-On-premises ID Document Recognition and Document Liveness (authenticity) SDKs.
+Build document capture and identity data extraction with Identixia ID document recognition, optical character recognition (OCR), and document liveness SDKs.
 
-Read passports, national IDs, and driver licenses on **your** device or server: OCR / MRZ / barcode fields, cropped images, and optional anti-spoof authenticity checks.
+Read passports, national ID cards, and driver licenses on **your** device or server. Extract printed text, read the machine-readable zone (MRZ), decode supported barcodes, and obtain cropped document images. Add document anti-spoofing checks when enabled by your license.
 
 We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic**, **Windows**, and **Linux / Docker**.
 
@@ -16,9 +16,9 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
 | **Liveness / authenticity** | Screen / printout / substitution checks | `authenticity` |
 
-Full-product repositories run both when licensed. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.
+Combined SDK repositories support both recognition and document liveness when licensed. Choose the **liveness-only** Linux / Docker API when you need document authenticity checks without text extraction.
 
-<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Document demo status" width="480"><figcaption>Desktop demo — status</figcaption></figure>
+![Document demo status](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)
 
 ## Next
 

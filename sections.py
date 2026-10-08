@@ -1000,6 +1000,10 @@ def publish() -> None:
         write_gitbook_yaml(ROOT / name)
     write_summaries()
     stamp_footers()
+    from editorial import refresh_copy
+
+    for name in ("documentation", "developers", "guides"):
+        refresh_copy(ROOT / name)
     write_site_yaml()
     linked = rewrite_repo_links(compiled)
     print(

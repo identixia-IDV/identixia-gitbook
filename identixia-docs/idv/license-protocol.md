@@ -1,9 +1,9 @@
 ---
 description: >-
-  license_v2 shared protocol used by IDV_server and license.
+  Understand the shared license_v2 protocol used by the Identixia IDV server and license issuer.
 ---
 
-# Hybrid licence protocol
+# IDV Hybrid License Protocol
 
 ## Overview
 

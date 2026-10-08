@@ -1,10 +1,10 @@
 ---
 description: >-
-  Sample company/backend: holds the service bearer and starts IDV sessions.
+  Connect your company backend to IDV, keep service credentials on the server, and create verification sessions for applicants.
 icon: gears
 ---
 
-# Company backend (server)
+# Company Backend Integration for Identity Verification
 
 ## Role
 

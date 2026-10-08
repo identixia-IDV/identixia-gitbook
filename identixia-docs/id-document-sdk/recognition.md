@@ -1,15 +1,15 @@
 ---
 description: >-
-  OCR, MRZ, barcode, and images from ID documents — APIs and repositories.
+  Learn how Identixia ID document recognition and OCR works, which APIs to use, and which sample repositories match your platform.
 ---
 
-# Document recognition
+# ID Document Recognition and OCR SDK Features and Integration
 
 ## Overview
 
 Document **recognition** finds the card in the frame and extracts:
 
-* Visual-zone fields (name, document number, dates, and related data)
+* Read printed document fields such as the name, document number, and dates using optical character recognition
 * **MRZ** (machine-readable zone)
 * Barcode / QR when present
 * Cropped images (portrait, document, signature, and related crops)

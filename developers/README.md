@@ -1,9 +1,10 @@
 ---
-description: Integrate Identixia on mobile, desktop, and your own server.
+description: >-
+  Integrate Identixia face recognition, liveness detection, document OCR, and identity verification SDKs using platform guides and HTTP APIs.
 icon: code
 ---
 
-# Developers
+# Identity Verification SDK and API Developer Guides
 
 {% hint style="warning" %}
 Recognition-only builds do not include liveness. Liveness-only builds do not enroll or search a gallery.
@@ -18,11 +19,11 @@ Recognition-only builds do not include liveness. Liveness-only builds do not enr
   </thead>
   <tbody>
     <tr>
-      <td><strong>Face</strong> on a phone or desktop.</td>
+      <td><strong>Face</strong> recognition and liveness SDK integration for mobile apps and servers.</td>
       <td><a href="face-sdk/integration-guide.md">Face integration guide</a></td>
     </tr>
     <tr>
-      <td><strong>ID document</strong> capture, MRZ, and barcode.</td>
+      <td><strong>ID document</strong> capture, text recognition, MRZ reading, and barcode extraction.</td>
       <td><a href="id-document-sdk/integration-guide.md">Document integration guide</a></td>
     </tr>
     <tr>

@@ -1,10 +1,10 @@
 ---
 description: >-
-  How to read document authenticity / liveness checks inside Result JSON tests[].
+  Interpret document authenticity and liveness checks in result JSON. Understand missing checks and license-dependent security fields.
 icon: lock
 ---
 
-# Security check fields
+# Document Liveness and Security Check Results
 
 ## Where authenticity lives
 

@@ -1,10 +1,10 @@
 ---
 description: >-
-  IDV_server: platform API, workers, storage, and /admin mount.
+  Explore the IDV platform API, background workers, storage, and admin interface for self-hosted identity verification.
 icon: server
 ---
 
-# IDV server
+# IDV Identity Verification Server
 
 | Item | Detail |
 | --- | --- |

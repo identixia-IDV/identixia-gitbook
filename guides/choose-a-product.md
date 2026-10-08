@@ -1,9 +1,10 @@
 ---
-description: Match the GitHub repository to the capability you licensed.
+description: >-
+  Compare Identixia face recognition, liveness detection, document OCR, and IDV products to choose the right integration for your app.
 icon: compass
 ---
 
-# Choose a product
+# Choose a Face Recognition, Document OCR, or IDV Product
 
 {% hint style="danger" %}
 Do not expect liveness in a recognition-only build, or enroll and 1:N search in a liveness-only build.

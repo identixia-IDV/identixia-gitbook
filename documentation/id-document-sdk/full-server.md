@@ -1,10 +1,10 @@
 ---
 description: >-
-  Full Document SDK HTTP APIs for Windows and Linux/Docker.
+  Deploy Identixia ID document recognition and OCR with licensed liveness checks using self-hosted HTTP APIs on Windows or Linux and Docker.
 icon: server
 ---
 
-# Server (Windows & Docker)
+# ID Document Recognition and OCR APIs for Windows and Docker
 
 ## Platforms
 

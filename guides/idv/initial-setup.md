@@ -1,10 +1,10 @@
 ---
 description: >-
-  First Identity Console access, company settings, and webhook secret — after engines and .env.
+  Set up Identity Console access, company settings, and webhook configuration after preparing your IDV engines and environment.
 icon: wrench
 ---
 
-# Initial setup process
+# Initial IDV Console and Company Setup
 
 ## Before you start
 
