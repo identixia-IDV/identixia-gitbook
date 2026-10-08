@@ -13,7 +13,7 @@ copy .env.example .env
 # or: cp .env.example .env
 ```
 
-Edit `IDV/.env`. Restart servers after changes.
+Edit `IDV_server/.env`. Restart servers after changes.
 
 ## 2. Required keys for a real engine demo
 
@@ -37,22 +37,22 @@ Company backend (process env or its own config):
 
 | Env key | Default |
 | --- | --- |
-| `IDV_SERVER_DIR` | `platform/server` |
-| `IDV_SERVER_UI_DIST` | `platform/console/dist` |
-| `IDV_BRAND_DIR` | `license/admin/brand` |
+| `IDV_SERVER_DIR` | `IDV_server` |
+| `IDV_SERVER_UI_DIST` | `IDV_console/dist` |
+| `IDV_BRAND_DIR` | `license/brand` |
 | `COMPANY_ADMIN_DIST` | `company/admin/dist` |
 | `COMPANY_ADMIN_DIR` | `company/admin` |
-| `LICENSE_ADMIN_DIR` | `license/admin` |
+| `LICENSE_ADMIN_DIR` | `license` |
 
 ## 4. Storage
 
 | Project | Default |
 | --- | --- |
-| `platform/server` | SQLite under `database/` (tenant-separated rows) |
+| `IDV_server` | SQLite under `database/` (tenant-separated rows) |
 | `company/backend` | `company/backend/database/company.sqlite` |
-| `license/admin` | `license/admin/database/` (issuer ledger) |
+| `license` | `license/database/` (issuer ledger) |
 
-Production: `python IDV/setup_database.py` (or `--yes`) for PostgreSQL / media / Valkey / RabbitMQ. Memory stores are for tests only (`IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY`).
+Production: `python IDV/Install_db/setup_database.py` (or `--yes`) for PostgreSQL / media / Valkey / RabbitMQ. Memory stores are for tests only (`IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY`).
 
 ## 5. Security rules (non-negotiable)
 

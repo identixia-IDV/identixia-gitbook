@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Rebuild Identixia GitBook docs: Face SDK · ID Document SDK · IDV.
+"""Rebuild Identixia GitBook docs (FaceOnLive-style sidebar + content).
 
 Sources:
-  - repositories/* product READMEs + catalog/github_about.json (Face + Document)
+  - repositories/* product READMEs + repositories/APPs/github_about.json (Face + Document)
   - IDV/* (platform overview; no handbook dump)
 
   python gitbook-push/generate.py
@@ -21,8 +21,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import content_lib as C  # noqa: E402
 
-ABOUT_PATH = ROOT / "catalog" / "github_about.json"
-NAMES_PATH = ROOT / "catalog" / "repository_names.json"
+ABOUT_PATH = ROOT / "repositories" / "APPs" / "github_about.json"
+NAMES_PATH = ROOT / "repositories" / "APPs" / "repository_names.json"
 REPOS_DIR = ROOT / "repositories"
 ASSETS_SRC = REPOS_DIR / "identixia-assets"
 IDV_DIR = ROOT / "IDV"
@@ -211,7 +211,7 @@ def strip_readme_noise(body: str) -> str:
         ):
             continue
         line = line.replace(
-            "raw.githubusercontent.com/identixiaAI/identixia-assets",
+            "raw.githubusercontent.com/identixia-IDV/identixia-assets",
             "raw.githubusercontent.com/identixia-IDV/identixia-assets",
         )
         if re.match(r"^#+\s+", line):
@@ -306,7 +306,7 @@ def build_product_page(owner: str, item: dict, rel: str, by_name: dict[str, dict
         platform=plat_label,
         family=family,
     )
-    readme_path = REPOS_DIR / name / "README.md"
+    readme_path = (REPOS_DIR / "APPs" / name) / "README.md"
     readme_body = ""
     if readme_path.is_file():
         raw = rewrite_links(readme_path.read_text(encoding="utf-8", errors="replace"), owner)
@@ -317,55 +317,160 @@ def build_product_page(owner: str, item: dict, rel: str, by_name: dict[str, dict
     return out
 
 
-def write_face_hub() -> None:
-    body = f"""
-<p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
+def write_integration_guides() -> None:
+    """Top-level integration guides for Face and Document products."""
+    write_page(
+        OUT / "face-sdk" / "integration-guide.md",
+        "Face SDK — Integration guide",
+        "How to start a Face project, download runtime, place databases, and call every API.",
+        """
+This is the **full Face SDK integration path**. Open the platform page for your stack after you finish these steps.
 
-## Overview
+## 1. Choose a product
 
-The **Face SDK** runs entirely on the device or on your server. It covers two independently licensed functions:
-
-| Function | Capabilities | License flag |
+| Goal | Product line | Example repos |
 | --- | --- | --- |
-| **Recognition** | Detect faces, attributes, quality, templates, 1:1 match, 1:N identify | `recognition` |
-| **Liveness** | Passive presentation-attack score (live person vs photo or screen) | `liveness` |
+| Recognition + optional liveness | Face Recognition & Liveness Detection | Android / iOS / Flutter / RN / Ionic / Windows / Docker |
+| Recognition only | Face Recognition | Windows / Docker (and thin mobile siblings) |
+| Liveness only | Face Liveness Detection | Android / iOS / Windows / Docker |
 
-Choose a **repository that matches your license**. A recognition-only build does not return liveness scores.
+## 2. Clone and download the runtime
 
-## Product lines
+```bash
+git clone https://github.com/identixia-IDV/<PRODUCT>.git
+cd <PRODUCT>
+python scripts/get_runtime.py
+```
 
-| Requirement | Start here |
+Pin a tag when you need a fixed build:
+
+```bash
+python scripts/get_runtime.py --tag 1.0.0
+```
+
+| Channel | Where files land |
 | --- | --- |
-| Recognition **and** liveness in one app or API | [Full product](full-product.md) (Android through Docker) |
-| Recognition only | [Windows](recognition-windows.md) · [Linux / Docker](recognition-linux-docker.md) |
-| Liveness only | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Linux / Docker](liveness-linux-docker.md) |
+| Android | `libfacesdk/*.aar` + `libfacesdk/databases/*.xdb` |
+| iOS | Frameworks at repo root / `Frameworks/` + `databases/*.xdb` |
+| Flutter / RN / Ionic | Sample Android + iOS paths (see that platform page) |
+| Windows / Linux | `lib/cpu/` (binaries **and** every `recognition*.xdb`) |
 
-Function guides:
+{% hint style="warning" %}
+Never ship the engine without database packs. Missing `*.xdb` files cause empty OCR / liveness / match results even when activate returns success.
+{% endhint %}
 
-* [Face recognition](recognition.md) — detect, templates, gallery, match
-* [Face liveness](liveness.md) — when scores appear and how to gate UX
+## 3. Run the sample
 
-## Full product (recognition + liveness)
+* **Mobile:** Android Studio / Xcode / `flutter run` / `yarn android` / Ionic — wait for **Ready**.
+* **Server:** `pip install -r requirements.txt` → `python run_server.py` / `python3 run_server.py` → `GET /api/health`.
 
-| Platform | Repository | Docs |
+## 4. Activate
+
+* **Mobile:** demo key is bound to the sample application / bundle id. Your app needs a new key.
+* **Server:** `GET /api/machinecode` → contact Identixia → `POST /api/activate` or set `LICENSE=` in `.env`.
+
+## 5. Call the APIs
+
+| Surface | Where to look |
+| --- | --- |
+| Mobile methods | Platform pages under [Reference](reference.md) (lifecycle, detect, match, liveness, gallery, VideoWorker) |
+| HTTP endpoints | [SDK Server — Face Recognition](../sdk-server/face-recognition.md) and [Face Liveness](../sdk-server/face-liveness.md) |
+
+## 6. Resources
+
+* Releases: each product’s GitHub **Releases** page
+* Postman: monorepo `postman/Identixia-API.postman_collection.json`
+* Docs site: [docs.identixia.com](https://docs.identixia.com)
+* License: [Request a license](../request-a-license-and-support.md)
+
+Next: open your platform page (for example [Android](android.md) or [Windows](windows.md)).
+""".strip()
+        + "\n",
+    )
+    write_page(
+        OUT / "id-document-sdk" / "integration-guide.md",
+        "ID Document SDK — Integration guide",
+        "How to start a Document project, download runtime, place document.xdb, and call every API.",
+        """
+This is the **full ID Document SDK integration path**. Open the platform page for your stack after you finish these steps.
+
+## 1. Choose a product
+
+| Goal | Product line | Example repos |
 | --- | --- | --- |
-| Android | [`FaceRecognition-LivenessDetection-Android`]({GH}/FaceRecognition-LivenessDetection-Android) | [Android](android.md) |
-| iOS | [`FaceRecognition-LivenessDetection-iOS`]({GH}/FaceRecognition-LivenessDetection-iOS) | [iOS](ios.md) |
-| Flutter | [`FaceRecognition-LivenessDetection-Flutter`]({GH}/FaceRecognition-LivenessDetection-Flutter) | [Flutter](flutter.md) |
-| React Native | [`FaceRecognition-LivenessDetection-React-Native`]({GH}/FaceRecognition-LivenessDetection-React-Native) | [React Native](react-native.md) |
-| Ionic Capacitor | [`FaceRecognition-LivenessDetection-Ionic-Capacitor`]({GH}/FaceRecognition-LivenessDetection-Ionic-Capacitor) | [Ionic Capacitor](ionic-capacitor.md) |
-| Ionic Cordova | [`FaceRecognition-LivenessDetection-Ionic-Cordova`]({GH}/FaceRecognition-LivenessDetection-Ionic-Cordova) | [Ionic Cordova](ionic-cordova.md) |
-| Windows | [`FaceRecognition-LivenessDetection-Windows`]({GH}/FaceRecognition-LivenessDetection-Windows) | [Windows](windows.md) |
-| Linux / Docker | [`FaceRecognition-LivenessDetection-Docker`]({GH}/FaceRecognition-LivenessDetection-Docker) | [Linux / Docker](linux-docker.md) |
+| OCR + optional authenticity | ID Document Recognition & Liveness Detection | Android / iOS / Flutter / RN / Ionic / Windows / Docker |
+| OCR only | ID Document Recognition | Thin siblings + server ports |
+| Authenticity / PAD only | ID Document Liveness Detection | Android / iOS / Windows / Docker |
+
+## 2. Clone and download the runtime
+
+```bash
+git clone https://github.com/identixia-IDV/<PRODUCT>.git
+cd <PRODUCT>
+python scripts/get_runtime.py
+```
+
+| Channel | Where files land |
+| --- | --- |
+| Android | `libdocsdk/documentreadersdk.aar` (`document.xdb` embedded) |
+| iOS | `docsdk.xcframework` / `docsdk.framework` (`document.xdb` in the bundle) |
+| Flutter / RN / Ionic | Sample Android + iOS paths (see that platform page) |
+| Windows / Linux | `lib/cpu/` with `document.xdb` at the top level |
+
+## 3. Run the sample
+
+* **Mobile:** open Camera / Gallery after status shows **Ready**. Result is one scroll (identity, fields, checks, images).
+* **Server:** start the HTTP API, then call `/api/document/process` or `/api/document/liveness`.
+
+## 4. Activate
+
+Same pattern as Face: mobile demo id vs your application id; server machine code → license → activate.
+
+## 5. Call the APIs
+
+| Surface | Where to look |
+| --- | --- |
+| Mobile methods | Platform pages (`setActivation`, `init`, `recognize`, `documentProcess`, locate / liveness) |
+| HTTP endpoints | [SDK Server — Document Recognition](../sdk-server/document-recognition.md) · [Document Liveness](../sdk-server/document-liveness.md) |
+| Result JSON | [Result Format](result-json.md) · [Security check fields](security-fields.md) |
+
+## 6. Resources
+
+* Releases: product GitHub **Releases**
+* Postman: monorepo `postman/Identixia-API.postman_collection.json`
+* License: [Request a license](../request-a-license-and-support.md)
+
+Next: open your platform page (for example [Android](android.md) or [Windows](windows.md)).
+""".strip()
+        + "\n",
+    )
+
+
+def write_face_hub() -> None:
+    """Introduction page for Face Recognition & Liveness Detection (FaceOnLive-style)."""
+    body = f"""
+On-premises Face Recognition and Face Liveness Detection (anti-spoofing) SDKs.
+
+The algorithm runs in real time on phones and servers. It supports accurate **1:1** and **1:N** matching, **passive face liveness**, and face attributes (age, gender, mask/sunglasses, landmarks).
+
+Use it for identity verification and attendance. Processing stays on **your** device or server.
+
+We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic**, **Windows**, and **Linux / Docker**.
+
+| Function | What you get | License flag |
+| --- | --- | --- |
+| **Recognition** | Detect, attributes, quality, templates, 1:1, 1:N | `recognition` |
+| **Liveness** | Passive presentation-attack score | `liveness` |
+
+Choose a repository that matches your license. A recognition-only build does not return liveness scores.
 
 <figure><img src="../.gitbook/assets/face-android-home.png" alt="Face SDK Android home" width="160"><figcaption>Android demo home</figcaption></figure>
 
-## Integration path
+## Next
 
-1. Open the platform page for your stack.
-2. Clone the sample, place engine binaries from GitHub Releases, and run until status shows **Ready**.
-3. Activate with **your** application id or machine code (demo keys work only for demo ids).
-4. Call recognition and liveness APIs on a **background** thread (mobile) or over HTTP (server).
+* [Reference](reference.md) — platform quick starts and sample repositories
+* [SDK Server](../sdk-server/) — HTTP API (Windows & Docker)
+* Function notes: [Recognition](recognition.md) · [Liveness](liveness.md)
 
 {{% hint style="info" %}}
 Biometric images and templates stay on **your** device or server. Identixia does not host them.
@@ -373,9 +478,53 @@ Biometric images and templates stay on **your** device or server. Identixia does
 """.strip()
     write_page(
         OUT / "face-sdk" / "README.md",
-        "Face SDK",
-        "On-premise Face SDK: recognition and passive liveness for mobile and server platforms.",
+        "Introduction",
+        "On-premises Face Recognition and Face Liveness Detection SDKs.",
         body + "\n",
+    )
+    write_page(
+        OUT / "face-sdk" / "reference.md",
+        "Reference",
+        "Documentation for Face Recognition and Face Liveness Detection SDKs by platform.",
+        f"""
+Documentation for Face Recognition and Face Liveness Detection SDKs.
+
+We provide SDKs for all platforms. Sample projects are on GitHub: [{GH.replace('https://github.com/', '')}]({GH}).
+
+## Quick start
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | [`FaceRecognition-LivenessDetection-Android`]({GH}/FaceRecognition-LivenessDetection-Android) |
+| iOS | [iOS](ios.md) | [`FaceRecognition-LivenessDetection-iOS`]({GH}/FaceRecognition-LivenessDetection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`FaceRecognition-LivenessDetection-Flutter`]({GH}/FaceRecognition-LivenessDetection-Flutter) |
+| React Native | [React Native](react-native.md) | [`FaceRecognition-LivenessDetection-React-Native`]({GH}/FaceRecognition-LivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`FaceRecognition-LivenessDetection-Ionic-Capacitor`]({GH}/FaceRecognition-LivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`FaceRecognition-LivenessDetection-Ionic-Cordova`]({GH}/FaceRecognition-LivenessDetection-Ionic-Cordova) |
+| Windows | [Windows](windows.md) | [`FaceRecognition-LivenessDetection-Windows`]({GH}/FaceRecognition-LivenessDetection-Windows) |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`FaceRecognition-LivenessDetection-Docker`]({GH}/FaceRecognition-LivenessDetection-Docker) |
+
+## Recognition only
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android, iOS, Flutter, React Native, Ionic | [Recognition only](recognition-only.md) | Listed on that page |
+| Windows | [Face Recognition (Windows)](recognition-windows.md) | [`FaceRecognition-Windows`]({GH}/FaceRecognition-Windows) |
+| Linux / Docker | [Face Recognition (Linux / Docker)](recognition-linux-docker.md) | [`FaceRecognition-Docker`]({GH}/FaceRecognition-Docker) |
+
+## Liveness only
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Face Liveness (Android)](liveness-android.md) | [`FaceLivenessDetection-Android`]({GH}/FaceLivenessDetection-Android) |
+| iOS | [Face Liveness (iOS)](liveness-ios.md) | [`FaceLivenessDetection-iOS`]({GH}/FaceLivenessDetection-iOS) |
+| Flutter, React Native, Ionic | [Liveness only — mobile](liveness-only-mobile.md) | Listed on that page |
+| Windows | [Face Liveness (Windows)](liveness-windows.md) | [`FaceLivenessDetection-Windows`]({GH}/FaceLivenessDetection-Windows) |
+| Linux / Docker | [Face Liveness (Linux / Docker)](liveness-linux-docker.md) | [`FaceLivenessDetection-Docker`]({GH}/FaceLivenessDetection-Docker) |
+
+HTTP APIs: [SDK Server](../sdk-server/).
+""".strip()
+        + "\n",
     )
 
 
@@ -485,7 +634,7 @@ curl -s -X POST http://127.0.0.1:14103/api/face/liveness \\
   -d '{{"image":"BASE64_JPEG"}}'
 ```
 
-Liveness-only Docker uses the path documented on [Linux / Docker (liveness only)](liveness-linux-docker.md) (often `/api/liveness`).
+Liveness-only Docker uses the same `/api/face/liveness` path on port **14105** — see [Linux / Docker (liveness only)](liveness-linux-docker.md).
 
 ## Mobile tip
 
@@ -498,56 +647,38 @@ Run activate → init → liveness on a **background** thread. Keep the camera p
 
 
 def write_document_hub() -> None:
+    """Introduction page for ID Document Recognition & Liveness Detection (FaceOnLive-style)."""
     body = f"""
-<p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
+On-premises ID Document Recognition and Document Liveness (authenticity) SDKs.
 
-## Overview
+Read passports, national IDs, and driver licenses on **your** device or server: OCR / MRZ / barcode fields, cropped images, and optional anti-spoof authenticity checks.
 
-The **ID Document SDK** reads passports, national IDs, and driver licenses **on-premise**. Two independently licensed functions:
+We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic**, **Windows**, and **Linux / Docker**.
 
-| Function | Capabilities | License flag |
+| Function | What you get | License flag |
 | --- | --- | --- |
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
-| **Liveness / authenticity** | Anti-spoof checks (screen, printout, substitution) | `authenticity` |
+| **Liveness / authenticity** | Screen / printout / substitution checks | `authenticity` |
 
-Full product repositories run **both** when the license allows. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.
-
-## Start here
-
-1. [Document recognition](recognition.md) — fields, MRZ, images
-2. [Document liveness](liveness.md) — authenticity checks versus OCR
-3. [Result JSON](result-json.md) — shared shape for mobile and server
-4. [Security check fields](security-fields.md) — how to read authenticity results
-
-## Full product (recognition + liveness)
-
-| Platform | Repository | Docs |
-| --- | --- | --- |
-| Android | [`ID-Document-Recognition-Liveness-Detection-Android`]({GH}/ID-Document-Recognition-Liveness-Detection-Android) | [Android](android.md) |
-| iOS | [`ID-Document-Recognition-Liveness-Detection-iOS`]({GH}/ID-Document-Recognition-Liveness-Detection-iOS) | [iOS](ios.md) |
-| Flutter | [`ID-Document-Recognition-Liveness-Detection-Flutter`]({GH}/ID-Document-Recognition-Liveness-Detection-Flutter) | [Flutter](flutter.md) |
-| React Native | [`ID-Document-Recognition-Liveness-Detection-React-Native`]({GH}/ID-Document-Recognition-Liveness-Detection-React-Native) | [React Native](react-native.md) |
-| Ionic Capacitor | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) | [Ionic Capacitor](ionic-capacitor.md) |
-| Ionic Cordova | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) | [Ionic Cordova](ionic-cordova.md) |
-| Windows | [`ID-Document-Recognition-Liveness-Detection-Windows`]({GH}/ID-Document-Recognition-Liveness-Detection-Windows) | [Windows](windows.md) |
-| Linux / Docker | [`ID-Document-Recognition-Liveness-Detection-Docker`]({GH}/ID-Document-Recognition-Liveness-Detection-Docker) | [Linux / Docker](linux-docker.md) |
-
-## Liveness-only API
-
-| Platform | Repository | Docs |
-| --- | --- | --- |
-| Linux / Docker | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) | [Document liveness Docker](liveness-linux-docker.md) |
+Full-product repositories run both when licensed. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.
 
 <figure><img src="../.gitbook/assets/document-desktop-status.png" alt="Document demo status" width="480"><figcaption>Desktop demo — status</figcaption></figure>
 
+## Next
+
+* [Reference](reference.md) — platform quick starts and sample repositories
+* [Result Format](result-json.md) · [Security check fields](security-fields.md)
+* [SDK Server](../sdk-server/) — HTTP API (Windows & Docker)
+* Function notes: [Recognition](recognition.md) · [Liveness](liveness.md)
+
 {{% hint style="info" %}}
-Document images and OCR fields stay on **your** device or server. Parse [Result JSON](result-json.md) — do not scrape the Result UI.
+Document images and OCR fields stay on **your** device or server. Parse [Result Format](result-json.md) — do not scrape the Result UI.
 {{% endhint %}}
 """.strip()
     write_page(
         OUT / "id-document-sdk" / "README.md",
-        "ID Document SDK",
-        "On-premise ID Document SDK: recognition (OCR/MRZ) and document liveness for mobile and server.",
+        "Introduction",
+        "On-premises ID Document Recognition and Document Liveness SDKs.",
         body + "\n",
     )
 
@@ -579,14 +710,14 @@ Default full-product API port is **14102** (confirm in the README).
 
 | Route | Role |
 | --- | --- |
-| `POST /api/documentProcess` | Full process (recognition + authenticity when licensed) |
-| `POST /api/documentRecognition` | OCR / MRZ / barcode only |
-| `POST /api/documentLiveness` | Authenticity only |
+| `POST /api/document/process` | Full process (recognition + authenticity when licensed) |
+| `POST /api/document/recognition` | OCR / MRZ / barcode only |
+| `POST /api/document/liveness` | Authenticity only |
 
 ### Example — recognition-only call
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/documentRecognition \\
+curl -s -X POST http://127.0.0.1:14102/api/document/recognition \\
   -H "Content-Type: application/json" \\
   -d '{{"images":["BASE64_FRONT","BASE64_BACK"]}}'
 ```
@@ -634,7 +765,7 @@ See [Security check fields](security-fields.md).
 ### Example — authenticity-only (full server)
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/documentLiveness \\
+curl -s -X POST http://127.0.0.1:14102/api/document/liveness \\
   -H "Content-Type: application/json" \\
   -d '{{"images":["BASE64_FRONT"]}}'
 ```
@@ -650,7 +781,7 @@ curl -s -X POST http://127.0.0.1:14102/api/documentLiveness \\
         """
 ## Purpose
 
-Mobile `recognize` and server `POST /api/documentProcess` (also recognition / liveness routes) return one **customer process JSON**. Parse this object in your app — do not scrape the demo Result UI.
+Mobile `recognize` and server `POST /api/document/process` (also recognition / liveness routes) return one **customer process JSON**. Parse this object in your app — do not scrape the demo Result UI.
 
 Allowed top-level keys:
 
@@ -811,7 +942,7 @@ else count pass / fail / hold → apply your policy (any fail ⇒ reject is comm
 | `authenticity` present | Authenticity `tests` populate when the route requests them |
 | Missing | Empty authenticity set — never invent a pass |
 
-Server routes: `POST /api/documentLiveness` (authenticity only) or `POST /api/documentProcess` (OCR + authenticity when licensed).
+Server routes: `POST /api/document/liveness` (authenticity only) or `POST /api/document/process` (OCR + authenticity when licensed).
 """.strip()
         + "\n",
     )
@@ -820,21 +951,18 @@ Server routes: `POST /api/documentLiveness` (authenticity only) or `POST /api/do
 def write_idv_pages() -> None:
     write_page(
         OUT / "idv" / "README.md",
-        "IDV platform",
-        "Self-host identity verification platform: setup guide, sessions, APIs, and webhooks.",
+        "IDV: Self-Host KYC Platform",
+        "IDV is Identixia's self-host web & mobile KYC platform. It uses SDK Server as the biometric backend.",
         f"""
-<p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
-<p align="center"><img src="../.gitbook/assets/favicon.png" alt="Identixia mark" width="48"></p>
+**IDV** is Identixia's open web & mobile KYC platform. It uses [SDK Server](../sdk-server/) (Face + Document HTTP engines) as the biometric backend.
 
-## What IDV is
-
-**IDV** is Identixia’s self-host identity-verification platform. It uses your on-premise **Document** and **Face** SDK HTTP engines as the biometric backend. It does not replace those SDKs — it orchestrates them between your company systems and applicant capture apps.
+It does not replace those SDKs — it orchestrates them between your company systems and applicant capture apps.
 
 ## Project components
 
 | Component | Role | Folder · port |
 | --- | --- | --- |
-| **Platform (Admin)** | Tenant API, reviews, Identity Console | `platform/server/` · `:14187` · UI `:14188` / `/admin` |
+| **Platform (Admin)** | Tenant API, reviews, Identity Console | `IDV_server/` · `:14187` · UI `:14188` / `/admin` |
 | **Company (Merchant)** | Holds service credentials; starts sessions | `company/backend/` · `:14195` · Admin `:14189` |
 | **Applicant (User)** | Web / mobile capture apps | `client/` · e.g. web `:5175` |
 | **Engines** | Document + Face HTTP APIs | Document `:14102` · Face `:14103` |
@@ -845,27 +973,27 @@ Applicant app ──► Company backend :14195 ──► IDV server :14187 ─�
                Company Admin :14189      Identity Console /admin
 ```
 
-## Read this guide (in order)
+## Guide (in order)
 
 1. [Project structure](project-structure.md)
-2. [Prerequisites: engines](engines.md) — start and activate Document + Face first
-3. [Project setup](environment.md) — `.env`, tokens, storage
-4. [Initial setup process](initial-setup.md) — first console login, settings, webhook secret
-5. [Quick start](quick-start.md) · [End-to-end walkthrough](walkthrough.md)
-6. [Session states](session-states.md)
-7. [Creating a session (API)](api.md)
-8. [Webhook integration](company-webhooks.md)
-9. [Applicant clients](components-clients.md) · [Production](production.md)
+2. [Project setup](environment.md) — `.env`, tokens, storage
+3. [Initial setup process](initial-setup.md)
+4. [Understanding session states](session-states.md)
+5. [iOS & Android](components-clients.md) (and web demos)
+6. [Creating a session (API)](api.md)
+7. [Webhook integration](company-webhooks.md)
+8. [Quick start](quick-start.md) · [Walkthrough](walkthrough.md)
+9. [Production](production.md) · [Reference](reference.md)
 
 <figure><img src="../.gitbook/assets/idv-audit-console.png" alt="Identity Console" width="520"><figcaption>Identity Console</figcaption></figure>
-<figure><img src="../.gitbook/assets/idv-device-screen.png" alt="Applicant capture" width="220"><figcaption>Applicant capture</figcaption></figure>
 
 {{% hint style="danger" %}}
-**Safety:** Keep the company **service bearer** on the company backend only. Capture apps receive a short-lived **capture token**. Never commit secrets. `IDV_OPEN_API=1` / bearer `demo` is for **localhost demos only**. License Admin (`:14190`) stays on a private host.
+**Safety:** Keep the company **service bearer** on the company backend only. Capture apps receive a short-lived **capture token**. Never commit secrets. `IDV_OPEN_API=1` / bearer `demo` is for **localhost demos only**.
 {{% endhint %}}
 """.strip()
         + "\n",
     )
+
     write_page(
         OUT / "idv" / "architecture.md",
         "Architecture",
@@ -900,14 +1028,14 @@ Company backend :14195              Capture app (web / mobile)
 | Concern | Owner |
 | --- | --- |
 | Document OCR / face match / liveness scores | Document SDK + Face SDK |
-| Tenant policy, sessions, reviews, API auth | `platform/server` |
+| Tenant policy, sessions, reviews, API auth | `IDV_server` |
 | Holding service tokens, starting sessions for apps | **Your** backend (sample: `company/backend`) |
-| Hybrid entitlement metering on customer host | `license/license_v2` inside `platform/server` |
-| Issuing Hybrid licences | `license/admin` (Identixia) |
+| Hybrid entitlement metering on customer host | `license/license_v2` (issuer) / server copy in `IDV_server` |
+| Issuing Hybrid licences | `license` (Identixia) |
 
 ## Decision rule
 
-Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Missing or error signals never auto-accept (`platform/server/idv/decision/`).
+Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Missing or error signals never auto-accept (`IDV_server/idv/decision/`).
 """.strip()
         + "\n",
     )
@@ -920,7 +1048,7 @@ Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Miss
 
 1. Complete [Project setup](environment.md) (`.env`)
 2. Document engine `:14102` + Face engine `:14103` — [Prerequisites: engines](engines.md)
-3. Run `python IDV/scripts/start_local.py` **or** start services manually below
+3. Run `python IDV/IDV_server (then company)` **or** start services manually below
 4. [Initial setup process](initial-setup.md) — console, company settings, webhook
 5. [End-to-end walkthrough](walkthrough.md)
 
@@ -928,7 +1056,7 @@ Trust aggregation is **most-severe-wins** (`reject` > `review` > `accept`). Miss
 
 ```bash
 # Engines must already be healthy on :14102 and :14103
-python IDV/scripts/start_local.py
+python IDV/IDV_server (then company)
 ```
 
 Preflight checks engine health, starts IDV server + company backend, and prints URLs. It does **not** start License Admin and does **not** mean the stack is production-ready when `IDV_OPEN_API=1`.
@@ -937,24 +1065,24 @@ Preflight checks engine health, starts IDV server + company backend, and prints 
 
 | Project | Default SQLite |
 | --- | --- |
-| `platform/server` | `platform/server/database/idv.sqlite` (or `IDV_SQLITE_PATH`) |
+| `IDV_server` | `IDV_server/database/idv.sqlite` (or `IDV_SQLITE_PATH`) |
 | `company/backend` | `company/backend/database/company.sqlite` |
-| `license/admin` | `license/admin/database/` |
+| `license` | `license/database/` |
 
-PostgreSQL / media / Valkey / RabbitMQ: `python setup_database.py` from `IDV/`. See [Project setup](environment.md).
+PostgreSQL / media / Valkey / RabbitMQ: `python IDV/Install_db/setup_database.py` from `IDV/Install_db/`. See [Project setup](environment.md).
 
 ## Manual commands
 
 ```bash
 # Platform (localhost demo auth only)
-cd IDV/platform/server && python -m venv .venv && .venv/Scripts/activate
+cd IDV/IDV_server && python -m venv .venv && .venv/Scripts/activate
 pip install -r requirements.txt
 set IDV_OPEN_API=1
 python app.py
 # → http://127.0.0.1:14187/v1  and  /admin/
 
 # Identity Console (develop)
-cd IDV/platform/console && npm install && npm run dev
+cd IDV/IDV_console && npm install && npm run dev
 # → http://127.0.0.1:14188/
 
 # Company server + admin UI
@@ -969,7 +1097,7 @@ cd IDV/company/admin && npm install && npm run dev
 # → http://127.0.0.1:14189/
 
 # Licence issuer (localhost / private network only — never public)
-cd IDV/license/admin && pip install -r requirements.txt
+cd IDV/license && pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py
 # → http://127.0.0.1:14190/
@@ -990,7 +1118,7 @@ When `IDV_ENGINES=http`, the platform uses:
 
 | Role | Default URL | Example paths |
 | --- | --- | --- |
-| Document Reader | `http://127.0.0.1:14102` | `/api/documentProcess`, `/api/documentRecognition`, `/api/documentLiveness` |
+| Document Reader | `http://127.0.0.1:14102` | `/api/document/process`, `/api/document/recognition`, `/api/document/liveness` |
 | Face Recognition + liveness | `http://127.0.0.1:14103` | `/api/face/compare`, `/api/face/boxes`, `/api/face/template`, `/api/face/score`, `/api/face/liveness` |
 
 Child pages: [Document engine](engines-document.md) · [Face engine](engines-face.md).
@@ -1001,7 +1129,7 @@ Same process APIs as [ID Document SDK](../id-document-sdk/) and [Face SDK](../fa
 
 1. Run the Document server (Windows or Docker) on **14102** — see [ID Document SDK → Server](../id-document-sdk/full-server.md).
 2. Run the Face server on **14103** — see [Face SDK → Server](../face-sdk/full-server.md).
-3. Activate each engine with **its** machine code (`GET /api/machinecode` → send to Identixia → `POST /api/activate` or `license.txt`). Docker and bare metal codes differ.
+3. Activate each engine with **its** machine code (`GET /api/machinecode` → send to Identixia → set `LICENSE=` in `.env` or `POST /api/activate`). Docker and bare metal codes differ.
 4. Confirm health:
 
 ```bash
@@ -1009,8 +1137,8 @@ curl -s http://127.0.0.1:14102/api/health
 curl -s http://127.0.0.1:14103/api/health
 ```
 
-5. Set `IDV_ENGINES=http`, `DOCUMENT_API_URL`, and `FACE_API_URL` in `IDV/.env` (see [Project setup](environment.md)).
-6. Continue with [Initial setup process](initial-setup.md) or `python IDV/scripts/start_local.py`.
+5. Set `IDV_ENGINES=http`, `DOCUMENT_API_URL`, and `FACE_API_URL` in `IDV_server/.env` (see [Project setup](environment.md)).
+6. Continue with [Initial setup process](initial-setup.md) or `python IDV/IDV_server (then company)`.
 
 ## Session create (platform API)
 
@@ -1043,11 +1171,11 @@ Face 1:1 uses the **Face SDK matcher**. Optional vector indexes stay off until i
 
 | Path | Role | Docs |
 | --- | --- | --- |
-| `platform/server/` | Platform API + workers (`:14187`) | [Platform server](platform-server.md) |
-| `platform/console/` | Identity Console (`:14188` / `/admin`) | [Identity Console](platform-console.md) |
+| `IDV_server/` | Platform API + workers (`:14187`) | [Platform server](platform-server.md) |
+| `IDV_console/` | Identity Console (`:14188` / `/admin`) | [Identity Console](platform-console.md) |
 | `company/backend/` | Sample **company server** (`:14195`) | [Company backend](company-backend.md) |
 | `company/admin/` | Company operator UI (`:14189`) | [Company Admin](company-admin.md) |
-| `license/admin/` | Hybrid issuer + brand (`:14190`) | [License Admin](license-admin.md) |
+| `license/` | Hybrid issuer + brand (`:14190`) | [License Admin](license-admin.md) |
 | `app/` | Applicant SDKs + demos | [Applicant clients](components-clients.md) |
 | `packages/` | Shared UI / decision / licence libs | [Shared packages](shared-packages.md) |
 | `license/license_v2/` | Shared Hybrid protocol | [Hybrid protocol](license-protocol.md) |
@@ -1055,7 +1183,7 @@ Face 1:1 uses the **Face SDK matcher**. Optional vector indexes stay off until i
 
 ## Brand
 
-One pack only: `IDV/license/admin/brand/` → `/brand/*` and docs `.gitbook/assets/`.
+One pack only: `IDV/license/brand/` → `/brand/*` and docs `.gitbook/assets/`.
 
 Org: [`identixia-IDV`]({GH}).
 """.strip()
@@ -1082,12 +1210,12 @@ Demo keys work only for demo application ids.
 1. Start the API once.
 2. Call `GET /api/machinecode` and copy `data.machinecode`.
 3. Send that code to Identixia. Docker and bare-metal machine codes differ — license the environment you ship.
-4. Call `POST /api/activate`, or place `license.txt` and restart.
+4. Call `POST /api/activate`, or set `LICENSE=` in `.env` and restart.
 5. Confirm with `GET /api/licenseStatus`.
 
 ## IDV
 
-IDV uses Hybrid licensing via `license/admin` and `license/license_v2`. The issuer UI listens on `:14190` (localhost). Company systems use `company/backend` (sample `:14195`) to hold the service token and start sessions — see [Company integration](idv/company.md).
+IDV uses Hybrid licensing via `license` and `license/license_v2`. The issuer UI listens on `:14190` (localhost). Company systems use `company/backend` (sample `:14195`) to hold the service token and start sessions — see [Company integration](idv/company.md).
 
 ## Support
 
@@ -1125,61 +1253,70 @@ We are available 24/7 for license requests and technical support.
 
 
 def write_welcome() -> None:
-    body = """
+    """Welcome page modeled on https://docs.faceonlive.com/ (company + product links)."""
+    body = f"""
 <p align="center"><img src=".gitbook/assets/brand-logo.png" alt="Identixia" width="280"></p>
 
-## Introduction
+We are an IT company that excels in **Face Recognition**, **Face Liveness Detection** (anti-spoofing), **ID Document Recognition**, and on-premise **identity verification**.
 
-Identixia documentation covers **three products**. All biometric processing runs on **your** device or server.
+All biometric processing runs on **your** device or server.
 
-| Product | Source in monorepo | What you get |
-| --- | --- | --- |
-| [**Face SDK**](face-sdk/) | `repositories/Face*` | Face recognition and passive face liveness |
-| [**ID Document SDK**](id-document-sdk/) | `repositories/ID-Document*` | Document OCR/MRZ and document authenticity |
-| [**IDV**](idv/) | `IDV/` | Verification platform that orchestrates the two SDKs |
+## Company information
 
-## How to use these docs
+{{% embed url="https://identixia.com" %}}
+Our Website
+{{% endembed %}}
 
-The sidebar is multi-level: product → function → product line → channel → platform.
+{{% embed url="{GH}" %}}
+Our GitHub
+{{% endembed %}}
 
-1. Open the **product** (Face SDK, ID Document SDK, or IDV).
-2. Open **Recognition** or **Liveness** (for IDV: Getting started, Engines, or Components).
-3. Choose **full product**, **recognition-only**, or **liveness-only**, then **Mobile** or **Server**.
-4. Open your **platform** page → Quick start → Ready → API reference.
-5. For IDV, start the Document and Face engines, then the IDV server and a client demo.
+## SDK Server
 
-{% hint style="info" %}
-Native engine binaries ship on GitHub Releases (`/releases/latest/download/…`). They are not committed to git. Demo UIs are optional — call the SDK or HTTP API directly in production.
-{% endhint %}
+Windows and Docker HTTP APIs with the same `/api/*` routes, unlimited on-premise transactions, and Postman cruise for every product port.
 
-## Products
+{{% content-ref url="sdk-server/" %}}
+SDK Server
+{{% endcontent-ref %}}
 
-<table data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-cover data-type="image">Cover image</th><th data-hidden></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody>
-<tr><td><strong>Face SDK</strong></td><td>Detect, templates, 1:1 / 1:N, and passive liveness when licensed. Mobile and server repositories under <code>repositories/</code>.</td><td><a href=".gitbook/assets/face-android-home.png">face-android-home.png</a></td><td></td><td><a href="face-sdk/">face-sdk</a></td></tr>
-<tr><td><strong>ID Document SDK</strong></td><td>Passport and ID OCR, MRZ, barcode, and document authenticity when licensed.</td><td><a href=".gitbook/assets/document-desktop-status.png">document-desktop-status.png</a></td><td></td><td><a href="id-document-sdk/">id-document-sdk</a></td></tr>
-<tr><td><strong>IDV platform</strong></td><td>Sessions, capture clients, Identity Console, company sample, and Hybrid licensing — uses Face and Document engines over HTTP.</td><td><a href=".gitbook/assets/brand-mark.png">brand-mark.png</a></td><td></td><td><a href="idv/">idv</a></td></tr>
-</tbody></table>
+## Our products
 
-## Shared conventions
+### - Face Recognition & Face Liveness Detection
 
-| Topic | Summary |
-| --- | --- |
-| Control vs process (HTTP) | `/api/health`, `/api/machinecode`, `/api/activate`, `/api/licenseStatus` return `{success,code,message,request_id,data}`. Process routes return engine JSON. |
-| Threading (mobile) | Activate, init, detect, and recognize on a **background** thread. |
-| License flags | Face: `recognition` / `liveness`. Document: `recognition` / `authenticity`. A missing flag means the feature is not evaluated. |
-| Brand | Logo and favicons live in docs `.gitbook/assets/`; IDV consoles use `IDV/license/admin/brand/`. |
+{{% content-ref url="face-sdk/" %}}
+Face Recognition & Liveness Detection
+{{% endcontent-ref %}}
 
-## Links
+### - ID Document Recognition & Liveness Detection
+
+{{% content-ref url="id-document-sdk/" %}}
+ID Document Recognition & Liveness Detection
+{{% endcontent-ref %}}
+
+### - IDV: Self-Host KYC Platform
+
+{{% content-ref url="idv/" %}}
+IDV: Self-Host KYC Platform
+{{% endcontent-ref %}}
+
+## Let's go!
+
+1. Open the **Integration guide** under Face SDK or ID Document SDK (clone → `python scripts/get_runtime.py` → place databases → run → activate → APIs).
+2. Open **Reference** for your platform (Android, iOS, Flutter, React Native, Ionic, Windows, Docker).
+3. For HTTP APIs, open [SDK Server](sdk-server/) — full endpoint lists, cURL / Python / JavaScript, and Postman.
+4. For the full KYC stack, start with [IDV](idv/).
+
+{{% hint style="info" %}}
+Native engines and `*.xdb` databases ship on GitHub Releases. Download with `python scripts/get_runtime.py` from any product clone — they are not committed to git.
+{{% endhint %}}
 
 * [Request a license & support](request-a-license-and-support.md)
 * [Contact](contact-us.md)
-* [identixia.com](https://identixia.com)
-* GitHub: [identixia-IDV](https://github.com/identixia-IDV)
 """.strip()
     write_page(
         OUT / "README.md",
         "Welcome to Identixia",
-        "Identixia documentation for Face SDK, ID Document SDK, and the IDV platform.",
+        "Identixia documentation for Face SDK, ID Document SDK, SDK Server, and IDV.",
         body + "\n",
     )
 
@@ -1332,10 +1469,10 @@ Parent: [Liveness-only products](liveness-only.md).
 
 | Platform | Docs | Repository | Default port |
 | --- | --- | --- | ---: |
-| Windows | [Windows](liveness-windows.md) | [`FaceLivenessDetection-Windows`]({GH}/FaceLivenessDetection-Windows) | 14103 |
-| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) | [`FaceLivenessDetection-Docker`]({GH}/FaceLivenessDetection-Docker) | 14103 |
+| Windows | [Windows](liveness-windows.md) | [`FaceLivenessDetection-Windows`]({GH}/FaceLivenessDetection-Windows) | 14105 |
+| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) | [`FaceLivenessDetection-Docker`]({GH}/FaceLivenessDetection-Docker) | 14105 |
 
-Process path is typically `POST /api/liveness` (confirm in the product README). Control routes use the standard `{{success, code, message, request_id, data}}` envelope.
+Process paths: `POST /api/face/liveness` and `POST /api/face/deepfake`. Control routes use the standard `{{success, code, message, request_id, data}}` envelope.
 
 Parent: [Liveness-only products](liveness-only.md).
 """,
@@ -1403,9 +1540,9 @@ Parent: [Full product](full-product.md).
 
 | Route | Role |
 | --- | --- |
-| `POST /api/documentProcess` | Full process (recognition + authenticity when licensed) |
-| `POST /api/documentRecognition` | OCR / MRZ / barcode only |
-| `POST /api/documentLiveness` | Authenticity only |
+| `POST /api/document/process` | Full process (recognition + authenticity when licensed) |
+| `POST /api/document/recognition` | OCR / MRZ / barcode only |
+| `POST /api/document/liveness` | Authenticity only |
 
 Control routes use `{{success, code, message, request_id, data}}`. Response shape: [Result JSON](result-json.md).
 
@@ -1423,7 +1560,7 @@ You need document anti-spoofing (authenticity) without shipping a full OCR UI.
 
 | Platform | Docs | Repository | Default port |
 | --- | --- | --- | ---: |
-| Linux / Docker | [Document liveness Docker](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) | 14106 |
+| Linux / Docker | [Document liveness Docker](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) | 14107 |
 
 Concept guide: [Document liveness](liveness.md). For OCR plus authenticity together, use the [full product](full-product.md).
 """,
@@ -1431,18 +1568,34 @@ Concept guide: [Document liveness](liveness.md). For OCR plus authenticity toget
     hub(
         "id-document-sdk/reference.md",
         "Reference",
-        "Shared Document SDK result shapes and security fields.",
-        """
-## Topics
+        "Documentation for ID Document Recognition and Document Liveness SDKs by platform.",
+        f"""
+Documentation for ID Document Recognition and Document Liveness SDKs.
+
+We provide SDKs for all platforms. Sample projects are on GitHub: [{GH.replace("https://github.com/", "")}]({GH}).
+
+## Quick start
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | [`ID-Document-Recognition-Liveness-Detection-Android`]({GH}/ID-Document-Recognition-Liveness-Detection-Android) |
+| iOS | [iOS](ios.md) | [`ID-Document-Recognition-Liveness-Detection-iOS`]({GH}/ID-Document-Recognition-Liveness-Detection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`ID-Document-Recognition-Liveness-Detection-Flutter`]({GH}/ID-Document-Recognition-Liveness-Detection-Flutter) |
+| React Native | [React Native](react-native.md) | [`ID-Document-Recognition-Liveness-Detection-React-Native`]({GH}/ID-Document-Recognition-Liveness-Detection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) |
+| Windows | [Windows](windows.md) | [`ID-Document-Recognition-Liveness-Detection-Windows`]({GH}/ID-Document-Recognition-Liveness-Detection-Windows) |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`ID-Document-Recognition-Liveness-Detection-Docker`]({GH}/ID-Document-Recognition-Liveness-Detection-Docker) |
+| Document Liveness (Linux / Docker) | [Document Liveness](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) |
+
+## Formats
 
 | Topic | Page |
 | --- | --- |
-| Process / recognize JSON | [Result JSON](result-json.md) |
+| Process JSON | [Result Format](result-json.md) |
 | Authenticity fields | [Security check fields](security-fields.md) |
 
-Parse JSON in your application. Do not scrape the demo Result screen.
-
-Return to the [ID Document SDK](README.md) hub for platform samples.
+HTTP APIs: [SDK Server](../sdk-server/).
 """,
     )
 
@@ -1458,7 +1611,7 @@ Return to the [ID Document SDK](README.md) hub for platform samples.
 2. [Prerequisites: engines](engines.md) — Document `:14102` + Face `:14103`
 3. [Project setup](environment.md) — `.env`, tokens, storage
 4. [Initial setup process](initial-setup.md) — consoles, settings, webhook secret
-5. [Quick start](quick-start.md) · helper `python IDV/scripts/start_local.py`
+5. [Quick start](quick-start.md) · helper `python IDV/IDV_server (then company)`
 6. [End-to-end walkthrough](walkthrough.md)
 7. [Session states](session-states.md)
 8. [Creating a session (API)](api.md)
@@ -1480,7 +1633,7 @@ IDV is a self-host KYC platform that uses Identixia **SDK-integrated HTTP engine
 
 | Role | What it is | Folder | Typical port |
 | --- | --- | --- | ---: |
-| **Admin (platform)** | Tenant API, workers, Identity Console | `platform/server/`, `platform/console/` | 14187 · 14188 |
+| **Admin (platform)** | Tenant API, workers, Identity Console | `IDV_server/`, `IDV_console/` | 14187 · 14188 |
 | **Company (merchant)** | Your backend sample + operator UI | `company/backend/`, `company/admin/` | 14195 · 14189 |
 | **Applicant (user)** | Capture SDKs and demo apps | `app/` | e.g. 5175 |
 | **Engines** | Document + Face recognition / liveness | Face / Document SDK repos | 14102 · 14103 |
@@ -1489,7 +1642,7 @@ IDV is a self-host KYC platform that uses Identixia **SDK-integrated HTTP engine
 
 | Path | Role |
 | --- | --- |
-| `license/admin/` | Hybrid licence **issuer** (Identixia ops) — `:14190`, private only |
+| `license/` | Hybrid licence **issuer** (Identixia ops) — `:14190`, private only |
 | `license/license_v2/` | Shared Hybrid protocol sources |
 | `packages/` | Shared admin UI / decision / licence helpers |
 | `docs/` | Offline handbook + API notes |
@@ -1525,7 +1678,7 @@ Complete one `onboarding_standard` verification locally and see a `session.compl
 
 ```bash
 # IDV server
-cd IDV/platform/server && set IDV_OPEN_API=1 && python app.py
+cd IDV/IDV_server && set IDV_OPEN_API=1 && python app.py
 # → http://127.0.0.1:14187/v1  and  /admin/
 
 # Company backend
@@ -1569,7 +1722,7 @@ Response includes `sessionId`, `captureToken`, `launchUrl`, and `next_step`. Han
    * Body: `{ "images": ["<base64>"] }` (or the shape the step expects)
 3. Repeat until the session completes (typical: document then face)
 
-Use a [client demo](components-clients.md) or Postman (`IDV/platform/server/postman/IDV-Public.postman_collection.json`).
+Use a [client demo](components-clients.md) or Postman (`IDV/IDV_server/postman/IDV-Public.postman_collection.json`).
 
 ## 6. Confirm outcome
 
@@ -1683,9 +1836,9 @@ Register in Identity Console. Events today: `session.created`, `session.complete
 
 | Collection | Path |
 | --- | --- |
-| Public | `IDV/platform/server/postman/IDV-Public.postman_collection.json` |
-| Company sample | `IDV/platform/server/postman/Company-Backend-Sample.postman_collection.json` |
-| Local env | `IDV/platform/server/postman/IDV-Local.postman_environment.json` |
+| Public | `IDV/IDV_server/postman/IDV-Public.postman_collection.json` |
+| Company sample | `IDV/IDV_server/postman/Company-Backend-Sample.postman_collection.json` |
+| Local env | `IDV/IDV_server/postman/IDV-Local.postman_environment.json` |
 
 Full persistence notes: `IDV/docs/API.md` in source. Session meanings: [Session states](session-states.md).
 """,
@@ -1704,10 +1857,10 @@ Full persistence notes: `IDV/docs/API.md` in source. Session meanings: [Session 
 | TLS | Terminate HTTPS on a reverse proxy in front of `:14187` (and company `:14195` if public). |
 | License Admin | Keep `:14190` on **localhost** / private network. Do not publish the issuer UI. |
 | Engines | Point IDV at internal Document `:14102` and Face `:14103` URLs; activate each host/container with its own machine code. |
-| Database | Prefer PostgreSQL via `python IDV/setup_database.py` (or `--yes` for a guided default). SQLite is fine for local demos only. |
+| Database | Prefer PostgreSQL via `python IDV/Install_db/setup_database.py` (or `--yes` for a guided default). SQLite is fine for local demos only. |
 | Memory store | `IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY` are for tests — not production. |
 | Webhooks | Require `whsec_…` HMAC verification; idempotent handlers; poll session API if a delivery is missed. |
-| Brand | Serve `/brand/*` from `license/admin/brand/` (or the configured `IDV_BRAND_DIR`). |
+| Brand | Serve `/brand/*` from `license/brand/` (or the configured `IDV_BRAND_DIR`). |
 
 ## Reverse proxy (sketch)
 
@@ -1715,28 +1868,28 @@ Full persistence notes: `IDV/docs/API.md` in source. Session meanings: [Session 
 Internet clients
       │
       ▼
- HTTPS terminator  ──►  platform/server :14187  (/v1, /admin)
+ HTTPS terminator  ──►  IDV_server :14187  (/v1, /admin)
       │
       └──►  company/backend :14195  (merchant APIs + /admin)
                  │
-                 ├──► platform/server (service bearer)
+                 ├──► IDV_server (service bearer)
                  └──► (optional) capture CDN / static hosting
 
 Internal only:
   document-engine :14102
   face-engine     :14103
-  license/admin   :14190   ← Identixia / ops, not public
+  license   :14190   ← Identixia / ops, not public
 ```
 
 ## Database
 
 ```bash
 cd IDV
-python setup_database.py --check   # inspect current config
-python setup_database.py --yes     # non-interactive recommended local/prod bootstrap
+python IDV/Install_db/setup_database.py --check   # inspect current config
+python IDV/Install_db/setup_database.py --yes     # non-interactive recommended local/prod bootstrap
 ```
 
-Writes `IDV/.env` and creates schema. Production authority is **PostgreSQL**; media / Valkey / RabbitMQ options appear in the same wizard when you need them.
+Writes `IDV_server/.env` and creates schema. Production authority is **PostgreSQL**; media / Valkey / RabbitMQ options appear in the same wizard when you need them.
 
 ## Engine URLs
 
@@ -1772,7 +1925,7 @@ copy .env.example .env
 # or: cp .env.example .env
 ```
 
-Edit `IDV/.env`. Restart servers after changes.
+Edit `IDV_server/.env`. Restart servers after changes.
 
 ## 2. Required keys for a real engine demo
 
@@ -1796,22 +1949,22 @@ Company backend (process env or its own config):
 
 | Env key | Default |
 | --- | --- |
-| `IDV_SERVER_DIR` | `platform/server` |
-| `IDV_SERVER_UI_DIST` | `platform/console/dist` |
-| `IDV_BRAND_DIR` | `license/admin/brand` |
+| `IDV_SERVER_DIR` | `IDV_server` |
+| `IDV_SERVER_UI_DIST` | `IDV_console/dist` |
+| `IDV_BRAND_DIR` | `license/brand` |
 | `COMPANY_ADMIN_DIST` | `company/admin/dist` |
 | `COMPANY_ADMIN_DIR` | `company/admin` |
-| `LICENSE_ADMIN_DIR` | `license/admin` |
+| `LICENSE_ADMIN_DIR` | `license` |
 
 ## 4. Storage
 
 | Project | Default |
 | --- | --- |
-| `platform/server` | SQLite under `database/` (tenant-separated rows) |
+| `IDV_server` | SQLite under `database/` (tenant-separated rows) |
 | `company/backend` | `company/backend/database/company.sqlite` |
-| `license/admin` | `license/admin/database/` (issuer ledger) |
+| `license` | `license/database/` (issuer ledger) |
 
-Production: `python IDV/setup_database.py` (or `--yes`) for PostgreSQL / media / Valkey / RabbitMQ. Memory stores are for tests only (`IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY`).
+Production: `python IDV/Install_db/setup_database.py` (or `--yes`) for PostgreSQL / media / Valkey / RabbitMQ. Memory stores are for tests only (`IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY`).
 
 ## 5. Security rules (non-negotiable)
 
@@ -1834,7 +1987,7 @@ Next: [Initial setup process](initial-setup.md).
 
 1. Engines healthy — [Prerequisites: engines](engines.md)
 2. `.env` configured — [Project setup](environment.md)
-3. Platform + company running — `python IDV/scripts/start_local.py` or [Quick start](quick-start.md)
+3. Platform + company running — `python IDV/IDV_server (then company)` or [Quick start](quick-start.md)
 
 ## 1. Open Identity Console
 
@@ -1964,18 +2117,18 @@ Company systems integrate **through** this platform — see [Company integration
     hub(
         "idv/platform-server.md",
         "IDV server",
-        "platform/server: platform API, workers, storage, and /admin mount.",
+        "IDV_server: platform API, workers, storage, and /admin mount.",
         """
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/platform/server/` |
+| Folder | `IDV/IDV_server/` |
 | API | `http://127.0.0.1:14187/v1` |
 | Admin (production build) | `http://127.0.0.1:14187/admin/` |
-| Postman | `IDV/platform/server/postman/` |
+| Postman | `IDV/IDV_server/postman/` |
 | OpenAPI notes | `IDV/docs/API.md` |
 
 ```bash
-cd IDV/platform/server
+cd IDV/IDV_server
 python -m venv .venv && .venv/Scripts/activate
 pip install -r requirements.txt
 set IDV_OPEN_API=1
@@ -1984,22 +2137,22 @@ python app.py
 
 `IDV_OPEN_API=1` enables the local demo bearer (`demo` / `ten_demo`). Disable it outside local demos — see [Production](production.md).
 
-Integrator routes: [Creating a session (API)](api.md). Decision code: `platform/server/idv/decision/`.
+Integrator routes: [Creating a session (API)](api.md). Decision code: `IDV_server/idv/decision/`.
 """,
     )
     hub(
         "idv/platform-console.md",
         "Identity Console",
-        "platform/console — tenant operators: sessions, reviews, webhooks, workflows.",
+        "IDV_console — tenant operators: sessions, reviews, webhooks, workflows.",
         """
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/platform/console/` |
+| Folder | `IDV/IDV_console/` |
 | Develop | `http://127.0.0.1:14188/` (proxies API to `:14187`) |
-| Production | `npm run build` → served from `platform/server` at `/admin/` |
+| Production | `npm run build` → served from `IDV_server` at `/admin/` |
 
 ```bash
-cd IDV/platform/console
+cd IDV/IDV_console
 npm install && npm run dev
 ```
 
@@ -2183,22 +2336,22 @@ IDV uses **Hybrid** licensing: day-to-day metering on the customer host, issuanc
 | First issue | `license_request.txt` | `license.txt` |
 | Same host again | — | Used count kept (no restore) |
 
-The issuer never sees ID images or biometrics. Brand files for consoles live under `license/admin/brand/`.
+The issuer never sees ID images or biometrics. Brand files for consoles live under `license/brand/`.
 """,
     )
     hub(
         "idv/license-admin.md",
         "License Admin",
-        "Identixia Hybrid issuer (license/admin) on localhost :14190.",
+        "Identixia Hybrid issuer (license) on localhost :14190.",
         """
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/license/admin/` |
+| Folder | `IDV/license/` |
 | UI | `http://127.0.0.1:14190/` (**localhost only**) |
-| Brand | `license/admin/brand/` → `/brand/*` |
+| Brand | `license/brand/` → `/brand/*` |
 
 ```bash
-cd IDV/license/admin
+cd IDV/license
 pip install -r requirements.txt
 set LICENSE_ADMIN_PASSWORD=a-long-first-password
 python app.py
@@ -2219,7 +2372,7 @@ First sign-in enrols an authenticator for the seeded `admin` operator.
     hub(
         "idv/license-protocol.md",
         "Hybrid licence protocol",
-        "license_v2 shared protocol used by platform/server and license/admin.",
+        "license_v2 shared protocol used by IDV_server and license.",
         """
 ## Overview
 
@@ -2228,7 +2381,7 @@ IDV uses a **Hybrid** licence model: day-to-day entitlement metering runs on the
 | Path | Role |
 | --- | --- |
 | `IDV/license/license_v2/` | Canonical protocol sources and tests |
-| Vendored copies | Inside `platform/server/` and `license/admin/` for self-contained runs |
+| Vendored copies | Inside `IDV_server/` and `license/` for self-contained runs |
 | `IDV/packages/license-core` | Helper package for consoles and shared libraries |
 
 ## Operating model
@@ -2236,7 +2389,7 @@ IDV uses a **Hybrid** licence model: day-to-day entitlement metering runs on the
 | Step | Where it happens |
 | --- | --- |
 | Issue / renew `license.txt` | [License Admin](license-admin.md) (Identixia) |
-| Enforce usage on the host | `license/license_v2` inside `platform/server` |
+| Enforce usage on the host | `license/license_v2` (issuer) / server copy in `IDV_server` |
 | Sync usage receipts | USB export or `POST /api/v2/online/report` (when exposed) |
 
 There is one commercial Hybrid product. Operators do not choose STRICT/LENIENT tiers in the issuer UI. The issuer never receives ID images or biometrics.
@@ -2256,7 +2409,7 @@ Parent: [Licensing](licensing.md).
 | `license-core` | Hybrid licence helpers |
 | `contracts` / `db` | Shared contracts and DB helpers when used by kits |
 
-Applicant SDKs are **not** here — they live under `IDV/app/packages/`.
+Applicant SDKs are **not** here — they live under `IDV/demo_clients/packages/`.
 """,
     )
     hub(
@@ -2269,7 +2422,7 @@ Applicant SDKs are **not** here — they live under `IDV/app/packages/`.
 | Integrator summary (this site) | [Creating a session (API)](api.md) · [Walkthrough](walkthrough.md) · [Production](production.md) |
 | Endpoint / persistence notes | `IDV/docs/API.md` |
 | Offline handbook (chapters) | `IDV/docs/handbook/` · `IDV/docs/index.html` |
-| Postman (public / private / company) | `IDV/platform/server/postman/` |
+| Postman (public / private / company) | `IDV/IDV_server/postman/` |
 | Architecture notes | `IDV/docs/architecture.md` |
 
 GitBook covers the integrator path. Deep handbook chapters stay in `IDV/docs/` and are not duplicated page-for-page here.
@@ -2305,7 +2458,7 @@ IDV selects recognition, authenticity, or full process based on workflow steps a
 | Setting | Value |
 | --- | --- |
 | Base URL | `http://127.0.0.1:14103` |
-| Modes | compare · boxes · template · score · liveness |
+| Modes | `/api/face/compare` · `/boxes` · `/template` · `/score` · `/liveness` |
 
 IDV uses the Face SDK matcher for 1:1 and related steps. Optional vector indexes stay off until interoperability gates are set — ANN distance alone never decides trust.
 
@@ -2318,11 +2471,11 @@ IDV uses the Face SDK matcher for 1:1 and related steps. Optional vector indexes
     hub(
         "idv/components-clients.md",
         "Applicant clients",
-        "IDV client SDKs and demo apps under IDV/app/.",
+        "IDV client SDKs and demo apps under IDV/demo_clients/.",
         """
 Capture SDKs and demos. The **service token stays on the company backend**; apps use capture tokens.
 
-## Packages (`IDV/app/packages/`)
+## Packages (`IDV/demo_clients/packages/`)
 
 | Package | Role |
 | --- | --- |
@@ -2341,7 +2494,7 @@ Capture SDKs and demos. The **service token stays on the company backend**; apps
 | Flutter / React Native | [Other demos](client-other.md) |
 
 ```bash
-python IDV/app/tools/refresh_client.py
+python IDV/demo_clients/tools/refresh_client.py
 ```
 """,
     )
@@ -2353,7 +2506,7 @@ python IDV/app/tools/refresh_client.py
 ## Run locally
 
 ```bash
-cd IDV/app/demos/web
+cd IDV/demo_clients/demos/web
 npm install && npm run dev
 # http://127.0.0.1:5175/
 ```
@@ -2373,13 +2526,13 @@ Parent: [Applicant clients](components-clients.md).
 ## Build
 
 ```bash
-cd IDV/app/packages/idv-android
+cd IDV/demo_clients/packages/idv-android
 ./gradlew publishToMavenLocal
 cd ../../app/android
 ./gradlew :app:assembleDebug
 ```
 
-Use a capture token from the company backend. Package sources: `IDV/app/packages/idv-android`.
+Use a capture token from the company backend. Package sources: `IDV/demo_clients/packages/idv-android`.
 
 Parent: [Applicant clients](components-clients.md).
 """,
@@ -2391,9 +2544,9 @@ Parent: [Applicant clients](components-clients.md).
         """
 ## Run
 
-Open `IDV/app/demos/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme on a physical device when testing camera capture.
+Open `IDV/demo_clients/demos/ios/IdvClient.xcodeproj` and run the **IdvClient** scheme on a physical device when testing camera capture.
 
-Session client package: `IDV/app/packages/idv-ios`.
+Session client package: `IDV/demo_clients/packages/idv-ios`.
 
 Parent: [Applicant clients](components-clients.md).
 """,
@@ -2407,104 +2560,563 @@ Parent: [Applicant clients](components-clients.md).
 
 | App | Path |
 | --- | --- |
-| Flutter | `IDV/app/demos/flutter` |
-| React Native | `IDV/app/demos/react_native` |
+| Flutter | `IDV/demo_clients/demos/flutter` |
+| React Native | `IDV/demo_clients/demos/react_native` |
 
-React Native capture helpers align with `packages/idv-web`. See `IDV/app/README.md` for bootstrap details.
+React Native capture helpers align with `packages/idv-web`. See `IDV/demo_clients/README.md` for bootstrap details.
 
 Parent: [Applicant clients](components-clients.md).
 """,
     )
 
 
+def write_sdk_server() -> None:
+    """HTTP SDK Server section — full integration guides for Windows/Docker APIs."""
+    write_page(
+        OUT / "sdk-server" / "README.md",
+        "SDK Server",
+        "Full integration guide for on-premise Windows and Docker HTTP APIs.",
+        """
+This section is the **HTTP integration guide** for Identixia Windows and Docker products. Use it when you call `/api/*` from your backend, mobile app, or Postman — after the product server is running.
+
+## Products and ports
+
+| Product | Default port | Gradio demo | Docs |
+| --- | --- | --- | --- |
+| Document recognition + liveness | **14102** | **14202** | [Document Recognition](document-recognition.md) |
+| Face recognition + liveness | **14103** | **14203** | [Face Recognition](face-recognition.md) |
+| Face recognition only | **14104** | **14204** | [Face Recognition](face-recognition.md) |
+| Face liveness only | **14105** | **14205** | [Face Liveness](face-liveness.md) |
+| Document recognition only | **14106** | **14206** | [Document Recognition](document-recognition.md) |
+| Document liveness only | **14107** | **14207** | [Document Liveness](document-liveness.md) |
+
+## Start any server (same pattern)
+
+1. Clone the product repository (Windows or Docker).
+2. Download runtime libraries and databases:
+
+```bash
+python scripts/get_runtime.py
+```
+
+3. Copy `.env.example` → `.env`, install Python deps, start (`python run_server.py` / `python3 run_server.py` or Docker Compose).
+4. Read the machine code, request a license, activate.
+5. Call process routes with base64 images (JSON or multipart).
+
+```bash
+curl -s http://127.0.0.1:14103/api/machinecode
+curl -s -X POST http://127.0.0.1:14103/api/activate \\
+  -H "Content-Type: application/json" \\
+  -d '{"license":"YOUR_KEY"}'
+curl -s http://127.0.0.1:14103/api/health
+curl -s http://127.0.0.1:14103/api/licenseStatus
+```
+
+## Response shapes
+
+| Route type | Shape |
+| --- | --- |
+| Control (`/api/health`, `/api/activate`, `/api/machinecode`, `/api/licenseStatus`, `/api/backend`) | `{success, code, message, request_id, data}` |
+| Process (`/api/face/*`, `/api/document/*`) | Engine / process JSON (not the control envelope) |
+
+## Runtime placement
+
+| Platform | Path after `get_runtime.py` |
+| --- | --- |
+| Windows / Linux host | `lib/cpu/` — binaries **and** every required `*.xdb` |
+| Docker Hub image | Runtime is already inside the image |
+
+Never ship binaries without database packs. Face recognition needs the full `recognition*.xdb` set; document products need `document.xdb`.
+
+## Postman
+
+Import once (every path, no duplicates):
+
+* Monorepo: `postman/Identixia-API.postman_collection.json`
+* Environment: `postman/Identixia-Local.postman_environment.json`
+* Set `baseUrl` to the product under test (`http://127.0.0.1:14102` … `14107`)
+
+## Platform deep-dives
+
+* Face: [Windows](../face-sdk/windows.md) · [Linux / Docker](../face-sdk/linux-docker.md)
+* Document: [Windows](../id-document-sdk/windows.md) · [Linux / Docker](../id-document-sdk/linux-docker.md)
+
+## Next
+
+* [Face Recognition](face-recognition.md)
+* [Face Liveness](face-liveness.md)
+* [Document Recognition](document-recognition.md)
+* [Document Liveness](document-liveness.md)
+""".strip()
+        + "\n",
+    )
+    write_page(
+        OUT / "sdk-server" / "face-recognition.md",
+        "Face Recognition",
+        "Full HTTP integration guide for face recognition (+ optional liveness).",
+        """
+Start Face Recognition (+ Liveness) Windows/Docker on port **14103** (recognition-only uses **14104**).
+
+## Start the project
+
+```bash
+git clone https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows.git
+cd FaceRecognition-LivenessDetection-Windows
+python scripts/get_runtime.py
+cp -n .env.example .env
+pip install -r requirements.txt
+python run_server.py
+```
+
+Linux / Docker: see [Linux / Docker](../face-sdk/linux-docker.md). Place files under `lib/cpu/` including every `recognition*.xdb` pack.
+
+## Activate
+
+```bash
+curl -s http://127.0.0.1:14103/api/machinecode
+curl -s -X POST http://127.0.0.1:14103/api/activate \\
+  -H "Content-Type: application/json" \\
+  -d '{"license":"YOUR_KEY"}'
+curl -s http://127.0.0.1:14103/api/licenseStatus
+```
+
+## All endpoints
+
+### Control
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/health` | Process up |
+| `GET` | `/api/backend` | Backend / SDK info |
+| `GET` | `/api/machinecode` | Machine fingerprint |
+| `GET` | `/api/licenseStatus` | `recognition`, `liveness` flags |
+| `POST` | `/api/activate` | Activate license |
+
+### Face process
+
+| Method | Path | Body (summary) | Description |
+| --- | --- | --- | --- |
+| `POST` | `/api/face/analyze` | `image`, optional `cropImage` | Full analyze |
+| `POST` | `/api/face/boxes` | `image` | Face boxes |
+| `POST` | `/api/face/traits` | `image` | Attributes |
+| `POST` | `/api/face/image-quality` | `image` | Image quality |
+| `POST` | `/api/face/landmarks` | `image`, `mode` `14` or `68` | Landmarks |
+| `POST` | `/api/face/quality` | `image` | Face quality |
+| `POST` | `/api/face/template` | `image` | Template / feature |
+| `POST` | `/api/face/compare` | `image1`, `image2` | 1:1 image match |
+| `POST` | `/api/face/score` | `feature1`, `feature2` | Template similarity |
+| `POST` | `/api/face/liveness` | `image` | PAD + deepfake (when licensed) |
+| `POST` | `/api/face/deepfake` | `image` | Deepfake-only |
+| `POST` | `/api/face/enroll` | `image`, `name` | Gallery enroll |
+| `POST` | `/api/face/search` | `image`, `threshold` | 1:N search |
+| `GET` | `/api/face/gallery` | — | List gallery |
+| `DELETE` | `/api/face/gallery/{id}` | — | Remove entry |
+| `POST` | `/api/face/track/start` | config | Start track session |
+| `POST` | `/api/face/track/frame` | `image` | Push frame |
+| `GET` | `/api/face/track/events` | — | Poll events |
+| `POST` | `/api/face/track/stop` | — | Stop session |
+
+## cURL — analyze
+
+```bash
+curl -s -X POST http://127.0.0.1:14103/api/face/analyze \\
+  -H "Content-Type: application/json" \\
+  -d '{"image":"BASE64_JPEG","cropImage":false}'
+```
+
+## cURL — compare (1:1)
+
+```bash
+curl -s -X POST http://127.0.0.1:14103/api/face/compare \\
+  -H "Content-Type: application/json" \\
+  -d '{"image1":"BASE64_A","image2":"BASE64_B"}'
+```
+
+## cURL — liveness (when licensed)
+
+```bash
+curl -s -X POST http://127.0.0.1:14103/api/face/liveness \\
+  -H "Content-Type: application/json" \\
+  -d '{"image":"BASE64_JPEG"}'
+```
+
+Authenticity is **REAL** only when PAD and deepfake both pass.
+
+## Python
+
+```python
+import base64, json, urllib.request
+from pathlib import Path
+
+image = base64.b64encode(Path("photo.jpg").read_bytes()).decode()
+req = urllib.request.Request(
+    "http://127.0.0.1:14103/api/face/analyze",
+    data=json.dumps({"image": image, "cropImage": False}).encode(),
+    headers={"Content-Type": "application/json"},
+)
+with urllib.request.urlopen(req, timeout=180) as resp:
+    print(resp.read().decode())
+```
+
+## JavaScript
+
+```javascript
+const image = /* base64 string */;
+const res = await fetch("http://127.0.0.1:14103/api/face/analyze", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ image, cropImage: false }),
+});
+console.log(await res.json());
+```
+
+## Resources
+
+* [Windows product guide](../face-sdk/windows.md)
+* [Linux / Docker product guide](../face-sdk/linux-docker.md)
+* [Postman](README.md#postman)
+* [Request a license](../request-a-license-and-support.md)
+""".strip()
+        + "\n",
+    )
+    write_page(
+        OUT / "sdk-server" / "face-liveness.md",
+        "Face Liveness",
+        "Full HTTP integration guide for passive face liveness (+ deepfake).",
+        """
+Start Face Liveness Windows/Docker on port **14105** (the full Face product also exposes liveness on **14103**).
+
+## Start the project
+
+```bash
+git clone https://github.com/identixia-IDV/FaceLivenessDetection-Windows.git
+cd FaceLivenessDetection-Windows
+python scripts/get_runtime.py
+cp -n .env.example .env
+pip install -r requirements.txt
+python run_server.py
+```
+
+Place under `lib/cpu/`: engine binaries plus `recognition-common.xdb`, `recognition-liveness.xdb`, and `recognition-deepfake.xdb`. Matcher packs (`recognition.xdb`, attr, quality) are **not** included in the liveness-only product.
+
+## Activate
+
+```bash
+curl -s http://127.0.0.1:14105/api/machinecode
+curl -s -X POST http://127.0.0.1:14105/api/activate \\
+  -H "Content-Type: application/json" \\
+  -d '{"license":"YOUR_KEY"}'
+curl -s http://127.0.0.1:14105/api/licenseStatus
+```
+
+## Endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/health` | Health |
+| `GET` | `/api/machinecode` | Machine code |
+| `GET` | `/api/licenseStatus` | Liveness entitlement |
+| `POST` | `/api/activate` | Activate |
+| `POST` | `/api/face/liveness` | PAD + deepfake (combined authenticity) |
+| `POST` | `/api/face/deepfake` | Deepfake-only score |
+
+Authenticity is **REAL** only when PAD and deepfake both pass.
+
+## cURL
+
+```bash
+curl -s -X POST http://127.0.0.1:14105/api/face/liveness \\
+  -H "Content-Type: application/json" \\
+  -d '{"image":"BASE64_JPEG"}'
+```
+
+## Python
+
+```python
+import base64, json, urllib.request
+from pathlib import Path
+
+image = base64.b64encode(Path("photo.jpg").read_bytes()).decode()
+req = urllib.request.Request(
+    "http://127.0.0.1:14105/api/face/liveness",
+    data=json.dumps({"image": image}).encode(),
+    headers={"Content-Type": "application/json"},
+)
+with urllib.request.urlopen(req, timeout=180) as resp:
+    print(resp.read().decode())
+```
+
+## JavaScript
+
+```javascript
+const image = /* base64 string */;
+const res = await fetch("http://127.0.0.1:14105/api/face/liveness", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ image }),
+});
+console.log(await res.json());
+```
+
+## Resources
+
+* [Face Liveness (Windows)](../face-sdk/liveness-windows.md)
+* [Face Liveness (Linux / Docker)](../face-sdk/liveness-linux-docker.md)
+* [Postman](README.md#postman)
+""".strip()
+        + "\n",
+    )
+    write_page(
+        OUT / "sdk-server" / "document-recognition.md",
+        "Document Recognition",
+        "Full HTTP integration guide for ID document recognition (+ optional authenticity).",
+        """
+Start Document full product on port **14102** (recognition-only uses **14106**).
+
+## Start the project
+
+```bash
+git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows.git
+cd ID-Document-Recognition-Liveness-Detection-Windows
+python scripts/get_runtime.py
+cp -n .env.example .env
+pip install -r requirements.txt
+python run_server.py
+```
+
+Place under `lib/cpu/`: `DocumentReaderSDK.dll` (or Linux `.so` files) **and** `document.xdb`.
+
+## Activate
+
+```bash
+curl -s http://127.0.0.1:14102/api/machinecode
+curl -s -X POST http://127.0.0.1:14102/api/activate \\
+  -H "Content-Type: application/json" \\
+  -d '{"license":"YOUR_KEY"}'
+curl -s http://127.0.0.1:14102/api/licenseStatus
+```
+
+## Endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/health` | Health |
+| `GET` | `/api/backend` | Backend info |
+| `GET` | `/api/machinecode` | Machine code |
+| `GET` | `/api/licenseStatus` | `recognition`, `authenticity` flags |
+| `POST` | `/api/activate` | Activate |
+| `POST` | `/api/document/process` | Full process (OCR + optional authenticity) |
+| `POST` | `/api/document/recognition` | Recognition only |
+| `POST` | `/api/document/liveness` | Authenticity / PAD only |
+| `POST` | `/api/document/general` | General helper |
+
+Prefer `images: [{ "image": "<b64>" }, …]` when the binding expects an array (see Postman). Some samples also accept `image` / `image2`.
+
+## cURL — process
+
+```bash
+curl -s -X POST http://127.0.0.1:14102/api/document/process \\
+  -H "Content-Type: application/json" \\
+  -d '{"images":[{"image":"BASE64_FRONT"},{"image":"BASE64_BACK"}]}'
+```
+
+## Python
+
+```python
+import base64, json, urllib.request
+from pathlib import Path
+
+front = base64.b64encode(Path("front.jpg").read_bytes()).decode()
+back = base64.b64encode(Path("back.jpg").read_bytes()).decode()
+req = urllib.request.Request(
+    "http://127.0.0.1:14102/api/document/process",
+    data=json.dumps({"images": [{"image": front}, {"image": back}]}).encode(),
+    headers={"Content-Type": "application/json"},
+)
+with urllib.request.urlopen(req, timeout=180) as resp:
+    print(resp.read().decode())
+```
+
+## Resources
+
+* [Result Format](../id-document-sdk/result-json.md)
+* [Security check fields](../id-document-sdk/security-fields.md)
+* [Windows](../id-document-sdk/windows.md) · [Linux / Docker](../id-document-sdk/linux-docker.md)
+* [Postman](README.md#postman)
+""".strip()
+        + "\n",
+    )
+    write_page(
+        OUT / "sdk-server" / "document-liveness.md",
+        "Document Liveness",
+        "Full HTTP integration guide for document authenticity / PAD.",
+        """
+Start Document Liveness Windows/Docker on port **14107** (the full Document product also exposes authenticity on **14102**).
+
+## Start the project
+
+```bash
+git clone https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows.git
+cd ID-Document-Liveness-Detection-Windows
+python scripts/get_runtime.py
+cp -n .env.example .env
+pip install -r requirements.txt
+python run_server.py
+```
+
+Place under `lib/cpu/`: engine binaries and liveness-only `document.xdb` (packed from `db_liveness.dat`). OCR recognition databases are **not** included.
+
+## Activate
+
+```bash
+curl -s http://127.0.0.1:14107/api/machinecode
+curl -s -X POST http://127.0.0.1:14107/api/activate \\
+  -H "Content-Type: application/json" \\
+  -d '{"license":"YOUR_KEY"}'
+```
+
+## Endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/health` | Health |
+| `GET` | `/api/machinecode` | Machine code |
+| `GET` | `/api/licenseStatus` | Entitlement |
+| `POST` | `/api/activate` | Activate |
+| `POST` | `/api/document/liveness` | Authenticity / PAD for front (+ back) images |
+
+This product is **PAD / authenticity**, not OCR. Pair with Document Recognition when you need fields.
+
+## cURL
+
+```bash
+curl -s -X POST http://127.0.0.1:14107/api/document/liveness \\
+  -H "Content-Type: application/json" \\
+  -d '{"images":["BASE64_FRONT","BASE64_BACK"]}'
+```
+
+## Python
+
+```python
+import base64, json, urllib.request
+from pathlib import Path
+
+front = base64.b64encode(Path("front.jpg").read_bytes()).decode()
+req = urllib.request.Request(
+    "http://127.0.0.1:14107/api/document/liveness",
+    data=json.dumps({"images": [front]}).encode(),
+    headers={"Content-Type": "application/json"},
+)
+with urllib.request.urlopen(req, timeout=180) as resp:
+    print(resp.read().decode())
+```
+
+## JavaScript
+
+```javascript
+const image = /* front base64 */;
+const res = await fetch("http://127.0.0.1:14107/api/document/liveness", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ image }),
+});
+console.log(await res.json());
+```
+
+See [Security check fields](../id-document-sdk/security-fields.md).
+""".strip()
+        + "\n",
+    )
+
+
 def write_summary(_structure: dict[str, list[tuple[str, str]]] | None = None) -> None:
-    """4–5 level GitBook sidebar. Leaf platform files keep stable catalog URLs."""
+    """FaceOnLive-style shallow sidebar. Leaf platform files keep stable catalog URLs.
+
+    Pattern (see https://docs.faceonlive.com/):
+      Welcome → SDK Server → IDV (KYC) → Face SDK (Intro + Reference) → Document SDK (Intro + Reference)
+    """
     lines = [
         "# Table of contents",
         "",
         "",
         "* [Welcome to Identixia](README.md)",
-        "* [Face SDK](face-sdk/README.md)",
-        "  * [Recognition](face-sdk/recognition.md)",
-        "    * [Full product (recognition + liveness)](face-sdk/full-product.md)",
-        "      * [Mobile & cross-platform](face-sdk/full-mobile.md)",
-        "        * [Android](face-sdk/android.md)",
-        "        * [iOS](face-sdk/ios.md)",
-        "        * [Flutter](face-sdk/flutter.md)",
-        "        * [React Native](face-sdk/react-native.md)",
-        "        * [Ionic Capacitor](face-sdk/ionic-capacitor.md)",
-        "        * [Ionic Cordova](face-sdk/ionic-cordova.md)",
-        "      * [Server (Windows & Docker)](face-sdk/full-server.md)",
-        "        * [Windows](face-sdk/windows.md)",
-        "        * [Linux / Docker](face-sdk/linux-docker.md)",
-        "    * [Recognition-only products](face-sdk/recognition-only.md)",
-        "      * [Windows](face-sdk/recognition-windows.md)",
-        "      * [Linux / Docker](face-sdk/recognition-linux-docker.md)",
-        "  * [Liveness](face-sdk/liveness.md)",
-        "    * [In the full product](face-sdk/full-product.md)",
-        "      * [Mobile & cross-platform](face-sdk/full-mobile.md)",
-        "      * [Server (Windows & Docker)](face-sdk/full-server.md)",
-        "    * [Liveness-only products](face-sdk/liveness-only.md)",
-        "      * [Mobile](face-sdk/liveness-only-mobile.md)",
-        "        * [Android](face-sdk/liveness-android.md)",
-        "        * [iOS](face-sdk/liveness-ios.md)",
-        "      * [Server](face-sdk/liveness-only-server.md)",
-        "        * [Windows](face-sdk/liveness-windows.md)",
-        "        * [Linux / Docker](face-sdk/liveness-linux-docker.md)",
-        "* [ID Document SDK](id-document-sdk/README.md)",
-        "  * [Recognition](id-document-sdk/recognition.md)",
-        "    * [Full product (recognition + liveness)](id-document-sdk/full-product.md)",
-        "      * [Mobile & cross-platform](id-document-sdk/full-mobile.md)",
-        "        * [Android](id-document-sdk/android.md)",
-        "        * [iOS](id-document-sdk/ios.md)",
-        "        * [Flutter](id-document-sdk/flutter.md)",
-        "        * [React Native](id-document-sdk/react-native.md)",
-        "        * [Ionic Capacitor](id-document-sdk/ionic-capacitor.md)",
-        "        * [Ionic Cordova](id-document-sdk/ionic-cordova.md)",
-        "      * [Server (Windows & Docker)](id-document-sdk/full-server.md)",
-        "        * [Windows](id-document-sdk/windows.md)",
-        "        * [Linux / Docker](id-document-sdk/linux-docker.md)",
-        "  * [Liveness](id-document-sdk/liveness.md)",
-        "    * [In the full product](id-document-sdk/full-product.md)",
-        "      * [Mobile & cross-platform](id-document-sdk/full-mobile.md)",
-        "      * [Server (Windows & Docker)](id-document-sdk/full-server.md)",
-        "    * [Liveness-only products](id-document-sdk/liveness-only.md)",
-        "      * [Linux / Docker](id-document-sdk/liveness-linux-docker.md)",
-        "  * [Reference](id-document-sdk/reference.md)",
-        "    * [Result JSON](id-document-sdk/result-json.md)",
-        "    * [Security check fields](id-document-sdk/security-fields.md)",
-        "* [IDV platform](idv/README.md)",
-        "  * [Getting started](idv/getting-started.md)",
-        "    * [Project structure](idv/project-structure.md)",
-        "    * [Prerequisites: engines](idv/engines.md)",
-        "      * [Document engine](idv/engines-document.md)",
-        "      * [Face engine](idv/engines-face.md)",
-        "    * [Project setup](idv/environment.md)",
-        "    * [Initial setup process](idv/initial-setup.md)",
-        "    * [Quick start](idv/quick-start.md)",
-        "    * [End-to-end walkthrough](idv/walkthrough.md)",
-        "  * [Session states](idv/session-states.md)",
+        "* [SDK Server](sdk-server/README.md)",
+        "  * [Face Recognition](sdk-server/face-recognition.md)",
+        "  * [Face Liveness](sdk-server/face-liveness.md)",
+        "  * [Document Recognition](sdk-server/document-recognition.md)",
+        "  * [Document Liveness](sdk-server/document-liveness.md)",
+        "* [IDV: Self-Host KYC Platform](idv/README.md)",
+        "  * [Project structure](idv/project-structure.md)",
+        "  * [Project setup](idv/environment.md)",
+        "  * [Initial setup process](idv/initial-setup.md)",
+        "  * [Understanding session states](idv/session-states.md)",
+        "  * [iOS & Android](idv/components-clients.md)",
         "  * [Creating a session (API)](idv/api.md)",
         "  * [Webhook integration](idv/company-webhooks.md)",
-        "  * [Applicant clients](idv/components-clients.md)",
-        "    * [Web demo](idv/client-web.md)",
-        "    * [Android demo](idv/client-android.md)",
-        "    * [iOS demo](idv/client-ios.md)",
-        "    * [Flutter & React Native](idv/client-other.md)",
-        "  * [Architecture](idv/architecture.md)",
-        "  * [Platform](idv/platform.md)",
-        "    * [IDV server](idv/platform-server.md)",
-        "    * [Identity Console](idv/platform-console.md)",
-        "  * [Company integration](idv/company.md)",
-        "    * [Company backend (server)](idv/company-backend.md)",
-        "    * [Company Admin UI](idv/company-admin.md)",
+        "  * [Quick start](idv/quick-start.md)",
+        "  * [Walkthrough](idv/walkthrough.md)",
+        "  * [IDV server](idv/platform-server.md)",
+        "  * [Identity Console](idv/platform-console.md)",
+        "  * [Company backend](idv/company-backend.md)",
+        "  * [Company Admin UI](idv/company-admin.md)",
         "  * [Licensing](idv/licensing.md)",
-        "    * [License Admin](idv/license-admin.md)",
-        "    * [Hybrid licence protocol](idv/license-protocol.md)",
         "  * [Production](idv/production.md)",
-        "  * [Shared packages](idv/shared-packages.md)",
-        "  * [Map of components](idv/components.md)",
         "  * [Reference](idv/reference.md)",
+        "",
+        "## Face Recognition & Liveness Detection",
+        "",
+        "* [Introduction](face-sdk/README.md)",
+        "* [Develop](face-sdk/integration-guide.md)",
+        "  * [Integration guide](face-sdk/integration-guide.md)",
+        "  * [Face recognition](face-sdk/recognition.md)",
+        "  * [Face liveness](face-sdk/liveness.md)",
+        "  * [Full product](face-sdk/full-product.md)",
+        "  * [Full product — mobile](face-sdk/full-mobile.md)",
+        "  * [Full product — server](face-sdk/full-server.md)",
+        "  * [Recognition only](face-sdk/recognition-only.md)",
+        "  * [Liveness only](face-sdk/liveness-only.md)",
+        "  * [Liveness only — mobile](face-sdk/liveness-only-mobile.md)",
+        "  * [Liveness only — server](face-sdk/liveness-only-server.md)",
+        "* [Resources](face-sdk/reference.md)",
+        "  * [Android](face-sdk/android.md)",
+        "  * [iOS](face-sdk/ios.md)",
+        "  * [Flutter](face-sdk/flutter.md)",
+        "  * [React Native](face-sdk/react-native.md)",
+        "  * [Ionic Capacitor](face-sdk/ionic-capacitor.md)",
+        "  * [Ionic Cordova](face-sdk/ionic-cordova.md)",
+        "  * [Windows](face-sdk/windows.md)",
+        "  * [Linux / Docker](face-sdk/linux-docker.md)",
+        "  * [Face Recognition (Windows)](face-sdk/recognition-windows.md)",
+        "  * [Face Recognition (Linux / Docker)](face-sdk/recognition-linux-docker.md)",
+        "  * [Face Liveness (Android)](face-sdk/liveness-android.md)",
+        "  * [Face Liveness (iOS)](face-sdk/liveness-ios.md)",
+        "  * [Face Liveness (Windows)](face-sdk/liveness-windows.md)",
+        "  * [Face Liveness (Linux / Docker)](face-sdk/liveness-linux-docker.md)",
+        "",
+        "## ID Document Recognition & Liveness Detection",
+        "",
+        "* [Introduction](id-document-sdk/README.md)",
+        "* [Develop](id-document-sdk/integration-guide.md)",
+        "  * [Integration guide](id-document-sdk/integration-guide.md)",
+        "  * [Document recognition](id-document-sdk/recognition.md)",
+        "  * [Document liveness](id-document-sdk/liveness.md)",
+        "  * [Full product](id-document-sdk/full-product.md)",
+        "  * [Full product — mobile](id-document-sdk/full-mobile.md)",
+        "  * [Full product — server](id-document-sdk/full-server.md)",
+        "  * [Liveness only](id-document-sdk/liveness-only.md)",
+        "  * [Result format](id-document-sdk/result-json.md)",
+        "  * [Security check fields](id-document-sdk/security-fields.md)",
+        "* [Resources](id-document-sdk/reference.md)",
+        "  * [Android](id-document-sdk/android.md)",
+        "  * [iOS](id-document-sdk/ios.md)",
+        "  * [Flutter](id-document-sdk/flutter.md)",
+        "  * [React Native](id-document-sdk/react-native.md)",
+        "  * [Ionic Capacitor](id-document-sdk/ionic-capacitor.md)",
+        "  * [Ionic Cordova](id-document-sdk/ionic-cordova.md)",
+        "  * [Windows](id-document-sdk/windows.md)",
+        "  * [Linux / Docker](id-document-sdk/linux-docker.md)",
+        "  * [Document Liveness (Linux / Docker)](id-document-sdk/liveness-linux-docker.md)",
+        "",
         "* [Request a License & Support](request-a-license-and-support.md)",
         "* [Contact](contact-us.md)",
         "",
@@ -2561,6 +3173,8 @@ def main() -> int:
     write_face_concepts()
     write_document_hub()
     write_document_concepts()
+    write_integration_guides()
+    write_sdk_server()
     write_idv_pages()
     write_nav_hubs()
     write_static_pages()

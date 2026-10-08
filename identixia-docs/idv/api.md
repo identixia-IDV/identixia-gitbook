@@ -95,8 +95,8 @@ Register in Identity Console. Events today: `session.created`, `session.complete
 
 | Collection | Path |
 | --- | --- |
-| Public | `IDV/platform/server/postman/IDV-Public.postman_collection.json` |
-| Company sample | `IDV/platform/server/postman/Company-Backend-Sample.postman_collection.json` |
-| Local env | `IDV/platform/server/postman/IDV-Local.postman_environment.json` |
+| Public | `IDV/IDV_server/postman/IDV-Public.postman_collection.json` |
+| Company sample | `IDV/IDV_server/postman/Company-Backend-Sample.postman_collection.json` |
+| Local env | `IDV/IDV_server/postman/IDV-Local.postman_environment.json` |
 
 Full persistence notes: `IDV/docs/API.md` in source. Session meanings: [Session states](session-states.md).

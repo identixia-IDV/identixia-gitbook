@@ -11,7 +11,7 @@ description: >-
 2. [Prerequisites: engines](engines.md) — Document `:14102` + Face `:14103`
 3. [Project setup](environment.md) — `.env`, tokens, storage
 4. [Initial setup process](initial-setup.md) — consoles, settings, webhook secret
-5. [Quick start](quick-start.md) · helper `python IDV/scripts/start_local.py`
+5. [Quick start](quick-start.md) · helper `python IDV/IDV_server (then company)`
 6. [End-to-end walkthrough](walkthrough.md)
 7. [Session states](session-states.md)
 8. [Creating a session (API)](api.md)

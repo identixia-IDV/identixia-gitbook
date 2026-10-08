@@ -13,7 +13,7 @@ When `IDV_ENGINES=http`, the platform uses:
 
 | Role | Default URL | Example paths |
 | --- | --- | --- |
-| Document Reader | `http://127.0.0.1:14102` | `/api/documentProcess`, `/api/documentRecognition`, `/api/documentLiveness` |
+| Document Reader | `http://127.0.0.1:14102` | `/api/document/process`, `/api/document/recognition`, `/api/document/liveness` |
 | Face Recognition + liveness | `http://127.0.0.1:14103` | `/api/face/compare`, `/api/face/boxes`, `/api/face/template`, `/api/face/score`, `/api/face/liveness` |
 
 Child pages: [Document engine](engines-document.md) · [Face engine](engines-face.md).
@@ -24,7 +24,7 @@ Same process APIs as [ID Document SDK](../id-document-sdk/) and [Face SDK](../fa
 
 1. Run the Document server (Windows or Docker) on **14102** — see [ID Document SDK → Server](../id-document-sdk/full-server.md).
 2. Run the Face server on **14103** — see [Face SDK → Server](../face-sdk/full-server.md).
-3. Activate each engine with **its** machine code (`GET /api/machinecode` → send to Identixia → `POST /api/activate` or `license.txt`). Docker and bare metal codes differ.
+3. Activate each engine with **its** machine code (`GET /api/machinecode` → send to Identixia → set `LICENSE=` in `.env` or `POST /api/activate`). Docker and bare metal codes differ.
 4. Confirm health:
 
 ```bash
@@ -32,8 +32,8 @@ curl -s http://127.0.0.1:14102/api/health
 curl -s http://127.0.0.1:14103/api/health
 ```
 
-5. Set `IDV_ENGINES=http`, `DOCUMENT_API_URL`, and `FACE_API_URL` in `IDV/.env` (see [Project setup](environment.md)).
-6. Continue with [Initial setup process](initial-setup.md) or `python IDV/scripts/start_local.py`.
+5. Set `IDV_ENGINES=http`, `DOCUMENT_API_URL`, and `FACE_API_URL` in `IDV_server/.env` (see [Project setup](environment.md)).
+6. Continue with [Initial setup process](initial-setup.md) or `python IDV/IDV_server (then company)`.
 
 ## Session create (platform API)
 

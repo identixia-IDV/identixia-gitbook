@@ -1,57 +1,32 @@
 ---
 description: >-
-  On-premise Face SDK: recognition and passive liveness for mobile and server platforms.
+  On-premises Face Recognition and Face Liveness Detection SDKs.
 ---
 
-# Face SDK
+# Introduction
 
-<p align="center"><img src="../.gitbook/assets/brand-logo.png" alt="Identixia" width="220"></p>
+On-premises Face Recognition and Face Liveness Detection (anti-spoofing) SDKs.
 
-## Overview
+The algorithm runs in real time on phones and servers. It supports accurate **1:1** and **1:N** matching, **passive face liveness**, and face attributes (age, gender, mask/sunglasses, landmarks).
 
-The **Face SDK** runs entirely on the device or on your server. It covers two independently licensed functions:
+Use it for identity verification and attendance. Processing stays on **your** device or server.
 
-| Function | Capabilities | License flag |
+We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic**, **Windows**, and **Linux / Docker**.
+
+| Function | What you get | License flag |
 | --- | --- | --- |
-| **Recognition** | Detect faces, attributes, quality, templates, 1:1 match, 1:N identify | `recognition` |
-| **Liveness** | Passive presentation-attack score (live person vs photo or screen) | `liveness` |
+| **Recognition** | Detect, attributes, quality, templates, 1:1, 1:N | `recognition` |
+| **Liveness** | Passive presentation-attack score | `liveness` |
 
-Choose a **repository that matches your license**. A recognition-only build does not return liveness scores.
-
-## Product lines
-
-| Requirement | Start here |
-| --- | --- |
-| Recognition **and** liveness in one app or API | [Full product](full-product.md) (Android through Docker) |
-| Recognition only | [Windows](recognition-windows.md) · [Linux / Docker](recognition-linux-docker.md) |
-| Liveness only | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Linux / Docker](liveness-linux-docker.md) |
-
-Function guides:
-
-* [Face recognition](recognition.md) — detect, templates, gallery, match
-* [Face liveness](liveness.md) — when scores appear and how to gate UX
-
-## Full product (recognition + liveness)
-
-| Platform | Repository | Docs |
-| --- | --- | --- |
-| Android | [`FaceRecognition-LivenessDetection-Android`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android) | [Android](android.md) |
-| iOS | [`FaceRecognition-LivenessDetection-iOS`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS) | [iOS](ios.md) |
-| Flutter | [`FaceRecognition-LivenessDetection-Flutter`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Flutter) | [Flutter](flutter.md) |
-| React Native | [`FaceRecognition-LivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native) | [React Native](react-native.md) |
-| Ionic Capacitor | [`FaceRecognition-LivenessDetection-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Capacitor) | [Ionic Capacitor](ionic-capacitor.md) |
-| Ionic Cordova | [`FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) | [Ionic Cordova](ionic-cordova.md) |
-| Windows | [`FaceRecognition-LivenessDetection-Windows`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows) | [Windows](windows.md) |
-| Linux / Docker | [`FaceRecognition-LivenessDetection-Docker`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker) | [Linux / Docker](linux-docker.md) |
+Choose a repository that matches your license. A recognition-only build does not return liveness scores.
 
 <figure><img src="../.gitbook/assets/face-android-home.png" alt="Face SDK Android home" width="160"><figcaption>Android demo home</figcaption></figure>
 
-## Integration path
+## Next
 
-1. Open the platform page for your stack.
-2. Clone the sample, place engine binaries from GitHub Releases, and run until status shows **Ready**.
-3. Activate with **your** application id or machine code (demo keys work only for demo ids).
-4. Call recognition and liveness APIs on a **background** thread (mobile) or over HTTP (server).
+* [Reference](reference.md) — platform quick starts and sample repositories
+* [SDK Server](../sdk-server/) — HTTP API (Windows & Docker)
+* Function notes: [Recognition](recognition.md) · [Liveness](liveness.md)
 
 {% hint style="info" %}
 Biometric images and templates stay on **your** device or server. Identixia does not host them.

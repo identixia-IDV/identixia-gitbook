@@ -1,6 +1,6 @@
 ---
 description: >-
-  license_v2 shared protocol used by platform/server and license/admin.
+  license_v2 shared protocol used by IDV_server and license.
 ---
 
 # Hybrid licence protocol
@@ -12,7 +12,7 @@ IDV uses a **Hybrid** licence model: day-to-day entitlement metering runs on the
 | Path | Role |
 | --- | --- |
 | `IDV/license/license_v2/` | Canonical protocol sources and tests |
-| Vendored copies | Inside `platform/server/` and `license/admin/` for self-contained runs |
+| Vendored copies | Inside `IDV_server/` and `license/` for self-contained runs |
 | `IDV/packages/license-core` | Helper package for consoles and shared libraries |
 
 ## Operating model
@@ -20,7 +20,7 @@ IDV uses a **Hybrid** licence model: day-to-day entitlement metering runs on the
 | Step | Where it happens |
 | --- | --- |
 | Issue / renew `license.txt` | [License Admin](license-admin.md) (Identixia) |
-| Enforce usage on the host | `license/license_v2` inside `platform/server` |
+| Enforce usage on the host | `license/license_v2` (issuer) / server copy in `IDV_server` |
 | Sync usage receipts | USB export or `POST /api/v2/online/report` (when exposed) |
 
 There is one commercial Hybrid product. Operators do not choose STRICT/LENIENT tiers in the issuer UI. The issuer never receives ID images or biometrics.

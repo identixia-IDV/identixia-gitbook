@@ -62,4 +62,4 @@ else count pass / fail / hold → apply your policy (any fail ⇒ reject is comm
 | `authenticity` present | Authenticity `tests` populate when the route requests them |
 | Missing | Empty authenticity set — never invent a pass |
 
-Server routes: `POST /api/documentLiveness` (authenticity only) or `POST /api/documentProcess` (OCR + authenticity when licensed).
+Server routes: `POST /api/document/liveness` (authenticity only) or `POST /api/document/process` (OCR + authenticity when licensed).

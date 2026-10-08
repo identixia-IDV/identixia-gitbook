@@ -20,7 +20,7 @@ Complete one `onboarding_standard` verification locally and see a `session.compl
 
 ```bash
 # IDV server
-cd IDV/platform/server && set IDV_OPEN_API=1 && python app.py
+cd IDV/IDV_server && set IDV_OPEN_API=1 && python app.py
 # → http://127.0.0.1:14187/v1  and  /admin/
 
 # Company backend
@@ -64,7 +64,7 @@ Response includes `sessionId`, `captureToken`, `launchUrl`, and `next_step`. Han
    * Body: `{ "images": ["<base64>"] }` (or the shape the step expects)
 3. Repeat until the session completes (typical: document then face)
 
-Use a [client demo](components-clients.md) or Postman (`IDV/platform/server/postman/IDV-Public.postman_collection.json`).
+Use a [client demo](components-clients.md) or Postman (`IDV/IDV_server/postman/IDV-Public.postman_collection.json`).
 
 ## 6. Confirm outcome
 

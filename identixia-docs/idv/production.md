@@ -14,10 +14,10 @@ description: >-
 | TLS | Terminate HTTPS on a reverse proxy in front of `:14187` (and company `:14195` if public). |
 | License Admin | Keep `:14190` on **localhost** / private network. Do not publish the issuer UI. |
 | Engines | Point IDV at internal Document `:14102` and Face `:14103` URLs; activate each host/container with its own machine code. |
-| Database | Prefer PostgreSQL via `python IDV/setup_database.py` (or `--yes` for a guided default). SQLite is fine for local demos only. |
+| Database | Prefer PostgreSQL via `python IDV/Install_db/setup_database.py` (or `--yes` for a guided default). SQLite is fine for local demos only. |
 | Memory store | `IDV_FORCE_MEMORY` / `COMPANY_FORCE_MEMORY` are for tests — not production. |
 | Webhooks | Require `whsec_…` HMAC verification; idempotent handlers; poll session API if a delivery is missed. |
-| Brand | Serve `/brand/*` from `license/admin/brand/` (or the configured `IDV_BRAND_DIR`). |
+| Brand | Serve `/brand/*` from `license/brand/` (or the configured `IDV_BRAND_DIR`). |
 
 ## Reverse proxy (sketch)
 
@@ -25,28 +25,28 @@ description: >-
 Internet clients
       │
       ▼
- HTTPS terminator  ──►  platform/server :14187  (/v1, /admin)
+ HTTPS terminator  ──►  IDV_server :14187  (/v1, /admin)
       │
       └──►  company/backend :14195  (merchant APIs + /admin)
                  │
-                 ├──► platform/server (service bearer)
+                 ├──► IDV_server (service bearer)
                  └──► (optional) capture CDN / static hosting
 
 Internal only:
   document-engine :14102
   face-engine     :14103
-  license/admin   :14190   ← Identixia / ops, not public
+  license   :14190   ← Identixia / ops, not public
 ```
 
 ## Database
 
 ```bash
 cd IDV
-python setup_database.py --check   # inspect current config
-python setup_database.py --yes     # non-interactive recommended local/prod bootstrap
+python IDV/Install_db/setup_database.py --check   # inspect current config
+python IDV/Install_db/setup_database.py --yes     # non-interactive recommended local/prod bootstrap
 ```
 
-Writes `IDV/.env` and creates schema. Production authority is **PostgreSQL**; media / Valkey / RabbitMQ options appear in the same wizard when you need them.
+Writes `IDV_server/.env` and creates schema. Production authority is **PostgreSQL**; media / Valkey / RabbitMQ options appear in the same wizard when you need them.
 
 ## Engine URLs
 

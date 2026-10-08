@@ -18,12 +18,12 @@ Demo keys work only for demo application ids.
 1. Start the API once.
 2. Call `GET /api/machinecode` and copy `data.machinecode`.
 3. Send that code to Identixia. Docker and bare-metal machine codes differ — license the environment you ship.
-4. Call `POST /api/activate`, or place `license.txt` and restart.
+4. Call `POST /api/activate`, or set `LICENSE=` in `.env` and restart.
 5. Confirm with `GET /api/licenseStatus`.
 
 ## IDV
 
-IDV uses Hybrid licensing via `license/admin` and `license/license_v2`. The issuer UI listens on `:14190` (localhost). Company systems use `company/backend` (sample `:14195`) to hold the service token and start sessions — see [Company integration](idv/company.md).
+IDV uses Hybrid licensing via `license` and `license/license_v2`. The issuer UI listens on `:14190` (localhost). Company systems use `company/backend` (sample `:14195`) to hold the service token and start sessions — see [Company integration](idv/company.md).
 
 ## Support
 

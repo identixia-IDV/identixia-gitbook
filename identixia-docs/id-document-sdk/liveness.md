@@ -34,7 +34,7 @@ See [Security check fields](security-fields.md).
 ### Example — authenticity-only (full server)
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/documentLiveness \
+curl -s -X POST http://127.0.0.1:14102/api/document/liveness \
   -H "Content-Type: application/json" \
   -d '{"images":["BASE64_FRONT"]}'
 ```

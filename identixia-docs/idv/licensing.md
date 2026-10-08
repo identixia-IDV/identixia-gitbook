@@ -20,4 +20,4 @@ IDV uses **Hybrid** licensing: day-to-day metering on the customer host, issuanc
 | First issue | `license_request.txt` | `license.txt` |
 | Same host again | — | Used count kept (no restore) |
 
-The issuer never sees ID images or biometrics. Brand files for consoles live under `license/admin/brand/`.
+The issuer never sees ID images or biometrics. Brand files for consoles live under `license/brand/`.

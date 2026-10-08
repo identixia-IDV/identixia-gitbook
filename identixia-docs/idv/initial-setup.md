@@ -9,7 +9,7 @@ description: >-
 
 1. Engines healthy — [Prerequisites: engines](engines.md)
 2. `.env` configured — [Project setup](environment.md)
-3. Platform + company running — `python IDV/scripts/start_local.py` or [Quick start](quick-start.md)
+3. Platform + company running — `python IDV/IDV_server (then company)` or [Quick start](quick-start.md)
 
 ## 1. Open Identity Console
 

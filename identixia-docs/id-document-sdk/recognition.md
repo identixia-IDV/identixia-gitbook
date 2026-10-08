@@ -26,14 +26,14 @@ Default full-product API port is **14102** (confirm in the README).
 
 | Route | Role |
 | --- | --- |
-| `POST /api/documentProcess` | Full process (recognition + authenticity when licensed) |
-| `POST /api/documentRecognition` | OCR / MRZ / barcode only |
-| `POST /api/documentLiveness` | Authenticity only |
+| `POST /api/document/process` | Full process (recognition + authenticity when licensed) |
+| `POST /api/document/recognition` | OCR / MRZ / barcode only |
+| `POST /api/document/liveness` | Authenticity only |
 
 ### Example — recognition-only call
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/documentRecognition \
+curl -s -X POST http://127.0.0.1:14102/api/document/recognition \
   -H "Content-Type: application/json" \
   -d '{"images":["BASE64_FRONT","BASE64_BACK"]}'
 ```

@@ -39,7 +39,7 @@ curl -s -X POST http://127.0.0.1:14103/api/face/liveness \
   -d '{"image":"BASE64_JPEG"}'
 ```
 
-Liveness-only Docker uses the path documented on [Linux / Docker (liveness only)](liveness-linux-docker.md) (often `/api/liveness`).
+Liveness-only Docker uses the same `/api/face/liveness` path on port **14105** — see [Linux / Docker (liveness only)](liveness-linux-docker.md).
 
 ## Mobile tip
 

@@ -1,13 +1,13 @@
 ---
 description: >-
-  IDV client SDKs and demo apps under IDV/app/.
+  IDV client SDKs and demo apps under IDV/demo_clients/.
 ---
 
 # Applicant clients
 
 Capture SDKs and demos. The **service token stays on the company backend**; apps use capture tokens.
 
-## Packages (`IDV/app/packages/`)
+## Packages (`IDV/demo_clients/packages/`)
 
 | Package | Role |
 | --- | --- |
@@ -26,5 +26,5 @@ Capture SDKs and demos. The **service token stays on the company backend**; apps
 | Flutter / React Native | [Other demos](client-other.md) |
 
 ```bash
-python IDV/app/tools/refresh_client.py
+python IDV/demo_clients/tools/refresh_client.py
 ```

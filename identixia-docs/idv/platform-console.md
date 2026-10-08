@@ -1,18 +1,18 @@
 ---
 description: >-
-  platform/console — tenant operators: sessions, reviews, webhooks, workflows.
+  IDV_console — tenant operators: sessions, reviews, webhooks, workflows.
 ---
 
 # Identity Console
 
 | Item | Detail |
 | --- | --- |
-| Folder | `IDV/platform/console/` |
+| Folder | `IDV/IDV_console/` |
 | Develop | `http://127.0.0.1:14188/` (proxies API to `:14187`) |
-| Production | `npm run build` → served from `platform/server` at `/admin/` |
+| Production | `npm run build` → served from `IDV_server` at `/admin/` |
 
 ```bash
-cd IDV/platform/console
+cd IDV/IDV_console
 npm install && npm run dev
 ```
 

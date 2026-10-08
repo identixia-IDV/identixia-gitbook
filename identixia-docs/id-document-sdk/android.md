@@ -1,6 +1,6 @@
 ---
 description: >-
-  On-device ID document recognition SDK for Android. Passport, national ID, and driver license OCR, MRZ, and barcode capture. Document liveness runs when the license includes it.
+  ID document recognition SDK for Android. On-device passport, national ID, and driver license OCR, MRZ, and barcode capture for KYC. Document liveness runs when licensed.
 ---
 
 # ID Document SDK — Android
@@ -8,7 +8,7 @@ description: >-
 
 ## Overview
 
-On-device ID document recognition SDK for Android. Passport, national ID, and driver license OCR, MRZ, and barcode capture. Document liveness runs when the license includes it.
+ID document recognition SDK for Android. On-device passport, national ID, and driver license OCR, MRZ, and barcode capture for KYC. Document liveness runs when licensed.
 
 Processing runs **on the device**. Identixia does **not** receive biometric images, templates, or document scans.
 
@@ -48,7 +48,43 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 | ABIs | `arm64-v8a`, `armeabi-v7a` |
 | Packaging | `jniLibs { useLegacyPackaging = true }` |
 
-## Quick start
+## Download and place the runtime
+
+Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+
+### Download (recommended)
+
+```bash
+python scripts/get_runtime.py
+```
+
+To pin a specific Release tag:
+
+```bash
+python scripts/get_runtime.py --tag 1.0.0
+```
+
+| | |
+| --- | --- |
+| **Release asset** | `documentfullsdk.aar` |
+| **Local path after download** | `libdocsdk/documentfullsdk.aar` |
+| **Databases** | `document.xdb` is embedded inside the AAR (`assets/document.xdb`). |
+
+### Manual download (optional)
+
+Open the repository **Releases** page and download the asset named above:
+
+```text
+https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/latest/download/<asset>
+```
+
+Unzip so files land in the documented path — **not** nested inside an extra folder.
+
+{% hint style="warning" %}
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
+{% endhint %}
+
+## Integration guide — start the project
 
 ### 1. Clone the sample
 
@@ -57,23 +93,25 @@ git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Dete
 cd ID-Document-Recognition-Liveness-Detection-Android
 ```
 
-### 2. Place the runtime
+### 2. Download and place the runtime
 
-Engine AAR / `docsdk` framework from Releases (`documentreadersdk.aar` / `docsdk.xcframework.zip`) or local `libdocsdk`.
+See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
 
-Clients should download versioned assets via:
-
-```text
-https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/latest/download/<asset>
+```bash
+python scripts/get_runtime.py
 ```
 
 ### 3. Run the demo
 
-Follow the repository **Run** section (Android Studio / Xcode / `flutter run` / `yarn android` / Ionic). Wait until status shows **Ready** before opening camera modes.
+Open this folder in **Android Studio** (JDK **17**) and run on a physical **arm64** phone.
 
-### 4. Try every demo mode
+Wait until Home status shows **Ready** before opening camera modes.
 
-Use each tile / screen once (enroll, identify, capture, document front/back, result, about). Confirm license state on the About / Result screen.
+### 4. Activate and try every mode
+
+1. Confirm Home / About shows a licensed **Ready** state (sample apps ship a demo key for the sample application id only).
+2. Exercise each demo tile once (enroll, identify, capture, attribute, liveness, document front/back, result).
+3. For your own app: request a license for **your** application id / bundle id, then call activate → init on a background thread.
 
 ### Add the SDK to your own Android app
 
@@ -81,7 +119,7 @@ Use each tile / screen once (enroll, identify, capture, document front/back, res
 apply from: 'https://raw.githubusercontent.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/main/install.gradle'
 ```
 
-Keep `documentreadersdk.aar` available (Release download or `libdocsdk/`). Use the sample kit helpers for guide crop + `recognize`.
+Keep `documentfullsdk.aar` available (Release download or `libdocsdk/`). Use the sample kit helpers for guide crop + `recognize`.
 
 
 ## License and activation (mobile)
@@ -121,21 +159,29 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 
 ## API reference — mobile document SDK
 
+Android, iOS, Flutter, React Native, and Ionic share the **same customer method names** and the same process JSON idea (`identity` / `readings` / `tests` / `images` / `session`).
+
 ### Lifecycle
 
 | API | Purpose |
 | --- | --- |
-| Activate + init | License then load models (background thread) |
-| License status | Recognition / authenticity flags |
-| Session helpers | `startNewSession` / gallery session before recognize |
+| `setActivation(license)` | Activate license (background thread) |
+| `init()` | Load models |
+| `deinit()` | Unload engine |
+| `getMachineCode()` / `getLicenseStatus()` | License helpers |
+| `startNewSession(optionsJson?)` | Open a process session before recognize |
 
-### Capture and recognize
+### Capture and process
 
 | API | Purpose |
 | --- | --- |
 | Guide / crop helpers | Align document in frame (`DocumentGuideView` / kit crop) |
-| `recognize(front, back?)` | Run OCR + MRZ + barcode (+ liveness when licensed) |
-| Result parser | Map engine JSON → identity, fields, checks, images |
+| `locateDocument(image)` | Find document bounds in a frame / still |
+| `recognize(front, back?, authenticity?)` | OCR + MRZ + barcode (+ authenticity when licensed) |
+| `documentRecognition(front, back?)` | Recognition-only path |
+| `documentLiveness(front, back?)` | Authenticity / PAD-only path |
+| `documentProcess(imagesJson, rfidJson, optionsJson)` | Combined pipeline (same idea as `POST /api/document/process`) |
+| `faceLiveness(image, mode?)` | Optional face PAD helper on document products that ship it |
 
 ### Result JSON (shared idea)
 
@@ -147,14 +193,15 @@ Top-level concepts (names may be normalized per platform):
 | Fields / readings | OCR, MRZ, barcode field rows |
 | Checks / tests | Verification + image quality + security |
 | Images | Portrait / document crops (base64) |
+| Session | Process / request metadata when present |
 
 See [Result JSON](result-json.md) and [Security check fields](security-fields.md).
 
 ### Integration checklist
 
 1. Apply `install.gradle` or vendor iOS `docsdk`.
-2. Activate with your app id license.
-3. Capture front (and back when needed) → `recognize`.
+2. Activate with your app id license → `init`.
+3. Capture front (and back when needed) → `recognize` or `documentProcess`.
 4. Parse JSON in your app — do not depend on the demo Result UI.
 5. Store fields you need in **your** database.
 
@@ -181,12 +228,30 @@ See [Result JSON](result-json.md) and [Security check fields](security-fields.md
 
 <figure><img src="../.gitbook/assets/document-desktop-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
 
+## Resources
+
+| Resource | Link |
+| --- | --- |
+| **This repository** | [`identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android) |
+| **GitHub Releases (runtime)** | [Latest download](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/latest) |
+| **Runtime helper** | `python scripts/get_runtime.py` in the product clone |
+| **Documentation site** | [docs.identixia.com](https://docs.identixia.com) |
+| **SDK Server (HTTP)** | [SDK Server](../sdk-server/README.md) |
+| **Website** | [identixia.com](https://identixia.com) |
+| **Hugging Face** | [huggingface.co/Identixia](https://huggingface.co/Identixia) |
+| **Docker Hub** | [hub.docker.com/u/identixia](https://hub.docker.com/u/identixia) |
+| **Playground** | [playground.identixia.com](https://playground.identixia.com/) |
+| **License & support** | [Request a license](../request-a-license-and-support.md) · [Contact](../contact-us.md) |
+
+Postman collections live under each product repository’s `postman/` folder (and the monorepo `postman/Identixia-API.postman_collection.json` for all HTTP routes).
+
 ## Next steps
 
-1. Complete **Quick start** until the sample shows **Ready**.
-2. Activate with a license issued for **your** application id or machine code.
-3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
-4. Return to the [ID Document SDK](README.md) hub for Result JSON and related platforms.
+1. Complete **Integration guide — start the project** until the sample shows **Ready**.
+2. Confirm runtime files and databases are in place (`python scripts/get_runtime.py`).
+3. Activate with a license issued for **your** application id or machine code.
+4. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
+5. Return to the [ID Document SDK](README.md) hub for Result JSON and related platforms.
 
 
 ## Support
@@ -205,6 +270,35 @@ Use the sample app to evaluate capture UX and the one-scroll Result screen, then
 
 ---
 
+## Develop
+
+Use this repository for passport, national ID, and driver license OCR, MRZ, and barcode capture, with document liveness when the license includes it. Processing stays on the phone. Identixia does not receive camera frames, templates, or document images.
+
+| | |
+| --- | --- |
+| **Architecture** | [Where the engine runs](#-architecture) |
+| **Quick start** | Follow [Initial commands](#-initial-commands), then [Run](#-run). |
+| **Initialize** | [Activate, then init](#-initialize) |
+| **Process** | [Camera or a still image](#-process) |
+| **Results** | [What to read back](#-results) |
+| **Requirements** | [Requirements](#-requirements) |
+
+---
+
+## Resources
+
+| Resource | Where |
+| --- | --- |
+| **Sample** | This repository — [ID-Document-Recognition-Liveness-Detection-Android](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android) |
+| **Client library** | the sample project in this repository |
+| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/latest) |
+| **API** | [Method list](#-api) |
+| **Develop docs** | [docs.identixia.com/id-document-sdk/android](https://docs.identixia.com/id-document-sdk/android) |
+| **License** | [License](#-license) · [Contact](#-contact) |
+| **Other platforms** | [Platforms](#-platforms) |
+
+---
+
 ## Basics
 
 Read this once before cloning. Mobile demos ship a **bundled license** for the sample application / bundle id. Production apps need a new key from Identixia. [Initial commands](#-initial-commands) lists clone → place runtime → run → activate options.
@@ -213,7 +307,7 @@ Read this once before cloning. Mobile demos ship a **bundled license** for the s
 | --- | --- |
 | **Product** | On-device **ID document recognition SDK** for Android (KYC / eKYC) |
 | **Documents** | Passport, national ID, driver license — OCR · passport MRZ · barcode / QR · optional document liveness |
-| **Runtime zip** | `install.gradle` uses `libdocsdk/` when `documentreadersdk.aar` is already in this repo |
+| **Runtime zip** | `install.gradle` uses `libdocumentfullsdk/` when `documentfullsdk.aar` is already in this repo |
 | **Demo id / license** | `com.identixia.documentreader` — bundled demo license until **12 Aug 2027** |
 | **Activate** | Sample app: keep the demo id and bundled key. Your app: new applicationId / bundle id → [contact](#-contact) → call the SDK activate API (see docs). |
 | **Tools** | Android Studio · **JDK 17** · physical **arm64** phone (emulator is not enough for full camera demos) |
@@ -229,9 +323,10 @@ Clone the sample, place the runtime, and run it.
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android.git
 cd ID-Document-Recognition-Liveness-Detection-Android
+python scripts/get_runtime.py
 ```
 
-The sample applies `install.gradle`. When `libdocsdk/documentreadersdk.aar` is already in the clone, that is the engine the app builds with.
+The sample applies `install.gradle`. When `libdocumentfullsdk/documentfullsdk.aar` is already in the clone, that is the engine the app builds with.
 
 Open this folder in **Android Studio** (JDK 17) → Run on a physical **arm64** device.
 
@@ -261,13 +356,13 @@ Wait until Home status = **Ready**, then use Camera / Gallery (or the face mode 
 
 ## Install
 
-The sample builds with the AAR already in `libdocsdk/`. Your own app adds one line to the app module:
+The sample builds with the AAR already in `libdocumentfullsdk/`. Your own app adds one line to the app module:
 
 ```gradle
 apply from: 'https://raw.githubusercontent.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/main/install.gradle'
 ```
 
-That one line pulls the **engine** (`documentreadersdk.aar`) and the reusable **kit** (`libdockey`: `DocSdkSession`, `DocumentGuideView`, `ResultParser`, …).
+That one line pulls the **engine** (`documentfullsdk.aar`) and the reusable **kit** (`libdockey`: `DocSdkSession`, `DocumentGuideView`, `ResultParser`, …).
 
 Keep `minSdk 24`, `abiFilters` `arm64-v8a`, and `packaging { jniLibs { useLegacyPackaging = true } }`.
 
@@ -294,9 +389,9 @@ Keep `minSdk 24`, `abiFilters` `arm64-v8a`, and `packaging { jniLibs { useLegacy
 
 The code below shows how to use the license:
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/0c5015c2fcbcbc6a79dedb003cd89bceab1fd322/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L31-L33](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/0c5015c2fcbcbc6a79dedb003cd89bceab1fd322/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L31-L33)
+[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/5541cdfbef77d73c0aa099018f81dbabf67be7f2/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L31-L33](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/5541cdfbef77d73c0aa099018f81dbabf67be7f2/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L31-L33)
 
-[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/0c5015c2fcbcbc6a79dedb003cd89bceab1fd322/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L76-L77](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/0c5015c2fcbcbc6a79dedb003cd89bceab1fd322/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L76-L77)
+[https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/5541cdfbef77d73c0aa099018f81dbabf67be7f2/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L76-L77](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/5541cdfbef77d73c0aa099018f81dbabf67be7f2/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L76-L77)
 
 Please [contact us](#-contact) to get a license for **your own app**.
 
@@ -305,8 +400,49 @@ Please [contact us](#-contact) to get a license for **your own app**.
 ## Use in your app
 
 1. In the app module, apply `install.gradle` from tag `v1.0.0` (see Install above) — engine + `libdockey`.
-2. Activate → init → recognize (prefer kit helpers over raw engine calls).
+2. Activate → init → `recognize` / `documentProcess` (prefer kit helpers over raw engine calls). Same process JSON idea as the Windows / Docker HTTP API.
 3. Keep the demo `applicationId` only while using the sample license.
+
+---
+
+## Architecture
+
+The native engine runs inside the app process. The first successful activate unpacks model databases onto the device. Keep `useLegacyPackaging = true` on Android when the engine loads `.so` files from the AAR.
+
+## Initialize
+
+The sample application id is already licensed. For your own id, request a new key, then call activate and init on a background thread. Open the camera only after the status is Ready. Do not reuse the sample key with a different application id.
+
+| Code | Meaning |
+| ---: | --- |
+| `0` | Success |
+| `1` / `-1` | Invalid license |
+| `2` / `-2` | License was issued for a different application id |
+| `3` / `-3` | License expired |
+| `4` / `-4` | Not activated |
+| `-5` | Models failed to load. Run `python scripts/get_runtime.py` and confirm the database packs are present. |
+| `-12` | No face in the image |
+| `-13` | No document in the image |
+
+## Process
+
+Capture the document with the camera, or pick a still from the gallery. Keep the whole document inside the frame.
+
+## Results
+
+Read identity, text fields, MRZ or barcode, then images. Authenticity checks appear only when document liveness is licensed and the image was checked.
+
+## API
+
+The sample and your app use the same method names.
+
+| API | What it returns |
+| --- | --- |
+| `activate(license)` then `init()` | Load the engine. Call both on one background thread. |
+| Camera | Live capture from the sample Home screen. |
+| Gallery | Still image of a passport, national ID, or driver license. |
+| `recognize` / document process | Identity, MRZ, barcode, and field text. |
+| Document liveness | Presentation-attack result when the license includes it. |
 
 ---
 

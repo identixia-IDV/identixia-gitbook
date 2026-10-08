@@ -18,17 +18,17 @@ The GitBook sidebar is **4–5 levels deep**: product → function → product l
 python gitbook-push/generate.py
 ```
 
-Rewrites `identixia-docs/` markdown, syncs brand assets and screenshots into `.gitbook/assets/` (one file per asset), and removes obsolete section folders. Slugs match `catalog/github_about.json` homepages.
+Rewrites `identixia-docs/` markdown, syncs brand assets and screenshots into `.gitbook/assets/` (one file per asset), and removes obsolete section folders. Slugs match `repositories/APPs/github_about.json` homepages.
 
 ## Push to GitBook repo
 
 Remote: `git@github.com:identixia-IDV/identixia-gitbook.git`
 
 ```bash
-python catalog/gitbook_push.py
-python catalog/gitbook_push.py --ssh
-python catalog/gitbook_push.py --force
-python catalog/gitbook_push.py --no-generate
+python gitbook-push/gitbook_push.py
+python gitbook-push/gitbook_push.py --ssh
+python gitbook-push/gitbook_push.py --force
+python gitbook-push/gitbook_push.py --no-generate
 ```
 
 ## Layout
@@ -57,4 +57,4 @@ IDV consoles serve the same brand pack from `license-admin/brand/` as `/brand/*`
 * Platform pages are customer guides: overview, capabilities, prerequisites, quick start, license, API, troubleshooting, curated screenshots, next steps, and a repository README appendix.
 * Screenshots come only from `repositories/identixia-assets` (flattened once into `.gitbook/assets/`).
 * Engine binaries stay on GitHub Releases — not in git.
-* After catalog or product README changes, run `generate.py` (or `catalog/gitbook_push.py`).
+* After catalog or product README changes, run `generate.py` (or `gitbook-push/gitbook_push.py`).

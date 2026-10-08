@@ -16,9 +16,9 @@ description: >-
 
 | Route | Role |
 | --- | --- |
-| `POST /api/documentProcess` | Full process (recognition + authenticity when licensed) |
-| `POST /api/documentRecognition` | OCR / MRZ / barcode only |
-| `POST /api/documentLiveness` | Authenticity only |
+| `POST /api/document/process` | Full process (recognition + authenticity when licensed) |
+| `POST /api/document/recognition` | OCR / MRZ / barcode only |
+| `POST /api/document/liveness` | Authenticity only |
 
 Control routes use `{success, code, message, request_id, data}`. Response shape: [Result JSON](result-json.md).
 

@@ -102,7 +102,7 @@ def what_you_can_do(ctx: ProductCtx) -> str:
                 "| 1:N identify | Enroll a gallery and search (mobile VideoWorker / server gallery) |"
             )
             rows.append(
-                "| Passive liveness | Presentation-attack score when the license includes `liveness` |"
+                "| Passive liveness + deepfake | PAD and deepfake together when the license includes `liveness`; REAL only if both pass |"
             )
         return (
             "## Capabilities\n\n| Capability | Description |\n| --- | --- |\n"
@@ -114,8 +114,8 @@ def what_you_can_do(ctx: ProductCtx) -> str:
 
 | Capability | Description |
 | --- | --- |
-| Passive face liveness | Score one RGB face image or camera frame for presentation-attack detection |
-| License gating | Liveness runs only when the license includes `liveness` |
+| Passive face liveness + deepfake | Score one RGB face for PAD and deepfake; REAL only when both engines say real |
+| License gating | Liveness / deepfake run only when the license includes `liveness` |
 """
     if ctx.family == "document":
         return """## Capabilities
@@ -203,8 +203,8 @@ def prerequisites(ctx: ProductCtx) -> str:
 | OS | Windows 10/11 x64 |
 | Runtime | Product `lib/` (CPU) next to the server |
 | Python | As required by the sample server (see repo README) |
-| Port | Face **14103** · Document **14102** (default) |
-| License | `license.txt` or `POST /api/activate` |
+| Port | Full face **14103** · recognition-only **14104** · face liveness **14105** · document **14102** · document liveness **14107** |
+| License | `.env` `LICENSE=` or `POST /api/activate` |
 """
     if ctx.platform == "Linux":
         return """## Prerequisites
@@ -213,19 +213,189 @@ def prerequisites(ctx: ProductCtx) -> str:
 | --- | --- |
 | Host | Linux x86_64 or any Docker host |
 | Docker | Optional — same repository builds the image |
-| Port | Face **14103** · Document **14102** · Document liveness **14106** (product-specific) |
+| Port | Full face **14103** · recognition-only **14104** · face liveness **14105** · document **14102** · document liveness **14107** |
 | Machine code | Different for bare metal vs container — license the environment you ship |
 """
     return "## Prerequisites\n\nSee the product README for toolchain details.\n"
 
 
+def _android_aar(name: str) -> str:
+    """AAR file name. Distinct for recognition, liveness, and both."""
+    if "Document" in name:
+        if "Recognition" in name and "Liveness" in name:
+            return "documentfullsdk.aar"
+        if name.startswith("ID-Document-Liveness"):
+            return "documentlivenesssdk.aar"
+        return "documentreadersdk.aar"
+    if "Recognition" in name and "Liveness" in name:
+        return "facefullsdk.aar"
+    if name.startswith("FaceLiveness"):
+        return "facelivenessdk.aar"
+    return "facerecognitionsdk.aar"
+
+
+def _windows_dll(name: str) -> str:
+    """Windows wrapper DLL. Distinct for recognition, liveness, and both."""
+    if "Document" in name:
+        if "Recognition" in name and "Liveness" in name:
+            return "DocumentFullSDK.dll"
+        if name.startswith("ID-Document-Liveness"):
+            return "DocumentLivenessSDK.dll"
+        return "DocumentReaderSDK.dll"
+    if "Recognition" in name and "Liveness" in name:
+        return "FaceFullSDK.dll"
+    if name.startswith("FaceLiveness"):
+        return "FaceLivenessSDK.dll"
+    return "FaceRecognitionSDK.dll"
+
+
+def _runtime_paths(ctx: ProductCtx) -> tuple[str, str, str]:
+    """Return (asset_hint, local_path, databases_note)."""
+    if ctx.platform == "Android" and ctx.family in ("face_combined", "face_recog", "face_liveness"):
+        aar = _android_aar(ctx.name)
+        stem = aar[: -len(".aar")]
+        if ctx.family == "face_liveness" or ctx.name.startswith("FaceLiveness"):
+            note = "Required packs: `liveness.xdb` and `recognition-deepfake.xdb`."
+        else:
+            note = (
+                "Required packs: `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, "
+                "`recognition-quality.xdb`, and when licensed `recognition-liveness.xdb` + `recognition-deepfake.xdb`."
+            )
+        return (
+            f"`{stem}-android.zip` (contains `{aar}` + `databases/*.xdb`)",
+            f"`libfacesdk/{aar}` and `libfacesdk/databases/*.xdb`",
+            note,
+        )
+    if ctx.platform == "Android" and ctx.family in ("document", "document_liveness"):
+        aar = _android_aar(ctx.name)
+        return (
+            f"`{aar}`",
+            f"`libdocsdk/{aar}`",
+            "`document.xdb` is embedded inside the AAR (`assets/document.xdb`).",
+        )
+    if ctx.platform == "iOS" and ctx.family in ("face_combined", "face_recog", "face_liveness"):
+        return (
+            "`facerecognitionsdk-ios.zip` (frameworks + `databases/*.xdb`)",
+            "Repository root / `Frameworks/` + `databases/*.xdb`",
+            "Place every `*.xdb` from the Release next to the frameworks (or under `databases/`).",
+        )
+    if ctx.platform == "iOS" and ctx.family in ("document", "document_liveness"):
+        return (
+            "`docsdk.xcframework.zip`",
+            "`docsdk.xcframework` / `docsdk.framework` (includes `document.xdb` in the bundle)",
+            "If the framework is missing `document.xdb`, add it from the paired SDK pack before shipping.",
+        )
+    if ctx.platform in ("Flutter", "ReactNative", "Ionic", "Ionic-Cordova"):
+        if "Document" in ctx.name or ctx.family.startswith("document"):
+            aar = _android_aar(ctx.name)
+            return (
+                f"Android `{aar}` + iOS `docsdk.xcframework.zip` (from the paired native product Releases)",
+                f"See the sample paths in the repository README (`example/android/libdocsdk/{aar}`, `ios/Frameworks/…`)",
+                "Document Android embeds `document.xdb` in the AAR; iOS embeds it in the framework bundle.",
+            )
+        return (
+            f"Android `{_android_aar(ctx.name)}` zip + iOS face zip (from the paired Android / iOS product Releases)",
+            f"See the sample paths in the repository README (`example/android/libfacesdk/{_android_aar(ctx.name)}`, `ios/Frameworks/…`)",
+            "Do not skip database packs — `get_runtime.py` verifies required `*.xdb` files after download.",
+        )
+    if ctx.platform in ("Windows", "Linux"):
+        asset = "GitHub Release `*-windows.zip` / `*-linux.zip`"
+        return (
+            asset,
+            f"`lib/cpu/` (`{_windows_dll(ctx.name)}` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level)",
+            "Face recognition needs the full `recognition*.xdb` set; face liveness needs "
+            "`recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb`; "
+            "document products need `document.xdb`.",
+        )
+    return (
+        "GitHub Release assets for this repository",
+        "Paths documented in the product README",
+        "Always download database packs with the engine — never ship binaries alone.",
+    )
+
+
+def _run_commands_mobile(ctx: ProductCtx) -> str:
+    if ctx.platform == "Android":
+        return (
+            "Open this folder in **Android Studio** (JDK **17**) and run on a physical **arm64** phone.\n\n"
+            "Wait until Home status shows **Ready** before opening camera modes."
+        )
+    if ctx.platform == "iOS":
+        return (
+            "Open the Xcode project, set your signing **Team**, and run on a physical iPhone.\n\n"
+            "Wait until Home status shows **Ready** before opening camera modes."
+        )
+    if ctx.platform == "Flutter":
+        return (
+            "```bash\n"
+            "dart run tool/bootstrap.dart\n"
+            "cd example && flutter run\n"
+            "```\n\n"
+            "Use a physical device for camera demos."
+        )
+    if ctx.platform == "ReactNative":
+        return (
+            "```bash\nyarn\ncd example && yarn android\n```\n\n"
+            "On iOS: `cd example/ios && pod install && cd .. && yarn ios --device`."
+        )
+    if ctx.platform == "Ionic":
+        return (
+            "```bash\nnpm install\nnpm run build\nnpx cap sync\nnpx cap run android\n```\n\n"
+            "On iOS: `npx cap open ios` after sync, then run from Xcode."
+        )
+    if ctx.platform == "Ionic-Cordova":
+        return (
+            "```bash\nnpm install\nnpm run setup:android && npm run android\n```\n\n"
+            "On iOS: `npm run setup:ios && npm run ios`."
+        )
+    return "Follow the repository **Run** section."
+
+
+def runtime_download_section(ctx: ProductCtx) -> str:
+    asset, path, dbs = _runtime_paths(ctx)
+    hint_open = '{% hint style="warning" %}'
+    hint_close = "{% endhint %}"
+    return f"""## Download and place the runtime
+
+Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+
+### Download (recommended)
+
+```bash
+python scripts/get_runtime.py
+```
+
+To pin a specific Release tag:
+
+```bash
+python scripts/get_runtime.py --tag 1.0.0
+```
+
+| | |
+| --- | --- |
+| **Release asset** | {asset} |
+| **Local path after download** | {path} |
+| **Databases** | {dbs} |
+
+### Manual download (optional)
+
+Open the repository **Releases** page and download the asset named above:
+
+```text
+https://github.com/{ctx.owner}/{ctx.name}/releases/latest/download/<asset>
+```
+
+Unzip so files land in the documented path — **not** nested inside an extra folder.
+
+{hint_open}
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
+{hint_close}
+"""
+
+
 def quick_start_mobile(ctx: ProductCtx) -> str:
     clone = f"https://github.com/{ctx.owner}/{ctx.name}.git"
-    runtime_note = {
-        "face_combined": "Engine zip/AAR/framework from GitHub Releases (`/releases/latest/download/…`) or the files already under `libfacesdk` / Frameworks when present.",
-        "face_liveness": "Liveness runtime AAR/framework as documented in the sample `libfacesdk` / Frameworks folder.",
-        "document": "Engine AAR / `docsdk` framework from Releases (`documentreadersdk.aar` / `docsdk.xcframework.zip`) or local `libdocsdk`.",
-    }.get(ctx.family, "Follow the repository README for the runtime path.")
+    run_cmds = _run_commands_mobile(ctx)
 
     install = ""
     if ctx.platform == "Android" and ctx.family in ("face_combined", "face_liveness"):
@@ -248,10 +418,10 @@ That line pulls the engine and, for face recognition, the reusable **kit** (`lib
 apply from: 'https://raw.githubusercontent.com/{ctx.owner}/{ctx.name}/main/install.gradle'
 ```
 
-Keep `documentreadersdk.aar` available (Release download or `libdocsdk/`). Use the sample kit helpers for guide crop + `recognize`.
+Keep `{_android_aar(ctx.name)}` available (Release download or `libdocsdk/`). Use the sample kit helpers for guide crop + `recognize`.
 """
 
-    return f"""## Quick start
+    return f"""## Integration guide — start the project
 
 ### 1. Clone the sample
 
@@ -260,23 +430,23 @@ git clone {clone}
 cd {ctx.name}
 ```
 
-### 2. Place the runtime
+### 2. Download and place the runtime
 
-{runtime_note}
+See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
 
-Clients should download versioned assets via:
-
-```text
-https://github.com/{ctx.owner}/{ctx.name}/releases/latest/download/<asset>
+```bash
+python scripts/get_runtime.py
 ```
 
 ### 3. Run the demo
 
-Follow the repository **Run** section (Android Studio / Xcode / `flutter run` / `yarn android` / Ionic). Wait until status shows **Ready** before opening camera modes.
+{run_cmds}
 
-### 4. Try every demo mode
+### 4. Activate and try every mode
 
-Use each tile / screen once (enroll, identify, capture, document front/back, result, about). Confirm license state on the About / Result screen.
+1. Confirm Home / About shows a licensed **Ready** state (sample apps ship a demo key for the sample application id only).
+2. Exercise each demo tile once (enroll, identify, capture, attribute, liveness, document front/back, result).
+3. For your own app: request a license for **your** application id / bundle id, then call activate → init on a background thread.
 {install}
 """
 
@@ -286,9 +456,11 @@ def quick_start_server(ctx: ProductCtx) -> str:
     if ctx.family == "document":
         port = "14102"
     elif ctx.family == "document_liveness":
-        port = "14106"
+        port = "14107"
     elif ctx.family == "face_liveness":
-        port = "14103"
+        port = "14105"
+    elif ctx.family == "face_recog":
+        port = "14104"
 
     analyze = ""
     if ctx.family in ("face_combined", "face_recog"):
@@ -306,7 +478,7 @@ curl -s -X POST http://127.0.0.1:{port}/api/face/analyze \\
 ### Try liveness
 
 ```bash
-curl -s -X POST http://127.0.0.1:{port}/api/liveness \\
+curl -s -X POST http://127.0.0.1:{port}/api/face/liveness \\
   -H "Content-Type: application/json" \\
   -d "{{\\"image\\":\\"BASE64_JPEG\\"}}"
 ```
@@ -316,7 +488,7 @@ curl -s -X POST http://127.0.0.1:{port}/api/liveness \\
 ### Try document process
 
 ```bash
-curl -s -X POST http://127.0.0.1:{port}/api/documentProcess \\
+curl -s -X POST http://127.0.0.1:{port}/api/document/process \\
   -H "Content-Type: application/json" \\
   -d "{{\\"images\\":[{{\\"image\\":\\"BASE64_JPEG\\"}}]}}"
 ```
@@ -326,7 +498,7 @@ curl -s -X POST http://127.0.0.1:{port}/api/documentProcess \\
 ### Try document liveness
 
 ```bash
-curl -s -X POST http://127.0.0.1:{port}/api/documentLiveness \\
+curl -s -X POST http://127.0.0.1:{port}/api/document/liveness \\
   -H "Content-Type: application/json" \\
   -d "{{\\"images\\":[\\"BASE64_JPEG\\"]}}"
 ```
@@ -344,31 +516,55 @@ curl -s http://127.0.0.1:PORT/api/health
 ```
 """
 
-    return f"""## Quick start (server)
+    start = "python run_server.py" if ctx.platform == "Windows" else "python3 run_server.py"
+    return f"""## Integration guide — start the project
 
-Default API port for this product family: **`{port}`**.
+Default API port for this product family: **`{port}`**. Gradio demo (when shipped) uses **`{int(port)+100}`**.
 
-### 1. Clone and start
+### 1. Clone the sample
 
 ```bash
 git clone https://github.com/{ctx.owner}/{ctx.name}.git
 cd {ctx.name}
-# Follow README: place lib/ runtime, then start the HTTP server / demo UI
 ```
 
-### 2. Machine code → license → activate
+### 2. Download and place the runtime
+
+Native libraries and `*.xdb` databases are not in git. From the repository root:
+
+```bash
+python scripts/get_runtime.py
+```
+
+Files must land under `lib/cpu/` (DLLs or `.so` files **and** every required database pack). See [Download and place the runtime](#download-and-place-the-runtime).
+
+### 3. Configure and start the server
+
+```bash
+cp -n .env.example .env   # Windows: copy .env.example .env
+pip install -r requirements.txt
+{start}
+```
+
+Configuration lives in **`.env`**: `PORT`, `LICENSE`, `API_BASE`, `DEMO_PORT`. Shell / Compose environment variables still win over `.env`.
+
+### 4. Machine code → license → activate
 
 ```bash
 curl -s http://127.0.0.1:{port}/api/machinecode
-# Send data.machinecode to Identixia → receive license
+```
+
+Send `data.machinecode` to Identixia and receive a license. Then either set `LICENSE=` in `.env` and restart, or:
+
+```bash
 curl -s -X POST http://127.0.0.1:{port}/api/activate \\
-  -H "Content-Type: text/plain" \\
-  --data-binary @license.txt
+  -H "Content-Type: application/json" \\
+  -d '{{\\"license\\":\\"YOUR_KEY\\"}}'
 curl -s http://127.0.0.1:{port}/api/licenseStatus
 curl -s http://127.0.0.1:{port}/api/health
 ```
 
-You can also drop `license.txt` next to the server and restart.
+Prefer `.env` (`LICENSE=`) for the key — do not use a separate `license.txt`.
 {analyze}{docker}
 """
 
@@ -380,7 +576,7 @@ def license_section(ctx: ProductCtx) -> str:
 1. Start the API (it stays up even without a key so you can read the machine code).
 2. `GET /api/machinecode` → copy `data.machinecode`.
 3. Contact Identixia with that code (Docker and bare metal codes differ).
-4. `POST /api/activate` with the license file/bytes **or** place `license.txt` and restart.
+4. `POST /api/activate` with the key **or** set `LICENSE=` in `.env` and restart.
 5. `GET /api/licenseStatus` → check capability flags (`recognition`, `liveness` / `authenticity`).
 
 Control routes return the envelope `{success, code, message, request_id, data}`. Process routes return **engine / process JSON** (not the control envelope).
@@ -413,28 +609,42 @@ Control routes return the envelope `{success, code, message, request_id, data}`.
 def face_mobile_api() -> str:
     return """## API reference — mobile face SDK
 
-Prefer **`FaceRecognitionClient`** (Android kit) / the matching iOS kit wrappers. Serialize all engine calls on one queue.
+Prefer **`FaceRecognitionClient`** (Android kit) / the matching iOS kit wrappers. Flutter, React Native, and Ionic expose the **same method names** as Android (`detect`, `faceDetection`, `liveness`, `livenessAll`, …). Serialize all engine calls on **one background thread**.
 
 ### Lifecycle
 
 | API | Purpose |
 | --- | --- |
-| `activate(license)` | Activate + init on a worker thread; completion returns status code |
-| `deactivate()` / `release()` | Tear down engine |
+| `setActivation(license)` / kit `activate(license)` | Activate (+ init) on a worker thread |
+| `init()` | Load models when not bundled into activate |
+| `deinit()` / `deactivate()` / `release()` | Tear down engine |
+| `getMachineCode()` | Offline machine / app fingerprint helpers |
 | `getLicenseStatus()` | Current license flags |
 | `allowsRecognition()` / `allowsLiveness()` | Capability checks |
 
 ### Still-image recognition
 
-| API | Purpose |
-| --- | --- |
-| `detect(bitmap, crop?, flags?)` | Detect faces; JSON string with regions / landmarks / traits |
-| `faceDetection(bitmap, param?)` | Typed `FaceBox` list |
-| `templateExtraction(bitmap, face)` | Template bytes for one face box |
-| `extractFeature(bitmap)` | Feature bytes (largest / primary face helpers) |
-| `similarity(feature1, feature2)` | 1:1 score between templates |
-| `quality(bitmap, crop?)` | Quality attributes JSON |
-| `setLandmarkMode(14\\|68)` | Landmark density |
+| API | Purpose | Closest HTTP route |
+| --- | --- | --- |
+| `detect(image, crop?, flags?)` | Detect faces; JSON with regions / landmarks / traits | `POST /api/face/analyze` |
+| `faceDetection(image, param?)` | Typed `FaceBox` list / JSON boxes | `POST /api/face/boxes` |
+| `faceDetect` / `faceAttribute` / `imageQuality` / `landmarks` | Focused still helpers (plugin channels) | `/api/face/traits`, `/image-quality`, `/landmarks` |
+| `match(image1, image2)` | 1:1 image compare | `POST /api/face/compare` |
+| `templateExtraction(image, face)` | Template bytes for one face box | `POST /api/face/template` |
+| `extractFeature(image)` | Feature bytes (largest / primary face) | `POST /api/face/template` |
+| `similarity(feature1, feature2)` | 1:1 score between templates | `POST /api/face/score` |
+| `quality(image, crop?)` | Quality attributes JSON | `POST /api/face/quality` |
+| `setLandmarkMode(14\\|68)` | Landmark density | — |
+
+### Passive liveness + deepfake (when licensed)
+
+| API | Purpose | Closest HTTP route |
+| --- | --- | --- |
+| `liveness(image)` | PAD + deepfake | `POST /api/face/liveness` |
+| `livenessAll(image)` | Same as `liveness`, high-accuracy pack | `POST /api/face/liveness` |
+| `deepfake(image)` | Deepfake-only still check | `POST /api/face/deepfake` |
+
+Treat authenticity as **REAL** only when both PAD and deepfake say real. Without the entitlement, treat missing scores as **not run**, not as pass.
 
 ### Gallery (on-device 1:N)
 
@@ -450,38 +660,57 @@ Prefer **`FaceRecognitionClient`** (Android kit) / the matching iOS kit wrappers
 | API | Purpose |
 | --- | --- |
 | `startVideoWorker(config)` | Start tracking / identify session |
-| `addFrame(bitmap)` | Push camera frames |
+| `addFrame` / live-frame helpers | Push camera frames |
 | `setVideoWorkerEventHandler` | Receive track / match / liveness events (JSON) |
 | `stopVideoWorker()` | Stop session |
 | `makeTrackingConfig` / `makeIdentityConfig` | Build configs (passive / active liveness options when licensed) |
 
-### Passive liveness
+### Usage example (Android kit)
 
-When the license includes liveness, still-image detect/quality paths and VideoWorker configs can return passive 2D scores. Use `passive2DVerdict` helpers in the kit. Without the entitlement, treat missing scores as **not run**, not as pass.
+```kotlin
+val client = FaceRecognitionClient.get(context)
+client.activate(licenseKey) { code ->
+    if (code != 0) return@activate
+    // Worker thread: detect + match
+    val json = client.detect(bitmap, /* crop */ false, /* flags */ 0)
+    val score = client.match(bitmapA, bitmapB)
+    val live = client.liveness(bitmap) // when licensed
+}
+```
+
+### Usage example (plugin / Flutter / React Native / Ionic)
+
+Call the same method names exposed by the plugin bridge (`activate` → `init` → `detect` / `match` / `liveness` / `enroll`). Keep camera preview on the UI thread; keep engine calls on a single background isolate / queue.
 
 ### Integration checklist
 
-1. Apply `install.gradle` (Android) or vendor iOS frameworks from Release.
-2. `FaceRecognitionClient.get(context).activate(license) { code -> … }`.
+1. Download runtime with `python scripts/get_runtime.py` (or `install.gradle` on Android).
+2. `FaceRecognitionClient.get(context).activate(license) { code -> … }` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
-4. Enroll → Identify, or Capture / Attribute for still flows.
+4. Enroll → Identify, or Capture / Attribute / Liveness for still flows.
 5. Persist templates in **your** database if you leave the demo gallery.
 """
 
 
 def face_http_api(combined: bool) -> str:
+    port = "14103" if combined else "14104"
     live = ""
     if combined:
         live = """
-| `POST` | `/api/face/liveness` | `{ "image": "<b64>" }` | Passive liveness (license-gated) |
-| `POST` | `/api/face/deepfake` | `{ "image": "<b64>" }` | Deepfake score when enabled |
+| `POST` | `/api/face/liveness` | `{ "image": "<b64>" }` | PAD + deepfake (`liveness_all`); REAL when both pass |
+| `POST` | `/api/face/deepfake` | `{ "image": "<b64>" }` | Deepfake-only score when enabled |
+"""
+    gallery = """
 | `POST` | `/api/face/enroll` | `{ "image", "name" }` | Server gallery enroll |
 | `POST` | `/api/face/search` | `{ "image", "threshold" }` | 1:N search |
+| `GET` | `/api/face/gallery` | — | List gallery |
 | `DELETE` | `/api/face/gallery/{id}` | — | Remove gallery entry |
 """
     return f"""## API reference — HTTP (Windows / Linux / Docker)
 
-Base URL: `http://{{host}}:14103`
+Base URL: `http://{{host}}:{port}`
+
+There is **no** legacy `/api/detect`, `/api/match`, or `/api/liveness` on this stack — use `/api/face/*` only.
 
 ### Control routes (envelope)
 
@@ -508,11 +737,28 @@ Same path accepts JSON (base64 fields) or `multipart/form-data` (`image`, `image
 | `POST` | `/api/face/template` | `image` | Template / feature |
 | `POST` | `/api/face/compare` | `image1`, `image2` | 1:1 image match |
 | `POST` | `/api/face/score` | `feature1`, `feature2` | Template similarity |
-{live}
+{live}{gallery}
+### Live track (when enabled)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `POST` | `/api/face/track/start` | Start a tracking session |
+| `POST` | `/api/face/track/frame` | Push a frame (base64) |
+| `GET` | `/api/face/track/events` | Poll track / match / liveness events |
+| `POST` | `/api/face/track/stop` | Stop the session |
+
+### Example — analyze one image
+
+```bash
+curl -s -X POST http://127.0.0.1:{port}/api/face/analyze \\
+  -H "Content-Type: application/json" \\
+  -d '{{"image":"BASE64_JPEG","cropImage":false}}'
+```
+
 ### Example — compare two images
 
 ```bash
-curl -s -X POST http://127.0.0.1:14103/api/face/compare \\
+curl -s -X POST http://127.0.0.1:{port}/api/face/compare \\
   -H "Content-Type: application/json" \\
   -d '{{"image1":"BASE64_JPEG","image2":"BASE64_JPEG"}}'
 ```
@@ -520,17 +766,39 @@ curl -s -X POST http://127.0.0.1:14103/api/face/compare \\
 ### Example — template similarity
 
 ```bash
-curl -s -X POST http://127.0.0.1:14103/api/face/score \\
+curl -s -X POST http://127.0.0.1:{port}/api/face/score \\
   -H "Content-Type: application/json" \\
   -d '{{"feature1":"<b64>","feature2":"<b64>"}}'
 ```
+
+### Example — Python analyze
+
+```python
+import base64, json, urllib.request
+from pathlib import Path
+
+image = base64.b64encode(Path("photo.jpg").read_bytes()).decode()
+req = urllib.request.Request(
+    "http://127.0.0.1:{port}/api/face/analyze",
+    data=json.dumps({{"image": image, "cropImage": False}}).encode(),
+    headers={{"Content-Type": "application/json"}},
+)
+with urllib.request.urlopen(req, timeout=180) as resp:
+    print(resp.read().decode())
+```
+
+**Postman:** import `postman/Identixia-API.postman_collection.json` (monorepo) or the product `postman/` collection, and set `baseUrl` to `http://127.0.0.1:{port}`.
 """
 
 
 def face_liveness_http_api() -> str:
     return """## API reference — face liveness HTTP
 
-Base URL: `http://{host}:14103` (confirm in the product README).
+Base URL: `http://{host}:14105`
+
+Liveness-only products expose `/api/face/liveness` and `/api/face/deepfake` (same paths as the full Face stack). There is **no** `/api/liveness` / `/api/check_liveness` alias on this release.
+
+`POST /api/face/liveness` runs **PAD + deepfake** (`FaceSDK_liveness_all`). Demo UIs treat authenticity as **REAL** only when both traits say real. Use `/api/face/deepfake` for a deepfake-only score.
 
 | Method | Path | Body | Description |
 | --- | --- | --- | --- |
@@ -538,35 +806,45 @@ Base URL: `http://{host}:14103` (confirm in the product README).
 | `GET` | `/api/machinecode` | — | License machine code |
 | `GET` | `/api/licenseStatus` | — | Liveness entitlement |
 | `POST` | `/api/activate` | license bytes / JSON | Activate |
-| `POST` | `/api/liveness` | `{ "image": "<b64>", "algorithm": "all" }` | Passive liveness |
-| `POST` | `/api/check_liveness` | same | Alias |
+| `POST` | `/api/face/liveness` | `{ "image": "<b64>" }` | PAD + deepfake (combined authenticity) |
+| `POST` | `/api/face/deepfake` | `{ "image": "<b64>" }` | Deepfake-only score when enabled |
 
 ```bash
-curl -s -X POST http://127.0.0.1:14103/api/liveness \\
+curl -s -X POST http://127.0.0.1:14105/api/face/liveness \\
   -H "Content-Type: application/json" \\
-  -d '{"image":"BASE64_JPEG","algorithm":"all"}'
+  -d '{"image":"BASE64_JPEG"}'
 ```
+
+**Postman:** import `postman/FaceLiveness-API.postman_collection.json` from the product repo.
 """
 
 
 def document_mobile_api() -> str:
     return """## API reference — mobile document SDK
 
+Android, iOS, Flutter, React Native, and Ionic share the **same customer method names** and the same process JSON idea (`identity` / `readings` / `tests` / `images` / `session`).
+
 ### Lifecycle
 
 | API | Purpose |
 | --- | --- |
-| Activate + init | License then load models (background thread) |
-| License status | Recognition / authenticity flags |
-| Session helpers | `startNewSession` / gallery session before recognize |
+| `setActivation(license)` | Activate license (background thread) |
+| `init()` | Load models |
+| `deinit()` | Unload engine |
+| `getMachineCode()` / `getLicenseStatus()` | License helpers |
+| `startNewSession(optionsJson?)` | Open a process session before recognize |
 
-### Capture and recognize
+### Capture and process
 
 | API | Purpose |
 | --- | --- |
 | Guide / crop helpers | Align document in frame (`DocumentGuideView` / kit crop) |
-| `recognize(front, back?)` | Run OCR + MRZ + barcode (+ liveness when licensed) |
-| Result parser | Map engine JSON → identity, fields, checks, images |
+| `locateDocument(image)` | Find document bounds in a frame / still |
+| `recognize(front, back?, authenticity?)` | OCR + MRZ + barcode (+ authenticity when licensed) |
+| `documentRecognition(front, back?)` | Recognition-only path |
+| `documentLiveness(front, back?)` | Authenticity / PAD-only path |
+| `documentProcess(imagesJson, rfidJson, optionsJson)` | Combined pipeline (same idea as `POST /api/document/process`) |
+| `faceLiveness(image, mode?)` | Optional face PAD helper on document products that ship it |
 
 ### Result JSON (shared idea)
 
@@ -578,14 +856,15 @@ Top-level concepts (names may be normalized per platform):
 | Fields / readings | OCR, MRZ, barcode field rows |
 | Checks / tests | Verification + image quality + security |
 | Images | Portrait / document crops (base64) |
+| Session | Process / request metadata when present |
 
 See [Result JSON](result-json.md) and [Security check fields](security-fields.md).
 
 ### Integration checklist
 
 1. Apply `install.gradle` or vendor iOS `docsdk`.
-2. Activate with your app id license.
-3. Capture front (and back when needed) → `recognize`.
+2. Activate with your app id license → `init`.
+3. Capture front (and back when needed) → `recognize` or `documentProcess`.
 4. Parse JSON in your app — do not depend on the demo Result UI.
 5. Store fields you need in **your** database.
 """
@@ -610,15 +889,15 @@ Base URL: `http://{host}:14102`
 
 | Method | Path | Body | Description |
 | --- | --- | --- | --- |
-| `POST` | `/api/documentProcess` | `{ "images":[…], "rfid"?, "response"? }` | Full process (OCR + optional authenticity) |
-| `POST` | `/api/documentRecognition` | `{ "images":[…] }` | Recognition only |
-| `POST` | `/api/documentLiveness` | `{ "images":[…] }` | Authenticity / liveness only |
-| `POST` | `/api/generalProcess` | `{ "image", "options"? }` | General process helper |
+| `POST` | `/api/document/process` | `{ "images":[…], "rfid"?, "response"? }` | Full process (OCR + optional authenticity) |
+| `POST` | `/api/document/recognition` | `{ "images":[…] }` | Recognition only |
+| `POST` | `/api/document/liveness` | `{ "images":[…] }` | Authenticity / liveness only |
+| `POST` | `/api/document/general` | `{ "image", "options"? }` | General process helper |
 
 `images` entries are objects with base64 `image` (and optional metadata) or raw base64 strings depending on binding — see the sample Postman collection in the repo `postman/` folder.
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/documentProcess \\
+curl -s -X POST http://127.0.0.1:14102/api/document/process \\
   -H "Content-Type: application/json" \\
   -d '{"images":[{"image":"BASE64_JPEG"}]}'
 ```
@@ -628,7 +907,7 @@ curl -s -X POST http://127.0.0.1:14102/api/documentProcess \\
 def document_liveness_http_api() -> str:
     return """## API reference — document liveness HTTP
 
-Base URL: `http://{host}:14106` (dedicated product; Document Recognition on **14102** also exposes `/api/documentLiveness` when licensed).
+Base URL: `http://{host}:14107` (dedicated product; Document Recognition on **14102** also exposes `/api/document/liveness` when licensed).
 
 | Method | Path | Description |
 | --- | --- | --- |
@@ -636,9 +915,11 @@ Base URL: `http://{host}:14106` (dedicated product; Document Recognition on **14
 | `GET` | `/api/machinecode` | Machine code |
 | `GET` | `/api/licenseStatus` | Entitlement |
 | `POST` | `/api/activate` | Activate |
-| `POST` | `/api/documentLiveness` | `{ "images": ["<b64>", ...] }` |
+| `POST` | `/api/document/liveness` | `{ "images": ["<b64>", ...] }` |
 
 This product is **PAD / authenticity**, not OCR. Pair with ID Document Recognition when you need fields.
+
+**Postman:** import `postman/DocumentLiveness-API.postman_collection.json` from the product repo.
 """
 
 
@@ -771,24 +1052,45 @@ def readme_appendix(readme_body: str) -> str:
     )
 
 
+def resources_section(ctx: ProductCtx) -> str:
+    return f"""## Resources
+
+| Resource | Link |
+| --- | --- |
+| **This repository** | [`{ctx.owner}/{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) |
+| **GitHub Releases (runtime)** | [Latest download](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) |
+| **Runtime helper** | `python scripts/get_runtime.py` in the product clone |
+| **Documentation site** | [docs.identixia.com](https://docs.identixia.com) |
+| **SDK Server (HTTP)** | [SDK Server](../sdk-server/README.md) |
+| **Website** | [identixia.com](https://identixia.com) |
+| **Hugging Face** | [huggingface.co/Identixia](https://huggingface.co/Identixia) |
+| **Docker Hub** | [hub.docker.com/u/identixia](https://hub.docker.com/u/identixia) |
+| **Playground** | [playground.identixia.com](https://playground.identixia.com/) |
+| **License & support** | [Request a license](../request-a-license-and-support.md) · [Contact](../contact-us.md) |
+
+Postman collections live under each product repository’s `postman/` folder (and the monorepo `postman/Identixia-API.postman_collection.json` for all HTTP routes).
+"""
+
+
 def next_steps(ctx: ProductCtx) -> str:
     lines = [
         "## Next steps",
         "",
-        "1. Complete **Quick start** until the sample shows **Ready**.",
-        "2. Activate with a license issued for **your** application id or machine code.",
-        "3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.",
+        "1. Complete **Integration guide — start the project** until the sample shows **Ready**.",
+        "2. Confirm runtime files and databases are in place (`python scripts/get_runtime.py`).",
+        "3. Activate with a license issued for **your** application id or machine code.",
+        "4. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.",
     ]
     if ctx.family in ("face_combined", "face_recog", "face_liveness"):
         lines.append(
-            "4. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms."
+            "5. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms."
         )
     elif ctx.family in ("document", "document_liveness"):
         lines.append(
-            "4. Return to the [ID Document SDK](README.md) hub for Result JSON and related platforms."
+            "5. Return to the [ID Document SDK](README.md) hub for Result JSON and related platforms."
         )
     else:
-        lines.append("4. Open the product hub that matches your license.")
+        lines.append("5. Open the product hub that matches your license.")
     return "\n".join(lines) + "\n"
 
 
@@ -834,6 +1136,8 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
         parts.append(readme_appendix(readme_body))
         return "\n".join(p for p in parts if p)
 
+    parts.append(runtime_download_section(ctx))
+
     if ctx.platform in ("Windows", "Linux"):
         parts.append(quick_start_server(ctx))
         parts.append(license_section(ctx))
@@ -855,18 +1159,33 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
         elif ctx.family == "face_liveness":
             parts.append(
                 "## API reference — mobile face liveness\n\n"
-                "Activate → init, then score a camera frame or gallery still with the "
-                "liveness API exposed by the sample (see kit / SDK class in the repo). "
-                "Without a liveness entitlement the score is omitted.\n"
+                "Android, iOS, Flutter, React Native, and Ionic share the same customer methods.\n\n"
+                "| API | Purpose | Closest HTTP route |\n"
+                "| --- | --- | --- |\n"
+                "| `setActivation(license)` → `init()` | License then load models (background thread) | `POST /api/activate` |\n"
+                "| `getMachineCode()` / `getLicenseStatus()` | License helpers | `/api/machinecode`, `/api/licenseStatus` |\n"
+                "| `liveness(image)` | PAD + deepfake | `POST /api/face/liveness` |\n"
+                "| `livenessAll(image)` | Same as `liveness`, high-accuracy pack | `POST /api/face/liveness` |\n"
+                "| `deepfake(image)` | Deepfake-only still check | `POST /api/face/deepfake` |\n"
+                "| VideoWorker / capture kit | Live camera HUD; authenticity REAL only if PAD and deepfake both pass | `/api/face/track/*` |\n\n"
+                "Without a liveness entitlement the score is omitted — treat as **not evaluated**, not pass.\n\n"
+                "### Usage example\n\n"
+                "```text\n"
+                "1. python scripts/get_runtime.py\n"
+                "2. activate(license) on a background thread → init()\n"
+                "3. liveness(bitmap) or start the capture / VideoWorker UI\n"
+                "4. Treat authenticity as REAL only when PAD and deepfake both pass\n"
+                "```\n"
             )
             parts.append(STATUS_CODES)
-        elif ctx.family == "document":
+        elif ctx.family in ("document", "document_liveness"):
             parts.append(document_mobile_api())
 
     parts.append(troubleshooting(ctx))
     if ctx.family in ("face_combined", "face_recog"):
         parts.append(cross_platform_face())
     parts.append(screenshots_section(ctx, nested=True))
+    parts.append(resources_section(ctx))
     parts.append(next_steps(ctx))
     parts.append(CONTACT_NESTED)
     parts.append(readme_appendix(readme_body))

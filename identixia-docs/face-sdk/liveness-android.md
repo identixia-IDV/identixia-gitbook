@@ -1,6 +1,6 @@
 ---
 description: >-
-  On-device passive face liveness SDK for Android. Scores a camera frame for presentation-attack detection when the license allows it.
+  Passive face liveness SDK for Android. On-device presentation-attack and deepfake checks for KYC. A face is REAL only when both pass. Sample app and docs included.
 ---
 
 # Face liveness — Android
@@ -8,7 +8,7 @@ description: >-
 
 ## Overview
 
-On-device passive face liveness SDK for Android. Scores a camera frame for presentation-attack detection when the license allows it.
+Passive face liveness SDK for Android. On-device presentation-attack and deepfake checks for KYC. A face is REAL only when both pass. Sample app and docs included.
 
 Processing runs **on the device**. Identixia does **not** receive biometric images, templates, or document scans.
 
@@ -29,8 +29,8 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 
 | Capability | Description |
 | --- | --- |
-| Passive face liveness | Score one RGB face image or camera frame for presentation-attack detection |
-| License gating | Liveness runs only when the license includes `liveness` |
+| Passive face liveness + deepfake | Score one RGB face for PAD and deepfake; REAL only when both engines say real |
+| License gating | Liveness / deepfake run only when the license includes `liveness` |
 
 ## Prerequisites
 
@@ -43,7 +43,43 @@ Processing runs **on the device**. Identixia does **not** receive biometric imag
 | ABIs | `arm64-v8a`, `armeabi-v7a` |
 | Packaging | `jniLibs { useLegacyPackaging = true }` |
 
-## Quick start
+## Download and place the runtime
+
+Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
+
+### Download (recommended)
+
+```bash
+python scripts/get_runtime.py
+```
+
+To pin a specific Release tag:
+
+```bash
+python scripts/get_runtime.py --tag 1.0.0
+```
+
+| | |
+| --- | --- |
+| **Release asset** | `facelivenessdk-android.zip` (contains `facelivenessdk.aar` + `databases/*.xdb`) |
+| **Local path after download** | `libfacesdk/facelivenessdk.aar` and `libfacesdk/databases/*.xdb` |
+| **Databases** | Required packs: `liveness.xdb` and `recognition-deepfake.xdb`. |
+
+### Manual download (optional)
+
+Open the repository **Releases** page and download the asset named above:
+
+```text
+https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/latest/download/<asset>
+```
+
+Unzip so files land in the documented path — **not** nested inside an extra folder.
+
+{% hint style="warning" %}
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
+{% endhint %}
+
+## Integration guide — start the project
 
 ### 1. Clone the sample
 
@@ -52,23 +88,25 @@ git clone https://github.com/identixia-IDV/FaceLivenessDetection-Android.git
 cd FaceLivenessDetection-Android
 ```
 
-### 2. Place the runtime
+### 2. Download and place the runtime
 
-Liveness runtime AAR/framework as documented in the sample `libfacesdk` / Frameworks folder.
+See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
 
-Clients should download versioned assets via:
-
-```text
-https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/latest/download/<asset>
+```bash
+python scripts/get_runtime.py
 ```
 
 ### 3. Run the demo
 
-Follow the repository **Run** section (Android Studio / Xcode / `flutter run` / `yarn android` / Ionic). Wait until status shows **Ready** before opening camera modes.
+Open this folder in **Android Studio** (JDK **17**) and run on a physical **arm64** phone.
 
-### 4. Try every demo mode
+Wait until Home status shows **Ready** before opening camera modes.
 
-Use each tile / screen once (enroll, identify, capture, document front/back, result, about). Confirm license state on the About / Result screen.
+### 4. Activate and try every mode
+
+1. Confirm Home / About shows a licensed **Ready** state (sample apps ship a demo key for the sample application id only).
+2. Exercise each demo tile once (enroll, identify, capture, attribute, liveness, document front/back, result).
+3. For your own app: request a license for **your** application id / bundle id, then call activate → init on a background thread.
 
 ### Add the SDK to your own Android app
 
@@ -118,7 +156,27 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 
 ## API reference — mobile face liveness
 
-Activate → init, then score a camera frame or gallery still with the liveness API exposed by the sample (see kit / SDK class in the repo). Without a liveness entitlement the score is omitted.
+Android, iOS, Flutter, React Native, and Ionic share the same customer methods.
+
+| API | Purpose | Closest HTTP route |
+| --- | --- | --- |
+| `setActivation(license)` → `init()` | License then load models (background thread) | `POST /api/activate` |
+| `getMachineCode()` / `getLicenseStatus()` | License helpers | `/api/machinecode`, `/api/licenseStatus` |
+| `liveness(image)` | PAD + deepfake | `POST /api/face/liveness` |
+| `livenessAll(image)` | Same as `liveness`, high-accuracy pack | `POST /api/face/liveness` |
+| `deepfake(image)` | Deepfake-only still check | `POST /api/face/deepfake` |
+| VideoWorker / capture kit | Live camera HUD; authenticity REAL only if PAD and deepfake both pass | `/api/face/track/*` |
+
+Without a liveness entitlement the score is omitted — treat as **not evaluated**, not pass.
+
+### Usage example
+
+```text
+1. python scripts/get_runtime.py
+2. activate(license) on a background thread → init()
+3. liveness(bitmap) or start the capture / VideoWorker UI
+4. Treat authenticity as REAL only when PAD and deepfake both pass
+```
 
 
 ### Status codes
@@ -156,12 +214,30 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 
 <figure><img src="../.gitbook/assets/liveness-desktop.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
 
+## Resources
+
+| Resource | Link |
+| --- | --- |
+| **This repository** | [`identixia-IDV/FaceLivenessDetection-Android`](https://github.com/identixia-IDV/FaceLivenessDetection-Android) |
+| **GitHub Releases (runtime)** | [Latest download](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/latest) |
+| **Runtime helper** | `python scripts/get_runtime.py` in the product clone |
+| **Documentation site** | [docs.identixia.com](https://docs.identixia.com) |
+| **SDK Server (HTTP)** | [SDK Server](../sdk-server/README.md) |
+| **Website** | [identixia.com](https://identixia.com) |
+| **Hugging Face** | [huggingface.co/Identixia](https://huggingface.co/Identixia) |
+| **Docker Hub** | [hub.docker.com/u/identixia](https://hub.docker.com/u/identixia) |
+| **Playground** | [playground.identixia.com](https://playground.identixia.com/) |
+| **License & support** | [Request a license](../request-a-license-and-support.md) · [Contact](../contact-us.md) |
+
+Postman collections live under each product repository’s `postman/` folder (and the monorepo `postman/Identixia-API.postman_collection.json` for all HTTP routes).
+
 ## Next steps
 
-1. Complete **Quick start** until the sample shows **Ready**.
-2. Activate with a license issued for **your** application id or machine code.
-3. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
-4. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms.
+1. Complete **Integration guide — start the project** until the sample shows **Ready**.
+2. Confirm runtime files and databases are in place (`python scripts/get_runtime.py`).
+3. Activate with a license issued for **your** application id or machine code.
+4. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
+5. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms.
 
 
 ## Support
@@ -172,144 +248,218 @@ Serialize native SDK calls on **one background thread**. The engine is not concu
 
 The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
 
-## Identixia Face Liveness Detection SDK — Android (Fully On-Premise)
+## Identixia Face Liveness Detection — Android
 
-> **Ready in ~10 minutes (after AAR download):**
-> Drop `facelivenessdk.aar` into `libfacesdk/` → Run on a phone
-
----
-
-## Quick start checklist
-
-- [ ] Clone `https://github.com/identixia-IDV/FaceLivenessDetection-Android`
-- [ ] Download `facelivenessdk.aar` from [Google Drive](#get-the-aar-libfacesdk)
-- [ ] Place it in `libfacesdk/` (next to `libfacesdk/build.gradle`)
-- [ ] Open this folder in Android Studio → Run on a **physical** phone
-- [ ] Home status shows **Ready** → **Liveness / Settings / About** unlock
-
-> **Your own app?** Skip to [Setup on your own app](#setup-on-your-own-app). Full API: [docs.identixia.com](https://docs.identixia.com).
+**On-device face liveness SDK** for Android: passive face PAD and deepfake checks (authenticity is **REAL** only if both pass). All processing stays on the phone — no biometric data is sent to Identixia cloud. Ready after you download the AAR and databases (about 10 minutes once the runtime is in place).
 
 ---
 
-## Introduction
+## Develop
 
-Identixia **Face Liveness Detection SDK for Android** is an on-device passive liveness check for KYC. No extra hardware and no cloud. The check runs only after the license is activated.
+Use this repository for passive face presentation-attack and deepfake checks, without a recognition gallery. Processing stays on the phone. Identixia does not receive camera frames, templates, or document images.
 
-All processing stays on the phone. **No** biometric data leaves the device.
-
-This repository is the **Android demo app**. Runtime is `libfacesdk/facelivenessdk.aar` (download from Google Drive). No other Identixia repository is required.
-
-### Features
-
-| Demo tile | What it does |
-| --------- | ------------ |
-| **Liveness** | Live camera anti-spoofing with face box + track / liveness / luminance HUD |
-| **Settings** | Camera lens (front / back), liveness threshold |
-| **About** | Identixia Face Liveness SDK — on-device anti-spoofing |
-
-## Before you start
-
-| Step | What you need |
-| ---- | ------------- |
-| 1 | Android Studio + a **real device** (emulator is not recommended) |
-| 2 | `facelivenessdk.aar` in `./libfacesdk/` — see [Get the AAR](#get-the-aar-libfacesdk) |
-| 3 | Paste a Face Liveness license for `applicationId` `com.identixia.faceliveness` (product `741777`) into `MainActivity.kt` — see [SDK License](#sdk-license) |
-
-### System requirements
-
-| Item | Minimum | Recommended |
-| ---- | ------- | ----------- |
-| Android | API 24 (7.0) | API 29 (10) or newer |
-| ABI | `arm64-v8a`, `armeabi-v7a` | `arm64-v8a` |
-| Camera | Front or rear | Physical device |
+| | |
+| --- | --- |
+| **Architecture** | [Where the engine runs](#-architecture) |
+| **Quick start** | Follow [Initial commands](#-initial-commands), then [Run](#-run). |
+| **Initialize** | [Activate, then init](#-initialize) |
+| **Process** | [Camera or a still image](#-process) |
+| **Results** | [What to read back](#-results) |
+| **Requirements** | [Requirements](#-requirements) |
 
 ---
 
-## Get the AAR (`libfacesdk`)
+## Resources
 
-`libfacesdk/facelivenessdk.aar` is empty on GitHub because the binary is too large.
+| Resource | Where |
+| --- | --- |
+| **Sample** | This repository — [FaceLivenessDetection-Android](https://github.com/identixia-IDV/FaceLivenessDetection-Android) |
+| **Client library** | the sample project in this repository |
+| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/latest) |
+| **API** | [Method list](#-api) |
+| **Develop docs** | [docs.identixia.com/face-sdk/liveness-android](https://docs.identixia.com/face-sdk/liveness-android) |
+| **License** | [License](#-license) · [Contact](#-contact) |
+| **Other platforms** | [Platforms](#-platforms) |
 
-### Where to download
+---
 
-**[FaceLivenessSDK Android (Google Drive)](https://drive.google.com/drive/folders/1x3jt02f-YHsk4WD_QlnKJSx5uQ5Ds4xH)**
+## Basics
 
-### How to place it
+Read this once before cloning. Mobile demos may ship a **bundled license** for the sample application id. Production apps need a new key from Identixia.
+
+| Topic | Basic information |
+| --- | --- |
+| **Product** | On-device **face liveness detection** for Android |
+| **Demo tiles** | Liveness · Settings · About |
+| **Runtime** | `libfacelivenesssdk/facelivenesssdk.aar` plus `libfacelivenesssdk/databases/*.xdb` |
+| **Demo application id** | `com.identixia.faceliveness` (product `741777`) |
+| **Tools** | Android Studio · physical arm64 phone |
+| **Privacy** | All processing on device — no Identixia cloud |
+
+---
+
+## Initial commands
 
 ```bash
 git clone https://github.com/identixia-IDV/FaceLivenessDetection-Android.git
 cd FaceLivenessDetection-Android
+python scripts/get_runtime.py
 ```
 
-Download `facelivenessdk.aar` and put it here:
+Open this folder in **Android Studio** and run on a physical phone. Home status should show **Ready**, then **Liveness / Settings / About** unlock.
+
+Please [contact us](#-contact) to get a license for your own app. The sample may already include a demo license for its application id.
+
+Wait until Home status shows **Ready**, then try the demo tiles. Confirm Result / About shows a licensed state before integrating into your own app.
+
+---
+
+## What you get
+
+| Capability | What it does |
+| --- | --- |
+| **Liveness** | Live camera PAD + deepfake with face box and authenticity metrics |
+| **Settings** | Camera lens (front / back) and liveness threshold |
+| **About** | SDK status and on-device anti-spoofing summary |
+
+---
+
+## Demo modes
+
+| Mode | What to try |
+| --- | --- |
+| **Liveness** | Run passive PAD + deepfake on a live face |
+| **Settings** | Switch camera lens and adjust the liveness threshold |
+| **About** | Confirm license and SDK ready state |
+
+---
+
+## Requirements
+
+| | |
+| --- | --- |
+| Android | API 24 (7.0) minimum; API 29+ recommended |
+| ABI | `arm64-v8a`, `armeabi-v7a` |
+| Camera | Physical device (emulator is not recommended) |
+| Demo application id | `com.identixia.faceliveness` |
+
+---
+
+## Install
+
+Download the native engine files from this repository’s GitHub Release. The helper script places libraries and database packs in the correct folders.
+
+```bash
+python scripts/get_runtime.py
+```
+
+To download a specific Release tag instead of the latest build:
+
+```bash
+python scripts/get_runtime.py --tag 1.0.0
+```
+
+Place files like this after download:
 
 ```text
 FaceLivenessDetection-Android/
-└── libfacesdk/
+└── libfacelivenesssdk/
     ├── build.gradle
-    └── facelivenessdk.aar
+    ├── facelivenesssdk.aar
+    └── databases/
+        ├── liveness.xdb
+        └── recognition-deepfake.xdb
 ```
 
----
-
-## Run the demo
-
-1. Open **this** folder in Android Studio.
-2. Paste your Face Liveness `LICENSE_KEY` for `com.identixia.faceliveness`, then run on a device.
-
-Keep `applicationId` **`com.identixia.faceliveness`** so the key matches the binary (product `741777` only).
-
-## SDK License
-
-Licenses are **offline** and bound to your `applicationId`.
-
-`LICENSE_KEY` in `MainActivity.kt` is empty until you paste a key issued for `com.identixia.faceliveness` (product `741777`). A Face Recognition demo key will not activate this AAR.
-
-### How to get a license
-
-The code below shows how to use the license:
-
-[https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/c224f12f4b4c2af828508427f745bd024cfda7ef/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/c224f12f4b4c2af828508427f745bd024cfda7ef/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22)
-
-[https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/c224f12f4b4c2af828508427f745bd024cfda7ef/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L50-L55](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/c224f12f4b4c2af828508427f745bd024cfda7ef/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L50-L55)
-
-Please [contact us](#contact) to get a license for **your own app**.
-
-### License capabilities
-
-After activation, `FaceLivenessSDK.getLicenseStatus()` (and `LicenseStatus.current()` in the demo kit) reports what the key unlocks:
-
-- **Liveness only** / **Recognition + Liveness** — Liveness tile
-- **Recognition only** — liveness stays unavailable on this App
-- **No license** — tile stays locked until you activate
+Google Drive folder (alternate download): [FaceLivenessSDK Android](https://drive.google.com/drive/folders/1x3jt02f-YHsk4WD_QlnKJSx5uQ5Ds4xH).
 
 ---
 
-## Setup on your own app
+## Run
 
-Minimal integration (details: [docs.identixia.com](https://docs.identixia.com)):
-
-1. Copy `libfacesdk/` into your project and place `facelivenessdk.aar` inside it.
-2. `settings.gradle`: `include ':libfacesdk'`
-3. `app/build.gradle`: `implementation project(':libfacesdk')`, `minSdk 24`, `abiFilters 'arm64-v8a', 'armeabi-v7a'`, and `packaging { jniLibs { useLegacyPackaging = true } }`
-4. Add `CAMERA` permission.
-5. On a **background** thread: `FaceLivenessSDK.setActivation(context, "")` → `FaceLivenessSDK.init(context)` (`0` = success).
-
-Optional: copy `app/.../kit/` (`FaceLivenessClient`) for demo-style threading / camera helpers.
-
-Request a license for **your** `applicationId`, not the demo’s.
+Open this folder in **Android Studio** and run on a physical phone. Home status should show **Ready**, then **Liveness / Settings / About** unlock.
 
 ---
 
-## About SDK
+## License
 
-Public class: `com.identixia.facelivenessdk.FaceLivenessSDK`. Call **once per process** on a background thread: `setActivation` → `init`. Serialize native calls. Full reference: [docs.identixia.com](https://docs.identixia.com).
+Licenses are offline and bound to your `applicationId`. Paste a Face Liveness key for `com.identixia.faceliveness` (product `741777`) into the sample. A Face Recognition demo key will not activate this AAR.
+
+Please [contact us](#-contact) to get a license for **your own app**.
+
+After activation, `FaceLivenessSDK.getLicenseStatus()` reports what the key unlocks:
+
+- **Liveness only** / **Recognition + Liveness** — Liveness tile available
+- **Recognition only** — liveness stays unavailable on this app
+- **No license** — tiles stay locked until you activate
+
+---
+
+## Use in your app
+
+1. Copy `libfacelivenesssdk/` into your project and place `facelivenesssdk.aar` inside it.
+2. In `settings.gradle`: `include ':libfacelivenesssdk'`.
+3. In `app/build.gradle`: `implementation project(':libfacelivenesssdk')`, `minSdk 24`, `abiFilters 'arm64-v8a', 'armeabi-v7a'`, and `packaging { jniLibs { useLegacyPackaging = true } }`.
+4. Add the `CAMERA` permission.
+5. On a background thread: `FaceLivenessSDK.setActivation(context, "")` → `FaceLivenessSDK.init(context)` (`0` = success).
+
+Public class: `com.identixia.facelivenesssdk.FaceLivenessSDK`. Call **once per process** on a background thread. Full reference: [docs.identixia.com](https://docs.identixia.com).
 
 | Code | Meaning |
-| ---- | ------- |
+| --- | --- |
 | 0 | Success |
 | 1 | Invalid license |
 | 2 | License expired |
 | 3 | License not activated |
 | 4 | Engine failed to start |
+
+---
+
+## Architecture
+
+The native engine runs inside the app process. The first successful activate unpacks model databases onto the device. Keep `useLegacyPackaging = true` on Android when the engine loads `.so` files from the AAR.
+
+## Initialize
+
+The sample application id is already licensed. For your own id, request a new key, then call activate and init on a background thread. Open the camera only after the status is Ready. Do not reuse the sample key with a different application id.
+
+| Code | Meaning |
+| ---: | --- |
+| `0` | Success |
+| `1` / `-1` | Invalid license |
+| `2` / `-2` | License was issued for a different application id |
+| `3` / `-3` | License expired |
+| `4` / `-4` | Not activated |
+| `-5` | Models failed to load. Run `python scripts/get_runtime.py` and confirm the database packs are present. |
+| `-12` | No face in the image |
+| `-13` | No document in the image |
+
+## Process
+
+Capture one still or a live frame of the subject. Do not enroll a gallery in this build.
+
+## Results
+
+Read the liveness decision. A face or document is REAL only when every required check passes. A missing score means the check did not run.
+
+## API
+
+The sample and your app use the same method names.
+
+| API | What it returns |
+| --- | --- |
+| `activate(license)` then `init()` | Load the engine. Call both on one background thread. |
+| `getLicenseStatus()` | Read flags before opening the camera. |
+| `liveness` / `deepfake` | PAD and deepfake. REAL only if both pass. |
+| Enroll / 1:N | Not included. Use a Face Recognition repository for templates. |
+
+Camera frames stay on the UI thread. Engine calls stay on one background thread. The engine is not concurrent.
+
+---
+
+## Platforms
+
+| | Platform | Repo |
+| --- | --- | --- |
 
 ---

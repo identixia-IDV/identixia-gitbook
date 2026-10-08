@@ -7,7 +7,7 @@ description: >-
 
 ## Purpose
 
-Mobile `recognize` and server `POST /api/documentProcess` (also recognition / liveness routes) return one **customer process JSON**. Parse this object in your app — do not scrape the demo Result UI.
+Mobile `recognize` and server `POST /api/document/process` (also recognition / liveness routes) return one **customer process JSON**. Parse this object in your app — do not scrape the demo Result UI.
 
 Allowed top-level keys:
 
