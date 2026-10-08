@@ -1,7 +1,7 @@
 ---
 description: >-
   Integrate Identixia ID document OCR and liveness detection on iOS. Follow setup and license activation steps for passport and ID card OCR, MRZ, and barcode reading.
-icon: mobile
+icon: mobile-screen
 ---
 
 # ID Document OCR and Liveness Detection SDK for iOS

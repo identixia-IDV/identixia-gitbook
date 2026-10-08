@@ -1,7 +1,7 @@
 ---
 description: >-
   Integrate Identixia ID document OCR and liveness detection on Windows. Follow setup and license activation steps for passport and ID card OCR, MRZ, and barcode reading.
-icon: desktop
+icon: display
 ---
 
 # ID Document OCR and Liveness Detection SDK for Windows

@@ -1,7 +1,7 @@
 ---
 description: >-
   Integrate Identixia face liveness detection on Linux and Docker. Follow setup and license activation steps for passive anti-spoofing and deepfake checks.
-icon: shield-halved
+icon: shield
 ---
 
 # Face Liveness Detection SDK for Linux and Docker

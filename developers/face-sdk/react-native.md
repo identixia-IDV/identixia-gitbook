@@ -1,7 +1,7 @@
 ---
 description: >-
   Integrate Identixia face recognition and liveness detection on React Native. Follow setup and license activation steps for face detection, templates, and matching.
-icon: layer-group
+icon: code
 ---
 
 # Face Recognition and Liveness Detection SDK for React Native

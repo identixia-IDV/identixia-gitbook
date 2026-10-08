@@ -1,7 +1,7 @@
 ---
 description: >-
   Integrate Identixia ID document recognition and OCR on Linux and Docker. Follow setup and license activation steps for passport and ID card OCR, MRZ, and barcode reading.
-icon: box
+icon: cube
 ---
 
 # ID Document Recognition and OCR SDK for Linux and Docker

@@ -8,14 +8,14 @@ icon: crosshairs
 
 ## When to use
 
-Use these repositories when your license is **recognition only** (no `liveness` entitlement).
+Use these repositories when the license is **recognition only**. They detect faces, build templates, and run 1:1 and 1:N search. They do not return a liveness score, and there is no recognition-only phone SDK. Phone apps that need recognition ship in the [full product](full-product.md).
 
-| Platform | Docs | Repository |
-| --- | --- | --- |
-| Windows | [Windows (recognition only)](https://docs.identixia.com/developers/face-sdk/recognition-windows) | [`FaceRecognition-Windows`](https://github.com/identixia-IDV/FaceRecognition-Windows) |
-| Linux / Docker | [Linux / Docker (recognition only)](https://docs.identixia.com/developers/face-sdk/recognition-linux-docker) | [`FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker) |
+| Platform | Port | Docs | Repository |
+| --- | ---: | --- | --- |
+| Windows | 14104 | [Windows](https://docs.identixia.com/developers/face-sdk/recognition-windows) | [`FaceRecognition-Windows`](https://github.com/identixia-IDV/FaceRecognition-Windows) |
+| Linux / Docker | 14104 | [Linux / Docker](https://docs.identixia.com/developers/face-sdk/recognition-linux-docker) | [`FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker) |
 
-For recognition **with** liveness in one build, use the [full product](full-product.md) instead.
+Call `POST /api/face/analyze`, `/api/face/template`, `/api/face/compare` (`image1`, `image2`), `/api/face/enroll`, and `/api/face/search`. Do not call `/api/face/liveness` on this build.
 
 Concept guide: [Face recognition](recognition.md).
 

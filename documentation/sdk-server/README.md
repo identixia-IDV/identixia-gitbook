@@ -6,7 +6,9 @@ icon: server
 
 # Face Recognition and Document OCR HTTP API
 
-This section is the **HTTP integration guide** for Identixia Windows and Docker products. Use it when you call `/api/*` from your backend, mobile app, or Postman — after the product server is running.
+SDK Server is the on-premise HTTP API. A Windows build and a Docker build of the **same product** share one port and the same `/api` routes. Phone SDKs are not this API.
+
+Use this page to pick the port. Request bodies and platform setup are in [Developers](https://docs.identixia.com/developers).
 
 ## Products and ports
 

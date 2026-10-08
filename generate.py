@@ -703,22 +703,20 @@ Document **recognition** finds the card in the frame and extracts:
 * Align the document inside the guide; capture front (and back when required).
 * On mobile, call locate → capture → `recognize` on a **background** thread.
 
-## Server routes (full Document Docker / Windows)
+## Server routes
 
-Default full-product API port is **14102** (confirm in the README).
+The full product listens on **14102**. Recognition only listens on **14106** and does not serve `/api/document/liveness`.
 
-| Route | Role |
-| --- | --- |
-| `POST /api/document/process` | Full process (recognition + authenticity when licensed) |
-| `POST /api/document/recognition` | OCR / MRZ / barcode only |
-| `POST /api/document/liveness` | Authenticity only |
-
-### Example — recognition-only call
+| Route | Role | Which build |
+| --- | --- | --- |
+| `POST /api/document/process` | OCR, MRZ, barcode, and authenticity when that license flag is on | Full product and recognition only |
+| `POST /api/document/recognition` | OCR / MRZ / barcode only | Full product and recognition only |
+| `POST /api/document/liveness` | Authenticity only | Full product and liveness only (port **14107**) |
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/document/recognition \\
+curl -s -X POST http://127.0.0.1:14106/api/document/recognition \\
   -H "Content-Type: application/json" \\
-  -d '{{"images":["BASE64_FRONT","BASE64_BACK"]}}'
+  -d '{{"images":[{{"image":"BASE64_FRONT","page_idx":0}},{{"image":"BASE64_BACK","page_idx":1}}]}}'
 ```
 
 Response shape: [Result JSON](result-json.md).
@@ -1465,14 +1463,14 @@ Parent: [Full product](full-product.md).
         f"""
 ## When to use
 
-Use these repositories when your license is **recognition only** (no `liveness` entitlement).
+Use these repositories when the license is **recognition only**. They detect faces, build templates, and run 1:1 and 1:N search. They do not return a liveness score, and there is no recognition-only phone SDK. Phone apps that need recognition ship in the [full product](full-product.md).
 
-| Platform | Docs | Repository |
-| --- | --- | --- |
-| Windows | [Windows (recognition only)](recognition-windows.md) | [`FaceRecognition-Windows`]({GH}/FaceRecognition-Windows) |
-| Linux / Docker | [Linux / Docker (recognition only)](recognition-linux-docker.md) | [`FaceRecognition-Docker`]({GH}/FaceRecognition-Docker) |
+| Platform | Port | Docs | Repository |
+| --- | ---: | --- | --- |
+| Windows | 14104 | [Windows](recognition-windows.md) | [`FaceRecognition-Windows`]({GH}/FaceRecognition-Windows) |
+| Linux / Docker | 14104 | [Linux / Docker](recognition-linux-docker.md) | [`FaceRecognition-Docker`]({GH}/FaceRecognition-Docker) |
 
-For recognition **with** liveness in one build, use the [full product](full-product.md) instead.
+Call `POST /api/face/analyze`, `/api/face/template`, `/api/face/compare` (`image1`, `image2`), `/api/face/enroll`, and `/api/face/search`. Do not call `/api/face/liveness` on this build.
 
 Concept guide: [Face recognition](recognition.md).
 """,
@@ -1497,21 +1495,27 @@ Concept guide: [Face liveness](liveness.md). For recognition plus liveness toget
     hub(
         "face-sdk/liveness-only-mobile.md",
         "Liveness-only — mobile",
-        "Android and iOS standalone face liveness samples.",
+        "Phone and cross-platform face liveness samples, without enroll or 1:N.",
         f"""
 ## Platforms
+
+These builds score presentation attacks and deepfake checks. They do not enroll a gallery or run 1:N search.
 
 | Platform | Docs | Repository |
 | --- | --- | --- |
 | Android | [Android](liveness-android.md) | [`FaceLivenessDetection-Android`]({GH}/FaceLivenessDetection-Android) |
 | iOS | [iOS](liveness-ios.md) | [`FaceLivenessDetection-iOS`]({GH}/FaceLivenessDetection-iOS) |
+| Flutter | Repository README | [`FaceLivenessDetection-Flutter`]({GH}/FaceLivenessDetection-Flutter) |
+| React Native | Repository README | [`FaceLivenessDetection-React-Native`]({GH}/FaceLivenessDetection-React-Native) |
+| Ionic Capacitor | Repository README | [`FaceLivenessDetection-Ionic-Capacitor`]({GH}/FaceLivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | Repository README | [`FaceLivenessDetection-Ionic-Cordova`]({GH}/FaceLivenessDetection-Ionic-Cordova) |
 
 ## Integration path
 
-1. Clone the sample and place the liveness runtime from GitHub Releases.
+1. Clone the sample and place the liveness runtime from GitHub Releases (`python scripts/get_runtime.py`).
 2. Run until status shows **Ready**, then open the camera flow.
 3. Activate with a license that includes `liveness`.
-4. Treat a missing score as “not evaluated”, not as pass.
+4. Treat a missing score as not evaluated, not as a pass.
 
 Parent: [Liveness-only products](liveness-only.md).
 """,
@@ -1612,13 +1616,22 @@ Parent: [Full product](full-product.md).
         f"""
 ## When to use
 
-You need document anti-spoofing (authenticity) without shipping a full OCR UI.
+Use this line when the license is document authenticity only. The sample checks presentation attacks. It does not read MRZ, barcodes, or visual fields. Pair it with [Document recognition](recognition.md) when you also need the printed data.
 
-| Platform | Docs | Repository | Default port |
-| --- | --- | --- | ---: |
-| Linux / Docker | [Document liveness Docker](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) | 14107 |
+| Platform | Port | Where to start | Repository |
+| --- | ---: | --- | --- |
+| Android | — | Repository README | [`ID-Document-Liveness-Detection-Android`]({GH}/ID-Document-Liveness-Detection-Android) |
+| iOS | — | Repository README | [`ID-Document-Liveness-Detection-iOS`]({GH}/ID-Document-Liveness-Detection-iOS) |
+| Flutter | — | Repository README | [`ID-Document-Liveness-Detection-Flutter`]({GH}/ID-Document-Liveness-Detection-Flutter) |
+| React Native | — | Repository README | [`ID-Document-Liveness-Detection-React-Native`]({GH}/ID-Document-Liveness-Detection-React-Native) |
+| Ionic Capacitor | — | Repository README | [`ID-Document-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | — | Repository README | [`ID-Document-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Liveness-Detection-Ionic-Cordova) |
+| Windows | 14107 | Repository README | [`ID-Document-Liveness-Detection-Windows`]({GH}/ID-Document-Liveness-Detection-Windows) |
+| Linux / Docker | 14107 | [Docker guide](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) |
 
-Concept guide: [Document liveness](liveness.md). For OCR plus authenticity together, use the [full product](full-product.md).
+The HTTP call is `POST /api/document/liveness` with `images` entries `{{image, page_idx}}`. A liveness-only server does not expose `/api/document/process`.
+
+Concept guide: [Document liveness](liveness.md). For OCR and authenticity in one build, use the [full product](full-product.md).
 """,
     )
     hub(
@@ -2631,9 +2644,11 @@ def write_sdk_server() -> None:
     write_page(
         OUT / "sdk-server" / "README.md",
         "SDK Server",
-        "Full integration guide for on-premise Windows and Docker HTTP APIs.",
+        "On-premise Windows and Docker HTTP APIs: ports, response shapes, and which repository to run.",
         """
-This section is the **HTTP integration guide** for Identixia Windows and Docker products. Use it when you call `/api/*` from your backend, mobile app, or Postman — after the product server is running.
+SDK Server is the on-premise HTTP API. A Windows build and a Docker build of the **same product** share one port and the same `/api` routes. Phone SDKs are not this API.
+
+Use this page to pick the port. Request bodies and platform setup are in [Developers](https://docs.identixia.com/developers).
 
 ## Products and ports
 

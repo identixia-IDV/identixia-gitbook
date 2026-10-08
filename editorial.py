@@ -194,8 +194,6 @@ def refresh_copy(root: Path) -> int:
         original = page.read_text(encoding="utf-8")
         updated = edit_page(original, rel, root.name)
         if updated != original:
-            raw = page.read_bytes()
-            newline = "\r\n" if b"\r\n" in raw else "\n"
-            page.write_bytes(updated.replace("\n", newline).encode("utf-8"))
+            page.write_text(updated, encoding="utf-8", newline="\n")
             count += 1
     return count

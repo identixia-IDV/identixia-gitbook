@@ -1,7 +1,7 @@
 ---
 description: >-
   Integrate Identixia face recognition and liveness detection on Android. Follow setup and license activation steps for face detection, templates, and matching.
-icon: mobile
+icon: mobile-screen
 ---
 
 # Face Recognition and Liveness Detection SDK for Android

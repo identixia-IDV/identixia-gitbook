@@ -1,7 +1,7 @@
 ---
 description: >-
   Integrate Identixia ID document OCR and liveness detection on Linux and Docker. Follow setup and license activation steps for passport and ID card OCR, MRZ, and barcode reading.
-icon: box
+icon: cube
 ---
 
 # ID Document OCR and Liveness Detection SDK for Linux and Docker

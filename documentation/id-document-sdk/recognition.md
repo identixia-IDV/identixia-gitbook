@@ -21,22 +21,20 @@ Document **recognition** finds the card in the frame and extracts:
 * Align the document inside the guide; capture front (and back when required).
 * On mobile, call locate → capture → `recognize` on a **background** thread.
 
-## Server routes (full Document Docker / Windows)
+## Server routes
 
-Default full-product API port is **14102** (confirm in the README).
+The full product listens on **14102**. Recognition only listens on **14106** and does not serve `/api/document/liveness`.
 
-| Route | Role |
-| --- | --- |
-| `POST /api/document/process` | Full process (recognition + authenticity when licensed) |
-| `POST /api/document/recognition` | OCR / MRZ / barcode only |
-| `POST /api/document/liveness` | Authenticity only |
-
-### Example — recognition-only call
+| Route | Role | Which build |
+| --- | --- | --- |
+| `POST /api/document/process` | OCR, MRZ, barcode, and authenticity when that license flag is on | Full product and recognition only |
+| `POST /api/document/recognition` | OCR / MRZ / barcode only | Full product and recognition only |
+| `POST /api/document/liveness` | Authenticity only | Full product and liveness only (port **14107**) |
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/document/recognition \
+curl -s -X POST http://127.0.0.1:14106/api/document/recognition \
   -H "Content-Type: application/json" \
-  -d '{"images":["BASE64_FRONT","BASE64_BACK"]}'
+  -d '{"images":[{"image":"BASE64_FRONT","page_idx":0},{"image":"BASE64_BACK","page_idx":1}]}'
 ```
 
 Response shape: [Result JSON](result-json.md).

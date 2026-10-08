@@ -1,7 +1,7 @@
 ---
 description: >-
   Integrate Identixia ID document liveness detection on Linux and Docker. Follow setup and license activation steps for document presentation attack checks.
-icon: shield-halved
+icon: shield
 ---
 
 # ID Document Liveness Detection SDK for Linux and Docker
