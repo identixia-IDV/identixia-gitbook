@@ -36,22 +36,6 @@
   * [Recognition only — Linux / Docker](id-document-sdk/recognition-linux-docker.md)
   * [Liveness only — Linux / Docker](id-document-sdk/liveness-linux-docker.md)
 
-## IDV
-
-* [Session API](idv/api.md)
-* [Webhooks](idv/company-webhooks.md)
-* [Clients](idv/components-clients.md)
-  * [Android](idv/client-android.md)
-  * [iOS](idv/client-ios.md)
-  * [Web](idv/client-web.md)
-  * [Other](idv/client-other.md)
-* [Engines](idv/engines.md)
-  * [Face](idv/engines-face.md)
-  * [Documents](idv/engines-document.md)
-* [Shared packages](idv/shared-packages.md)
-* [License protocol](idv/license-protocol.md)
-* [License admin](idv/license-admin.md)
-
 ## API
 
 * [Face recognition](sdk-server/face-recognition.md)

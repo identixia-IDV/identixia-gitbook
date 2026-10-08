@@ -27,20 +27,6 @@
 * [Result format](id-document-sdk/result-json.md)
 * [Security checks](id-document-sdk/security-fields.md)
 
-## IDV
-
-* [Overview](idv/README.md)
-  * [Architecture](idv/architecture.md)
-  * [Session states](idv/session-states.md)
-* [Components](idv/components.md)
-* [Reference](idv/reference.md)
-* [Platform](idv/platform.md)
-  * [IDV server](idv/platform-server.md)
-  * [Identity Console](idv/platform-console.md)
-* [Company](idv/company.md)
-  * [Company backend](idv/company-backend.md)
-  * [Company Admin](idv/company-admin.md)
-
 ## API
 
 * [SDK Server](sdk-server/README.md)

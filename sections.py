@@ -362,6 +362,10 @@ def item(rel: str, label: str, indent: int = 0) -> str:
     return f"{pad}* [{label}]({rel})"
 
 
+# IDV pages stay in the repo. They are omitted from the sidebar until the project is ready.
+IDV_IN_NAV = False
+
+
 def write_summaries() -> None:
     documentation = "\n".join(
         [
@@ -394,20 +398,26 @@ def write_summaries() -> None:
             item("id-document-sdk/result-json.md", "Result format"),
             item("id-document-sdk/security-fields.md", "Security checks"),
             "",
-            "## IDV",
-            "",
-            item("idv/README.md", "Overview"),
-            item("idv/architecture.md", "Architecture", 1),
-            item("idv/session-states.md", "Session states", 1),
-            item("idv/components.md", "Components"),
-            item("idv/reference.md", "Reference"),
-            item("idv/platform.md", "Platform"),
-            item("idv/platform-server.md", "IDV server", 1),
-            item("idv/platform-console.md", "Identity Console", 1),
-            item("idv/company.md", "Company"),
-            item("idv/company-backend.md", "Company backend", 1),
-            item("idv/company-admin.md", "Company Admin", 1),
-            "",
+            *(
+                [
+                    "## IDV",
+                    "",
+                    item("idv/README.md", "Overview"),
+                    item("idv/architecture.md", "Architecture", 1),
+                    item("idv/session-states.md", "Session states", 1),
+                    item("idv/components.md", "Components"),
+                    item("idv/reference.md", "Reference"),
+                    item("idv/platform.md", "Platform"),
+                    item("idv/platform-server.md", "IDV server", 1),
+                    item("idv/platform-console.md", "Identity Console", 1),
+                    item("idv/company.md", "Company"),
+                    item("idv/company-backend.md", "Company backend", 1),
+                    item("idv/company-admin.md", "Company Admin", 1),
+                    "",
+                ]
+                if IDV_IN_NAV
+                else []
+            ),
             "## API",
             "",
             item("sdk-server/README.md", "SDK Server"),
@@ -454,22 +464,28 @@ def write_summaries() -> None:
             item("id-document-sdk/recognition-linux-docker.md", "Recognition only — Linux / Docker", 1),
             item("id-document-sdk/liveness-linux-docker.md", "Liveness only — Linux / Docker", 1),
             "",
-            "## IDV",
-            "",
-            item("idv/api.md", "Session API"),
-            item("idv/company-webhooks.md", "Webhooks"),
-            item("idv/components-clients.md", "Clients"),
-            item("idv/client-android.md", "Android", 1),
-            item("idv/client-ios.md", "iOS", 1),
-            item("idv/client-web.md", "Web", 1),
-            item("idv/client-other.md", "Other", 1),
-            item("idv/engines.md", "Engines"),
-            item("idv/engines-face.md", "Face", 1),
-            item("idv/engines-document.md", "Documents", 1),
-            item("idv/shared-packages.md", "Shared packages"),
-            item("idv/license-protocol.md", "License protocol"),
-            item("idv/license-admin.md", "License admin"),
-            "",
+            *(
+                [
+                    "## IDV",
+                    "",
+                    item("idv/api.md", "Session API"),
+                    item("idv/company-webhooks.md", "Webhooks"),
+                    item("idv/components-clients.md", "Clients"),
+                    item("idv/client-android.md", "Android", 1),
+                    item("idv/client-ios.md", "iOS", 1),
+                    item("idv/client-web.md", "Web", 1),
+                    item("idv/client-other.md", "Other", 1),
+                    item("idv/engines.md", "Engines"),
+                    item("idv/engines-face.md", "Face", 1),
+                    item("idv/engines-document.md", "Documents", 1),
+                    item("idv/shared-packages.md", "Shared packages"),
+                    item("idv/license-protocol.md", "License protocol"),
+                    item("idv/license-admin.md", "License admin"),
+                    "",
+                ]
+                if IDV_IN_NAV
+                else []
+            ),
             "## API",
             "",
             item("sdk-server/face-recognition.md", "Face recognition"),
@@ -490,22 +506,32 @@ def write_summaries() -> None:
             item("choose-a-product.md", "Choose a product"),
             item("run-the-sample.md", "Run the sample"),
             "",
-            "## IDV first run",
-            "",
-            item("idv/getting-started.md", "Getting started"),
-            item("idv/quick-start.md", "Quick start"),
-            item("idv/walkthrough.md", "Walkthrough"),
-            "",
-            "## IDV project",
-            "",
-            item("idv/project-structure.md", "Project structure"),
-            item("idv/environment.md", "Environment"),
-            item("idv/initial-setup.md", "Initial setup"),
-            item("idv/production.md", "Production"),
-            "",
+            *(
+                [
+                    "## IDV first run",
+                    "",
+                    item("idv/getting-started.md", "Getting started"),
+                    item("idv/quick-start.md", "Quick start"),
+                    item("idv/walkthrough.md", "Walkthrough"),
+                    "",
+                    "## IDV project",
+                    "",
+                    item("idv/project-structure.md", "Project structure"),
+                    item("idv/environment.md", "Environment"),
+                    item("idv/initial-setup.md", "Initial setup"),
+                    item("idv/production.md", "Production"),
+                    "",
+                ]
+                if IDV_IN_NAV
+                else []
+            ),
             "## License and support",
             "",
-            item("idv/licensing.md", "Licensing"),
+            *(
+                [item("idv/licensing.md", "Licensing")]
+                if IDV_IN_NAV
+                else []
+            ),
             item("request-a-license-and-support.md", "Request a license"),
             item("contact-us.md", "Contact"),
             "",
