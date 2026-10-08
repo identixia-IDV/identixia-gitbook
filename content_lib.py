@@ -946,29 +946,11 @@ def troubleshooting(ctx: ProductCtx) -> str:
     return common
 
 
-FOOTER_MD = """{% hint style="info" %}
-Biometrics stay on your device or server. Identixia does not receive camera frames, templates, or document images.
-{% endhint %}
+FOOTER_MD = """---
 
-{% columns %}
-{% column %}
-### Docs
+[Face](https://docs.identixia.com/face-sdk) · [Documents](https://docs.identixia.com/id-document-sdk) · [IDV](https://docs.identixia.com/idv) · [Developers](https://docs.identixia.com/developers) · [Guides](https://docs.identixia.com/guides) · [Website](https://identixia.com) · [GitHub](https://github.com/identixia-IDV) · [Email](mailto:contact@identixia.com)
 
-[Face](https://docs.identixia.com/face-sdk) · [Documents](https://docs.identixia.com/id-document-sdk) · [IDV](https://docs.identixia.com/idv)
-
-[Developers](https://docs.identixia.com/developers) · [Guides](https://docs.identixia.com/guides)
-{% endcolumn %}
-
-{% column %}
-### Identixia
-
-<a href="https://identixia.com" class="button secondary" data-icon="globe">Website</a>
-<a href="https://github.com/identixia-IDV" class="button secondary" data-icon="github">GitHub</a>
-<a href="mailto:contact@identixia.com" class="button primary" data-icon="envelope">Email</a>
-{% endcolumn %}
-{% endcolumns %}
-
-© Identixia. On-premise face, document, and identity verification.
+© Identixia
 """
 
 ASSETS_BASE = "https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main"
