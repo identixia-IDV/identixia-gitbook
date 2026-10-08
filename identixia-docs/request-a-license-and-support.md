@@ -5,21 +5,43 @@ description: >-
 
 # Request a License & Support
 
+{% hint style="warning" %}
+Demo keys work only with the demo application id. A production key must match the id or machine code you send.
+{% endhint %}
+
 ## Mobile SDK (Face / Document)
 
-1. Build with **your** applicationId or bundle id (not the demo id).
-2. Contact us with that id and the product (Face recognition, Face liveness, Document recognition, or Document authenticity).
-3. Activate and initialize as shown on the platform page.
-
-Demo keys work only for demo application ids.
+{% stepper %}
+{% step %}
+### Build with your id
+Use your applicationId or bundle id, not the demo id.
+{% endstep %}
+{% step %}
+### Send the id
+Contact Identixia with that id and the product: Face recognition, Face liveness, Document recognition, or Document authenticity.
+{% endstep %}
+{% step %}
+### Activate
+Call activate, then init, as shown on the platform page.
+{% endstep %}
+{% endstepper %}
 
 ## Server SDK (Windows / Linux / Docker)
 
-1. Start the API once.
-2. Call `GET /api/machinecode` and copy `data.machinecode`.
-3. Send that code to Identixia. Docker and bare-metal machine codes differ — license the environment you ship.
-4. Call `POST /api/activate`, or set `LICENSE=` in `.env` and restart.
-5. Confirm with `GET /api/licenseStatus`.
+{% stepper %}
+{% step %}
+### Start the API
+Start the container or Windows service once.
+{% endstep %}
+{% step %}
+### Copy the machine code
+Call `GET /api/machinecode` and copy `data.machinecode`. Docker and bare-metal codes differ.
+{% endstep %}
+{% step %}
+### Activate
+Call `POST /api/activate`, or set `LICENSE=` in `.env` and restart. Confirm with `GET /api/licenseStatus`.
+{% endstep %}
+{% endstepper %}
 
 ## IDV
 

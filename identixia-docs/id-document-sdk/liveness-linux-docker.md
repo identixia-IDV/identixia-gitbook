@@ -186,9 +186,9 @@ This product is **PAD / authenticity**, not OCR. Pair with ID Document Recogniti
 
 ## Screenshots
 
-<figure><img src="../.gitbook/assets/document-desktop-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-status.png" alt="Status card" width="420"><figcaption>Status card</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Status card" width="420"><figcaption>Status card</figcaption></figure>
 
 ## Resources
 
@@ -222,7 +222,7 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 ## Repository README
 
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
 ## Identixia ID Document Liveness — Linux / Docker
 
@@ -230,36 +230,7 @@ The following notes are adapted from the shipping repository README (exact comma
 
 Image: [`identixia/document-liveness`](https://hub.docker.com/r/identixia/document-liveness).
 
----
-
-## Develop
-
-Use this repository for ID document presentation-attack checks, without OCR. Processing stays on your host or in your container. Identixia does not receive the images.
-
-| | |
-| --- | --- |
-| **Architecture** | [Where the engine runs](#-architecture) |
-| **Quick start** | Follow [Initial commands](#-initial-commands), then [Run](#-run). |
-| **Initialize** | [Activate, then init](#-initialize) |
-| **Process** | [HTTP API](#-process) |
-| **Results** | [What to read back](#-results) |
-| **Requirements** | [Requirements](#-requirements) |
-
----
-
-## Resources
-
-| Resource | Where |
-| --- | --- |
-| **Sample** | This repository — [ID-Document-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker) |
-| **Client library** | the sample project in this repository |
-| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/latest) |
-| **API** | [Method list](#-api) |
-| **Develop docs** | [docs.identixia.com/id-document-sdk/liveness-linux-docker](https://docs.identixia.com/id-document-sdk/liveness-linux-docker) |
-| **License** | [License](#-license) · [Contact](#-contact) |
-| **Other platforms** | [Platforms](#-platforms) |
-
----
+> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/id-document-sdk/liveness-linux-docker). This page covers the sample repository.
 
 ## Basics
 
@@ -375,40 +346,9 @@ python3 run_demo.py
 
 Open http://127.0.0.1:14207
 
----
-
-## Use in your app
-
-POST document images to the liveness routes on **14107**. For full on-premise ID document recognition (passport MRZ OCR, ID card barcode, fields), use the recognition product on **14102**.
-
----
-
 ## Related
 
 Full OCR product: [ID-Document-Recognition-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) · Hub: [ID-Document-Recognition-Liveness-Detection-SDK](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-SDK)
-
----
-
-## Architecture
-
-The HTTP service and the native engine run on your machine. Docker binds the published port and reads `/etc/machine-id` for the license. Images are not uploaded to Identixia.
-
-## Initialize
-
-Start the server, call `GET /api/machinecode`, and send that code when you request a license. Put the key in `license.txt`, then `POST /api/activate`. Confirm with `GET /api/health` and `GET /api/licenseStatus`.
-
-| Code | Meaning |
-| ---: | --- |
-| success `true` | The call was accepted |
-| Activate failed | The key does not match this machine. Copy `data.machinecode` from `GET /api/machinecode` and request a key. |
-
-## Process
-
-After activate, POST a base64 JPEG to the process route on port **14107**. The same routes are in the Postman collection shipped with the server sample.
-
-## Results
-
-Read the liveness decision. A face or document is REAL only when every required check passes. A missing score means the check did not run.
 
 ## API
 

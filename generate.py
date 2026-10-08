@@ -141,9 +141,15 @@ def load_catalog() -> tuple[dict, dict[str, dict]]:
 
 
 def homepage_rel(url: str) -> str | None:
+    """Catalog path inside identixia-docs. Section prefixes are public URLs only."""
     if not url.startswith(DOCS_BASE):
         return None
-    return url[len(DOCS_BASE) :].lstrip("/") or None
+    rel = url[len(DOCS_BASE) :].lstrip("/")
+    for prefix in ("developers/", "guides/", "documentation/"):
+        if rel.startswith(prefix):
+            rel = rel[len(prefix) :]
+            break
+    return rel or None
 
 
 def title_for(rel: str) -> str:
@@ -240,24 +246,17 @@ def write_page(path: Path, title: str, description: str, body: str) -> None:
 
 
 def sync_assets() -> None:
-    dest = OUT / ".gitbook" / "assets"
-    dest.mkdir(parents=True, exist_ok=True)
-    # Remove stale flattened copies we no longer map (keep includes elsewhere).
-    keep = {dst for _, dst in ASSET_COPY} | {dst for _, dst in BRAND_EXTRA}
-    for p in dest.iterdir():
-        if p.is_file() and p.name not in keep:
-            p.unlink()
-    for src_rel, dst_name in ASSET_COPY:
-        src = ASSETS_SRC / src_rel
-        if not src.is_file():
-            print(f"WARN missing asset: {src_rel}")
-            continue
-        shutil.copy2(src, dest / dst_name)
-    for src, dst_name in BRAND_EXTRA:
-        if src.is_file():
-            shutil.copy2(src, dest / dst_name)
-        else:
-            print(f"WARN missing brand: {src}")
+    """Drop copied binaries. Pages link to identixia-assets on GitHub."""
+    here = Path(__file__).resolve().parent
+    for folder in (
+        OUT / ".gitbook" / "assets",
+        here / "documentation" / ".gitbook" / "assets",
+        here / "developers" / ".gitbook" / "assets",
+        here / "guides" / ".gitbook" / "assets",
+    ):
+        if folder.is_dir():
+            shutil.rmtree(folder)
+            print(f"removed local assets {folder.relative_to(here)}")
 
 
 def out_path_for(rel: str) -> Path:
@@ -1183,7 +1182,7 @@ Face 1:1 uses the **Face SDK matcher**. Optional vector indexes stay off until i
 
 ## Brand
 
-One pack only: `IDV/license/brand/` → `/brand/*` and docs `.gitbook/assets/`.
+Brand files live in [`identixia-assets`](https://github.com/identixia-IDV/identixia-assets) under `brand/`.
 
 Org: [`identixia-IDV`]({GH}).
 """.strip()
@@ -1197,21 +1196,43 @@ def write_static_pages() -> None:
         "Request a License & Support",
         "How to request an Identixia license for Face SDK, ID Document SDK, and IDV.",
         """
+{% hint style="warning" %}
+Demo keys work only with the demo application id. A production key must match the id or machine code you send.
+{% endhint %}
+
 ## Mobile SDK (Face / Document)
 
-1. Build with **your** applicationId or bundle id (not the demo id).
-2. Contact us with that id and the product (Face recognition, Face liveness, Document recognition, or Document authenticity).
-3. Activate and initialize as shown on the platform page.
-
-Demo keys work only for demo application ids.
+{% stepper %}
+{% step %}
+### Build with your id
+Use your applicationId or bundle id, not the demo id.
+{% endstep %}
+{% step %}
+### Send the id
+Contact Identixia with that id and the product: Face recognition, Face liveness, Document recognition, or Document authenticity.
+{% endstep %}
+{% step %}
+### Activate
+Call activate, then init, as shown on the platform page.
+{% endstep %}
+{% endstepper %}
 
 ## Server SDK (Windows / Linux / Docker)
 
-1. Start the API once.
-2. Call `GET /api/machinecode` and copy `data.machinecode`.
-3. Send that code to Identixia. Docker and bare-metal machine codes differ — license the environment you ship.
-4. Call `POST /api/activate`, or set `LICENSE=` in `.env` and restart.
-5. Confirm with `GET /api/licenseStatus`.
+{% stepper %}
+{% step %}
+### Start the API
+Start the container or Windows service once.
+{% endstep %}
+{% step %}
+### Copy the machine code
+Call `GET /api/machinecode` and copy `data.machinecode`. Docker and bare-metal codes differ.
+{% endstep %}
+{% step %}
+### Activate
+Call `POST /api/activate`, or set `LICENSE=` in `.env` and restart. Confirm with `GET /api/licenseStatus`.
+{% endstep %}
+{% endstepper %}
 
 ## IDV
 
@@ -1228,9 +1249,20 @@ IDV uses Hybrid licensing via `license` and `license/license_v2`. The issuer UI 
         "Contact",
         "Contact Identixia for licenses and technical support.",
         """
-## Support channels
+{% hint style="info" %}
+License requests and technical support are available 24/7.
+{% endhint %}
 
-We are available 24/7 for license requests and technical support.
+{% columns %}
+{% column %}
+<a href="mailto:contact@identixia.com" class="button primary" data-icon="envelope">Email</a>
+{% endcolumn %}
+{% column %}
+<a href="https://wa.me/17018854218" class="button secondary" data-icon="comment">WhatsApp</a>
+{% endcolumn %}
+{% endcolumns %}
+
+<a href="https://t.me/identixia" class="button secondary" data-icon="paper-plane">Telegram</a>
 
 {% include "./.gitbook/includes/contact.md" %}
 """.strip()
@@ -1250,68 +1282,92 @@ We are available 24/7 for license requests and technical support.
         encoding="utf-8",
         newline="\n",
     )
+    (OUT / ".gitbook" / "includes" / "footer.md").write_text(
+        C.FOOTER_MD,
+        encoding="utf-8",
+        newline="\n",
+    )
 
 
 def write_welcome() -> None:
     """Welcome page modeled on https://docs.faceonlive.com/ (company + product links)."""
     body = f"""
-<p align="center"><img src=".gitbook/assets/brand-logo.png" alt="Identixia" width="280"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/brand/logo.png" alt="Identixia" width="280"></p>
 
-We are an IT company that excels in **Face Recognition**, **Face Liveness Detection** (anti-spoofing), **ID Document Recognition**, and on-premise **identity verification**.
-
-All biometric processing runs on **your** device or server.
-
-## Company information
-
-{{% embed url="https://identixia.com" %}}
-Our Website
-{{% endembed %}}
-
-{{% embed url="{GH}" %}}
-Our GitHub
-{{% endembed %}}
-
-## SDK Server
-
-Windows and Docker HTTP APIs with the same `/api/*` routes, unlimited on-premise transactions, and Postman cruise for every product port.
-
-{{% content-ref url="sdk-server/" %}}
-SDK Server
-{{% endcontent-ref %}}
-
-## Our products
-
-### - Face Recognition & Face Liveness Detection
-
-{{% content-ref url="face-sdk/" %}}
-Face Recognition & Liveness Detection
-{{% endcontent-ref %}}
-
-### - ID Document Recognition & Liveness Detection
-
-{{% content-ref url="id-document-sdk/" %}}
-ID Document Recognition & Liveness Detection
-{{% endcontent-ref %}}
-
-### - IDV: Self-Host KYC Platform
-
-{{% content-ref url="idv/" %}}
-IDV: Self-Host KYC Platform
-{{% endcontent-ref %}}
-
-## Let's go!
-
-1. Open the **Integration guide** under Face SDK or ID Document SDK (clone → `python scripts/get_runtime.py` → place databases → run → activate → APIs).
-2. Open **Reference** for your platform (Android, iOS, Flutter, React Native, Ionic, Windows, Docker).
-3. For HTTP APIs, open [SDK Server](sdk-server/) — full endpoint lists, cURL / Python / JavaScript, and Postman.
-4. For the full KYC stack, start with [IDV](idv/).
-
-{{% hint style="info" %}}
-Native engines and `*.xdb` databases ship on GitHub Releases. Download with `python scripts/get_runtime.py` from any product clone — they are not committed to git.
+{{% hint style="success" %}}
+Face recognition, face liveness, and ID document capture run on **your** device or server. Identixia does not receive the images.
 {{% endhint %}}
 
-* [Request a license & support](request-a-license-and-support.md)
-* [Contact](contact-us.md)
+## Products
+
+<table data-view="cards">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th data-card-target data-type="content-ref" data-hidden>Open</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Face</strong> — recognition and passive liveness.</td>
+      <td><a href="face-sdk/README.md">Face SDK</a></td>
+    </tr>
+    <tr>
+      <td><strong>ID documents</strong> — OCR, MRZ, barcode, and document liveness.</td>
+      <td><a href="id-document-sdk/README.md">ID Document SDK</a></td>
+    </tr>
+    <tr>
+      <td><strong>IDV</strong> — self-hosted KYC sessions on your own stack.</td>
+      <td><a href="idv/README.md">IDV platform</a></td>
+    </tr>
+    <tr>
+      <td><strong>SDK Server</strong> — the same HTTP API on Windows and Docker.</td>
+      <td><a href="sdk-server/README.md">SDK Server</a></td>
+    </tr>
+  </tbody>
+</table>
+
+{{% columns %}}
+{{% column %}}
+### On a phone or desktop
+
+Use the sample app, then embed the SDK.
+
+<a href="https://docs.identixia.com/developers" class="button primary" data-icon="code">Developers</a>
+{{% endcolumn %}}
+{{% column %}}
+### First run
+
+Pick the repository that matches the license, then activate.
+
+<a href="https://docs.identixia.com/guides" class="button secondary" data-icon="compass">Guides</a>
+{{% endcolumn %}}
+{{% endcolumns %}}
+
+## Start here
+
+{{% stepper %}}
+{{% step %}}
+### Choose the product
+Open Face, Documents, or IDV above. Recognition-only builds do not include liveness. Liveness-only builds do not enroll or search a gallery.
+{{% endstep %}}
+{{% step %}}
+### Run the sample
+Clone the repository and follow the platform page. Android and iOS are separate setups.
+{{% endstep %}}
+{{% step %}}
+### Activate
+Send the application id, bundle id, or machine code, then call activate before init.
+{{% endstep %}}
+{{% endstepper %}}
+
+{{% hint style="warning" %}}
+Native engines and `*.xdb` databases ship on GitHub Releases. From a product clone, run `python scripts/get_runtime.py`. They are not committed to git.
+{{% endhint %}}
+
+<a href="https://identixia.com" class="button secondary" data-icon="globe">Website</a>
+<a href="{GH}" class="button secondary" data-icon="github">GitHub</a>
+<a href="https://docs.identixia.com/guides/request-a-license-and-support" class="button primary" data-icon="key">Request a license</a>
 """.strip()
     write_page(
         OUT / "README.md",
@@ -3128,7 +3184,7 @@ def write_gitbook_yaml() -> None:
     """Space icon uses Identixia favicon (single brand pack)."""
     (OUT / ".gitbook.yaml").write_text(
         "root: .\n\n"
-        "# Brand (copied into .gitbook/assets/ by generate.py)\n"
+        "# Images are loaded from identixia-IDV/identixia-assets. Do not commit binaries here.\n"
         "# Configure the space icon/favicon in GitBook UI to favicon.png if needed.\n",
         encoding="utf-8",
         newline="\n",
@@ -3199,7 +3255,15 @@ def main() -> int:
 
     write_welcome()
     write_summary(structure)
+    for page in OUT.rglob("*.md"):
+        original = page.read_text(encoding="utf-8")
+        updated = C.rewrite_asset_srcs(original)
+        if updated != original:
+            page.write_text(updated, encoding="utf-8", newline="\n")
     print(f"Wrote docs under {OUT}")
+    from sections import publish
+
+    publish()
     return 0
 
 

@@ -10,7 +10,7 @@ Source tree for the Identixia documentation site. Content is organized into **th
 
 Each SDK section explains **recognition** and **liveness**, then platform implementations. IDV explains the platform that calls Face and Document HTTP engines. The offline handbook under `IDV/docs/` is not duplicated page-for-page here.
 
-The GitBook sidebar is **4–5 levels deep**: product → function → product line → channel → platform (see `identixia-docs/SUMMARY.md`). Catalog homepage URLs for platform leaves stay stable across regenerations.
+The published site is three GitBook sections. `identixia-docs/` is the generator output. `publish()` in `sections.py` copies pages into `documentation/`, `developers/`, and `guides/`, each with its own `SUMMARY.md` and page icons. Documentation stays on the site root. Developer and guide pages use `/developers/` and `/guides/`.
 
 ## Regenerate
 
@@ -18,7 +18,7 @@ The GitBook sidebar is **4–5 levels deep**: product → function → product l
 python gitbook-push/generate.py
 ```
 
-Rewrites `identixia-docs/` markdown, syncs brand assets and screenshots into `.gitbook/assets/` (one file per asset), and removes obsolete section folders. Slugs match `repositories/APPs/github_about.json` homepages.
+Rewrites `identixia-docs/` markdown and removes obsolete section folders. Images point at `identixia-IDV/identixia-assets` on GitHub. Slugs match `repositories/APPs/github_about.json` homepages.
 
 ## Push to GitBook repo
 
@@ -35,26 +35,22 @@ python gitbook-push/gitbook_push.py --no-generate
 
 | Path | Role |
 |------|------|
-| `gitbook-docs.yaml` | GitBook space config |
+| `gitbook-docs.yaml` | Site sections: Documentation, Developers, Guides |
+| `sections.py` | Split pages, icons, and cross-section links |
+| `documentation/` | Product concepts (space key `space-1`) |
+| `developers/` | Platform, HTTP, and IDV integration |
+| `guides/` | Setup, samples, licensing |
 | `generate.py` | Rebuild from catalog, READMEs, and IDV summaries |
 | `content_lib.py` | Platform page builders (API, quick start, screenshots) |
-| `identixia-docs/` | Markdown published to GitBook |
-| `identixia-docs/SUMMARY.md` | Table of contents |
-| `identixia-docs/.gitbook/assets/` | Logo, favicons, screenshots (copied once; not duplicated elsewhere) |
+| `identixia-docs/` | Generator markdown (split into the three section folders on publish) |
+| `identixia-docs/SUMMARY.md` | Generator table of contents |
 
-## Brand
+## Images
 
-| Asset | Source | Docs name |
-|-------|--------|-----------|
-| Logo | `repositories/identixia-assets/brand/logo.png` | `brand-logo.png` |
-| Mark | `repositories/identixia-assets/brand/mark.png` | `brand-mark.png` |
-| Favicons | `IDV/license/admin/brand/` | `favicon.ico`, `favicon.png`, `apple-touch-icon.png` |
-
-IDV consoles serve the same brand pack from `license-admin/brand/` as `/brand/*`. Do not copy logos into every product repository.
+Pages use `https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/...`. When a file is not in that repository, the image tag stays and the alt text is what readers see. Do not commit screenshot binaries under `gitbook-push/`.
 
 ## Notes
 
-* Platform pages are customer guides: overview, capabilities, prerequisites, quick start, license, API, troubleshooting, curated screenshots, next steps, and a repository README appendix.
-* Screenshots come only from `repositories/identixia-assets` (flattened once into `.gitbook/assets/`).
+* Platform pages are customer guides: overview, capabilities, prerequisites, quick start, license, API, troubleshooting, screenshots, next steps, and a repository README appendix.
 * Engine binaries stay on GitHub Releases — not in git.
 * After catalog or product README changes, run `generate.py` (or `gitbook-push/gitbook_push.py`).

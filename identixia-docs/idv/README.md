@@ -36,7 +36,7 @@ Applicant app ──► Company backend :14195 ──► IDV server :14187 ─�
 8. [Quick start](quick-start.md) · [Walkthrough](walkthrough.md)
 9. [Production](production.md) · [Reference](reference.md)
 
-<figure><img src="../.gitbook/assets/idv-audit-console.png" alt="Identity Console" width="520"><figcaption>Identity Console</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/idv/audit-console.png" alt="Identity Console" width="520"><figcaption>Identity Console</figcaption></figure>
 
 {% hint style="danger" %}
 **Safety:** Keep the company **service bearer** on the company backend only. Capture apps receive a short-lived **capture token**. Never commit secrets. `IDV_OPEN_API=1` / bearer `demo` is for **localhost demos only**.

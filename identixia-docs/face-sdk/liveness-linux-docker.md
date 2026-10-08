@@ -195,9 +195,9 @@ curl -s -X POST http://127.0.0.1:14105/api/face/liveness \
 
 ## Screenshots
 
-<figure><img src="../.gitbook/assets/liveness-mobile.png" alt="Mobile liveness result" width="220"><figcaption>Mobile liveness result</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/mobile/liveness.png" alt="Mobile liveness result" width="220"><figcaption>Mobile liveness result</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/liveness-desktop.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/desktop/demo-ui.png" alt="Desktop liveness demo" width="480"><figcaption>Desktop liveness demo</figcaption></figure>
 
 ## Resources
 
@@ -231,42 +231,13 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 ## Repository README
 
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
 ## Identixia Face Liveness — Linux / Docker
 
 On-premise **passive face liveness** for Linux / Docker. `POST /api/face/liveness` runs **PAD + deepfake** when licensed; authenticity is **REAL** only if both say real. This image ships liveness model packs only. Matching is `FaceRecognition-Docker`.
 
----
-
-## Develop
-
-Use this repository for passive face presentation-attack and deepfake checks, without a recognition gallery. Processing stays on your host or in your container. Identixia does not receive the images.
-
-| | |
-| --- | --- |
-| **Architecture** | [Where the engine runs](#-architecture) |
-| **Quick start** | Follow [Initial commands](#-initial-commands), then [Run](#-run). |
-| **Initialize** | [Activate, then init](#-initialize) |
-| **Process** | [HTTP API](#-process) |
-| **Results** | [What to read back](#-results) |
-| **Requirements** | [Requirements](#-requirements) |
-
----
-
-## Resources
-
-| Resource | Where |
-| --- | --- |
-| **Sample** | This repository — [FaceLivenessDetection-Docker](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) |
-| **Client library** | the sample project in this repository |
-| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Docker/releases/latest) |
-| **API** | [Method list](#-api) |
-| **Develop docs** | [docs.identixia.com/face-sdk/liveness-linux-docker](https://docs.identixia.com/face-sdk/liveness-linux-docker) |
-| **License** | [License](#-license) · [Contact](#-contact) |
-| **Other platforms** | [Platforms](#-platforms) |
-
----
+> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/liveness-linux-docker). This page covers the sample repository.
 
 ## Basics
 
@@ -357,35 +328,6 @@ Liveness calls:
 | API port | **14105** |
 | Gradio demo port | **14205** |
 | Runtime download | `python scripts/get_runtime.py` |
-
----
-
-## Use in your app
-
-Call the HTTP API from your backend or client. Full reference: [docs.identixia.com](https://docs.identixia.com).
-
----
-
-## Architecture
-
-The HTTP service and the native engine run on your machine. Docker binds the published port and reads `/etc/machine-id` for the license. Images are not uploaded to Identixia.
-
-## Initialize
-
-Start the server, call `GET /api/machinecode`, and send that code when you request a license. Put the key in `license.txt`, then `POST /api/activate`. Confirm with `GET /api/health` and `GET /api/licenseStatus`.
-
-| Code | Meaning |
-| ---: | --- |
-| success `true` | The call was accepted |
-| Activate failed | The key does not match this machine. Copy `data.machinecode` from `GET /api/machinecode` and request a key. |
-
-## Process
-
-After activate, POST a base64 JPEG to the process route on port **14105**. The same routes are in the Postman collection shipped with the server sample.
-
-## Results
-
-Read the liveness decision. A face or document is REAL only when every required check passes. A missing score means the check did not run.
 
 ## API
 

@@ -206,15 +206,15 @@ curl -s -X POST http://127.0.0.1:14102/api/document/process \
 
 ## Screenshots
 
-<figure><img src="../.gitbook/assets/document-desktop-status.png" alt="Status" width="420"><figcaption>Status</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Status" width="420"><figcaption>Status</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-fields-visual.png" alt="Visual fields" width="420"><figcaption>Visual fields</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-fields-visual.png" alt="Visual fields" width="420"><figcaption>Visual fields</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-checks-validity.png" alt="Validity checks" width="420"><figcaption>Validity checks</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-validity.png" alt="Validity checks" width="420"><figcaption>Validity checks</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
 
 ## Resources
 
@@ -248,7 +248,7 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 ## Repository README
 
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
 ## Identixia ID Document Recognition and Liveness Detection — Linux / Docker
 
@@ -256,36 +256,7 @@ The following notes are adapted from the shipping repository README (exact comma
 
 Image: [`identixia/document-reader`](https://hub.docker.com/r/identixia/document-reader).
 
----
-
-## Develop
-
-Use this repository for passport, national ID, and driver license OCR, MRZ, and barcode capture, with document liveness when the license includes it. Processing stays on your host or in your container. Identixia does not receive the images.
-
-| | |
-| --- | --- |
-| **Architecture** | [Where the engine runs](#-architecture) |
-| **Quick start** | Follow [Initial commands](#-initial-commands), then [Run](#-run). |
-| **Initialize** | [Activate, then init](#-initialize) |
-| **Process** | [HTTP API](#-process) |
-| **Results** | [What to read back](#-results) |
-| **Requirements** | [Requirements](#-requirements) |
-
----
-
-## Resources
-
-| Resource | Where |
-| --- | --- |
-| **Sample** | This repository — [ID-Document-Recognition-Liveness-Detection-Docker](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) |
-| **Client library** | the sample project in this repository |
-| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker/releases/latest) |
-| **API** | [Method list](#-api) |
-| **Develop docs** | [docs.identixia.com/id-document-sdk/linux-docker](https://docs.identixia.com/id-document-sdk/linux-docker) |
-| **License** | [License](#-license) · [Contact](#-contact) |
-| **Other platforms** | [Platforms](#-platforms) |
-
----
+> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/id-document-sdk/linux-docker). This page covers the sample repository.
 
 ## Basics
 
@@ -396,37 +367,6 @@ python3 run_demo.py
 ```
 
 Open http://127.0.0.1:14202
-
----
-
-## Use in your app
-
-Point your backend at `http://<host>:14102`. See [docs](https://docs.identixia.com).
-
-Common KYC wiring: health → activate → `documentProcess` (OCR / MRZ / barcode) → optional authenticity when licensed → map fields into your case system.
-
----
-
-## Architecture
-
-The HTTP service and the native engine run on your machine. Docker binds the published port and reads `/etc/machine-id` for the license. Images are not uploaded to Identixia.
-
-## Initialize
-
-Start the server, call `GET /api/machinecode`, and send that code when you request a license. Put the key in `license.txt`, then `POST /api/activate`. Confirm with `GET /api/health` and `GET /api/licenseStatus`.
-
-| Code | Meaning |
-| ---: | --- |
-| success `true` | The call was accepted |
-| Activate failed | The key does not match this machine. Copy `data.machinecode` from `GET /api/machinecode` and request a key. |
-
-## Process
-
-After activate, POST a base64 JPEG to the process route on port **14102**. The same routes are in the Postman collection shipped with the server sample.
-
-## Results
-
-Read identity, text fields, MRZ or barcode, then images. Authenticity checks appear only when document liveness is licensed and the image was checked.
 
 ## API
 

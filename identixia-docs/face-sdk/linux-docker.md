@@ -285,13 +285,13 @@ Keep the same license product line across stacks. From the [Face SDK](README.md)
 
 ## Screenshots
 
-<figure><img src="../.gitbook/assets/face-desktop-detect.png" alt="Desktop detect" width="360"><figcaption>Desktop detect</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-detect.png" alt="Desktop detect" width="360"><figcaption>Desktop detect</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-desktop-match.png" alt="Desktop 1:1 match" width="360"><figcaption>Desktop 1:1 match</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-match.png" alt="Desktop 1:1 match" width="360"><figcaption>Desktop 1:1 match</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-desktop-liveness.png" alt="Desktop liveness" width="360"><figcaption>Desktop liveness</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-liveness.png" alt="Desktop liveness" width="360"><figcaption>Desktop liveness</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-desktop-identify.png" alt="Desktop identify" width="360"><figcaption>Desktop identify</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-identify.png" alt="Desktop identify" width="360"><figcaption>Desktop identify</figcaption></figure>
 
 ## Resources
 
@@ -325,42 +325,13 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 ## Repository README
 
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
 ## Identixia Face Recognition SDK — Linux / Docker
 
 **On-premise face recognition SDK** with **passive face liveness** as a Linux / Docker HTTP API: detect, quality, face template matching, 1:1 compare, and PAD + deepfake when licensed (`/api/face/liveness`; authenticity REAL only if both pass). Biometrics stay in your cluster — ideal for KYC backends and private access control. Image: [`identixia/face-recognition-liveness-sdk`](https://hub.docker.com/r/identixia/face-recognition-liveness-sdk).
 
----
-
-## Develop
-
-Use this repository for on-device or on-premise face recognition with optional passive liveness and deepfake checks. Processing stays on your host or in your container. Identixia does not receive the images.
-
-| | |
-| --- | --- |
-| **Architecture** | [Where the engine runs](#-architecture) |
-| **Quick start** | Follow [Initial commands](#-initial-commands), then [Run](#-run). |
-| **Initialize** | [Activate, then init](#-initialize) |
-| **Process** | [HTTP API](#-process) |
-| **Results** | [What to read back](#-results) |
-| **Requirements** | [Requirements](#-requirements) |
-
----
-
-## Resources
-
-| Resource | Where |
-| --- | --- |
-| **Sample** | This repository — [FaceRecognition-LivenessDetection-Docker](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker) |
-| **Client library** | the sample project in this repository |
-| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker/releases/latest) |
-| **API** | [Method list](#-api) |
-| **Develop docs** | [docs.identixia.com/face-sdk/linux-docker](https://docs.identixia.com/face-sdk/linux-docker) |
-| **License** | [License](#-license) · [Contact](#-contact) |
-| **Other platforms** | [Platforms](#-platforms) |
-
----
+> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/linux-docker). This page covers the sample repository.
 
 ## Basics
 
@@ -514,35 +485,6 @@ python3 run_demo.py
 ```
 
 Open http://127.0.0.1:14203
-
----
-
-## Use in your app
-
-Point your backend at `http://<host>:14103` for detect, match, and liveness. See [docs](https://docs.identixia.com).
-
----
-
-## Architecture
-
-The HTTP service and the native engine run on your machine. Docker binds the published port and reads `/etc/machine-id` for the license. Images are not uploaded to Identixia.
-
-## Initialize
-
-Start the server, call `GET /api/machinecode`, and send that code when you request a license. Put the key in `license.txt`, then `POST /api/activate`. Confirm with `GET /api/health` and `GET /api/licenseStatus`.
-
-| Code | Meaning |
-| ---: | --- |
-| success `true` | The call was accepted |
-| Activate failed | The key does not match this machine. Copy `data.machinecode` from `GET /api/machinecode` and request a key. |
-
-## Process
-
-After activate, POST a base64 JPEG to the process route on port **14103**. The same routes are in the Postman collection shipped with the server sample.
-
-## Results
-
-Read the face box, template or similarity score, and the enrolled identity for 1:N. Liveness is a separate field. Do not treat a missing liveness score as a pass.
 
 ## API
 

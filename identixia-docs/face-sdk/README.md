@@ -20,7 +20,7 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 
 Choose a repository that matches your license. A recognition-only build does not return liveness scores.
 
-<figure><img src="../.gitbook/assets/face-android-home.png" alt="Face SDK Android home" width="160"><figcaption>Android demo home</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png" alt="Face SDK Android home" width="160"><figcaption>Android demo home</figcaption></figure>
 
 ## Next
 

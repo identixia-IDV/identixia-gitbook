@@ -218,15 +218,15 @@ See [Result JSON](result-json.md) and [Security check fields](security-fields.md
 
 ## Screenshots
 
-<figure><img src="../.gitbook/assets/document-desktop-status.png" alt="Status" width="420"><figcaption>Status</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Status" width="420"><figcaption>Status</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-fields-visual.png" alt="Visual fields" width="420"><figcaption>Visual fields</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-fields-visual.png" alt="Visual fields" width="420"><figcaption>Visual fields</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-checks-validity.png" alt="Validity checks" width="420"><figcaption>Validity checks</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-validity.png" alt="Validity checks" width="420"><figcaption>Validity checks</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png" alt="Liveness checks" width="420"><figcaption>Liveness checks</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/document-desktop-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png" alt="Images" width="420"><figcaption>Images</figcaption></figure>
 
 ## Resources
 
@@ -260,7 +260,7 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 ## Repository README
 
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
 ## Identixia ID Document Recognition and Liveness Detection — Android
 
@@ -268,36 +268,7 @@ The following notes are adapted from the shipping repository README (exact comma
 
 Use the sample app to evaluate capture UX and the one-scroll Result screen, then add the same `install.gradle` line to your app.
 
----
-
-## Develop
-
-Use this repository for passport, national ID, and driver license OCR, MRZ, and barcode capture, with document liveness when the license includes it. Processing stays on the phone. Identixia does not receive camera frames, templates, or document images.
-
-| | |
-| --- | --- |
-| **Architecture** | [Where the engine runs](#-architecture) |
-| **Quick start** | Follow [Initial commands](#-initial-commands), then [Run](#-run). |
-| **Initialize** | [Activate, then init](#-initialize) |
-| **Process** | [Camera or a still image](#-process) |
-| **Results** | [What to read back](#-results) |
-| **Requirements** | [Requirements](#-requirements) |
-
----
-
-## Resources
-
-| Resource | Where |
-| --- | --- |
-| **Sample** | This repository — [ID-Document-Recognition-Liveness-Detection-Android](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android) |
-| **Client library** | the sample project in this repository |
-| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/latest) |
-| **API** | [Method list](#-api) |
-| **Develop docs** | [docs.identixia.com/id-document-sdk/android](https://docs.identixia.com/id-document-sdk/android) |
-| **License** | [License](#-license) · [Contact](#-contact) |
-| **Other platforms** | [Platforms](#-platforms) |
-
----
+> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/id-document-sdk/android). This page covers the sample repository.
 
 ## Basics
 
@@ -394,43 +365,6 @@ The code below shows how to use the license:
 [https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/5541cdfbef77d73c0aa099018f81dbabf67be7f2/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L76-L77](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/blob/5541cdfbef77d73c0aa099018f81dbabf67be7f2/app/src/main/java/com/identixia/documentreader/MainActivity.kt#L76-L77)
 
 Please [contact us](#-contact) to get a license for **your own app**.
-
----
-
-## Use in your app
-
-1. In the app module, apply `install.gradle` from tag `v1.0.0` (see Install above) — engine + `libdockey`.
-2. Activate → init → `recognize` / `documentProcess` (prefer kit helpers over raw engine calls). Same process JSON idea as the Windows / Docker HTTP API.
-3. Keep the demo `applicationId` only while using the sample license.
-
----
-
-## Architecture
-
-The native engine runs inside the app process. The first successful activate unpacks model databases onto the device. Keep `useLegacyPackaging = true` on Android when the engine loads `.so` files from the AAR.
-
-## Initialize
-
-The sample application id is already licensed. For your own id, request a new key, then call activate and init on a background thread. Open the camera only after the status is Ready. Do not reuse the sample key with a different application id.
-
-| Code | Meaning |
-| ---: | --- |
-| `0` | Success |
-| `1` / `-1` | Invalid license |
-| `2` / `-2` | License was issued for a different application id |
-| `3` / `-3` | License expired |
-| `4` / `-4` | Not activated |
-| `-5` | Models failed to load. Run `python scripts/get_runtime.py` and confirm the database packs are present. |
-| `-12` | No face in the image |
-| `-13` | No document in the image |
-
-## Process
-
-Capture the document with the camera, or pick a still from the gallery. Keep the whole document inside the frame.
-
-## Results
-
-Read identity, text fields, MRZ or barcode, then images. Authenticity checks appear only when document liveness is licensed and the image was checked.
 
 ## API
 

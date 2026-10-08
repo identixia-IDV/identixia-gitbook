@@ -2,11 +2,46 @@ $schema: https://api.gitbook.com/gitbook-docs.yaml
 site:
   title: Identixia Docs
   structure:
-    - type: space
-      key: space-1
-      title: Identixia Docs
-      path: identixia-docs
+    - type: section
+      key: section-documentation
+      title: Documentation
+      path: documentation
+      icon: book-open
       default: true
-      content:
-        directory: ./identixia-docs
-# Regenerated markdown lives under identixia-docs/ (Face SDK, ID Document SDK, IDV).
+      description: What Identixia products do and which repository to choose.
+      children:
+        - type: space
+          key: space-1
+          title: Documentation
+          path: content
+          default: true
+          content:
+            directory: ./documentation
+    - type: section
+      key: section-developers
+      title: Developers
+      path: developers
+      icon: code
+      description: Platform integration, HTTP APIs, and IDV clients.
+      children:
+        - type: space
+          key: space-developers
+          title: Developers
+          path: content
+          default: true
+          content:
+            directory: ./developers
+    - type: section
+      key: section-guides
+      title: Guides
+      path: guides
+      icon: compass
+      description: Setup, sample apps, licensing, and production.
+      children:
+        - type: space
+          key: space-guides
+          title: Guides
+          path: content
+          default: true
+          content:
+            directory: ./guides

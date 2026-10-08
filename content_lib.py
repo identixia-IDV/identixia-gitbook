@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 
@@ -944,23 +945,103 @@ def troubleshooting(ctx: ProductCtx) -> str:
     return common
 
 
+FOOTER_MD = """{% hint style="info" %}
+Biometrics stay on your device or server. Identixia does not receive camera frames, templates, or document images.
+{% endhint %}
+
+{% columns %}
+{% column %}
+### Docs
+
+[Face](https://docs.identixia.com/face-sdk) · [Documents](https://docs.identixia.com/id-document-sdk) · [IDV](https://docs.identixia.com/idv)
+
+[Developers](https://docs.identixia.com/developers) · [Guides](https://docs.identixia.com/guides)
+{% endcolumn %}
+
+{% column %}
+### Identixia
+
+<a href="https://identixia.com" class="button secondary" data-icon="globe">Website</a>
+<a href="https://github.com/identixia-IDV" class="button secondary" data-icon="github">GitHub</a>
+<a href="mailto:contact@identixia.com" class="button primary" data-icon="envelope">Email</a>
+{% endcolumn %}
+{% endcolumns %}
+
+© Identixia. On-premise face, document, and identity verification.
+"""
+
+ASSETS_BASE = "https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main"
+
+# Local GitBook filenames → path inside identixia-IDV/identixia-assets.
+# A missing file still uses this URL. The browser shows the alt text.
+LOCAL_TO_REMOTE = {
+    "brand-logo.png": "brand/logo.png",
+    "brand-mark.png": "brand/mark.png",
+    "favicon.ico": "brand/favicon.ico",
+    "favicon.png": "brand/favicon.png",
+    "apple-touch-icon.png": "brand/apple-touch-icon.png",
+    "face-android-home.png": "screenshots/face-recognition/android/home.png",
+    "face-android-capture.png": "screenshots/face-recognition/android/capture.png",
+    "face-android-enroll.png": "screenshots/face-recognition/android/enroll.png",
+    "face-android-identify.png": "screenshots/face-recognition/android/identify.png",
+    "face-android-detect.png": "screenshots/face-recognition/android/detect.png",
+    "face-android-attribute.png": "screenshots/face-recognition/android/attribute.png",
+    "face-android-quality.png": "screenshots/face-recognition/android/attribute-quality.png",
+    "face-android-landmarks.png": "screenshots/face-recognition/android/landmarks.png",
+    "face-android-match.png": "screenshots/face-recognition/android/match.png",
+    "face-android-liveness.png": "screenshots/face-recognition/android/attribute-liveness.png",
+    "face-android-settings.png": "screenshots/face-recognition/android/settings.png",
+    "face-android-about.png": "screenshots/face-recognition/android/about.png",
+    "face-ios-home.png": "screenshots/face-recognition/ios/home.png",
+    "face-ios-capture.png": "screenshots/face-recognition/ios/capture.png",
+    "face-ios-identify.jpg": "screenshots/face-recognition/ios/identify.jpg",
+    "face-ios-attribute.png": "screenshots/face-recognition/ios/attribute.png",
+    "face-ios-liveness.png": "screenshots/face-recognition/ios/attribute-liveness.png",
+    "face-ios-about.png": "screenshots/face-recognition/ios/about.png",
+    "face-flutter-camera.png": "screenshots/face-recognition/flutter/camera.png",
+    "face-flutter-result.png": "screenshots/face-recognition/flutter/result.png",
+    "face-desktop-detect.png": "screenshots/face-recognition/desktop/demo-ui-detect.png",
+    "face-desktop-match.png": "screenshots/face-recognition/desktop/demo-ui-match.png",
+    "face-desktop-liveness.png": "screenshots/face-recognition/desktop/demo-ui-liveness.png",
+    "face-desktop-identify.png": "screenshots/face-recognition/desktop/demo-ui-identify.png",
+    "liveness-mobile.png": "screenshots/face-liveness/mobile/liveness.png",
+    "liveness-desktop.png": "screenshots/face-liveness/desktop/demo-ui.png",
+    "document-desktop-status.png": "screenshots/document-reader/desktop/demo-ui-status.png",
+    "document-desktop-fields-visual.png": "screenshots/document-reader/desktop/demo-ui-fields-visual.png",
+    "document-desktop-fields-code.png": "screenshots/document-reader/desktop/demo-ui-fields-code.png",
+    "document-desktop-checks-validity.png": "screenshots/document-reader/desktop/demo-ui-checks-validity.png",
+    "document-desktop-checks-liveness.png": "screenshots/document-reader/desktop/demo-ui-checks-liveness.png",
+    "document-desktop-images.png": "screenshots/document-reader/desktop/demo-ui-images.png",
+    "idv-audit-console.png": "screenshots/idv/audit-console.png",
+    "idv-device-screen.png": "screenshots/idv/device-screen.png",
+}
+
+_ASSET_SRC = re.compile(r"(?:\.\./)*\.gitbook/assets/([^\"'\s)]+)")
+
+
+def asset_url(name: str) -> str:
+    rel = LOCAL_TO_REMOTE.get(name, f"screenshots/{name}")
+    return f"{ASSETS_BASE}/{rel}"
+
+
+def rewrite_asset_srcs(text: str) -> str:
+    return _ASSET_SRC.sub(lambda match: asset_url(match.group(1)), text)
+
+
 def _asset(name: str, alt: str, width: int = 180) -> str:
-    """GitBook-local asset (copied into identixia-docs/.gitbook/assets/)."""
+    """Remote image on identixia-assets. Alt text shows when the file is absent."""
     return (
-        f'<figure><img src="../.gitbook/assets/{name}" alt="{alt}" width="{width}">'
+        f'<figure><img src="{asset_url(name)}" alt="{alt}" width="{width}">'
         f"<figcaption>{alt}</figcaption></figure>"
     )
 
 
 def _asset_root(name: str, alt: str, width: int = 180) -> str:
-    return (
-        f'<figure><img src=".gitbook/assets/{name}" alt="{alt}" width="{width}">'
-        f"<figcaption>{alt}</figcaption></figure>"
-    )
+    return _asset(name, alt, width)
 
 
 def screenshots_section(ctx: ProductCtx, *, nested: bool = True) -> str:
-    """Modern product screenshots shipped in .gitbook/assets (not remote hotlinks)."""
+    """Screenshots hosted in identixia-IDV/identixia-assets."""
     a = _asset if nested else _asset_root
 
     # Face liveness product / hub
@@ -1046,7 +1127,7 @@ def readme_appendix(readme_body: str) -> str:
         "## Repository README\n\n"
         "The following notes are adapted from the shipping repository README "
         "(exact commands and platform-specific details). Screenshots on this page "
-        "use the Identixia documentation asset pack.\n\n"
+        "use images from the identixia-assets repository.\n\n"
         + readme_body.strip()
         + "\n"
     )

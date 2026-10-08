@@ -21,6 +21,6 @@ description: >-
 
 ## Brand
 
-One pack only: `IDV/license/brand/` → `/brand/*` and docs `.gitbook/assets/`.
+Brand files live in [`identixia-assets`](https://github.com/identixia-IDV/identixia-assets) under `brand/`.
 
 Org: [`identixia-IDV`](https://github.com/identixia-IDV).

@@ -18,7 +18,7 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 
 Full-product repositories run both when licensed. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.
 
-<figure><img src="../.gitbook/assets/document-desktop-status.png" alt="Document demo status" width="480"><figcaption>Desktop demo — status</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png" alt="Document demo status" width="480"><figcaption>Desktop demo — status</figcaption></figure>
 
 ## Next
 

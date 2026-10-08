@@ -265,13 +265,13 @@ Keep the same license product line across stacks. From the [Face SDK](README.md)
 
 ## Screenshots
 
-<figure><img src="../.gitbook/assets/face-flutter-camera.png" alt="Flutter camera" width="200"><figcaption>Flutter camera</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/flutter/camera.png" alt="Flutter camera" width="200"><figcaption>Flutter camera</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-flutter-result.png" alt="Flutter result" width="200"><figcaption>Flutter result</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/flutter/result.png" alt="Flutter result" width="200"><figcaption>Flutter result</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-android-home.png" alt="Android home (same product family)" width="160"><figcaption>Android home (same product family)</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png" alt="Android home (same product family)" width="160"><figcaption>Android home (same product family)</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-android-identify.png" alt="Android identify" width="160"><figcaption>Android identify</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/identify.png" alt="Android identify" width="160"><figcaption>Android identify</figcaption></figure>
 
 ## Resources
 
@@ -305,7 +305,7 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 ## Repository README
 
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
 ## Identixia Face Recognition — Flutter
 
@@ -313,36 +313,7 @@ The following notes are adapted from the shipping repository README (exact comma
 
 Package: `face_recognition_sdk`. Demo modes: **Enroll · Identify · Capture · Attribute**.
 
----
-
-## Develop
-
-Use this repository for on-device or on-premise face recognition with optional passive liveness and deepfake checks. Processing stays on the phone. Identixia does not receive camera frames, templates, or document images.
-
-| | |
-| --- | --- |
-| **Architecture** | [Where the engine runs](#-architecture) |
-| **Quick start** | Follow [Android](#android) or [iOS](#ios) under [Initial commands](#-initial-commands). Run one platform. |
-| **Initialize** | [Activate, then init](#-initialize) |
-| **Process** | [Camera or a still image](#-process) |
-| **Results** | [What to read back](#-results) |
-| **Requirements** | [Requirements](#-requirements) |
-
----
-
-## Resources
-
-| Resource | Where |
-| --- | --- |
-| **Sample** | This repository — [FaceRecognition-LivenessDetection-Flutter](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Flutter) |
-| **Client library** | `face_recognition_sdk` |
-| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Flutter/releases/latest) |
-| **API** | [Method list](#-api) |
-| **Develop docs** | [docs.identixia.com/face-sdk/flutter](https://docs.identixia.com/face-sdk/flutter) |
-| **License** | [License](#-license) · [Contact](#-contact) |
-| **Other platforms** | [Platforms](#-platforms) |
-
----
+> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/flutter). This page covers the sample repository.
 
 ## Basics
 
@@ -420,19 +391,6 @@ Wait until Home = **Ready**, then Enroll / Identify / Capture / Attribute.
 | Capability | What it does |
 | --- | --- |
 
----
-
-## Demo modes
-
-| Mode | What to try |
-| --- | --- |
-| **Enroll** | Create an on-device gallery entry (template + thumbnail) |
-| **Identify** | Live 1:N search against enrolled faces |
-| **Capture** | Guided still capture with quality feedback |
-| **Attribute** | Attribute scores when enabled |
-
----
-
 ## Requirements
 
 | | |
@@ -492,50 +450,6 @@ The code below shows how to use the license:
 [https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Flutter/blob/0126a661c391c61c1ac9e51314ef76579da1d7b4/example/lib/services/sdk_service.dart#L28-L39](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Flutter/blob/0126a661c391c61c1ac9e51314ef76579da1d7b4/example/lib/services/sdk_service.dart#L28-L39)
 
 Capabilities: face recognition (detect / templates / match) and/or passive face liveness + deepfake. Please [contact us](#-contact) to get a license for **your own app**.
-
----
-
-## Use in your app
-
-Depend on `face_recognition_sdk` via git (`ref: v1.0.0`), set Android `useLegacyPackaging = true`, then use `FaceCapture` / activate → init → detect / template / identify / `liveness` / `livenessAll`.
-
-Customer method names match Android and the Windows / Docker `/api/face/*` surface (`detect` ↔ analyze, `match` ↔ compare, `liveness` ↔ `/api/face/liveness`). Prefer package kits (`FaceCapture`, …) over reinventing the camera UI. Keep demo ids only while using sample licenses.
-
-| Step | Detail |
-| --- | --- |
-| 1 | Depend on `face_recognition_sdk` at tag `v1.0.0` (standalone clone — no monorepo `path:`) |
-| 2 | Keep or download Android AAR + iOS frameworks (`v1.0.0` Release) |
-| 3 | Activate → init on a physical device (`useLegacyPackaging = true` on Android) |
-| 4 | Wire Enroll / Identify (1:N) / Capture / Attribute (+ liveness if licensed) |
-
----
-
-## Architecture
-
-The native engine runs inside the app process. The first successful activate unpacks model databases onto the device. Keep `useLegacyPackaging = true` on Android when the engine loads `.so` files from the AAR.
-
-## Initialize
-
-The sample application id is already licensed. For your own id, request a new key, then call activate and init on a background thread. Open the camera only after the status is Ready. Do not reuse the sample key with a different application id.
-
-| Code | Meaning |
-| ---: | --- |
-| `0` | Success |
-| `1` / `-1` | Invalid license |
-| `2` / `-2` | License was issued for a different application id |
-| `3` / `-3` | License expired |
-| `4` / `-4` | Not activated |
-| `-5` | Models failed to load. Run `python scripts/get_runtime.py` and confirm the database packs are present. |
-| `-12` | No face in the image |
-| `-13` | No document in the image |
-
-## Process
-
-Enroll a person, then identify them, or compare two stills. Use a physical camera for the live sample.
-
-## Results
-
-Read the face box, template or similarity score, and the enrolled identity for 1:N. Liveness is a separate field. Do not treat a missing liveness score as a pass.
 
 ## API
 

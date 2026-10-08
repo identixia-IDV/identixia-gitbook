@@ -1,4 +1,4 @@
 root: .
 
-# Brand (copied into .gitbook/assets/ by generate.py)
+# Images are loaded from identixia-IDV/identixia-assets. Do not commit binaries here.
 # Configure the space icon/favicon in GitBook UI to favicon.png if needed.

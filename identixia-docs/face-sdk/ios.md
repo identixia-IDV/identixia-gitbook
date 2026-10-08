@@ -262,17 +262,17 @@ Keep the same license product line across stacks. From the [Face SDK](README.md)
 
 ## Screenshots
 
-<figure><img src="../.gitbook/assets/face-ios-home.png" alt="iOS home" width="160"><figcaption>iOS home</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/home.png" alt="iOS home" width="160"><figcaption>iOS home</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-ios-capture.png" alt="iOS capture" width="160"><figcaption>iOS capture</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/capture.png" alt="iOS capture" width="160"><figcaption>iOS capture</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-ios-identify.jpg" alt="iOS identify" width="160"><figcaption>iOS identify</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/identify.jpg" alt="iOS identify" width="160"><figcaption>iOS identify</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-ios-attribute.png" alt="iOS attributes" width="160"><figcaption>iOS attributes</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/attribute.png" alt="iOS attributes" width="160"><figcaption>iOS attributes</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-ios-liveness.png" alt="iOS liveness" width="160"><figcaption>iOS liveness</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/attribute-liveness.png" alt="iOS liveness" width="160"><figcaption>iOS liveness</figcaption></figure>
 
-<figure><img src="../.gitbook/assets/face-ios-about.png" alt="iOS about" width="160"><figcaption>iOS about</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/about.png" alt="iOS about" width="160"><figcaption>iOS about</figcaption></figure>
 
 ## Resources
 
@@ -306,7 +306,7 @@ Postman collections live under each product repository’s `postman/` folder (an
 
 ## Repository README
 
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use the Identixia documentation asset pack.
+The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
 
 ## Identixia Face Recognition — iOS
 
@@ -314,36 +314,7 @@ The following notes are adapted from the shipping repository README (exact comma
 
 Demo modes: **Enroll · Identify · Capture · Attribute**.
 
----
-
-## Develop
-
-Use this repository for on-device or on-premise face recognition with optional passive liveness and deepfake checks. Processing stays on the phone. Identixia does not receive camera frames, templates, or document images.
-
-| | |
-| --- | --- |
-| **Architecture** | [Where the engine runs](#-architecture) |
-| **Quick start** | Follow [Initial commands](#-initial-commands), then [Run](#-run). |
-| **Initialize** | [Activate, then init](#-initialize) |
-| **Process** | [Camera or a still image](#-process) |
-| **Results** | [What to read back](#-results) |
-| **Requirements** | [Requirements](#-requirements) |
-
----
-
-## Resources
-
-| Resource | Where |
-| --- | --- |
-| **Sample** | This repository — [FaceRecognition-LivenessDetection-iOS](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS) |
-| **Client library** | the sample project in this repository |
-| **Runtime** | [`python scripts/get_runtime.py`](#-install) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/releases/latest) |
-| **API** | [Method list](#-api) |
-| **Develop docs** | [docs.identixia.com/face-sdk/ios](https://docs.identixia.com/face-sdk/ios) |
-| **License** | [License](#-license) · [Contact](#-contact) |
-| **Other platforms** | [Platforms](#-platforms) |
-
----
+> For setup, integration, and API guides, see the [Identixia documentation](https://docs.identixia.com/developers/face-sdk/ios). This page covers the sample repository.
 
 ## Basics
 
@@ -392,19 +363,6 @@ Wait until Home status = **Ready**, then use Camera / Gallery (or the face mode 
 
 | Capability | What it does |
 | --- | --- |
-
----
-
-## Demo modes
-
-| Mode | What to try |
-| --- | --- |
-| **Enroll** | Store an on-device face template |
-| **Identify** | Live 1:N against enrolled people |
-| **Capture** | Guided still capture |
-| **Attribute** | Attribute readout when enabled |
-
----
 
 ## Requirements
 
@@ -457,41 +415,6 @@ The code below shows how to use the license:
 [https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/blob/1946743e92f39e4d01740992b31cddf8c7c246ed/FaceFullSDK/Home/ViewController.swift#L167-L191](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/blob/1946743e92f39e4d01740992b31cddf8c7c246ed/FaceFullSDK/Home/ViewController.swift#L167-L191)
 
 Please [contact us](#-contact) to get a license for **your own app**.
-
----
-
-## Use in your app
-
-Link the three frameworks, activate → init, then detect / template / match (and liveness when licensed). Do not ship a production key against the demo bundle id. See [docs](https://docs.identixia.com).
-
----
-
-## Architecture
-
-The native engine runs inside the app process. The first successful activate unpacks model databases onto the device. Keep `useLegacyPackaging = true` on Android when the engine loads `.so` files from the AAR.
-
-## Initialize
-
-The sample application id is already licensed. For your own id, request a new key, then call activate and init on a background thread. Open the camera only after the status is Ready. Do not reuse the sample key with a different application id.
-
-| Code | Meaning |
-| ---: | --- |
-| `0` | Success |
-| `1` / `-1` | Invalid license |
-| `2` / `-2` | License was issued for a different application id |
-| `3` / `-3` | License expired |
-| `4` / `-4` | Not activated |
-| `-5` | Models failed to load. Run `python scripts/get_runtime.py` and confirm the database packs are present. |
-| `-12` | No face in the image |
-| `-13` | No document in the image |
-
-## Process
-
-Enroll a person, then identify them, or compare two stills. Use a physical camera for the live sample.
-
-## Results
-
-Read the face box, template or similarity score, and the enrolled identity for 1:N. Liveness is a separate field. Do not treat a missing liveness score as a pass.
 
 ## API
 

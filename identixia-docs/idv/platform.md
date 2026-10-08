@@ -14,6 +14,6 @@ The **platform** is what tenants call for sessions, submissions, reviews, and wo
 | Customer routes | [Creating a session (API)](api.md) |
 | Hardening | [Production](production.md) |
 
-<figure><img src="../.gitbook/assets/idv-audit-console.png" alt="Identity Console" width="480"><figcaption>Identity Console</figcaption></figure>
+<figure><img src="https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/idv/audit-console.png" alt="Identity Console" width="480"><figcaption>Identity Console</figcaption></figure>
 
 Company systems integrate **through** this platform — see [Company integration](company.md).
