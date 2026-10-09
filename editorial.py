@@ -63,6 +63,41 @@ def sentence_name(value: str) -> str:
     return value.lower().replace("id document", "ID document").replace("ocr", "OCR")
 
 
+def platform_description(face: bool, mode: str, platform: str) -> str:
+    """One sentence for the GitBook subtitle. The page body does not repeat it."""
+    mobile = platform not in ("Windows", "Linux and Docker")
+    where = "on the device" if mobile else "on your server"
+    if face and mode == "liveness":
+        return (
+            f"Passive face liveness for {platform}. Presentation-attack and deepfake checks "
+            f"run {where}. A face is REAL only when both pass."
+        )
+    if not face and mode == "liveness":
+        return (
+            f"ID document liveness for {platform}. Presentation-attack checks for passports and ID cards "
+            f"run {where}, separate from OCR."
+        )
+    if face and mode == "recognition":
+        return (
+            f"Face recognition for {platform}. Detection, attributes, quality, templates, and 1:1 match "
+            f"run {where}. This build does not include liveness."
+        )
+    if not face and mode == "recognition":
+        return (
+            f"ID document recognition for {platform}. Passport, national ID, and driver license OCR, MRZ, "
+            f"and barcode reading run {where}. This build does not include document liveness."
+        )
+    if face:
+        return (
+            f"Face recognition and liveness for {platform}. Enrollment, templates, and 1:N search run {where}. "
+            "Passive liveness runs when the license includes it."
+        )
+    return (
+        f"ID document recognition and liveness for {platform}. Passport, national ID, and driver license "
+        f"OCR, MRZ, and barcode reading run {where}. Document liveness runs when the license includes it."
+    )
+
+
 def page_metadata(rel: str, section: str) -> tuple[str, str] | None:
     path = Path(rel)
     leaf = path.stem
@@ -98,8 +133,7 @@ def page_metadata(rel: str, section: str) -> tuple[str, str] | None:
         if mode == "combined":
             name = "Face Recognition and Liveness Detection" if face else "ID Document OCR and Liveness Detection"
         title = f"{name} SDK for {platform}"
-        purpose = "passive anti-spoofing and deepfake checks" if face and mode == "liveness" else "document presentation attack checks" if mode == "liveness" else "face detection, templates, and matching" if face else "passport and ID card OCR, MRZ, and barcode reading"
-        return title, f"Integrate Identixia {sentence_name(name)} on {platform}. Follow setup and license activation steps for {purpose}."
+        return title, platform_description(face, mode, platform)
     if leaf == "README" and not face:
         return ("ID Document OCR and Liveness Detection SDKs", "Read passports and ID cards with Identixia document OCR, MRZ, and barcode SDKs. Add licensed document liveness checks on mobile or self-hosted servers.")
     metadata = {

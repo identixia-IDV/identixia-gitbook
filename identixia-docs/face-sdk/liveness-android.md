@@ -1,6 +1,6 @@
 ---
 description: >-
-  Integrate Identixia face liveness detection on Android. Follow setup and license activation steps for passive anti-spoofing and deepfake checks.
+  Passive face liveness for Android. Presentation-attack and deepfake checks run on the device. A face is REAL only when both pass.
 ---
 
 # Face Liveness Detection SDK for Android
@@ -281,7 +281,13 @@ python scripts/get_runtime.py
 
 Open this folder in **Android Studio** and run on a physical phone. Home status should show **Ready**, then **Liveness / Settings / About** unlock.
 
-The sample includes a demo license for its existing application identifier. Keep that identifier and the bundled key when running the demo. For your own app, request a key from [contact@identixia.com](mailto:contact@identixia.com), replace the demo key, and rebuild. See [SDK license and activation](#-sdk-license-and-activation) below for the source files and activation steps.
+The sample runs with its bundled demo key. Keep the sample application id.
+
+For your own app:
+
+1. Email your Android application id or iOS bundle id, and the product name, to [contact@identixia.com](mailto:contact@identixia.com).
+2. Replace the demo key in the sample source with the key you receive.
+3. Rebuild. The sample activates that key before it initializes the SDK.
 
 Wait for the Home screen to show **Ready**, then select a demo feature. Check the license status on the Result or About screen before integrating the SDK into your own app.
 
@@ -344,28 +350,20 @@ Open this folder in **Android Studio** and run on a physical phone. Home status 
 
 ## SDK license and activation
 
-<p align="center">
-<a href="#-contact"><img src="https://img.shields.io/badge/Your%20app-Request%20a%20key-0F766E?style=for-the-badge&logo=gmail&logoColor=white" alt="Request a key" /></a>
-</p>
+1. Run the sample with the bundled key and the sample id below.
+2. For your own app, email [contact@identixia.com](mailto:contact@identixia.com) with the platform, your application id or bundle id, and the features you need.
+3. Put the key you receive in the same place as the demo key.
+4. Rebuild. Activation runs before SDK init. If it fails, the key does not match that id.
 
-<p align="center">
-</p>
+Sample id:
 
-<p align="center"><img src="https://img.shields.io/badge/Sample%20code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Sample code" /></p>
+- `com.identixia.faceliveness`
 
-The sample includes a demo license tied to its application identifier. Keep the sample’s identifier and bundled key when evaluating the app. License validation runs locally.
+Set the key, then activate:
 
-The demo uses these identifiers:
+[https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/main/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/main/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22)
 
-- Android application ID: `com.identixia.faceliveness`.
-
-To use the SDK in your own app, email [contact@identixia.com](mailto:contact@identixia.com) with your platform, application ID or bundle identifier, and the SDK features you need. Request a key for your app, replace the demo key in the source file below, and rebuild the app. For apps targeting both Android and iOS, use the key issued for each platform.
-
-Activate the license before initializing the SDK, following the sample’s startup code. Check the license status before using SDK features. If activation fails, verify that the key matches your app identifier and contact Identixia if you need a replacement.
-
-[Demo license definition](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/main/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L21-L22)
-
-[SDK activation call](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/main/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L55-L55)
+[https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/main/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L55-L55](https://github.com/identixia-IDV/FaceLivenessDetection-Android/blob/main/app/src/main/java/com/identixia/faceliveness/ui/MainActivity.kt#L55-L55)
 
 ## API
 

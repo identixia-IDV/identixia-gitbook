@@ -1,6 +1,6 @@
 ---
 description: >-
-  Integrate Identixia face recognition on Windows. Follow setup and license activation steps for face detection, templates, and matching.
+  Face recognition for Windows. Detection, attributes, quality, templates, and 1:1 match run on your server. This build does not include liveness.
 ---
 
 # Face Recognition SDK for Windows

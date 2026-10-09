@@ -1,6 +1,6 @@
 ---
 description: >-
-  Integrate Identixia face recognition and liveness detection on Windows. Follow setup and license activation steps for face detection, templates, and matching.
+  Face recognition and liveness for Windows. Enrollment, templates, and 1:N search run on your server. Passive liveness runs when the license includes it.
 ---
 
 # Face Recognition and Liveness Detection SDK for Windows

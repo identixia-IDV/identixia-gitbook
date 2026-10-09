@@ -1,6 +1,6 @@
 ---
 description: >-
-  Integrate Identixia face recognition on Linux and Docker. Follow setup and license activation steps for face detection, templates, and matching.
+  Face recognition for Linux and Docker. Detection, attributes, quality, templates, and 1:1 match run on your server. This build does not include liveness.
 icon: cube
 ---
 

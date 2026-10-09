@@ -1,6 +1,6 @@
 ---
 description: >-
-  Integrate Identixia face liveness detection on Windows. Follow setup and license activation steps for passive anti-spoofing and deepfake checks.
+  Passive face liveness for Windows. Presentation-attack and deepfake checks run on your server. A face is REAL only when both pass.
 icon: shield
 ---
 

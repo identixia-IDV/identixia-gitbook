@@ -1,6 +1,6 @@
 ---
 description: >-
-  Integrate Identixia face recognition and liveness detection on Linux and Docker. Follow setup and license activation steps for face detection, templates, and matching.
+  Face recognition and liveness for Linux and Docker. Enrollment, templates, and 1:N search run on your server. Passive liveness runs when the license includes it.
 icon: cube
 ---
 

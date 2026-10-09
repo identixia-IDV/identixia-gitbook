@@ -1,6 +1,6 @@
 ---
 description: >-
-  Integrate Identixia ID document liveness detection on Linux and Docker. Follow setup and license activation steps for document presentation attack checks.
+  ID document liveness for Linux and Docker. Presentation-attack checks for passports and ID cards run on your server, separate from OCR.
 icon: shield
 ---
 
