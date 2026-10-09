@@ -40,23 +40,6 @@ Build identity verification with face recognition, passive liveness detection, a
   </tbody>
 </table>
 
-{% columns %}
-{% column %}
-### On a phone or desktop
-
-Run the sample app for your platform, then integrate its capture and SDK calls into your application.
-
-<a href="https://docs.identixia.com/developers" class="button primary" data-icon="code">Developers</a>
-{% endcolumn %}
-{% column %}
-### First run
-
-Choose a sample that supports the features you need, download its runtime, and activate the matching SDK license.
-
-<a href="https://docs.identixia.com/guides" class="button secondary" data-icon="compass">Guides</a>
-{% endcolumn %}
-{% endcolumns %}
-
 ## Start here
 
 {% stepper %}
@@ -77,7 +60,3 @@ Request a license using your Android application ID, iOS bundle identifier, or s
 {% hint style="warning" %}
 Native engines and `*.xdb` databases ship on GitHub Releases. From a product clone, run `python scripts/get_runtime.py`. They are not committed to git.
 {% endhint %}
-
-<a href="https://identixia.com" class="button secondary" data-icon="globe">Website</a>
-<a href="https://github.com/identixia-IDV" class="button secondary" data-icon="github">GitHub</a>
-<a href="https://docs.identixia.com/guides/request-a-license-and-support" class="button primary" data-icon="key">Request a license</a>

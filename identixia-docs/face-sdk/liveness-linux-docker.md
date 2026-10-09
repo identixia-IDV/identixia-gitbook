@@ -8,22 +8,11 @@ description: >-
 
 ## Overview
 
-Passive face liveness SDK for Linux and Docker. On-premise REST API runs presentation-attack and deepfake checks together for KYC. A face is REAL only when both pass.
-
-Processing runs **on your server (or in your container)**. Identixia does **not** receive biometric images, templates, or document scans.
-
 | | |
 | --- | --- |
-| **Repository** | [`FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) |
+| **Repository** | [`FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Docker/releases/latest) |
 | **Platform** | Linux |
-| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
-
-
-## Repository
-
-{% embed url="https://github.com/identixia-IDV/FaceLivenessDetection-Docker" %}
-
-[`identixia-IDV/FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Docker/releases/latest)
+| **Runs** | On your server or in your container. Images stay there. |
 
 ## Capabilities
 
@@ -199,160 +188,7 @@ curl -s -X POST http://127.0.0.1:14105/api/face/liveness \
 
 ![Desktop liveness demo](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-liveness/desktop/demo-ui.png)
 
-## Resources
-
-| Resource | Link |
-| --- | --- |
-| **This repository** | [`identixia-IDV/FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) |
-| **GitHub Releases (runtime)** | [Latest download](https://github.com/identixia-IDV/FaceLivenessDetection-Docker/releases/latest) |
-| **Runtime helper** | `python scripts/get_runtime.py` in the product clone |
-| **Documentation site** | [docs.identixia.com](https://docs.identixia.com) |
-| **SDK Server (HTTP)** | [SDK Server](../sdk-server/README.md) |
-| **Website** | [identixia.com](https://identixia.com) |
-| **Hugging Face** | [huggingface.co/Identixia](https://huggingface.co/Identixia) |
-| **Docker Hub** | [hub.docker.com/u/identixia](https://hub.docker.com/u/identixia) |
-| **Playground** | [playground.identixia.com](https://playground.identixia.com/) |
-| **License & support** | [Request a license](../request-a-license-and-support.md) · [Contact](../contact-us.md) |
-
-Postman collections live under each product repository’s `postman/` folder (and the monorepo `postman/Identixia-API.postman_collection.json` for all HTTP routes).
-
-## Next steps
-
-1. Complete **Integration guide — start the project** until the sample shows **Ready**.
-2. Confirm runtime files and databases are in place (`python scripts/get_runtime.py`).
-3. Activate with a license issued for **your** application id or machine code.
-4. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
-5. Return to the [Face SDK](README.md) hub for recognition, liveness, and related platforms.
-
 
 ## Support
 
 {% include "../.gitbook/includes/contact.md" %}
-
-## Repository README
-
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
-
-## Face Liveness Detection SDK for Linux / Docker — HTTP API Demo | Identixia
-
-Integrate **face liveness detection and anti-spoofing** with the **Identixia Linux / Docker SDK**. This repository provides a self-hosted Linux / Docker HTTP API for passive face liveness detection and deepfake detection. Use presentation attack detection (PAD) to check for face spoofing and deepfake detection to check for manipulated face images. The combined authenticity result is REAL only when both checks pass. Face recognition and matching are not included.
-
-Use the sample to add selfie liveness checks to remote onboarding and biometric identity verification alongside a separate face matching service. Processing runs on your own server; images are not sent to the Identixia cloud.
-
-> For setup, integration, and API guides, see the [Face Liveness Detection SDK documentation for Linux / Docker](https://docs.identixia.com/developers/face-sdk/liveness-linux-docker). This page covers the sample repository.
-
-## SDK overview
-
-Start the server and request its machine code using `GET /api/machinecode`. Send that code to [contact@identixia.com](mailto:contact@identixia.com) to request a license for this machine. Apply the returned key using the activation instructions below.
-
-| Topic | Basic information |
-| --- | --- |
-| **Product** | On-premise **face liveness** for Linux / Docker |
-| **What you run** | HTTP API on port **14105** |
-| **Gradio demo** | Port **14205** |
-| **Docker image** | `identixia/face-liveness` |
-| **Models included** | `recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb` |
-| **Models left out** | `recognition.xdb`, `recognition-attr.xdb`, `recognition-quality.xdb` |
-| **Privacy** | Biometrics stay in your cluster — no Identixia cloud |
-
----
-
-## SDK installation
-
-Run the following script to download the native SDK libraries and model files from this repository’s GitHub Releases. The script places each file in the folder used by the sample.
-
-```bash
-python scripts/get_runtime.py
-```
-
-To select a release explicitly, pass its tag with `--tag`. For example:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
-
-Docker Hub images already include the runtime. For a host install, unpack the GitHub Release into `./lib/cpu/`.
-
----
-
-## Quick start
-
-```bash
-docker pull identixia/face-liveness:latest
-docker run -d --name identixia-face-liveness \
-  --shm-size=1gb --privileged \
-  -p 14105:14105 \
-  -v /etc/machine-id:/etc/machine-id:ro \
-  identixia/face-liveness:latest
-```
-
-Copy `.env.example` to `.env` and edit the settings for your installation: `PORT`, `LICENSE`, `API_BASE`, and `DEMO_PORT`. Environment variables already set in the shell take precedence over values in `.env`.
-
-```bash
-curl -s http://127.0.0.1:14105/api/machinecode
-```
-
-The JSON response contains your machine code in `data.machinecode`. This value identifies the machine for licensing.
-
-Email the machine code and the product you want to use to [contact@identixia.com](mailto:contact@identixia.com) to request a license key.
-
-Replace `YOUR_KEY` in the request below with the license key issued for this machine. The activation endpoint saves the key to the server’s `.env` file and attempts to initialize the SDK. For a local installation, you can also set `LICENSE=YOUR_KEY` in the repository’s `.env` file and restart the server.
-
-```bash
-curl -s -X POST http://127.0.0.1:14105/api/activate -H "Content-Type: application/json" -d "{\"license\":\"YOUR_KEY\"}"
-```
-
-```bash
-curl -s http://127.0.0.1:14105/api/health
-```
-
-Liveness calls:
-
-- `POST /api/face/liveness` — Combined authenticity result from presentation attack detection and deepfake checks
-- `POST /api/face/deepfake` — deepfake-only check
-
----
-
-## Features
-
-| Capability | What it does |
-| --- | --- |
-| **Passive liveness** | Run presentation attack detection when licensed |
-| **Deepfake** | Check for manipulated face images; report REAL only when both liveness and deepfake checks pass |
-| **Docker image** | Prebuilt runtime for Linux hosts |
-
----
-
-## System requirements
-
-| | |
-| --- | --- |
-| API port | **14105** |
-| Gradio demo port | **14205** |
-| Runtime download | `python scripts/get_runtime.py` |
-
-## API
-
-HTTP API on port **14105**. For image-processing requests, encode the JPEG image as base64 and include it in the JSON request body. Control routes return `{success, code, message, request_id, data}`.
-
-| Call | Route |
-| --- | --- |
-| Health | `GET /api/health` |
-| Machine code | `GET /api/machinecode` |
-| Activate | `POST /api/activate` with a JSON body containing your license key: `{"license":"YOUR_KEY"}` |
-| License status | `GET /api/licenseStatus` |
-| Liveness | `POST /api/face/liveness` — REAL only if PAD and deepfake both pass |
-| Recognition / 1:N | Not in this build. Use a Face Recognition repository. |
-
-```bash
-curl -s http://127.0.0.1:14105/api/health
-```
-
----
-
-## SDKs for other platforms
-
-| | Platform | Repo |
-| --- | --- | --- |
-
----

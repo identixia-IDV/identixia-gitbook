@@ -59,34 +59,24 @@ CONTACT_NESTED = """
 
 
 def github_block(owner: str, name: str) -> str:
-    return f"""
-## Repository
-
-{{% embed url="https://github.com/{owner}/{name}" %}}
-
-[`{owner}/{name}`](https://github.com/{owner}/{name}) · [Releases](https://github.com/{owner}/{name}/releases/latest)
-"""
+    return ""
 
 
 def overview(ctx: ProductCtx) -> str:
-    where = (
-        "on the device"
-        if ctx.platform
-        not in ("Windows", "Linux", "Hub")
-        else "on your server (or in your container)"
-    )
+    if ctx.platform in ("Windows", "Linux"):
+        runs = "On your server or in your container. Images stay there."
+    elif ctx.platform == "Hub":
+        runs = "On the device or server for the platform you choose."
+    else:
+        runs = "On the device. Images stay in the app."
     return f"""
 ## Overview
 
-{ctx.description}
-
-Processing runs **{where}**. Identixia does **not** receive biometric images, templates, or document scans.
-
 | | |
 | --- | --- |
-| **Repository** | [`{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) |
+| **Repository** | [`{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) · [Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) |
 | **Platform** | {ctx.platform} |
-| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
+| **Runs** | {runs} |
 """
 
 
@@ -948,8 +938,6 @@ def troubleshooting(ctx: ProductCtx) -> str:
 
 FOOTER_MD = """---
 
-[Face](https://docs.identixia.com/face-sdk) · [Documents](https://docs.identixia.com/id-document-sdk) · [IDV](https://docs.identixia.com/idv) · [Developers](https://docs.identixia.com/developers) · [Guides](https://docs.identixia.com/guides) · [Website](https://identixia.com) · [GitHub](https://github.com/identixia-IDV) · [Email](mailto:contact@identixia.com)
-
 © Identixia
 """
 
@@ -1251,7 +1239,6 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
             parts.append(cross_platform_face())
         parts.append(screenshots_section(ctx, nested=True))
         parts.append(CONTACT_NESTED)
-        parts.append(readme_appendix(readme_body))
         return "\n".join(p for p in parts if p)
 
     parts.append(runtime_download_section(ctx))
@@ -1303,10 +1290,7 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
     if ctx.family in ("face_combined", "face_recog"):
         parts.append(cross_platform_face())
     parts.append(screenshots_section(ctx, nested=True))
-    parts.append(resources_section(ctx))
-    parts.append(next_steps(ctx))
     parts.append(CONTACT_NESTED)
-    parts.append(readme_appendix(readme_body))
     return "\n".join(p for p in parts if p)
 
 

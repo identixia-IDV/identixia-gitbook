@@ -9,22 +9,11 @@ icon: cube
 
 ## Overview
 
-Face recognition SDK for Linux and Docker. On-premise detection, landmarks, attributes, quality, templates, and 1:1 match through a local REST API. Sample and docs included.
-
-Processing runs **on your server (or in your container)**. Identixia does **not** receive biometric images, templates, or document scans.
-
 | | |
 | --- | --- |
-| **Repository** | [`FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker) |
+| **Repository** | [`FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker) · [Releases](https://github.com/identixia-IDV/FaceRecognition-Docker/releases/latest) |
 | **Platform** | Linux |
-| **Documentation** | [docs.identixia.com](https://docs.identixia.com) |
-
-
-## Repository
-
-{% embed url="https://github.com/identixia-IDV/FaceRecognition-Docker" %}
-
-[`identixia-IDV/FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker) · [Releases](https://github.com/identixia-IDV/FaceRecognition-Docker/releases/latest)
+| **Runs** | On your server or in your container. Images stay there. |
 
 ## Capabilities
 
@@ -289,157 +278,9 @@ Keep the same license product line across stacks. From the [Face SDK](https://do
 
 ![Desktop identify](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/desktop/demo-ui-identify.png)
 
-## Resources
-
-| Resource | Link |
-| --- | --- |
-| **This repository** | [`identixia-IDV/FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker) |
-| **GitHub Releases (runtime)** | [Latest download](https://github.com/identixia-IDV/FaceRecognition-Docker/releases/latest) |
-| **Runtime helper** | `python scripts/get_runtime.py` in the product clone |
-| **Documentation site** | [docs.identixia.com](https://docs.identixia.com) |
-| **SDK Server (HTTP)** | [SDK Server](https://docs.identixia.com/sdk-server) |
-| **Website** | [identixia.com](https://identixia.com) |
-| **Hugging Face** | [huggingface.co/Identixia](https://huggingface.co/Identixia) |
-| **Docker Hub** | [hub.docker.com/u/identixia](https://hub.docker.com/u/identixia) |
-| **Playground** | [playground.identixia.com](https://playground.identixia.com/) |
-| **License & support** | [Request a license](https://docs.identixia.com/guides/request-a-license-and-support) · [Contact](https://docs.identixia.com/guides/contact-us) |
-
-Postman collections live under each product repository’s `postman/` folder (and the monorepo `postman/Identixia-API.postman_collection.json` for all HTTP routes).
-
-## Next steps
-
-1. Complete **Integration guide — start the project** until the sample shows **Ready**.
-2. Confirm runtime files and databases are in place (`python scripts/get_runtime.py`).
-3. Activate with a license issued for **your** application id or machine code.
-4. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.
-5. Return to the [Face SDK](https://docs.identixia.com/face-sdk) hub for recognition, liveness, and related platforms.
-
 
 ## Support
 
 {% include "../.gitbook/includes/contact.md" %}
-
-## Repository README
-
-The following notes are adapted from the shipping repository README (exact commands and platform-specific details). Screenshots on this page use images from the identixia-assets repository.
-
-## Face Recognition SDK for Linux / Docker — HTTP API Demo | Identixia
-
-Integrate **face recognition and face matching** with the **Identixia Linux / Docker SDK**. This repository provides a self-hosted Linux / Docker HTTP API for face detection, face template extraction, and face matching. Face templates are numerical representations used to compare faces. Use one-to-one (1:1) face comparison through the HTTP API. This recognition-only sample does not include face liveness checks.
-
-Use the sample as a starting point for biometric identity verification, face-based access control, and customer onboarding. Processing runs on your own server; images are not sent to the Identixia cloud.
-
-> For setup, integration, and API guides, see the [Face Recognition SDK documentation for Linux / Docker](https://docs.identixia.com/developers/face-sdk/recognition-linux-docker). This page covers the sample repository.
-
-## SDK overview
-
-Start the server and request its machine code using `GET /api/machinecode`. Send that code to [contact@identixia.com](mailto:contact@identixia.com) to request a license for this machine. Apply the returned key using the activation instructions below.
-
-| Topic | Basic information |
-| --- | --- |
-| **Product** | On-premise **face recognition** for Linux / Docker |
-| **Runtime** | Docker image or `lib/cpu/` from GitHub Release |
-| **Liveness** | Not included — use `FaceLivenessDetection-Docker` |
-| **Privacy** | Biometrics stay in your cluster — no Identixia cloud |
-
----
-
-## SDK installation
-
-Run the following script to download the native SDK libraries and model files from this repository’s GitHub Releases. The script places each file in the folder used by the sample.
-
-```bash
-python scripts/get_runtime.py
-```
-
-To select a release explicitly, pass its tag with `--tag`. For example:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
-
-Docker Hub images include the runtime. Host installs use `python scripts/get_runtime.py` into `lib/cpu/`.
-
----
-
-## Quick start
-
-```bash
-docker pull identixia/face-recognition:latest
-docker run -d --name identixia-face-recognition \
-  --shm-size=2gb --privileged \
-  -p 14104:14104 \
-  -v /etc/machine-id:/etc/machine-id:ro \
-  identixia/face-recognition:latest
-```
-
-Copy `.env.example` to `.env` and edit the settings for your installation: `PORT`, `LICENSE`, `API_BASE`, and `DEMO_PORT`. Environment variables already set in the shell take precedence over values in `.env`.
-
-```bash
-curl -s http://127.0.0.1:14104/api/machinecode
-```
-
-The JSON response contains your machine code in `data.machinecode`. This value identifies the machine for licensing.
-
-Email the machine code and the product you want to use to [contact@identixia.com](mailto:contact@identixia.com) to request a license key.
-
-Replace `YOUR_KEY` in the request below with the license key issued for this machine. The activation endpoint saves the key to the server’s `.env` file and attempts to initialize the SDK. For a local installation, you can also set `LICENSE=YOUR_KEY` in the repository’s `.env` file and restart the server.
-
-```bash
-curl -s -X POST http://127.0.0.1:14104/api/activate -H "Content-Type: application/json" -d "{\"license\":\"YOUR_KEY\"}"
-```
-
-```bash
-curl -s http://127.0.0.1:14104/api/health
-```
-
-Use the face analyze / compare endpoints after activation. See [docs](https://docs.identixia.com).
-
----
-
-## Features
-
-| Capability | What it does |
-| --- | --- |
-| **Detect / match** | Face detection, templates, and 1:1 compare |
-| **Docker** | Prebuilt Linux runtime option |
-
----
-
-## System requirements
-
-| | |
-| --- | --- |
-| API port | **14104** |
-| Gradio demo port | **14204** |
-| Runtime download | `python scripts/get_runtime.py` |
-
-## API
-
-HTTP API on port **14104**. For image-processing requests, encode the JPEG image as base64 and include it in the JSON request body. Control routes return `{success, code, message, request_id, data}`.
-
-| Call | Route |
-| --- | --- |
-| Health | `GET /api/health` |
-| Machine code | `GET /api/machinecode` |
-| Activate | `POST /api/activate` with a JSON body containing your license key: `{"license":"YOUR_KEY"}` |
-| License status | `GET /api/licenseStatus` |
-| Detect | `POST /api/face/analyze` |
-| 1:1 match | `POST /api/face/compare` |
-| Template | `POST /api/face/template` |
-| Liveness | Not in this build. Use a Face Liveness or full Face repository. |
-
-```bash
-curl -s http://127.0.0.1:14104/api/health
-```
-
----
-
-## SDKs for other platforms
-
-| | Platform | Repo |
-| --- | --- | --- |
-
----
 
 {% include "../.gitbook/includes/footer.md" %}

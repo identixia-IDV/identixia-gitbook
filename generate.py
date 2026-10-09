@@ -1251,32 +1251,16 @@ IDV uses Hybrid licensing via `license` and `license/license_v2`. The issuer UI 
 License requests and technical support are available 24/7.
 {% endhint %}
 
-{% columns %}
-{% column %}
-<a href="mailto:contact@identixia.com" class="button primary" data-icon="envelope">Email</a>
-{% endcolumn %}
-{% column %}
-<a href="https://wa.me/17018854218" class="button secondary" data-icon="comment">WhatsApp</a>
-{% endcolumn %}
-{% endcolumns %}
-
-<a href="https://t.me/identixia" class="button secondary" data-icon="paper-plane">Telegram</a>
-
 {% include "./.gitbook/includes/contact.md" %}
 """.strip()
         + "\n",
     )
     (OUT / ".gitbook" / "includes").mkdir(parents=True, exist_ok=True)
     (OUT / ".gitbook" / "includes" / "contact.md").write_text(
-        """
-<div align="center">
-
-<a href="mailto:contact@identixia.com"><img alt="Email contact@identixia.com" src="https://img.shields.io/badge/Email-contact%40identixia.com-0F766E?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-<a href="https://wa.me/17018854218"><img alt="WhatsApp +1 (701) 885-4218" src="https://img.shields.io/badge/WhatsApp-%2B1_(701)_885--4218-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" /></a>
-<a href="https://t.me/identixia"><img alt="Telegram @identixia" src="https://img.shields.io/badge/Telegram-%40identixia-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" /></a>
-
-</div>
-""".lstrip(),
+        """<a href="mailto:contact@identixia.com" class="button primary" data-icon="envelope">contact@identixia.com</a>
+<a href="https://wa.me/17018854218" class="button secondary" data-icon="comment">+1 (701) 885-4218</a>
+<a href="https://t.me/identixia" class="button secondary" data-icon="paper-plane">@identixia</a>
+""",
         encoding="utf-8",
         newline="\n",
     )
@@ -1325,23 +1309,6 @@ Face recognition, face liveness, and ID document capture run on **your** device 
   </tbody>
 </table>
 
-{{% columns %}}
-{{% column %}}
-### On a phone or desktop
-
-Use the sample app, then embed the SDK.
-
-<a href="https://docs.identixia.com/developers" class="button primary" data-icon="code">Developers</a>
-{{% endcolumn %}}
-{{% column %}}
-### First run
-
-Pick the repository that matches the license, then activate.
-
-<a href="https://docs.identixia.com/guides" class="button secondary" data-icon="compass">Guides</a>
-{{% endcolumn %}}
-{{% endcolumns %}}
-
 ## Start here
 
 {{% stepper %}}
@@ -1362,10 +1329,6 @@ Send the application id, bundle id, or machine code, then call activate before i
 {{% hint style="warning" %}}
 Native engines and `*.xdb` databases ship on GitHub Releases. From a product clone, run `python scripts/get_runtime.py`. They are not committed to git.
 {{% endhint %}}
-
-<a href="https://identixia.com" class="button secondary" data-icon="globe">Website</a>
-<a href="{GH}" class="button secondary" data-icon="github">GitHub</a>
-<a href="https://docs.identixia.com/guides/request-a-license-and-support" class="button primary" data-icon="key">Request a license</a>
 """.strip()
     write_page(
         OUT / "README.md",
