@@ -386,6 +386,79 @@ def item(rel: str, label: str, indent: int = 0) -> str:
     return f"{pad}* [{label}]({rel})"
 
 
+# Developer sidebar. Each platform page is one of three SDKs.
+_FACE_KINDS = (
+    ("Face recognition and liveness", ""),
+    ("Face recognition", "recognition-"),
+    ("Face liveness detection", "liveness-"),
+)
+_DOC_KINDS = (
+    ("ID document recognition and liveness", ""),
+    ("ID document recognition and OCR", "recognition-"),
+    ("ID document liveness detection", "liveness-"),
+)
+_PLATFORMS = (
+    ("android", "Android"),
+    ("ios", "iOS"),
+    ("flutter", "Flutter"),
+    ("react-native", "React Native"),
+    ("ionic-capacitor", "Ionic Capacitor"),
+    ("ionic-cordova", "Ionic Cordova"),
+    ("windows", "Windows"),
+    ("linux-docker", "Linux and Docker"),
+)
+
+
+def _platform_leaf(prefix: str, leaf: str) -> str:
+    if prefix:
+        return f"{prefix}{leaf}.md"
+    return f"{leaf}.md"
+
+
+def developer_product_nav(section: str, kinds: tuple[tuple[str, str], ...], titles: dict[str, str]) -> list[str]:
+    """Mobile, then server. Native and cross-platform under mobile. Three SDKs under each platform."""
+    lines: list[str] = []
+
+    def add(rel: str, label: str, indent: int) -> None:
+        lines.append(item(f"{section}/{rel}", label, indent))
+
+    add("mobile-sdks.md", titles["mobile"], 0)
+    add("native-mobile.md", titles["native"], 1)
+    for leaf, name in _PLATFORMS[:2]:
+        add(f"{leaf}-sdks.md", titles["platform"].format(name=name), 2)
+        for label, prefix in kinds:
+            add(_platform_leaf(prefix, leaf), label, 3)
+    add("cross-platform.md", titles["cross"], 1)
+    for leaf, name in _PLATFORMS[2:6]:
+        add(f"{leaf}-sdks.md", titles["platform"].format(name=name), 2)
+        for label, prefix in kinds:
+            add(_platform_leaf(prefix, leaf), label, 3)
+    add("server-apis.md", titles["server"], 0)
+    for leaf, name in _PLATFORMS[6:]:
+        add(f"{leaf}-sdks.md", titles["api"].format(name=name), 1)
+        for label, prefix in kinds:
+            add(_platform_leaf(prefix, leaf), label, 2)
+    return lines
+
+
+_FACE_TITLES = {
+    "mobile": "Mobile face recognition SDKs",
+    "native": "Android and iOS face SDKs",
+    "cross": "Flutter, React Native, and Ionic face SDKs",
+    "server": "Windows and Linux face recognition APIs",
+    "platform": "{name} face recognition SDK",
+    "api": "{name} face recognition API",
+}
+_DOC_TITLES = {
+    "mobile": "Mobile ID document SDKs",
+    "native": "Android and iOS ID document SDKs",
+    "cross": "Flutter, React Native, and Ionic ID document SDKs",
+    "server": "Windows and Linux ID document APIs",
+    "platform": "{name} ID document SDK",
+    "api": "{name} ID document API",
+}
+
+
 # IDV pages stay in the repo. They are omitted from the sidebar until the project is ready.
 IDV_IN_NAV = False
 
@@ -443,63 +516,17 @@ def write_summaries() -> None:
             "",
             "* [Start here](README.md)",
             "",
-            "## Face",
+            "## Face recognition and liveness detection",
             "",
-            item("face-sdk/integration-guide.md", "Integration guide"),
-            item("face-sdk/android.md", "Android", 1),
-            item("face-sdk/ios.md", "iOS", 1),
-            item("face-sdk/flutter.md", "Flutter", 1),
-            item("face-sdk/react-native.md", "React Native", 1),
-            item("face-sdk/ionic-capacitor.md", "Ionic Capacitor", 1),
-            item("face-sdk/ionic-cordova.md", "Ionic Cordova", 1),
-            item("face-sdk/liveness-android.md", "Face Liveness — Android", 1),
-            item("face-sdk/liveness-ios.md", "Face Liveness — iOS", 1),
-            item("face-sdk/liveness-flutter.md", "Face Liveness — Flutter", 1),
-            item("face-sdk/liveness-react-native.md", "Face Liveness — React Native", 1),
-            item("face-sdk/liveness-ionic-capacitor.md", "Face Liveness — Ionic Capacitor", 1),
-            item("face-sdk/liveness-ionic-cordova.md", "Face Liveness — Ionic Cordova", 1),
-            item("face-sdk/reference.md", "Platform index"),
-            item("face-sdk/windows.md", "Windows", 1),
-            item("face-sdk/linux-docker.md", "Linux / Docker", 1),
-            item("face-sdk/recognition-android.md", "Face Recognition — Android", 1),
-            item("face-sdk/recognition-ios.md", "Face Recognition — iOS", 1),
-            item("face-sdk/recognition-flutter.md", "Face Recognition — Flutter", 1),
-            item("face-sdk/recognition-react-native.md", "Face Recognition — React Native", 1),
-            item("face-sdk/recognition-ionic-capacitor.md", "Face Recognition — Ionic Capacitor", 1),
-            item("face-sdk/recognition-ionic-cordova.md", "Face Recognition — Ionic Cordova", 1),
-            item("face-sdk/recognition-windows.md", "Face Recognition — Windows", 1),
-            item("face-sdk/recognition-linux-docker.md", "Face Recognition — Linux / Docker", 1),
-            item("face-sdk/liveness-windows.md", "Face Liveness — Windows", 1),
-            item("face-sdk/liveness-linux-docker.md", "Face Liveness — Linux / Docker", 1),
+            item("face-sdk/integration-guide.md", "Face recognition SDK integration guide"),
+            item("face-sdk/reference.md", "Face recognition SDK platform index"),
+            *developer_product_nav("face-sdk", _FACE_KINDS, _FACE_TITLES),
             "",
-            "## ID Document",
+            "## ID document recognition and liveness detection",
             "",
-            item("id-document-sdk/integration-guide.md", "Integration guide"),
-            item("id-document-sdk/android.md", "Android", 1),
-            item("id-document-sdk/ios.md", "iOS", 1),
-            item("id-document-sdk/flutter.md", "Flutter", 1),
-            item("id-document-sdk/react-native.md", "React Native", 1),
-            item("id-document-sdk/ionic-capacitor.md", "Ionic Capacitor", 1),
-            item("id-document-sdk/ionic-cordova.md", "Ionic Cordova", 1),
-            item("id-document-sdk/reference.md", "Platform index"),
-            item("id-document-sdk/windows.md", "Windows", 1),
-            item("id-document-sdk/linux-docker.md", "Linux / Docker", 1),
-            item("id-document-sdk/recognition-android.md", "ID Document Recognition — Android", 1),
-            item("id-document-sdk/recognition-ios.md", "ID Document Recognition — iOS", 1),
-            item("id-document-sdk/recognition-flutter.md", "ID Document Recognition — Flutter", 1),
-            item("id-document-sdk/recognition-react-native.md", "ID Document Recognition — React Native", 1),
-            item("id-document-sdk/recognition-ionic-capacitor.md", "ID Document Recognition — Ionic Capacitor", 1),
-            item("id-document-sdk/recognition-ionic-cordova.md", "ID Document Recognition — Ionic Cordova", 1),
-            item("id-document-sdk/recognition-windows.md", "ID Document Recognition — Windows", 1),
-            item("id-document-sdk/recognition-linux-docker.md", "ID Document Recognition — Linux / Docker", 1),
-            item("id-document-sdk/liveness-android.md", "ID Document Liveness — Android", 1),
-            item("id-document-sdk/liveness-ios.md", "ID Document Liveness — iOS", 1),
-            item("id-document-sdk/liveness-flutter.md", "ID Document Liveness — Flutter", 1),
-            item("id-document-sdk/liveness-react-native.md", "ID Document Liveness — React Native", 1),
-            item("id-document-sdk/liveness-ionic-capacitor.md", "ID Document Liveness — Ionic Capacitor", 1),
-            item("id-document-sdk/liveness-ionic-cordova.md", "ID Document Liveness — Ionic Cordova", 1),
-            item("id-document-sdk/liveness-windows.md", "ID Document Liveness — Windows", 1),
-            item("id-document-sdk/liveness-linux-docker.md", "ID Document Liveness — Linux / Docker", 1),
+            item("id-document-sdk/integration-guide.md", "ID document SDK integration guide"),
+            item("id-document-sdk/reference.md", "ID document SDK platform index"),
+            *developer_product_nav("id-document-sdk", _DOC_KINDS, _DOC_TITLES),
             "",
             *(
                 [
@@ -669,6 +696,133 @@ def append_footer(text: str, rel: str) -> str:
     if "includes/footer.md" in text:
         return text
     return text.rstrip() + footer_include(rel)
+
+
+_REPO_PLATFORM = {
+    "android": "Android",
+    "ios": "iOS",
+    "flutter": "Flutter",
+    "react-native": "React-Native",
+    "ionic-capacitor": "Ionic-Capacitor",
+    "ionic-cordova": "Ionic-Cordova",
+    "windows": "Windows",
+    "linux-docker": "Docker",
+}
+
+
+def _catalog_page(title: str, description: str, icon: str, body: str) -> str:
+    return (
+        "---\n"
+        "description: >-\n"
+        f"  {description}\n"
+        f"icon: {icon}\n"
+        "---\n\n"
+        f"# {title}\n\n"
+        f"{body.strip()}\n"
+    )
+
+
+def _kit_rows(kinds: tuple[tuple[str, str], ...], repos: tuple[tuple[str, str], ...], leaf: str) -> str:
+    suffix = _REPO_PLATFORM[leaf]
+    rows = []
+    for (label, prefix), (repo_prefix, repo_kind) in zip(kinds, repos):
+        if repo_kind != prefix:
+            raise SystemExit(f"catalog mismatch {label}")
+        guide = _platform_leaf(prefix, leaf)
+        repo = f"{repo_prefix}{suffix}"
+        rows.append(
+            f"| {label} | [`{repo}`](https://github.com/identixia-IDV/{repo}) | [{label}]({guide}) |"
+        )
+    return "\n".join(
+        [
+            "| SDK | Repository | Integration guide |",
+            "| --- | --- | --- |",
+            *rows,
+        ]
+    )
+
+
+def write_developer_groups() -> None:
+    """Parent pages for the Developers sidebar. GitBook only nests links under a real page."""
+    face_repos = (
+        ("FaceRecognition-LivenessDetection-", ""),
+        ("FaceRecognition-", "recognition-"),
+        ("FaceLivenessDetection-", "liveness-"),
+    )
+    doc_repos = (
+        ("ID-Document-Recognition-Liveness-Detection-", ""),
+        ("ID-Document-Recognition-", "recognition-"),
+        ("ID-Document-Liveness-Detection-", "liveness-"),
+    )
+    products = (
+        (
+            "face-sdk",
+            _FACE_KINDS,
+            face_repos,
+            _FACE_TITLES,
+            "face recognition and face liveness detection",
+            "Face recognition compares enrolled templates. Face liveness detection checks a color face image for presentation attacks and deepfakes. The combined product includes both when the license does.",
+        ),
+        (
+            "id-document-sdk",
+            _DOC_KINDS,
+            doc_repos,
+            _DOC_TITLES,
+            "ID document recognition and document liveness detection",
+            "Document recognition reads printed fields, the machine-readable zone, and supported barcodes. Document liveness detection checks whether the capture looks like a physical document. The combined product includes both when the license does.",
+        ),
+    )
+    groups = (
+        ("mobile-sdks.md", "mobile", "mobile-screen", _PLATFORMS[:6], "native-mobile.md", "cross-platform.md"),
+        ("native-mobile.md", "native", "mobile-screen", _PLATFORMS[:2], None, None),
+        ("cross-platform.md", "cross", "code", _PLATFORMS[2:6], None, None),
+        ("server-apis.md", "server", "server", _PLATFORMS[6:], None, None),
+    )
+    root = ROOT / "developers"
+    for section, kinds, repos, titles, product, about in products:
+        for leaf, name in _PLATFORMS:
+            title_key = "api" if leaf in {"windows", "linux-docker"} else "platform"
+            title = titles[title_key].format(name=name)
+            surface = "API" if title_key == "api" else "SDK"
+            description = f"Integrate Identixia {product} with the {name} {surface}. Choose the combined kit, the recognition kit, or the liveness kit."
+            body = "\n".join(
+                [
+                    about,
+                    "",
+                    "Choose the repository that matches the license you have.",
+                    "",
+                    _kit_rows(kinds, repos, leaf),
+                ]
+            )
+            path = root / section / f"{leaf}-sdks.md"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(_catalog_page(title, description, "mobile-screen" if title_key == "platform" else "server", body), encoding="utf-8", newline="\n")
+        for filename, key, icon, platforms, left, right in groups:
+            title = titles[key]
+            names = [name for _, name in platforms]
+            if len(names) == 1:
+                listed = names[0]
+            elif len(names) == 2:
+                listed = f"{names[0]} and {names[1]}"
+            else:
+                listed = ", ".join(names[:-1]) + f", and {names[-1]}"
+            noun = "APIs" if key == "server" else "SDKs"
+            if key == "server":
+                listed = "Windows, Linux, and Docker"
+            description = f"Identixia {product} {noun} for {listed}."
+            parts = [about, ""]
+            if left and right:
+                parts.append(f"- [{titles['native']}]({left})")
+                parts.append(f"- [{titles['cross']}]({right})")
+                parts.append("")
+            for leaf, name in platforms:
+                child = titles["api" if leaf in {"windows", "linux-docker"} else "platform"].format(name=name)
+                parts.append(f"## {child}")
+                parts.append("")
+                parts.append(_kit_rows(kinds, repos, leaf))
+                parts.append("")
+            path = root / section / filename
+            path.write_text(_catalog_page(title, description, icon, "\n".join(parts)), encoding="utf-8", newline="\n")
 
 
 def write_extra_pages() -> None:
@@ -1003,6 +1157,7 @@ Wait until the sample shows **Ready**, then open the capture, enroll, or recogni
         encoding="utf-8",
         newline="\n",
     )
+    write_developer_groups()
 
 
 def _copy_space(name: str, compiled: list[tuple[re.Pattern[str], str]]) -> int:
