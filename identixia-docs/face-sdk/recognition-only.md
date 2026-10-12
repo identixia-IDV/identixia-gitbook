@@ -7,7 +7,7 @@ description: >-
 
 ## When to use
 
-Use these repositories when the license is **recognition only**. They detect faces, build templates, and run 1:1 and 1:N search. They do not return a liveness score, and there is no recognition-only phone SDK. Phone apps that need recognition ship in the [full product](full-product.md).
+Use these repositories when the license is **recognition only**. They detect faces, build templates, and run 1:1 and 1:N search. They do not return a liveness score. Phone, Windows, and Linux / Docker samples are listed on [Face recognition](recognition.md).
 
 | Platform | Port | Docs | Repository |
 | --- | ---: | --- | --- |

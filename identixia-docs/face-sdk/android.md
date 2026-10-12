@@ -150,7 +150,7 @@ Run native SDK calls sequentially on **one background thread**. The engine does 
 
 ## API reference — mobile face SDK
 
-Prefer **`FaceRecognitionClient`** (Android kit) / the matching iOS kit wrappers. Flutter, React Native, and Ionic expose the **same method names** as Android (`detect`, `faceDetection`, `liveness`, `livenessAll`, …). Serialize all engine calls on **one background thread**.
+Prefer **`FaceRecognitionClient`** (Android kit) / the matching iOS kit wrappers. Flutter, React Native, and Ionic expose the **same method names** as Android (`detect`, `faceDetection`, `match`, …). Serialize all engine calls on **one background thread**.
 
 ### Lifecycle
 
@@ -202,9 +202,9 @@ Treat authenticity as **REAL** only when both PAD and deepfake say real. Without
 | --- | --- |
 | `startVideoWorker(config)` | Start tracking / identify session |
 | `addFrame` / live-frame helpers | Push camera frames |
-| `setVideoWorkerEventHandler` | Receive track / match / liveness events (JSON) |
+| `setVideoWorkerEventHandler` | Receive track / match events (JSON) |
 | `stopVideoWorker()` | Stop session |
-| `makeTrackingConfig` / `makeIdentityConfig` | Build configs (passive / active liveness options when licensed) |
+| `makeTrackingConfig` / `makeIdentityConfig` | Build configs |
 
 ### Usage example (Android kit)
 
@@ -221,14 +221,14 @@ client.activate(licenseKey) { code ->
 
 ### Usage example (plugin / Flutter / React Native / Ionic)
 
-Call the same method names exposed by the plugin bridge (`activate` → `init` → `detect` / `match` / `liveness` / `enroll`). Keep camera preview on the UI thread; keep engine calls on a single background isolate / queue.
+Call the same method names exposed by the plugin bridge (`activate` → `init` → `detect` / `match` / `enroll`). Keep camera preview on the UI thread; keep engine calls on a single background isolate / queue.
 
 ### Integration checklist
 
 1. Download runtime with `python scripts/get_runtime.py` (or `install.gradle` on Android).
 2. `FaceRecognitionClient.get(context).activate(license) { code -> … }` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
-4. Enroll → Identify, or Capture / Attribute / Liveness for still flows.
+4. Enroll → Identify, or Capture / Attribute for still flows.
 5. Persist templates in **your** database if you leave the demo gallery.
 
 ## Troubleshooting

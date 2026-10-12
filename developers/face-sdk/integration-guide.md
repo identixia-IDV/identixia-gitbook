@@ -13,7 +13,7 @@ This is the **full Face SDK integration path**. Open the platform page for your 
 | Goal | Product line | Example repos |
 | --- | --- | --- |
 | Recognition and liveness | Face Recognition & Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14103**. |
-| Recognition | Face Recognition | Windows and Linux / Docker. Server port **14104**. There is no recognition-only phone SDK. These builds do not return a liveness score. |
+| Recognition | Face Recognition | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14104**. These builds do not return a liveness score. |
 | Liveness | Face Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14105**. These builds do not enroll a gallery or run 1:N search. |
 
 ## 2. Clone and download the runtime

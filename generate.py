@@ -266,6 +266,73 @@ def out_path_for(rel: str) -> Path:
     return OUT / section / f"{leaf}.md"
 
 
+APP_DOC_PREFIXES = (
+    ("ID-Document-Recognition-Liveness-Detection-", "id-document-sdk", ""),
+    ("ID-Document-Liveness-Detection-", "id-document-sdk", "liveness-"),
+    ("ID-Document-Recognition-", "id-document-sdk", "recognition-"),
+    ("FaceRecognition-LivenessDetection-", "face-sdk", ""),
+    ("FaceLivenessDetection-", "face-sdk", "liveness-"),
+    ("FaceRecognition-", "face-sdk", "recognition-"),
+)
+APP_SUFFIX_PLATFORM = {
+    "Android": "Android",
+    "iOS": "iOS",
+    "Flutter": "Flutter",
+    "React-Native": "ReactNative",
+    "Ionic-Capacitor": "Ionic",
+    "Ionic-Cordova": "Ionic-Cordova",
+    "Windows": "Windows",
+    "Docker": "Linux",
+}
+APP_SUFFIX_LEAF = {
+    "Android": "android",
+    "iOS": "ios",
+    "Flutter": "flutter",
+    "React-Native": "react-native",
+    "Ionic-Capacitor": "ionic-capacitor",
+    "Ionic-Cordova": "ionic-cordova",
+    "Windows": "windows",
+    "Docker": "linux-docker",
+}
+
+
+def app_doc_rel(name: str) -> tuple[str, str] | None:
+    """Return (docs rel, platform label) for an app repository folder."""
+    for prefix, section, leaf_prefix in APP_DOC_PREFIXES:
+        if name.startswith(prefix):
+            suffix = name[len(prefix) :]
+            leaf = APP_SUFFIX_LEAF.get(suffix)
+            plat = APP_SUFFIX_PLATFORM.get(suffix)
+            if not leaf or not plat:
+                return None
+            return f"{section}/{leaf_prefix}{leaf}", plat
+    return None
+
+
+def write_missing_app_pages(owner: str) -> int:
+    """Write a developer page for every app folder that does not have one yet."""
+    apps = REPOS_DIR / "APPs"
+    written = 0
+    for path in sorted(apps.iterdir()):
+        if not path.is_dir() or path.name.startswith("_") or path.name.startswith("."):
+            continue
+        mapped = app_doc_rel(path.name)
+        if mapped is None:
+            continue
+        rel, plat = mapped
+        if out_path_for(rel).is_file():
+            continue
+        item = {
+            "name": path.name,
+            "description": path.name.replace("-", " "),
+            "homepage": f"{DOCS_BASE}/developers/{rel}",
+        }
+        build_product_page(owner, item, rel, {path.name: {"platform": plat}})
+        print(f"PAGE {path.name} -> {rel}")
+        written += 1
+    return written
+
+
 def build_product_page(owner: str, item: dict, rel: str, by_name: dict[str, dict]) -> Path | None:
     name = item["name"]
     if name in HUB_REPOS:
@@ -330,7 +397,7 @@ This is the **full Face SDK integration path**. Open the platform page for your 
 | Goal | Product line | Example repos |
 | --- | --- | --- |
 | Recognition and liveness | Face Recognition & Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14103**. |
-| Recognition | Face Recognition | Windows and Linux / Docker. Server port **14104**. There is no recognition-only phone SDK. These builds do not return a liveness score. |
+| Recognition | Face Recognition | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14104**. These builds do not return a liveness score. |
 | Liveness | Face Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14105**. These builds do not enroll a gallery or run 1:N search. |
 
 ## 2. Clone and download the runtime
@@ -398,7 +465,7 @@ This is the **full ID Document SDK integration path**. Open the platform page fo
 | Goal | Product line | Example repos |
 | --- | --- | --- |
 | Recognition and authenticity | ID Document Recognition & Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14102**. |
-| Recognition | ID Document Recognition | Linux / Docker. Server port **14106**. This build does not serve `/api/document/liveness`. |
+| Recognition | ID Document Recognition | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14106**. This build does not serve `/api/document/liveness`. |
 | Authenticity | ID Document Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14107**. It does not read MRZ, barcodes, or visual fields, and it does not expose `/api/document/process`. |
 
 ## 2. Clone and download the runtime
@@ -461,21 +528,61 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 | **Recognition** | Detect, attributes, quality, templates, 1:1, 1:N | `recognition` |
 | **Liveness** | Passive presentation-attack score | `liveness` |
 
+## What you get
+
+| Capability | Description |
+| --- | --- |
+| Face detection | Bounding box, landmarks, and pose |
+| Attributes | Age, gender, and related traits when enabled |
+| Quality | ICAO-style image and face quality scores |
+| Templates | Numerical representations of faces that you store in **your** database |
+| 1:1 match | Compare two images or two templates |
+| 1:N identify | Save templates in a gallery, then search for the closest match |
+| Passive liveness + deepfake | Presentation-attack and deepfake checks when the license includes `liveness`. Report REAL only when both pass |
+
+A missing liveness score means the check was not evaluated. It does not mean the face passed.
+
 ## What you need
 
-A license that includes `recognition`. Add `liveness` when you need a presentation-attack score. From the product repository, run `python scripts/get_runtime.py` so the native libraries and `*.xdb` databases are on disk. You keep the gallery database.
+| Requirement | Detail |
+| --- | --- |
+| License | `recognition` for detect, template, and match. Add `liveness` for the presentation-attack and deepfake scores |
+| Runtime | From the product repository, run `python scripts/get_runtime.py` |
+| Databases | `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, `recognition-quality.xdb`. When liveness is licensed, also `recognition-liveness.xdb` and `recognition-deepfake.xdb` |
+| Gallery | You keep the enrolled templates. The SDK does not upload faces |
+
+If a database pack is missing, activate can succeed and recognition or liveness still fails at runtime.
+
+## Samples
+
+These repositories include recognition and liveness. Server port **14103**. Gradio, when the image ships it, uses **14203**.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | [`FaceRecognition-LivenessDetection-Android`]({GH}/FaceRecognition-LivenessDetection-Android) |
+| iOS | [iOS](ios.md) | [`FaceRecognition-LivenessDetection-iOS`]({GH}/FaceRecognition-LivenessDetection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`FaceRecognition-LivenessDetection-Flutter`]({GH}/FaceRecognition-LivenessDetection-Flutter) |
+| React Native | [React Native](react-native.md) | [`FaceRecognition-LivenessDetection-React-Native`]({GH}/FaceRecognition-LivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`FaceRecognition-LivenessDetection-Ionic-Capacitor`]({GH}/FaceRecognition-LivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`FaceRecognition-LivenessDetection-Ionic-Cordova`]({GH}/FaceRecognition-LivenessDetection-Ionic-Cordova) |
+| Windows | [Windows](windows.md) | [`FaceRecognition-LivenessDetection-Windows`]({GH}/FaceRecognition-LivenessDetection-Windows) |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`FaceRecognition-LivenessDetection-Docker`]({GH}/FaceRecognition-LivenessDetection-Docker) |
+
+Other licenses use different repositories. [Choose a product](https://docs.identixia.com/guides/choose-a-product) lists them.
 
 ## Try it
 
-* [Run the sample](https://docs.identixia.com/guides/run-the-sample)
-* [Choose a product](https://docs.identixia.com/guides/choose-a-product)
-* [SDK Server](../sdk-server/README.md) — Windows and Docker HTTP API
+1. Clone one repository above.
+2. Run `python scripts/get_runtime.py`.
+3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
+4. On Windows or Docker, call the HTTP API on port **14103**. See [SDK Server](../sdk-server/README.md).
 
 <figure><img src="../.gitbook/assets/face-android-home.png" alt="Face SDK Android home" width="160"><figcaption>Android demo home</figcaption></figure>
 
 ## Next
 
-* [Recognition](recognition.md) · [Liveness](liveness.md)
+* [Recognition](recognition.md) — detect, template, 1:1, and 1:N
+* [Liveness](liveness.md) — presentation-attack and deepfake scores
 
 {{% hint style="info" %}}
 Biometric images and templates stay on **your** device or server. Identixia does not host them.
@@ -511,10 +618,16 @@ We provide SDKs for all platforms. Sample projects are on GitHub: [{GH.replace('
 
 ## Face Recognition
 
-Windows and Linux / Docker. There is no recognition-only phone SDK. These builds do not return a liveness score. Server port **14104**.
+These builds do not return a liveness score. Server port **14104**.
 
 | Platform | Docs | Repository |
 | --- | --- | --- |
+| Android | [Face Recognition (Android)](recognition-android.md) | [`FaceRecognition-Android`]({GH}/FaceRecognition-Android) |
+| iOS | [Face Recognition (iOS)](recognition-ios.md) | [`FaceRecognition-iOS`]({GH}/FaceRecognition-iOS) |
+| Flutter | [Face Recognition (Flutter)](recognition-flutter.md) | [`FaceRecognition-Flutter`]({GH}/FaceRecognition-Flutter) |
+| React Native | [Face Recognition (React Native)](recognition-react-native.md) | [`FaceRecognition-React-Native`]({GH}/FaceRecognition-React-Native) |
+| Ionic Capacitor | [Face Recognition (Ionic Capacitor)](recognition-ionic-capacitor.md) | [`FaceRecognition-Ionic-Capacitor`]({GH}/FaceRecognition-Ionic-Capacitor) |
+| Ionic Cordova | [Face Recognition (Ionic Cordova)](recognition-ionic-cordova.md) | [`FaceRecognition-Ionic-Cordova`]({GH}/FaceRecognition-Ionic-Cordova) |
 | Windows | [Face Recognition (Windows)](recognition-windows.md) | [`FaceRecognition-Windows`]({GH}/FaceRecognition-Windows) |
 | Linux / Docker | [Face Recognition (Linux / Docker)](recognition-linux-docker.md) | [`FaceRecognition-Docker`]({GH}/FaceRecognition-Docker) |
 
@@ -526,10 +639,10 @@ These builds score presentation attacks. They do not enroll a gallery or run 1:N
 | --- | --- | --- |
 | Android | [Face Liveness (Android)](liveness-android.md) | [`FaceLivenessDetection-Android`]({GH}/FaceLivenessDetection-Android) |
 | iOS | [Face Liveness (iOS)](liveness-ios.md) | [`FaceLivenessDetection-iOS`]({GH}/FaceLivenessDetection-iOS) |
-| Flutter | Repository README | [`FaceLivenessDetection-Flutter`]({GH}/FaceLivenessDetection-Flutter) |
-| React Native | Repository README | [`FaceLivenessDetection-React-Native`]({GH}/FaceLivenessDetection-React-Native) |
-| Ionic Capacitor | Repository README | [`FaceLivenessDetection-Ionic-Capacitor`]({GH}/FaceLivenessDetection-Ionic-Capacitor) |
-| Ionic Cordova | Repository README | [`FaceLivenessDetection-Ionic-Cordova`]({GH}/FaceLivenessDetection-Ionic-Cordova) |
+| Flutter | [Flutter](liveness-flutter.md) | [`FaceLivenessDetection-Flutter`]({GH}/FaceLivenessDetection-Flutter) |
+| React Native | [React Native](liveness-react-native.md) | [`FaceLivenessDetection-React-Native`]({GH}/FaceLivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](liveness-ionic-capacitor.md) | [`FaceLivenessDetection-Ionic-Capacitor`]({GH}/FaceLivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](liveness-ionic-cordova.md) | [`FaceLivenessDetection-Ionic-Cordova`]({GH}/FaceLivenessDetection-Ionic-Cordova) |
 | Windows | [Face Liveness (Windows)](liveness-windows.md) | [`FaceLivenessDetection-Windows`]({GH}/FaceLivenessDetection-Windows) |
 | Linux / Docker | [Face Liveness (Linux / Docker)](liveness-linux-docker.md) | [`FaceLivenessDetection-Docker`]({GH}/FaceLivenessDetection-Docker) |
 
@@ -593,10 +706,31 @@ Parse the process JSON for score / match decision. Do not scrape the demo UI.
 
 ## Repositories that include recognition
 
-| Variant | Platforms |
-| --- | --- |
-| Full (recognition + liveness) | [Android](android.md) · [iOS](ios.md) · [Flutter](flutter.md) · [React Native](react-native.md) · [Ionic](ionic-capacitor.md) · [Windows](windows.md) · [Docker](linux-docker.md) |
-| Recognition only | [Windows](recognition-windows.md) · [Docker](recognition-linux-docker.md) |
+Recognition and liveness together. Server port **14103**.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | [`FaceRecognition-LivenessDetection-Android`]({GH}/FaceRecognition-LivenessDetection-Android) |
+| iOS | [iOS](ios.md) | [`FaceRecognition-LivenessDetection-iOS`]({GH}/FaceRecognition-LivenessDetection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`FaceRecognition-LivenessDetection-Flutter`]({GH}/FaceRecognition-LivenessDetection-Flutter) |
+| React Native | [React Native](react-native.md) | [`FaceRecognition-LivenessDetection-React-Native`]({GH}/FaceRecognition-LivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`FaceRecognition-LivenessDetection-Ionic-Capacitor`]({GH}/FaceRecognition-LivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`FaceRecognition-LivenessDetection-Ionic-Cordova`]({GH}/FaceRecognition-LivenessDetection-Ionic-Cordova) |
+| Windows | [Windows](windows.md) | [`FaceRecognition-LivenessDetection-Windows`]({GH}/FaceRecognition-LivenessDetection-Windows) |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`FaceRecognition-LivenessDetection-Docker`]({GH}/FaceRecognition-LivenessDetection-Docker) |
+
+Recognition without a liveness score. Server port **14104**. Do not call `/api/face/liveness` on this build.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](recognition-android.md) | [`FaceRecognition-Android`]({GH}/FaceRecognition-Android) |
+| iOS | [iOS](recognition-ios.md) | [`FaceRecognition-iOS`]({GH}/FaceRecognition-iOS) |
+| Flutter | [Flutter](recognition-flutter.md) | [`FaceRecognition-Flutter`]({GH}/FaceRecognition-Flutter) |
+| React Native | [React Native](recognition-react-native.md) | [`FaceRecognition-React-Native`]({GH}/FaceRecognition-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](recognition-ionic-capacitor.md) | [`FaceRecognition-Ionic-Capacitor`]({GH}/FaceRecognition-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](recognition-ionic-cordova.md) | [`FaceRecognition-Ionic-Cordova`]({GH}/FaceRecognition-Ionic-Cordova) |
+| Windows | [Windows](recognition-windows.md) | [`FaceRecognition-Windows`]({GH}/FaceRecognition-Windows) |
+| Linux / Docker | [Linux / Docker](recognition-linux-docker.md) | [`FaceRecognition-Docker`]({GH}/FaceRecognition-Docker) |
 
 Hub pack: [`Face-Recognition-SDK`]({GH}/Face-Recognition-SDK)
 
@@ -627,10 +761,20 @@ It is **passive**: the user looks at the camera. The core API does not require s
 
 ## Products
 
-| Product line | Docs |
-| --- | --- |
-| Face Recognition & Liveness Detection | Platform pages under [Face SDK](README.md). Server port **14103**. |
-| Face Liveness Detection | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Docker](liveness-linux-docker.md). Flutter, React Native, and Ionic samples are in the repository list on [Choose a product](https://docs.identixia.com/guides/choose-a-product). Server port **14105**. |
+Presentation-attack and deepfake checks. Report REAL only when both pass. These builds do not enroll a gallery and do not run 1:N search. Server port **14105**. The routes are `POST /api/face/liveness` and `POST /api/face/deepfake`.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](liveness-android.md) | [`FaceLivenessDetection-Android`]({GH}/FaceLivenessDetection-Android) |
+| iOS | [iOS](liveness-ios.md) | [`FaceLivenessDetection-iOS`]({GH}/FaceLivenessDetection-iOS) |
+| Flutter | [Flutter](liveness-flutter.md) | [`FaceLivenessDetection-Flutter`]({GH}/FaceLivenessDetection-Flutter) |
+| React Native | [React Native](liveness-react-native.md) | [`FaceLivenessDetection-React-Native`]({GH}/FaceLivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](liveness-ionic-capacitor.md) | [`FaceLivenessDetection-Ionic-Capacitor`]({GH}/FaceLivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](liveness-ionic-cordova.md) | [`FaceLivenessDetection-Ionic-Cordova`]({GH}/FaceLivenessDetection-Ionic-Cordova) |
+| Windows | [Windows](liveness-windows.md) | [`FaceLivenessDetection-Windows`]({GH}/FaceLivenessDetection-Windows) |
+| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) | [`FaceLivenessDetection-Docker`]({GH}/FaceLivenessDetection-Docker) |
+
+Recognition and liveness in one sample use the repositories on [Face SDK](README.md). That server listens on port **14103** and uses the same `/api/face/liveness` path.
 
 Hub pack: [`Face-Liveness-Detection-SDK`]({GH}/Face-Liveness-Detection-SDK)
 
@@ -671,22 +815,62 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
 | **Liveness / authenticity** | Screen / printout / substitution checks | `authenticity` |
 
+## What you get
+
+| Capability | Description |
+| --- | --- |
+| Locate and crop | Find the ID document in a camera frame or still image |
+| OCR | Printed fields such as the name, document number, and dates |
+| MRZ | Machine-readable zone, including check digits |
+| Barcode / QR | Extracted when the document has one |
+| Front and back | Both sides when the workflow requires them |
+| Document authenticity | Screen, printout, and substitution checks when the license includes `authenticity` |
+| Result JSON | `identity`, `readings`, `tests`, `images`, and `session`. Parse this object. Do not scrape the Result screen |
+
+Authenticity is rows in `tests` with `group: "authenticity"`. An empty set is not a pass. See [Result format](result-json.md) and [Security checks](security-fields.md).
+
 ## What you need
 
-A license that includes `recognition` for OCR, MRZ, and barcode reading. Add `authenticity` when you need screen, printout, or substitution checks. From the product repository, run `python scripts/get_runtime.py`.
+| Requirement | Detail |
+| --- | --- |
+| License | `recognition` for OCR, MRZ, and barcode. Add `authenticity` for the security checks |
+| Runtime | From the product repository, run `python scripts/get_runtime.py` |
+| Database | `document.xdb`. On Android it is embedded in the AAR. On Windows and Linux it sits at the top of `lib/cpu/` |
+| Capture | A physical device for camera demos. Align the document in the guide and capture the back when the document has one |
+
+If `document.xdb` is missing, activate can succeed and OCR still fails at runtime.
+
+## Samples
+
+These repositories include recognition and document liveness. Server port **14102**. Gradio, when the image ships it, uses **14202**.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | [`ID-Document-Recognition-Liveness-Detection-Android`]({GH}/ID-Document-Recognition-Liveness-Detection-Android) |
+| iOS | [iOS](ios.md) | [`ID-Document-Recognition-Liveness-Detection-iOS`]({GH}/ID-Document-Recognition-Liveness-Detection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`ID-Document-Recognition-Liveness-Detection-Flutter`]({GH}/ID-Document-Recognition-Liveness-Detection-Flutter) |
+| React Native | [React Native](react-native.md) | [`ID-Document-Recognition-Liveness-Detection-React-Native`]({GH}/ID-Document-Recognition-Liveness-Detection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) |
+| Windows | [Windows](windows.md) | [`ID-Document-Recognition-Liveness-Detection-Windows`]({GH}/ID-Document-Recognition-Liveness-Detection-Windows) |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`ID-Document-Recognition-Liveness-Detection-Docker`]({GH}/ID-Document-Recognition-Liveness-Detection-Docker) |
+
+Other licenses use different repositories. [Choose a product](https://docs.identixia.com/guides/choose-a-product) lists them.
 
 ## Try it
 
-* [Run the sample](https://docs.identixia.com/guides/run-the-sample)
-* [Choose a product](https://docs.identixia.com/guides/choose-a-product)
-* [Result format](result-json.md) · [Security checks](security-fields.md)
+1. Clone one repository above.
+2. Run `python scripts/get_runtime.py`.
+3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
+4. On Windows or Docker, call `POST /api/document/process` on port **14102**. See [SDK Server](../sdk-server/README.md).
 
 <figure><img src="../.gitbook/assets/document-desktop-status.png" alt="Document demo status" width="480"><figcaption>Desktop demo — status</figcaption></figure>
 
 ## Next
 
-* [Recognition](recognition.md) · [Liveness](liveness.md)
-* [SDK Server](../sdk-server/README.md)
+* [Recognition](recognition.md) — OCR, MRZ, barcode, and crops
+* [Liveness](liveness.md) — screen, printout, and substitution checks
+* [Result format](result-json.md) · [Security checks](security-fields.md)
 
 {{% hint style="info" %}}
 Document images and OCR fields stay on **your** device or server. Parse [Result Format](result-json.md) — do not scrape the Result UI.
@@ -741,7 +925,32 @@ Response shape: [Result JSON](result-json.md).
 
 ## Repositories
 
-Full mobile + server samples are listed on the [ID Document SDK](README.md) hub.  
+Recognition and document liveness together. Server port **14102**.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | [`ID-Document-Recognition-Liveness-Detection-Android`]({GH}/ID-Document-Recognition-Liveness-Detection-Android) |
+| iOS | [iOS](ios.md) | [`ID-Document-Recognition-Liveness-Detection-iOS`]({GH}/ID-Document-Recognition-Liveness-Detection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`ID-Document-Recognition-Liveness-Detection-Flutter`]({GH}/ID-Document-Recognition-Liveness-Detection-Flutter) |
+| React Native | [React Native](react-native.md) | [`ID-Document-Recognition-Liveness-Detection-React-Native`]({GH}/ID-Document-Recognition-Liveness-Detection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) |
+| Windows | [Windows](windows.md) | [`ID-Document-Recognition-Liveness-Detection-Windows`]({GH}/ID-Document-Recognition-Liveness-Detection-Windows) |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`ID-Document-Recognition-Liveness-Detection-Docker`]({GH}/ID-Document-Recognition-Liveness-Detection-Docker) |
+
+Recognition without document liveness. Server port **14106**. This build does not serve `/api/document/liveness`.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](recognition-android.md) | [`ID-Document-Recognition-Android`]({GH}/ID-Document-Recognition-Android) |
+| iOS | [iOS](recognition-ios.md) | [`ID-Document-Recognition-iOS`]({GH}/ID-Document-Recognition-iOS) |
+| Flutter | [Flutter](recognition-flutter.md) | [`ID-Document-Recognition-Flutter`]({GH}/ID-Document-Recognition-Flutter) |
+| React Native | [React Native](recognition-react-native.md) | [`ID-Document-Recognition-React-Native`]({GH}/ID-Document-Recognition-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](recognition-ionic-capacitor.md) | [`ID-Document-Recognition-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](recognition-ionic-cordova.md) | [`ID-Document-Recognition-Ionic-Cordova`]({GH}/ID-Document-Recognition-Ionic-Cordova) |
+| Windows | [Windows](recognition-windows.md) | [`ID-Document-Recognition-Windows`]({GH}/ID-Document-Recognition-Windows) |
+| Linux / Docker | [Linux / Docker](recognition-linux-docker.md) | [`ID-Document-Recognition-Docker`]({GH}/ID-Document-Recognition-Docker) |
+
 Packaging hub: [`ID-Document-Recognition-Liveness-Detection-SDK`]({GH}/ID-Document-Recognition-Liveness-Detection-SDK)
 """.strip()
         + "\n",
@@ -772,10 +981,20 @@ See [Security check fields](security-fields.md).
 
 ## Where it ships
 
-| Product | Docs |
-| --- | --- |
-| ID Document Recognition & Liveness Detection | Platform pages on [ID Document SDK](README.md). Server port **14102**. |
-| ID Document Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, and [Linux / Docker](liveness-linux-docker.md). Server port **14107**. This build does not read MRZ, barcodes, or visual fields, and it does not expose `/api/document/process`. |
+Authenticity only. The sample does not read MRZ, barcodes, or visual fields. Server port **14107**. `POST /api/document/liveness` takes `images` entries `{{image, page_idx}}`. This server does not expose `/api/document/process`.
+
+| Platform | Port | Where to start | Repository |
+| --- | ---: | --- | --- |
+| Android | — | Repository README | [`ID-Document-Liveness-Detection-Android`]({GH}/ID-Document-Liveness-Detection-Android) |
+| iOS | — | Repository README | [`ID-Document-Liveness-Detection-iOS`]({GH}/ID-Document-Liveness-Detection-iOS) |
+| Flutter | — | Repository README | [`ID-Document-Liveness-Detection-Flutter`]({GH}/ID-Document-Liveness-Detection-Flutter) |
+| React Native | — | Repository README | [`ID-Document-Liveness-Detection-React-Native`]({GH}/ID-Document-Liveness-Detection-React-Native) |
+| Ionic Capacitor | — | Repository README | [`ID-Document-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | — | Repository README | [`ID-Document-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Liveness-Detection-Ionic-Cordova) |
+| Windows | 14107 | Repository README | [`ID-Document-Liveness-Detection-Windows`]({GH}/ID-Document-Liveness-Detection-Windows) |
+| Linux / Docker | 14107 | [Linux / Docker](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) |
+
+Recognition and authenticity in one sample use the repositories on [ID Document SDK](README.md). That server listens on port **14102**.
 
 ### Example — authenticity-only (full server)
 
@@ -1444,7 +1663,7 @@ Parent: [Full product](full-product.md).
         f"""
 ## When to use
 
-Use these repositories when the license is **recognition only**. They detect faces, build templates, and run 1:1 and 1:N search. They do not return a liveness score, and there is no recognition-only phone SDK. Phone apps that need recognition ship in the [full product](full-product.md).
+Use these repositories when the license is **recognition only**. They detect faces, build templates, and run 1:1 and 1:N search. They do not return a liveness score. Phone, Windows, and Linux / Docker samples are listed on [Face recognition](recognition.md).
 
 | Platform | Port | Docs | Repository |
 | --- | ---: | --- | --- |
@@ -1486,10 +1705,10 @@ These builds score presentation attacks and deepfake checks. They do not enroll 
 | --- | --- | --- |
 | Android | [Android](liveness-android.md) | [`FaceLivenessDetection-Android`]({GH}/FaceLivenessDetection-Android) |
 | iOS | [iOS](liveness-ios.md) | [`FaceLivenessDetection-iOS`]({GH}/FaceLivenessDetection-iOS) |
-| Flutter | Repository README | [`FaceLivenessDetection-Flutter`]({GH}/FaceLivenessDetection-Flutter) |
-| React Native | Repository README | [`FaceLivenessDetection-React-Native`]({GH}/FaceLivenessDetection-React-Native) |
-| Ionic Capacitor | Repository README | [`FaceLivenessDetection-Ionic-Capacitor`]({GH}/FaceLivenessDetection-Ionic-Capacitor) |
-| Ionic Cordova | Repository README | [`FaceLivenessDetection-Ionic-Cordova`]({GH}/FaceLivenessDetection-Ionic-Cordova) |
+| Flutter | [Flutter](liveness-flutter.md) | [`FaceLivenessDetection-Flutter`]({GH}/FaceLivenessDetection-Flutter) |
+| React Native | [React Native](liveness-react-native.md) | [`FaceLivenessDetection-React-Native`]({GH}/FaceLivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](liveness-ionic-capacitor.md) | [`FaceLivenessDetection-Ionic-Capacitor`]({GH}/FaceLivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](liveness-ionic-cordova.md) | [`FaceLivenessDetection-Ionic-Cordova`]({GH}/FaceLivenessDetection-Ionic-Cordova) |
 
 ## Integration path
 
@@ -1636,7 +1855,36 @@ We provide SDKs for all platforms. Sample projects are on GitHub: [{GH.replace("
 | Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) |
 | Windows | [Windows](windows.md) | [`ID-Document-Recognition-Liveness-Detection-Windows`]({GH}/ID-Document-Recognition-Liveness-Detection-Windows) |
 | Linux / Docker | [Linux / Docker](linux-docker.md) | [`ID-Document-Recognition-Liveness-Detection-Docker`]({GH}/ID-Document-Recognition-Liveness-Detection-Docker) |
-| Document Liveness (Linux / Docker) | [Document Liveness](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) |
+
+## ID Document Recognition
+
+Linux / Docker and the phone and Windows samples. Server port **14106**. This build does not serve `/api/document/liveness`.
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Android](recognition-android.md) | [`ID-Document-Recognition-Android`]({GH}/ID-Document-Recognition-Android) |
+| iOS | [iOS](recognition-ios.md) | [`ID-Document-Recognition-iOS`]({GH}/ID-Document-Recognition-iOS) |
+| Flutter | [Flutter](recognition-flutter.md) | [`ID-Document-Recognition-Flutter`]({GH}/ID-Document-Recognition-Flutter) |
+| React Native | [React Native](recognition-react-native.md) | [`ID-Document-Recognition-React-Native`]({GH}/ID-Document-Recognition-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](recognition-ionic-capacitor.md) | [`ID-Document-Recognition-Ionic-Capacitor`]({GH}/ID-Document-Recognition-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](recognition-ionic-cordova.md) | [`ID-Document-Recognition-Ionic-Cordova`]({GH}/ID-Document-Recognition-Ionic-Cordova) |
+| Windows | [Windows](recognition-windows.md) | [`ID-Document-Recognition-Windows`]({GH}/ID-Document-Recognition-Windows) |
+| Linux / Docker | [Linux / Docker](recognition-linux-docker.md) | [`ID-Document-Recognition-Docker`]({GH}/ID-Document-Recognition-Docker) |
+
+## ID Document Liveness Detection
+
+These samples check presentation attacks. They do not read MRZ, barcodes, or visual fields. Server port **14107**.
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Android](liveness-android.md) | [`ID-Document-Liveness-Detection-Android`]({GH}/ID-Document-Liveness-Detection-Android) |
+| iOS | [iOS](liveness-ios.md) | [`ID-Document-Liveness-Detection-iOS`]({GH}/ID-Document-Liveness-Detection-iOS) |
+| Flutter | [Flutter](liveness-flutter.md) | [`ID-Document-Liveness-Detection-Flutter`]({GH}/ID-Document-Liveness-Detection-Flutter) |
+| React Native | [React Native](liveness-react-native.md) | [`ID-Document-Liveness-Detection-React-Native`]({GH}/ID-Document-Liveness-Detection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](liveness-ionic-capacitor.md) | [`ID-Document-Liveness-Detection-Ionic-Capacitor`]({GH}/ID-Document-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](liveness-ionic-cordova.md) | [`ID-Document-Liveness-Detection-Ionic-Cordova`]({GH}/ID-Document-Liveness-Detection-Ionic-Cordova) |
+| Windows | [Windows](liveness-windows.md) | [`ID-Document-Liveness-Detection-Windows`]({GH}/ID-Document-Liveness-Detection-Windows) |
+| Linux / Docker | [Linux / Docker](liveness-linux-docker.md) | [`ID-Document-Liveness-Detection-Docker`]({GH}/ID-Document-Liveness-Detection-Docker) |
 
 ## Formats
 
@@ -3227,6 +3475,9 @@ def main() -> int:
         if "/" in rel:
             section, leaf = rel.split("/", 1)
             structure.setdefault(section, []).append((summary_label(rel), f"{leaf}.md"))
+
+    written = write_missing_app_pages(owner)
+    print(f"missing app pages written: {written}")
 
     write_welcome()
     write_summary(structure)

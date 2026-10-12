@@ -16,11 +16,17 @@ python scripts/get_runtime.py
 
 {% tabs %}
 {% tab title="Android" %}
-Open the Android project in Android Studio and run it on a device or emulator. The sample prints the application id to send with a license request.
+Requirements from the sample: Android Studio, JDK **17**, minSdk **24**, ABIs `arm64-v8a` and `armeabi-v7a`. Use a physical **arm64** phone for the camera.
+
+```bash
+python scripts/get_runtime.py
+```
+
+Open the Android project in Android Studio and run it. The sample prints the application id to send with a license request. Wait until status shows **Ready**.
 {% endtab %}
 
 {% tab title="iOS" %}
-Open the `.xcworkspace` on a Mac, select your team, and run on a physical device. The sample prints the bundle id to send with a license request.
+Requirements from the sample: a Mac, Xcode, and a physical iPhone. Deployment target is iOS **13+**. Open the `.xcworkspace`, select your team, and run. The sample prints the bundle id to send with a license request. Wait until status shows **Ready**.
 {% endtab %}
 
 {% tab title="Flutter" %}
@@ -81,6 +87,15 @@ iOS, from a Mac:
 npm run setup:ios
 npm run ios
 ```
+{% endtab %}
+{% tab title="Windows / Docker" %}
+Same steps for a Windows service and a Docker build of the same product. They share one port.
+
+1. Clone the Windows or Docker repository.
+2. On a host install, run `python scripts/get_runtime.py`. A Docker Hub image already contains the runtime.
+3. Copy `.env.example` to `.env`, install the Python dependencies, then start with `python run_server.py` (`python3` on macOS or Linux) or Docker Compose.
+4. Read `GET /api/machinecode`, request a license, then `POST /api/activate`.
+5. Call the process route for that product. Ports are on [SDK Server](https://docs.identixia.com/sdk-server).
 {% endtab %}
 {% endtabs %}
 

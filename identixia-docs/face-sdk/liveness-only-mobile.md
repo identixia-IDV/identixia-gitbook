@@ -13,10 +13,10 @@ These builds score presentation attacks and deepfake checks. They do not enroll 
 | --- | --- | --- |
 | Android | [Android](liveness-android.md) | [`FaceLivenessDetection-Android`](https://github.com/identixia-IDV/FaceLivenessDetection-Android) |
 | iOS | [iOS](liveness-ios.md) | [`FaceLivenessDetection-iOS`](https://github.com/identixia-IDV/FaceLivenessDetection-iOS) |
-| Flutter | Repository README | [`FaceLivenessDetection-Flutter`](https://github.com/identixia-IDV/FaceLivenessDetection-Flutter) |
-| React Native | Repository README | [`FaceLivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceLivenessDetection-React-Native) |
-| Ionic Capacitor | Repository README | [`FaceLivenessDetection-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceLivenessDetection-Ionic-Capacitor) |
-| Ionic Cordova | Repository README | [`FaceLivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceLivenessDetection-Ionic-Cordova) |
+| Flutter | [Flutter](liveness-flutter.md) | [`FaceLivenessDetection-Flutter`](https://github.com/identixia-IDV/FaceLivenessDetection-Flutter) |
+| React Native | [React Native](liveness-react-native.md) | [`FaceLivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceLivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](liveness-ionic-capacitor.md) | [`FaceLivenessDetection-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceLivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](liveness-ionic-cordova.md) | [`FaceLivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceLivenessDetection-Ionic-Cordova) |
 
 ## Integration path
 

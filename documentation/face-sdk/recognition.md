@@ -54,10 +54,31 @@ Parse the process JSON for score / match decision. Do not scrape the demo UI.
 
 ## Repositories that include recognition
 
-| Variant | Platforms |
-| --- | --- |
-| Full (recognition + liveness) | [Android](https://docs.identixia.com/developers/face-sdk/android) · [iOS](https://docs.identixia.com/developers/face-sdk/ios) · [Flutter](https://docs.identixia.com/developers/face-sdk/flutter) · [React Native](https://docs.identixia.com/developers/face-sdk/react-native) · [Ionic](https://docs.identixia.com/developers/face-sdk/ionic-capacitor) · [Windows](https://docs.identixia.com/developers/face-sdk/windows) · [Docker](https://docs.identixia.com/developers/face-sdk/linux-docker) |
-| Recognition only | [Windows](https://docs.identixia.com/developers/face-sdk/recognition-windows) · [Docker](https://docs.identixia.com/developers/face-sdk/recognition-linux-docker) |
+Recognition and liveness together. Server port **14103**.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](https://docs.identixia.com/developers/face-sdk/android) | [`FaceRecognition-LivenessDetection-Android`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android) |
+| iOS | [iOS](https://docs.identixia.com/developers/face-sdk/ios) | [`FaceRecognition-LivenessDetection-iOS`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS) |
+| Flutter | [Flutter](https://docs.identixia.com/developers/face-sdk/flutter) | [`FaceRecognition-LivenessDetection-Flutter`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Flutter) |
+| React Native | [React Native](https://docs.identixia.com/developers/face-sdk/react-native) | [`FaceRecognition-LivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](https://docs.identixia.com/developers/face-sdk/ionic-capacitor) | [`FaceRecognition-LivenessDetection-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](https://docs.identixia.com/developers/face-sdk/ionic-cordova) | [`FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) |
+| Windows | [Windows](https://docs.identixia.com/developers/face-sdk/windows) | [`FaceRecognition-LivenessDetection-Windows`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows) |
+| Linux / Docker | [Linux / Docker](https://docs.identixia.com/developers/face-sdk/linux-docker) | [`FaceRecognition-LivenessDetection-Docker`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker) |
+
+Recognition without a liveness score. Server port **14104**. Do not call `/api/face/liveness` on this build.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](https://docs.identixia.com/developers/face-sdk/recognition-android) | [`FaceRecognition-Android`](https://github.com/identixia-IDV/FaceRecognition-Android) |
+| iOS | [iOS](https://docs.identixia.com/developers/face-sdk/recognition-ios) | [`FaceRecognition-iOS`](https://github.com/identixia-IDV/FaceRecognition-iOS) |
+| Flutter | [Flutter](https://docs.identixia.com/developers/face-sdk/recognition-flutter) | [`FaceRecognition-Flutter`](https://github.com/identixia-IDV/FaceRecognition-Flutter) |
+| React Native | [React Native](https://docs.identixia.com/developers/face-sdk/recognition-react-native) | [`FaceRecognition-React-Native`](https://github.com/identixia-IDV/FaceRecognition-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](https://docs.identixia.com/developers/face-sdk/recognition-ionic-capacitor) | [`FaceRecognition-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceRecognition-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](https://docs.identixia.com/developers/face-sdk/recognition-ionic-cordova) | [`FaceRecognition-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-Ionic-Cordova) |
+| Windows | [Windows](https://docs.identixia.com/developers/face-sdk/recognition-windows) | [`FaceRecognition-Windows`](https://github.com/identixia-IDV/FaceRecognition-Windows) |
+| Linux / Docker | [Linux / Docker](https://docs.identixia.com/developers/face-sdk/recognition-linux-docker) | [`FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker) |
 
 Hub pack: [`Face-Recognition-SDK`](https://github.com/identixia-IDV/Face-Recognition-SDK)
 

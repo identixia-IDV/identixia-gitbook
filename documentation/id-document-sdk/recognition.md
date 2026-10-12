@@ -41,7 +41,32 @@ Response shape: [Result JSON](result-json.md).
 
 ## Repositories
 
-Full mobile + server samples are listed on the [ID Document SDK](README.md) hub.  
+Recognition and document liveness together. Server port **14102**.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](https://docs.identixia.com/developers/id-document-sdk/android) | [`ID-Document-Recognition-Liveness-Detection-Android`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android) |
+| iOS | [iOS](https://docs.identixia.com/developers/id-document-sdk/ios) | [`ID-Document-Recognition-Liveness-Detection-iOS`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS) |
+| Flutter | [Flutter](https://docs.identixia.com/developers/id-document-sdk/flutter) | [`ID-Document-Recognition-Liveness-Detection-Flutter`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Flutter) |
+| React Native | [React Native](https://docs.identixia.com/developers/id-document-sdk/react-native) | [`ID-Document-Recognition-Liveness-Detection-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](https://docs.identixia.com/developers/id-document-sdk/ionic-capacitor) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](https://docs.identixia.com/developers/id-document-sdk/ionic-cordova) | [`ID-Document-Recognition-Liveness-Detection-Ionic-Cordova`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Cordova) |
+| Windows | [Windows](https://docs.identixia.com/developers/id-document-sdk/windows) | [`ID-Document-Recognition-Liveness-Detection-Windows`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows) |
+| Linux / Docker | [Linux / Docker](https://docs.identixia.com/developers/id-document-sdk/linux-docker) | [`ID-Document-Recognition-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) |
+
+Recognition without document liveness. Server port **14106**. This build does not serve `/api/document/liveness`.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](https://docs.identixia.com/developers/id-document-sdk/recognition-android) | [`ID-Document-Recognition-Android`](https://github.com/identixia-IDV/ID-Document-Recognition-Android) |
+| iOS | [iOS](https://docs.identixia.com/developers/id-document-sdk/recognition-ios) | [`ID-Document-Recognition-iOS`](https://github.com/identixia-IDV/ID-Document-Recognition-iOS) |
+| Flutter | [Flutter](https://docs.identixia.com/developers/id-document-sdk/recognition-flutter) | [`ID-Document-Recognition-Flutter`](https://github.com/identixia-IDV/ID-Document-Recognition-Flutter) |
+| React Native | [React Native](https://docs.identixia.com/developers/id-document-sdk/recognition-react-native) | [`ID-Document-Recognition-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](https://docs.identixia.com/developers/id-document-sdk/recognition-ionic-capacitor) | [`ID-Document-Recognition-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Recognition-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](https://docs.identixia.com/developers/id-document-sdk/recognition-ionic-cordova) | [`ID-Document-Recognition-Ionic-Cordova`](https://github.com/identixia-IDV/ID-Document-Recognition-Ionic-Cordova) |
+| Windows | [Windows](https://docs.identixia.com/developers/id-document-sdk/recognition-windows) | [`ID-Document-Recognition-Windows`](https://github.com/identixia-IDV/ID-Document-Recognition-Windows) |
+| Linux / Docker | [Linux / Docker](https://docs.identixia.com/developers/id-document-sdk/recognition-linux-docker) | [`ID-Document-Recognition-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Docker) |
+
 Packaging hub: [`ID-Document-Recognition-Liveness-Detection-SDK`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-SDK)
 
 {% include "../.gitbook/includes/footer.md" %}

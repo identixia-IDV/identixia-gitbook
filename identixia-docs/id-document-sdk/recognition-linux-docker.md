@@ -23,8 +23,9 @@ description: >-
 | MRZ | Read the machine-readable zone (MRZ) and validate its check digits |
 | Barcode / QR | Extracted when present on the document |
 | Front and back | Capture both sides when your workflow requires it |
-| Document authenticity | Anti-spoof checks when the license includes `authenticity` |
 | Structured JSON | Same result model on mobile and server — see Result JSON |
+
+This sample does not include document liveness. It does not serve `/api/document/liveness` and it does not call `documentLiveness`.
 
 ## Prerequisites
 
@@ -54,7 +55,7 @@ python scripts/get_runtime.py --tag 1.0.0
 | | |
 | --- | --- |
 | **Release asset** | GitHub Release `*-windows.zip` / `*-linux.zip` |
-| **Local path after download** | `lib/cpu/` (`DocumentReaderSDK.dll` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level) |
+| **Local path after download** | `lib/cpu/` (`DocumentRecognitionSDK.dll` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level) |
 | **Databases** | Face recognition needs the full `recognition*.xdb` set; face liveness needs `recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb`; document products need `document.xdb`. |
 
 ### Manual download (optional)
@@ -73,7 +74,7 @@ If databases are missing, activate/init may succeed but recognition, liveness, o
 
 ## Integration guide — start the project
 
-Default API port for this product family: **`14102`**. Gradio demo (when shipped) uses **`14202`**.
+Default API port for this product family: **`14106`**. Gradio demo (when shipped) uses **`14206`**.
 
 ### 1. Clone the sample
 
@@ -105,17 +106,17 @@ Configuration lives in **`.env`**: `PORT`, `LICENSE`, `API_BASE`, `DEMO_PORT`. S
 ### 4. Machine code → license → activate
 
 ```bash
-curl -s http://127.0.0.1:14102/api/machinecode
+curl -s http://127.0.0.1:14106/api/machinecode
 ```
 
 Send `data.machinecode` to Identixia and receive a license. Then either set `LICENSE=` in `.env` and restart, or:
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/activate \
+curl -s -X POST http://127.0.0.1:14106/api/activate \
   -H "Content-Type: application/json" \
   -d '{\"license\":\"YOUR_KEY\"}'
-curl -s http://127.0.0.1:14102/api/licenseStatus
-curl -s http://127.0.0.1:14102/api/health
+curl -s http://127.0.0.1:14106/api/licenseStatus
+curl -s http://127.0.0.1:14106/api/health
 ```
 
 Prefer `.env` (`LICENSE=`) for the key — do not use a separate `license.txt`.
@@ -123,7 +124,7 @@ Prefer `.env` (`LICENSE=`) for the key — do not use a separate `license.txt`.
 ### Try document process
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/document/process \
+curl -s -X POST http://127.0.0.1:14106/api/document/recognition \
   -H "Content-Type: application/json" \
   -d "{\"images\":[{\"image\":\"BASE64_JPEG\"}]}"
 ```
@@ -147,9 +148,11 @@ curl -s http://127.0.0.1:PORT/api/health
 
 Control routes return the envelope `{success, code, message, request_id, data}`. Process routes return **engine / process JSON** (not the control envelope).
 
-## API reference — document HTTP (Windows / Linux / Docker)
+## API reference — document recognition HTTP
 
-Base URL: `http://{host}:14102`
+Base URL: `http://{host}:14106`
+
+This build does not serve `/api/document/liveness`.
 
 ### Control routes
 
@@ -158,25 +161,23 @@ Base URL: `http://{host}:14102`
 | `GET` | `/api/health` | Health |
 | `GET` | `/api/backend` | Backend info |
 | `GET` | `/api/machinecode` | Machine code |
-| `GET` | `/api/licenseStatus` | `recognition`, `authenticity` flags |
+| `GET` | `/api/licenseStatus` | `recognition` flag |
 | `POST` | `/api/activate` | Activate license |
 
 ### Process routes
 
 | Method | Path | Body | Description |
 | --- | --- | --- | --- |
-| `POST` | `/api/document/process` | `{ "images":[…], "rfid"?, "response"? }` | Full process (OCR + optional authenticity) |
-| `POST` | `/api/document/recognition` | `{ "images":[…] }` | Recognition only |
-| `POST` | `/api/document/liveness` | `{ "images":[…] }` | Authenticity / liveness only |
-| `POST` | `/api/document/general` | `{ "image", "options"? }` | General process helper |
-
-`images` entries are objects with base64 `image` (and optional metadata) or raw base64 strings depending on binding — see the sample Postman collection in the repo `postman/` folder.
+| `POST` | `/api/document/process` | `{ "images":[…] }` | OCR, MRZ, and barcode |
+| `POST` | `/api/document/recognition` | `{ "images":[…] }` | OCR / MRZ / barcode |
 
 ```bash
-curl -s -X POST http://127.0.0.1:14102/api/document/process \
+curl -s -X POST http://127.0.0.1:14106/api/document/recognition \
   -H "Content-Type: application/json" \
-  -d '{"images":[{"image":"BASE64_JPEG"}]}'
+  -d "{\"images\":[{\"image\":\"BASE64_FRONT\",\"page_idx\":0}]}"
 ```
+
+Response shape: [Result JSON](result-json.md).
 
 ## Troubleshooting
 

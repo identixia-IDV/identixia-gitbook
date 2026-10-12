@@ -27,10 +27,20 @@ See [Security check fields](security-fields.md).
 
 ## Where it ships
 
-| Product | Docs |
-| --- | --- |
-| ID Document Recognition & Liveness Detection | Platform pages on [ID Document SDK](README.md). Server port **14102**. |
-| ID Document Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, and [Linux / Docker](https://docs.identixia.com/developers/id-document-sdk/liveness-linux-docker). Server port **14107**. This build does not read MRZ, barcodes, or visual fields, and it does not expose `/api/document/process`. |
+Authenticity only. The sample does not read MRZ, barcodes, or visual fields. Server port **14107**. `POST /api/document/liveness` takes `images` entries `{image, page_idx}`. This server does not expose `/api/document/process`.
+
+| Platform | Port | Where to start | Repository |
+| --- | ---: | --- | --- |
+| Android | — | Repository README | [`ID-Document-Liveness-Detection-Android`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android) |
+| iOS | — | Repository README | [`ID-Document-Liveness-Detection-iOS`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-iOS) |
+| Flutter | — | Repository README | [`ID-Document-Liveness-Detection-Flutter`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Flutter) |
+| React Native | — | Repository README | [`ID-Document-Liveness-Detection-React-Native`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-React-Native) |
+| Ionic Capacitor | — | Repository README | [`ID-Document-Liveness-Detection-Ionic-Capacitor`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Ionic-Capacitor) |
+| Ionic Cordova | — | Repository README | [`ID-Document-Liveness-Detection-Ionic-Cordova`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Ionic-Cordova) |
+| Windows | 14107 | Repository README | [`ID-Document-Liveness-Detection-Windows`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows) |
+| Linux / Docker | 14107 | [Linux / Docker](https://docs.identixia.com/developers/id-document-sdk/liveness-linux-docker) | [`ID-Document-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker) |
+
+Recognition and authenticity in one sample use the repositories on [ID Document SDK](README.md). That server listens on port **14102**.
 
 ### Example — authenticity-only (full server)
 

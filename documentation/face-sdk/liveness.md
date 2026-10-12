@@ -22,10 +22,20 @@ It is **passive**: the user looks at the camera. The core API does not require s
 
 ## Products
 
-| Product line | Docs |
-| --- | --- |
-| Face Recognition & Liveness Detection | Platform pages under [Face SDK](README.md). Server port **14103**. |
-| Face Liveness Detection | [Android](https://docs.identixia.com/developers/face-sdk/liveness-android) · [iOS](https://docs.identixia.com/developers/face-sdk/liveness-ios) · [Windows](https://docs.identixia.com/developers/face-sdk/liveness-windows) · [Docker](https://docs.identixia.com/developers/face-sdk/liveness-linux-docker). Flutter, React Native, and Ionic samples are in the repository list on [Choose a product](https://docs.identixia.com/guides/choose-a-product). Server port **14105**. |
+Presentation-attack and deepfake checks. Report REAL only when both pass. These builds do not enroll a gallery and do not run 1:N search. Server port **14105**. The routes are `POST /api/face/liveness` and `POST /api/face/deepfake`.
+
+| Platform | Guide | Repository |
+| --- | --- | --- |
+| Android | [Android](https://docs.identixia.com/developers/face-sdk/liveness-android) | [`FaceLivenessDetection-Android`](https://github.com/identixia-IDV/FaceLivenessDetection-Android) |
+| iOS | [iOS](https://docs.identixia.com/developers/face-sdk/liveness-ios) | [`FaceLivenessDetection-iOS`](https://github.com/identixia-IDV/FaceLivenessDetection-iOS) |
+| Flutter | [Flutter](https://docs.identixia.com/developers/face-sdk/liveness-flutter) | [`FaceLivenessDetection-Flutter`](https://github.com/identixia-IDV/FaceLivenessDetection-Flutter) |
+| React Native | [React Native](https://docs.identixia.com/developers/face-sdk/liveness-react-native) | [`FaceLivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceLivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](https://docs.identixia.com/developers/face-sdk/liveness-ionic-capacitor) | [`FaceLivenessDetection-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceLivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](https://docs.identixia.com/developers/face-sdk/liveness-ionic-cordova) | [`FaceLivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceLivenessDetection-Ionic-Cordova) |
+| Windows | [Windows](https://docs.identixia.com/developers/face-sdk/liveness-windows) | [`FaceLivenessDetection-Windows`](https://github.com/identixia-IDV/FaceLivenessDetection-Windows) |
+| Linux / Docker | [Linux / Docker](https://docs.identixia.com/developers/face-sdk/liveness-linux-docker) | [`FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) |
+
+Recognition and liveness in one sample use the repositories on [Face SDK](README.md). That server listens on port **14103** and uses the same `/api/face/liveness` path.
 
 Hub pack: [`Face-Liveness-Detection-SDK`](https://github.com/identixia-IDV/Face-Liveness-Detection-SDK)
 

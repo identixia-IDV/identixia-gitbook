@@ -163,7 +163,8 @@ Android, iOS, Flutter, React Native, and Ionic share the **same customer method 
 | Guide / crop helpers | Align document in frame (`DocumentGuideView` / kit crop) |
 | `locateDocument(image)` | Find document bounds in a frame / still |
 | `recognize(front, back?, authenticity?)` | OCR + MRZ + barcode (+ authenticity when licensed) |
-| `documentRecognition(front, back?)` | Recognition-only path |
+| `documentRecognition(front, back?)` | Recognition path |
+
 | `documentLiveness(front, back?)` | Authenticity / PAD-only path |
 | `documentProcess(imagesJson, rfidJson, optionsJson)` | Combined pipeline (same idea as `POST /api/document/process`) |
 | `faceLiveness(image, mode?)` | Optional face PAD helper on document products that ship it |
@@ -176,7 +177,7 @@ Top-level concepts (names may be normalized per platform):
 | --- | --- |
 | Identity | Document type, country, overall score |
 | Fields / readings | OCR, MRZ, barcode field rows |
-| Checks / tests | Verification + image quality + security |
+| Checks / tests | Verification + image quality |
 | Images | Portrait / document crops (base64) |
 | Session | Process / request metadata when present |
 
@@ -186,7 +187,7 @@ See [Result JSON](https://docs.identixia.com/id-document-sdk/result-json) and [S
 
 1. Apply `install.gradle` or vendor iOS `docsdk`.
 2. Activate with your app id license → `init`.
-3. Capture front (and back when needed) → `recognize` or `documentProcess`.
+3. Capture front (and back when needed) → `recognize` or `documentRecognition`.
 4. Parse JSON in your app — do not depend on the demo Result UI.
 5. Store fields you need in **your** database.
 

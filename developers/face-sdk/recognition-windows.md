@@ -24,6 +24,7 @@ icon: display
 | Quality | ICAO-style image and face quality scores |
 | Templates | Numerical representations of faces that you can store in **your** database for comparison |
 | 1:1 match | Compare two images or two templates |
+| 1:N identify | Enroll a gallery and search. This sample does not return a liveness score. |
 
 ## Prerequisites
 

@@ -15,7 +15,7 @@ class ProductCtx:
     description: str
     title: str
     platform: str  # Android, iOS, Flutter, ReactNative, Ionic, Ionic-Cordova, Windows, Linux, Hub
-    family: str  # face_combined, face_recog, face_liveness, document, document_liveness, hub
+    family: str  # face_combined, face_recog, face_liveness, document, document_recog, document_liveness, hub
 
 
 STATUS_CODES = """
@@ -96,6 +96,10 @@ def what_you_can_do(ctx: ProductCtx) -> str:
             rows.append(
                 "| Passive liveness + deepfake | PAD and deepfake together when the license includes `liveness`; REAL only if both pass |"
             )
+        elif ctx.family == "face_recog":
+            rows.append(
+                "| 1:N identify | Enroll a gallery and search. This sample does not return a liveness score. |"
+            )
         return (
             "## Capabilities\n\n| Capability | Description |\n| --- | --- |\n"
             + "\n".join(rows)
@@ -121,6 +125,20 @@ def what_you_can_do(ctx: ProductCtx) -> str:
 | Front and back | Capture both sides when your workflow requires it |
 | Document authenticity | Anti-spoof checks when the license includes `authenticity` |
 | Structured JSON | Same result model on mobile and server — see Result JSON |
+"""
+    if ctx.family == "document_recog":
+        return """## Capabilities
+
+| Capability | Description |
+| --- | --- |
+| Locate and crop | Find the ID document in a camera frame or still image |
+| OCR | Visual-zone fields (name, document number, dates, and related data) |
+| MRZ | Machine-readable zone parse and checksum checks |
+| Barcode / QR | Extracted when present on the document |
+| Front and back | Capture both sides when your workflow requires it |
+| Structured JSON | Same result model on mobile and server — see Result JSON |
+
+This sample does not include document liveness. It does not serve `/api/document/liveness` and it does not call `documentLiveness`.
 """
     if ctx.family == "document_liveness":
         return """## Capabilities
@@ -218,6 +236,8 @@ def _android_aar(name: str) -> str:
             return "documentfullsdk.aar"
         if name.startswith("ID-Document-Liveness"):
             return "documentlivenesssdk.aar"
+        if name.startswith("ID-Document-Recognition"):
+            return "documentrecognitionsdk.aar"
         return "documentreadersdk.aar"
     if "Recognition" in name and "Liveness" in name:
         return "facefullsdk.aar"
@@ -233,6 +253,8 @@ def _windows_dll(name: str) -> str:
             return "DocumentFullSDK.dll"
         if name.startswith("ID-Document-Liveness"):
             return "DocumentLivenessSDK.dll"
+        if name.startswith("ID-Document-Recognition"):
+            return "DocumentRecognitionSDK.dll"
         return "DocumentReaderSDK.dll"
     if "Recognition" in name and "Liveness" in name:
         return "FaceFullSDK.dll"
@@ -248,21 +270,30 @@ def _runtime_paths(ctx: ProductCtx) -> tuple[str, str, str]:
         stem = aar[: -len(".aar")]
         if ctx.family == "face_liveness" or ctx.name.startswith("FaceLiveness"):
             note = "Required packs: `liveness.xdb` and `recognition-deepfake.xdb`."
+            local = f"`libfacesdk/{aar}` and `libfacesdk/databases/*.xdb`"
+        elif ctx.family == "face_recog":
+            note = (
+                "Packs included: `recognition-common.xdb`, `recognition.xdb`, `recognition-attr.xdb`, "
+                "`recognition-quality.xdb`. This sample does not include `recognition-liveness.xdb` or `recognition-deepfake.xdb`."
+            )
+            local = f"`libfacerecognitionsdk/{aar}` and `libfacerecognitionsdk/databases/*.xdb`"
         else:
             note = (
                 "Required packs: `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, "
                 "`recognition-quality.xdb`, and when licensed `recognition-liveness.xdb` + `recognition-deepfake.xdb`."
             )
+            local = f"`libfacesdk/{aar}` and `libfacesdk/databases/*.xdb`"
         return (
             f"`{stem}-android.zip` (contains `{aar}` + `databases/*.xdb`)",
-            f"`libfacesdk/{aar}` and `libfacesdk/databases/*.xdb`",
+            local,
             note,
         )
-    if ctx.platform == "Android" and ctx.family in ("document", "document_liveness"):
+    if ctx.platform == "Android" and ctx.family in ("document", "document_recog", "document_liveness"):
         aar = _android_aar(ctx.name)
+        folder = "libdocumentrecognitionsdk" if ctx.family == "document_recog" else "libdocsdk"
         return (
             f"`{aar}`",
-            f"`libdocsdk/{aar}`",
+            f"`{folder}/{aar}`",
             "`document.xdb` is embedded inside the AAR (`assets/document.xdb`).",
         )
     if ctx.platform == "iOS" and ctx.family in ("face_combined", "face_recog", "face_liveness"):
@@ -271,7 +302,7 @@ def _runtime_paths(ctx: ProductCtx) -> tuple[str, str, str]:
             "Repository root / `Frameworks/` + `databases/*.xdb`",
             "Place every `*.xdb` from the Release next to the frameworks (or under `databases/`).",
         )
-    if ctx.platform == "iOS" and ctx.family in ("document", "document_liveness"):
+    if ctx.platform == "iOS" and ctx.family in ("document", "document_recog", "document_liveness"):
         return (
             "`docsdk.xcframework.zip`",
             "`docsdk.xcframework` / `docsdk.framework` (includes `document.xdb` in the bundle)",
@@ -447,6 +478,8 @@ def quick_start_server(ctx: ProductCtx) -> str:
     port = "14103"
     if ctx.family == "document":
         port = "14102"
+    elif ctx.family == "document_recog":
+        port = "14106"
     elif ctx.family == "document_liveness":
         port = "14107"
     elif ctx.family == "face_liveness":
@@ -475,12 +508,13 @@ curl -s -X POST http://127.0.0.1:{port}/api/face/liveness \\
   -d "{{\\"image\\":\\"BASE64_JPEG\\"}}"
 ```
 """
-    elif ctx.family == "document":
+    elif ctx.family in ("document", "document_recog"):
+        route = "/api/document/recognition" if ctx.family == "document_recog" else "/api/document/process"
         analyze = f"""
 ### Try document process
 
 ```bash
-curl -s -X POST http://127.0.0.1:{port}/api/document/process \\
+curl -s -X POST http://127.0.0.1:{port}{route} \\
   -H "Content-Type: application/json" \\
   -d "{{\\"images\\":[{{\\"image\\":\\"BASE64_JPEG\\"}}]}}"
 ```
@@ -598,10 +632,27 @@ Control routes return the envelope `{success, code, message, request_id, data}`.
 """
 
 
-def face_mobile_api() -> str:
-    return """## API reference — mobile face SDK
+def face_mobile_api(include_liveness: bool = True) -> str:
+    liveness = ""
+    if include_liveness:
+        liveness = """
+### Passive liveness + deepfake (when licensed)
 
-Prefer **`FaceRecognitionClient`** (Android kit) / the matching iOS kit wrappers. Flutter, React Native, and Ionic expose the **same method names** as Android (`detect`, `faceDetection`, `liveness`, `livenessAll`, …). Serialize all engine calls on **one background thread**.
+| API | Purpose | Closest HTTP route |
+| --- | --- | --- |
+| `liveness(image)` | PAD + deepfake | `POST /api/face/liveness` |
+| `livenessAll(image)` | Same as `liveness`, high-accuracy pack | `POST /api/face/liveness` |
+| `deepfake(image)` | Deepfake-only still check | `POST /api/face/deepfake` |
+
+Treat authenticity as **REAL** only when both PAD and deepfake say real. Without the entitlement, treat missing scores as **not run**, not as pass.
+"""
+    live_line = "\n    val live = client.liveness(bitmap) // when licensed" if include_liveness else ""
+    omitted = ""
+    if not include_liveness:
+        omitted = "\nThis repository does not include face liveness. Do not call `liveness` or `/api/face/liveness`.\n"
+    return f"""## API reference — mobile face SDK
+{omitted}
+Prefer **`FaceRecognitionClient`** (Android kit) / the matching iOS kit wrappers. Flutter, React Native, and Ionic expose the **same method names** as Android (`detect`, `faceDetection`, `match`, …). Serialize all engine calls on **one background thread**.
 
 ### Lifecycle
 
@@ -627,17 +678,7 @@ Prefer **`FaceRecognitionClient`** (Android kit) / the matching iOS kit wrappers
 | `similarity(feature1, feature2)` | 1:1 score between templates | `POST /api/face/score` |
 | `quality(image, crop?)` | Quality attributes JSON | `POST /api/face/quality` |
 | `setLandmarkMode(14\\|68)` | Landmark density | — |
-
-### Passive liveness + deepfake (when licensed)
-
-| API | Purpose | Closest HTTP route |
-| --- | --- | --- |
-| `liveness(image)` | PAD + deepfake | `POST /api/face/liveness` |
-| `livenessAll(image)` | Same as `liveness`, high-accuracy pack | `POST /api/face/liveness` |
-| `deepfake(image)` | Deepfake-only still check | `POST /api/face/deepfake` |
-
-Treat authenticity as **REAL** only when both PAD and deepfake say real. Without the entitlement, treat missing scores as **not run**, not as pass.
-
+{liveness}
 ### Gallery (on-device 1:N)
 
 | API | Purpose |
@@ -653,36 +694,34 @@ Treat authenticity as **REAL** only when both PAD and deepfake say real. Without
 | --- | --- |
 | `startVideoWorker(config)` | Start tracking / identify session |
 | `addFrame` / live-frame helpers | Push camera frames |
-| `setVideoWorkerEventHandler` | Receive track / match / liveness events (JSON) |
+| `setVideoWorkerEventHandler` | Receive track / match events (JSON) |
 | `stopVideoWorker()` | Stop session |
-| `makeTrackingConfig` / `makeIdentityConfig` | Build configs (passive / active liveness options when licensed) |
+| `makeTrackingConfig` / `makeIdentityConfig` | Build configs |
 
 ### Usage example (Android kit)
 
 ```kotlin
 val client = FaceRecognitionClient.get(context)
-client.activate(licenseKey) { code ->
+client.activate(licenseKey) {{ code ->
     if (code != 0) return@activate
     // Worker thread: detect + match
     val json = client.detect(bitmap, /* crop */ false, /* flags */ 0)
-    val score = client.match(bitmapA, bitmapB)
-    val live = client.liveness(bitmap) // when licensed
-}
+    val score = client.match(bitmapA, bitmapB){live_line}
+}}
 ```
 
 ### Usage example (plugin / Flutter / React Native / Ionic)
 
-Call the same method names exposed by the plugin bridge (`activate` → `init` → `detect` / `match` / `liveness` / `enroll`). Keep camera preview on the UI thread; keep engine calls on a single background isolate / queue.
+Call the same method names exposed by the plugin bridge (`activate` → `init` → `detect` / `match` / `enroll`). Keep camera preview on the UI thread; keep engine calls on a single background isolate / queue.
 
 ### Integration checklist
 
 1. Download runtime with `python scripts/get_runtime.py` (or `install.gradle` on Android).
-2. `FaceRecognitionClient.get(context).activate(license) { code -> … }` (or `setActivation` → `init` on plugins).
+2. `FaceRecognitionClient.get(context).activate(license) {{ code -> … }}` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
-4. Enroll → Identify, or Capture / Attribute / Liveness for still flows.
+4. Enroll → Identify, or Capture / Attribute for still flows.
 5. Persist templates in **your** database if you leave the demo gallery.
 """
-
 
 def face_http_api(combined: bool) -> str:
     port = "14103" if combined else "14104"
@@ -811,9 +850,20 @@ curl -s -X POST http://127.0.0.1:14105/api/face/liveness \\
 """
 
 
-def document_mobile_api() -> str:
-    return """## API reference — mobile document SDK
-
+def document_mobile_api(recognition_only: bool = False) -> str:
+    auth = "" if recognition_only else " (+ authenticity when licensed)"
+    extra = ""
+    if not recognition_only:
+        extra = """
+| `documentLiveness(front, back?)` | Authenticity / PAD-only path |
+| `documentProcess(imagesJson, rfidJson, optionsJson)` | Combined pipeline (same idea as `POST /api/document/process`) |
+| `faceLiveness(image, mode?)` | Optional face PAD helper on document products that ship it |
+"""
+    note = ""
+    if recognition_only:
+        note = "\nThis repository does not include document liveness. Do not call `documentLiveness` or `/api/document/liveness`.\n"
+    return f"""## API reference — mobile document SDK
+{note}
 Android, iOS, Flutter, React Native, and Ionic share the **same customer method names** and the same process JSON idea (`identity` / `readings` / `tests` / `images` / `session`).
 
 ### Lifecycle
@@ -832,12 +882,9 @@ Android, iOS, Flutter, React Native, and Ionic share the **same customer method 
 | --- | --- |
 | Guide / crop helpers | Align document in frame (`DocumentGuideView` / kit crop) |
 | `locateDocument(image)` | Find document bounds in a frame / still |
-| `recognize(front, back?, authenticity?)` | OCR + MRZ + barcode (+ authenticity when licensed) |
-| `documentRecognition(front, back?)` | Recognition-only path |
-| `documentLiveness(front, back?)` | Authenticity / PAD-only path |
-| `documentProcess(imagesJson, rfidJson, optionsJson)` | Combined pipeline (same idea as `POST /api/document/process`) |
-| `faceLiveness(image, mode?)` | Optional face PAD helper on document products that ship it |
-
+| `recognize(front, back?, authenticity?)` | OCR + MRZ + barcode{auth} |
+| `documentRecognition(front, back?)` | Recognition path |
+{extra}
 ### Result JSON (shared idea)
 
 Top-level concepts (names may be normalized per platform):
@@ -846,7 +893,7 @@ Top-level concepts (names may be normalized per platform):
 | --- | --- |
 | Identity | Document type, country, overall score |
 | Fields / readings | OCR, MRZ, barcode field rows |
-| Checks / tests | Verification + image quality + security |
+| Checks / tests | Verification + image quality |
 | Images | Portrait / document crops (base64) |
 | Session | Process / request metadata when present |
 
@@ -856,10 +903,62 @@ See [Result JSON](result-json.md) and [Security check fields](security-fields.md
 
 1. Apply `install.gradle` or vendor iOS `docsdk`.
 2. Activate with your app id license → `init`.
-3. Capture front (and back when needed) → `recognize` or `documentProcess`.
+3. Capture front (and back when needed) → `recognize` or `documentRecognition`.
 4. Parse JSON in your app — do not depend on the demo Result UI.
 5. Store fields you need in **your** database.
 """
+
+
+def document_liveness_mobile_api() -> str:
+    return """## API reference — mobile document liveness
+
+This sample checks presentation attacks. It does not read MRZ, barcodes, or visual fields.
+
+| API | Purpose |
+| --- | --- |
+| `setActivation(license)` | Activate license (background thread) |
+| `init()` | Load models |
+| `deinit()` | Unload engine |
+| `getMachineCode()` / `getLicenseStatus()` | License helpers |
+| `documentLiveness(front, back?)` | Authenticity / PAD |
+
+A missing authenticity result is not a pass. See [Security check fields](security-fields.md).
+"""
+
+
+def document_recog_http_api() -> str:
+    return """## API reference — document recognition HTTP
+
+Base URL: `http://{host}:14106`
+
+This build does not serve `/api/document/liveness`.
+
+### Control routes
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/health` | Health |
+| `GET` | `/api/backend` | Backend info |
+| `GET` | `/api/machinecode` | Machine code |
+| `GET` | `/api/licenseStatus` | `recognition` flag |
+| `POST` | `/api/activate` | Activate license |
+
+### Process routes
+
+| Method | Path | Body | Description |
+| --- | --- | --- | --- |
+| `POST` | `/api/document/process` | `{ "images":[…] }` | OCR, MRZ, and barcode |
+| `POST` | `/api/document/recognition` | `{ "images":[…] }` | OCR / MRZ / barcode |
+
+```bash
+curl -s -X POST http://127.0.0.1:14106/api/document/recognition \\
+  -H "Content-Type: application/json" \\
+  -d "{\\"images\\":[{\\"image\\":\\"BASE64_FRONT\\",\\"page_idx\\":0}]}"
+```
+
+Response shape: [Result JSON](result-json.md).
+"""
+
 
 
 def document_http_api() -> str:
@@ -1254,13 +1353,17 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
             parts.append(face_liveness_http_api())
         elif ctx.family == "document":
             parts.append(document_http_api())
+        elif ctx.family == "document_recog":
+            parts.append(document_recog_http_api())
         elif ctx.family == "document_liveness":
             parts.append(document_liveness_http_api())
     else:
         parts.append(quick_start_mobile(ctx))
         parts.append(license_section(ctx))
-        if ctx.family in ("face_combined", "face_recog"):
+        if ctx.family == "face_combined":
             parts.append(face_mobile_api())
+        elif ctx.family == "face_recog":
+            parts.append(face_mobile_api(include_liveness=False))
         elif ctx.family == "face_liveness":
             parts.append(
                 "## API reference — mobile face liveness\n\n"
@@ -1283,8 +1386,10 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
                 "```\n"
             )
             parts.append(STATUS_CODES)
-        elif ctx.family in ("document", "document_liveness"):
-            parts.append(document_mobile_api())
+        elif ctx.family in ("document", "document_recog"):
+            parts.append(document_mobile_api(recognition_only=ctx.family == "document_recog"))
+        elif ctx.family == "document_liveness":
+            parts.append(document_liveness_mobile_api())
 
     parts.append(troubleshooting(ctx))
     if ctx.family in ("face_combined", "face_recog"):
@@ -1305,11 +1410,17 @@ def classify(name: str, platform: str | None) -> tuple[str, str]:
         return "Hub", "hub"
     if name.startswith("ID-Document-Liveness"):
         return plat if plat != "?" else "Linux", "document_liveness"
+    if name.startswith("ID-Document-Recognition-Liveness"):
+        return plat, "document"
+    if name.startswith("ID-Document-Recognition"):
+        return plat, "document_recog"
     if "Document" in name or name.startswith("ID-Document"):
         return plat, "document"
     if name.startswith("FaceLiveness") or "Face-Liveness" in name:
         return plat, "face_liveness"
-    if name in ("FaceRecognition-Windows", "FaceRecognition-Docker"):
+    if name.startswith("FaceRecognition-LivenessDetection") or "FaceRecognition-Liveness" in name:
+        return plat, "face_combined"
+    if name.startswith("FaceRecognition-"):
         return plat, "face_recog"
     if "FaceRecognition" in name:
         return plat, "face_combined"
