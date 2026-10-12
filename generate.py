@@ -806,6 +806,10 @@ Read passports, national IDs, and driver licenses on **your** device or server: 
 
 We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic**, **Windows**, and **Linux / Docker**.
 
+## Supported ID documents
+
+[Download the supported ID documents list](supported-id-documents.pdf). The file lists the identity document templates Identixia recognizes. Proof of address is not included.
+
 | Function | What you get | License flag |
 | --- | --- | --- |
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
@@ -866,7 +870,6 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 
 * [Recognition](recognition.md) — OCR, MRZ, barcode, and crops
 * [Liveness](liveness.md) — screen, printout, and substitution checks
-* [Supported ID documents and countries](supported-documents.md)
 * [Result format](result-json.md) · [Security checks](security-fields.md)
 
 {{% hint style="info" %}}
@@ -881,21 +884,115 @@ Document images and OCR fields stay on **your** device or server. Parse [Result 
     )
 
 
-def _country_slug(name: str, used: set[str]) -> str:
-    import re
+def _pdf_literal(text: str) -> str:
+    safe = []
+    for char in text:
+        if char in "()\\":
+            safe.append("\\" + char)
+        elif 32 <= ord(char) <= 255:
+            safe.append(char)
+        else:
+            safe.append("?")
+    return "".join(safe)
 
-    slug = re.sub(r"[^a-z0-9]+", "-", name.lower().replace("'", "")).strip("-") or "country"
-    base = slug
-    n = 2
-    while slug in used:
-        slug = f"{base}-{n}"
-        n += 1
-    used.add(slug)
-    return slug
+
+def _catalog_pdf(data: dict) -> bytes:
+    """Letter-size catalog. One country heading, then that country's templates."""
+    width, height = 612, 792
+    left, right, top, bottom = 48, 564, 748, 48
+    pages: list[list[str]] = [[]]
+    y = top
+
+    def ensure(size: int) -> None:
+        nonlocal y
+        if y - size >= bottom:
+            return
+        pages.append([])
+        y = top
+
+    def line(text: str, size: int, font: str, gap: int) -> None:
+        nonlocal y
+        ensure(gap)
+        pages[-1].append(f"BT /{font} {size} Tf {left} {y} Td ({_pdf_literal(text)}) Tj ET")
+        y -= gap
+
+    def wrap(text: str, size: int, font: str, gap: int, width_chars: int) -> None:
+        words = text.split()
+        current = ""
+        for word in words:
+            trial = word if not current else f"{current} {word}"
+            if len(trial) <= width_chars:
+                current = trial
+                continue
+            if current:
+                line(current, size, font, gap)
+            current = word
+        if current:
+            line(current, size, font, gap)
+
+    listed = data["listed"]
+    countries = data["countries"]
+    line("Supported ID documents", 18, "F2", 28)
+    wrap(
+        f"{listed:,} identity document templates for {len(countries)} issuing countries and authorities. Proof of address is not included.",
+        11,
+        "F1",
+        16,
+        88,
+    )
+    y -= 8
+    for country in countries:
+        line(country["name"], 13, "F2", 18)
+        for doc in country["documents"]:
+            wrap(doc, 10, "F1", 13, 92)
+        y -= 6
+
+    objects: list[bytes] = []
+
+    def add(body: bytes) -> int:
+        objects.append(body)
+        return len(objects)
+
+    font1 = add(b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
+    font2 = add(b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>")
+    page_ids: list[int] = []
+    for commands in pages:
+        stream = "\n".join(commands).encode("latin-1")
+        content_id = add(b"<< /Length " + str(len(stream)).encode() + b" >>\nstream\n" + stream + b"\nendstream")
+        page_ids.append(content_id)
+    page_object_ids: list[int] = []
+    for content_id in page_ids:
+        page_object_ids.append(
+            add(
+                b"<< /Type /Page /Parent 0 0 R /MediaBox [0 0 612 792] "
+                + f"/Contents {content_id} 0 R /Resources << /Font << /F1 {font1} 0 R /F2 {font2} 0 R >> >> >>".encode()
+            )
+        )
+    kids = " ".join(f"{page_id} 0 R" for page_id in page_object_ids)
+    pages_id = add(f"<< /Type /Pages /Count {len(page_object_ids)} /Kids [{kids}] >>".encode())
+    for page_id in page_object_ids:
+        objects[page_id - 1] = objects[page_id - 1].replace(b"/Parent 0 0 R", f"/Parent {pages_id} 0 R".encode())
+    catalog_id = add(f"<< /Type /Catalog /Pages {pages_id} 0 R >>".encode())
+    out = bytearray(b"%PDF-1.4\n")
+    offsets = [0]
+    for index, body in enumerate(objects, start=1):
+        offsets.append(len(out))
+        out.extend(f"{index} 0 obj\n".encode())
+        out.extend(body)
+        out.extend(b"\nendobj\n")
+    xref = len(out)
+    out.extend(f"xref\n0 {len(objects) + 1}\n".encode())
+    out.extend(b"0000000000 65535 f \n")
+    for offset in offsets[1:]:
+        out.extend(f"{offset:010d} 00000 n \n".encode())
+    out.extend(
+        f"trailer\n<< /Size {len(objects) + 1} /Root {catalog_id} 0 R >>\nstartxref\n{xref}\n%%EOF\n".encode()
+    )
+    return bytes(out)
 
 
 def write_supported_documents() -> None:
-    """Country search page. Document rows are written per country, not as one list."""
+    """Catalog PDF for the introduction page. Country markdown pages are removed."""
     import json
 
     data_path = Path(__file__).resolve().parent / "data" / "supported-id-documents.json"
@@ -903,49 +1000,22 @@ def write_supported_documents() -> None:
         print(f"SKIP supported documents: missing {data_path.name}")
         return
     data = json.loads(data_path.read_text(encoding="utf-8"))
-    listed = data["listed"]
-    countries_total = data["countries_total"]
-    folder = OUT / "id-document-sdk" / "supported-documents"
-    if folder.is_dir():
-        for old in folder.glob("*.md"):
-            old.unlink()
-    folder.mkdir(parents=True, exist_ok=True)
-    pairs: list[tuple[str, str]] = []
-    used: set[str] = set()
-    for country in data["countries"]:
-        name = country["name"]
-        slug = _country_slug(name, used)
-        pairs.append((name, slug))
-        docs = "\n".join(f"- {doc}" for doc in country["documents"])
-        write_page(
-            folder / f"{slug}.md",
-            name,
-            f"Identity document templates Identixia recognizes for {name}.",
-            f"[{listed:,} templates across {countries_total} issuing countries](../supported-documents.md).\n\n{docs}\n",
-        )
-    groups: dict[str, list[str]] = {}
-    for name, slug in pairs:
-        letter = name[0].upper()
-        if not letter.isalpha():
-            letter = "Other"
-        label = name.replace("[", "").replace("]", "")
-        groups.setdefault(letter, []).append(f"- [{label}](supported-documents/{slug}.md)")
-    sections = "\n\n".join(
-        f'{{% expand title="{letter}" %}}\n' + "\n".join(links) + "\n{% endexpand %}"
-        for letter, links in groups.items()
-    )
-    body = f"""Select an issuing country. Templates for that country are listed on its own page. This page does not list document templates. Proof of address is not included.
-
-Type a country name in the documentation search, or open a letter below.
-
-{sections}
-"""
-    write_page(
-        OUT / "id-document-sdk" / "supported-documents.md",
-        "Supported ID documents and countries",
-        f"Search identity document templates by issuing country. {listed:,} templates across {countries_total} countries. Proof of address is not included.",
-        body,
-    )
+    here = Path(__file__).resolve().parent
+    for root in (OUT, here / "documentation"):
+        page = root / "id-document-sdk" / "supported-documents.md"
+        folder = root / "id-document-sdk" / "supported-documents"
+        if page.is_file():
+            page.unlink()
+        if folder.is_dir():
+            shutil.rmtree(folder)
+    pdf = _catalog_pdf(data)
+    destination = OUT / "id-document-sdk" / "supported-id-documents.pdf"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(pdf)
+    published = here / "documentation" / "id-document-sdk" / "supported-id-documents.pdf"
+    published.parent.mkdir(parents=True, exist_ok=True)
+    published.write_bytes(pdf)
+    print(f"supported documents PDF {destination.stat().st_size} bytes, removed country pages")
 
 
 def write_document_concepts() -> None:
@@ -963,7 +1033,7 @@ Document **recognition** finds the card in the frame and extracts:
 * Barcode / QR when present
 * Cropped images (portrait, document, signature, and related crops)
 
-Issuing countries and document series are listed in [Supported ID documents and countries](supported-documents.md).
+Issuing countries and document series are listed in the [supported ID documents list](supported-id-documents.pdf).
 
 ## Capture tips
 
@@ -3420,7 +3490,6 @@ def write_summary(_structure: dict[str, list[tuple[str, str]]] | None = None) ->
         "* [Liveness](id-document-sdk/liveness.md)",
         "* [Result format](id-document-sdk/result-json.md)",
         "* [Security checks](id-document-sdk/security-fields.md)",
-        "* [Supported ID documents and countries](id-document-sdk/supported-documents.md)",
         "",
         "## API",
         "",

@@ -15,7 +15,6 @@
 * [Liveness](id-document-sdk/liveness.md)
 * [Result format](id-document-sdk/result-json.md)
 * [Security checks](id-document-sdk/security-fields.md)
-* [Supported ID documents and countries](id-document-sdk/supported-documents.md)
 
 ## API
 

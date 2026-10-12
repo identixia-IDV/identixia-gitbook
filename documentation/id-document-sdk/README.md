@@ -12,6 +12,10 @@ Read passports, national ID cards, and driver licenses on **your** device or ser
 
 We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic**, **Windows**, and **Linux / Docker**.
 
+## Supported ID documents
+
+[Download the supported ID documents list](supported-id-documents.pdf). The file lists the identity document templates Identixia recognizes. Proof of address is not included.
+
 | Function | What you get | License flag |
 | --- | --- | --- |
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
@@ -72,7 +76,6 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 
 * [Recognition](recognition.md) — OCR, MRZ, barcode, and crops
 * [Liveness](liveness.md) — screen, printout, and substitution checks
-* [Supported ID documents and countries](supported-documents.md)
 * [Result format](result-json.md) · [Security checks](security-fields.md)
 
 {% hint style="info" %}

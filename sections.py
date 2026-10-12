@@ -123,7 +123,6 @@ ICONS = {
     "liveness-only-server.md": "server",
     "result-json.md": "brackets-curly",
     "security-fields.md": "lock",
-    "supported-documents.md": "id-card",
     "integration-guide.md": "code",
     "reference.md": "book",
     "android.md": "mobile-screen",
@@ -484,7 +483,6 @@ def write_summaries() -> None:
             item("id-document-sdk/liveness.md", "Liveness"),
             item("id-document-sdk/result-json.md", "Result format"),
             item("id-document-sdk/security-fields.md", "Security checks"),
-            item("id-document-sdk/supported-documents.md", "Supported ID documents and countries"),
             "",
             *(
                 [
@@ -1170,6 +1168,13 @@ def _copy_space(name: str, compiled: list[tuple[re.Pattern[str], str]]) -> int:
                 continue
         elif rel.startswith(".gitbook/includes/"):
             pass
+        elif rel.lower().endswith(".pdf"):
+            if section_of(rel) != name:
+                continue
+            target = dest_root / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, target)
+            continue
         else:
             continue
         target = dest_root / rel
