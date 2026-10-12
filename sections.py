@@ -376,25 +376,14 @@ def write_summaries() -> None:
             "## Face",
             "",
             item("face-sdk/README.md", "Introduction"),
-            item("face-sdk/recognition.md", "Recognition", 1),
-            item("face-sdk/liveness.md", "Liveness", 1),
-            item("face-sdk/full-product.md", "Full product"),
-            item("face-sdk/full-mobile.md", "Mobile", 1),
-            item("face-sdk/full-server.md", "Server", 1),
-            item("face-sdk/recognition-only.md", "Recognition only"),
-            item("face-sdk/liveness-only.md", "Liveness only"),
-            item("face-sdk/liveness-only-mobile.md", "Mobile", 1),
-            item("face-sdk/liveness-only-server.md", "Server", 1),
+            item("face-sdk/recognition.md", "Recognition"),
+            item("face-sdk/liveness.md", "Liveness"),
             "",
             "## ID Document",
             "",
             item("id-document-sdk/README.md", "Introduction"),
-            item("id-document-sdk/recognition.md", "Recognition", 1),
-            item("id-document-sdk/liveness.md", "Liveness", 1),
-            item("id-document-sdk/full-product.md", "Full product"),
-            item("id-document-sdk/full-mobile.md", "Mobile", 1),
-            item("id-document-sdk/full-server.md", "Server", 1),
-            item("id-document-sdk/liveness-only.md", "Liveness only"),
+            item("id-document-sdk/recognition.md", "Recognition"),
+            item("id-document-sdk/liveness.md", "Liveness"),
             item("id-document-sdk/result-json.md", "Result format"),
             item("id-document-sdk/security-fields.md", "Security checks"),
             "",
@@ -439,15 +428,15 @@ def write_summaries() -> None:
             item("face-sdk/react-native.md", "React Native", 1),
             item("face-sdk/ionic-capacitor.md", "Ionic Capacitor", 1),
             item("face-sdk/ionic-cordova.md", "Ionic Cordova", 1),
-            item("face-sdk/liveness-android.md", "Liveness only — Android", 1),
-            item("face-sdk/liveness-ios.md", "Liveness only — iOS", 1),
+            item("face-sdk/liveness-android.md", "Face Liveness — Android", 1),
+            item("face-sdk/liveness-ios.md", "Face Liveness — iOS", 1),
             item("face-sdk/reference.md", "Platform index"),
             item("face-sdk/windows.md", "Windows", 1),
             item("face-sdk/linux-docker.md", "Linux / Docker", 1),
-            item("face-sdk/recognition-windows.md", "Recognition only — Windows", 1),
-            item("face-sdk/recognition-linux-docker.md", "Recognition only — Linux / Docker", 1),
-            item("face-sdk/liveness-windows.md", "Liveness only — Windows", 1),
-            item("face-sdk/liveness-linux-docker.md", "Liveness only — Linux / Docker", 1),
+            item("face-sdk/recognition-windows.md", "Face Recognition — Windows", 1),
+            item("face-sdk/recognition-linux-docker.md", "Face Recognition — Linux / Docker", 1),
+            item("face-sdk/liveness-windows.md", "Face Liveness — Windows", 1),
+            item("face-sdk/liveness-linux-docker.md", "Face Liveness — Linux / Docker", 1),
             "",
             "## ID Document",
             "",
@@ -461,8 +450,8 @@ def write_summaries() -> None:
             item("id-document-sdk/reference.md", "Platform index"),
             item("id-document-sdk/windows.md", "Windows", 1),
             item("id-document-sdk/linux-docker.md", "Linux / Docker", 1),
-            item("id-document-sdk/recognition-linux-docker.md", "Recognition only — Linux / Docker", 1),
-            item("id-document-sdk/liveness-linux-docker.md", "Liveness only — Linux / Docker", 1),
+            item("id-document-sdk/recognition-linux-docker.md", "ID Document Recognition — Linux / Docker", 1),
+            item("id-document-sdk/liveness-linux-docker.md", "ID Document Liveness — Linux / Docker", 1),
             "",
             *(
                 [
@@ -561,7 +550,7 @@ site:
       path: documentation
       icon: book-open
       default: true
-      description: What Identixia products do and which repository to choose.
+      description: What the products do, what you need, and what the sample returns.
       children:
         - type: space
           key: space-1
@@ -575,7 +564,7 @@ site:
       title: Developers
       path: developers
       icon: code
-      description: Platform integration, HTTP APIs, and IDV clients.
+      description: How to add the SDK to your app and call the kit.
       children:
         - type: space
           key: space-developers
@@ -589,7 +578,7 @@ site:
       title: Guides
       path: guides
       icon: compass
-      description: Setup, sample apps, licensing, and production.
+      description: Choose a product, run the sample, request a license, and contact support.
       children:
         - type: space
           key: space-guides
@@ -603,7 +592,7 @@ site:
 
 
 WELCOME_HINT = """{% hint style="info" %}
-This site has three sections. You are in **Documentation**. [Developers](https://docs.identixia.com/developers) is the integration reference. [Guides](https://docs.identixia.com/guides) covers setup, the sample apps, and licensing.
+This site has three sections. **Documentation** is what the product does and what a sample returns. [Developers](https://docs.identixia.com/developers) is how to put the kit in your app. [Guides](https://docs.identixia.com/guides) is how to choose a product, run a sample, and request a license.
 {% endhint %}
 
 """
@@ -641,9 +630,22 @@ def write_extra_pages() -> None:
             "Integrate Identixia on mobile, desktop, and your own server.",
             "code",
             """
-{% hint style="warning" %}
-Recognition-only builds do not include liveness. Liveness-only builds do not enroll or search a gallery.
-{% endhint %}
+Add the SDK to your own application in this order.
+
+{% stepper %}
+{% step %}
+### Open the integration guide
+Start with [Face](face-sdk/integration-guide.md) or [ID documents](id-document-sdk/integration-guide.md). The guide names the repository for the license you have.
+{% endstep %}
+{% step %}
+### Download the runtime
+Clone that repository and run `python scripts/get_runtime.py`. Native libraries and database packs are on GitHub Releases. They are not in git.
+{% endstep %}
+{% step %}
+### Activate, then call the kit
+Activate the license before initialization. Mobile calls run on a background thread. Server calls use the HTTP routes on the platform page.
+{% endstep %}
+{% endstepper %}
 
 <table data-view="cards">
   <thead>
@@ -654,30 +656,26 @@ Recognition-only builds do not include liveness. Liveness-only builds do not enr
   </thead>
   <tbody>
     <tr>
-      <td><strong>Face</strong> on a phone or desktop.</td>
+      <td><strong>Face</strong> recognition and liveness SDK integration for mobile apps and servers.</td>
       <td><a href="face-sdk/integration-guide.md">Face integration guide</a></td>
     </tr>
     <tr>
-      <td><strong>ID document</strong> capture, MRZ, and barcode.</td>
+      <td><strong>ID document</strong> capture, text recognition, MRZ reading, and barcode extraction.</td>
       <td><a href="id-document-sdk/integration-guide.md">Document integration guide</a></td>
     </tr>
     <tr>
       <td><strong>HTTP API</strong> on Windows or Docker.</td>
       <td><a href="sdk-server/face-recognition.md">Face recognition API</a></td>
     </tr>
-    <tr>
-      <td><strong>KYC session</strong> on the self-hosted platform.</td>
-      <td><a href="idv/api.md">Session API</a></td>
-    </tr>
   </tbody>
 </table>
 
 {% columns %}
 {% column %}
-Product behavior is in [Documentation](https://docs.identixia.com).
+What the product returns is in [Documentation](https://docs.identixia.com).
 {% endcolumn %}
 {% column %}
-First-run steps are in [Guides](https://docs.identixia.com/guides).
+Choosing a repository, running a sample, and requesting a license are in [Guides](https://docs.identixia.com/guides).
 {% endcolumn %}
 {% endcolumns %}
 
@@ -695,13 +693,13 @@ First-run steps are in [Guides](https://docs.identixia.com/guides).
             "compass",
             """
 {% hint style="info" %}
-Get a sample running before you embed the SDK. API details stay in [Developers](https://docs.identixia.com/developers).
+Use this section to understand the products, run a sample, and request a license. API calls stay in [Developers](https://docs.identixia.com/developers).
 {% endhint %}
 
 {% stepper %}
 {% step %}
 ### Choose a product
-Open [Choose a product](choose-a-product.md) so the repository matches the license.
+Open [Choose a product](choose-a-product.md) and match the repository to the license flags you need.
 {% endstep %}
 {% step %}
 ### Run the sample
@@ -712,8 +710,8 @@ Follow [Run the sample](run-the-sample.md). Android and iOS are separate setups.
 Send the machine code or application id from the sample on [Request a license](request-a-license-and-support.md).
 {% endstep %}
 {% step %}
-### Host KYC
-For the self-hosted platform, continue with [Quick start](idv/quick-start.md) and [Initial setup](idv/initial-setup.md).
+### Contact
+License requests and technical support are on [Contact](contact-us.md).
 {% endstep %}
 {% endstepper %}
 
@@ -734,12 +732,12 @@ For the self-hosted platform, continue with [Quick start](idv/quick-start.md) an
       <td><a href="run-the-sample.md">Run the sample</a></td>
     </tr>
     <tr>
-      <td>Stand up the self-hosted KYC platform.</td>
-      <td><a href="idv/quick-start.md">Quick start</a></td>
-    </tr>
-    <tr>
       <td>Send an application id or machine code.</td>
       <td><a href="request-a-license-and-support.md">Request a license</a></td>
+    </tr>
+    <tr>
+      <td>Email, phone, and Telegram.</td>
+      <td><a href="contact-us.md">Contact</a></td>
     </tr>
   </tbody>
 </table>
@@ -751,41 +749,38 @@ For the self-hosted platform, continue with [Quick start](idv/quick-start.md) an
     (ROOT / "guides" / "choose-a-product.md").write_text(
         _landing(
             "Choose a product",
-            "Match the GitHub repository to the capability you licensed.",
+            "Match the repository to the functions your license includes.",
             "compass",
             """
-{% hint style="danger" %}
-Do not expect liveness in a recognition-only build, or enroll and 1:N search in a liveness-only build.
-{% endhint %}
+Use the license flags on the product introduction, then clone the repository in that row.
 
-| You need | Face | ID document |
-| --- | --- | --- |
-| Recognition and liveness | Face Recognition & Liveness Detection | ID Document Recognition & Liveness Detection |
-| Recognition only | Face Recognition | ID Document Recognition |
-| Liveness only | Face Liveness Detection | ID Document Liveness Detection |
+## Face
 
-{% columns %}
-{% column %}
-Full products ship on Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, and Linux / Docker.
-{% endcolumn %}
-{% column %}
-Recognition-only and liveness-only builds exist on a subset of those platforms. [Developers](https://docs.identixia.com/developers) lists the repository for each one.
-{% endcolumn %}
-{% endcolumns %}
+| You need | License flags | Repositories | Server port |
+| --- | --- | --- | ---: |
+| Detect, attributes, quality, templates, 1:1, 1:N, and a passive liveness score | `recognition` and `liveness` | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Names start with `FaceRecognition-LivenessDetection-`. | 14103 |
+| Detect, templates, 1:1, and 1:N. No liveness score. | `recognition` | Windows [`FaceRecognition-Windows`](https://github.com/identixia-IDV/FaceRecognition-Windows) and Linux / Docker [`FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker). There is no phone SDK for this license. | 14104 |
+| A presentation-attack score. No enroll and no 1:N search. | `liveness` | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Names start with `FaceLivenessDetection-`. | 14105 |
 
-<details>
-<summary>SDK Server ports</summary>
+Phone and desktop pages for recognition plus liveness are in [Developers](https://docs.identixia.com/developers/face-sdk/integration-guide). Face liveness phone samples that have no separate developer page are the Flutter, React Native, Ionic Capacitor, and Ionic Cordova repositories above. Their setup is the repository README.
 
-| Product | Port |
-| --- | --- |
-| Document recognition and liveness | 14102 |
-| Face recognition and liveness | 14103 |
-| Face recognition only | 14104 |
-| Face liveness only | 14105 |
-| Document recognition only | 14106 |
-| Document liveness only | 14107 |
+Windows and Docker face recognition calls are `POST /api/face/analyze`, `/api/face/template`, `/api/face/compare`, `/api/face/enroll`, and `/api/face/search`. Do not call `/api/face/liveness` on the recognition build. The liveness build uses `POST /api/face/liveness` and `POST /api/face/deepfake`.
 
-</details>
+## ID document
+
+| You need | License flags | Repositories | Server port |
+| --- | --- | --- | ---: |
+| Locate, OCR, MRZ, barcode, cropped images, and authenticity checks | `recognition` and `authenticity` | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Names start with `ID-Document-Recognition-Liveness-Detection-`. | 14102 |
+| OCR, MRZ, and barcode. No document liveness route. | `recognition` | Linux / Docker [`ID-Document-Recognition-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Docker). | 14106 |
+| Screen, printout, and substitution checks. No MRZ, barcode, or visual fields. | `authenticity` | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Names start with `ID-Document-Liveness-Detection-`. | 14107 |
+
+The recognition build does not serve `/api/document/liveness`. The authenticity build does not expose `/api/document/process`. On the combined server, `POST /api/document/process` returns OCR and authenticity when that license flag is on, `POST /api/document/recognition` returns OCR / MRZ / barcode, and `POST /api/document/liveness` returns authenticity.
+
+## After you pick a repository
+
+1. [Run the sample](run-the-sample.md) until it shows **Ready**.
+2. [Request a license](request-a-license-and-support.md) for the sample application id or for your own application id or machine code.
+3. [Contact](contact-us.md) if you need a key or help with a platform.
 
 <a href="https://docs.identixia.com/developers" class="button primary" data-icon="code">Open Developers</a>
 """,

@@ -47,7 +47,7 @@ IDV = {
 ROOT_PAGES = {
     "contact-us": ("Contact Identixia for SDK Licensing and Support", "Contact Identixia for face recognition, liveness detection, document OCR, and IDV licensing or technical integration support."),
     "request-a-license-and-support": ("Request an Identixia SDK License and Technical Support", "Request a license for Face SDK, ID Document SDK, or IDV. Learn which app identifier or machine code to provide and how to activate."),
-    "choose-a-product": ("Choose a Face Recognition, Document OCR, or IDV Product", "Compare Identixia face recognition, liveness detection, document OCR, and IDV products to choose the right integration for your app."),
+    "choose-a-product": ("Choose a product", "Match an Identixia repository to the face or ID document license you need, then run the sample."),
     "run-the-sample": ("Run the Identixia SDK Sample Apps", "Set up Identixia SDK sample apps for Android, iOS, Flutter, React Native, and Ionic, then download the runtime and activate your license."),
 }
 
@@ -108,10 +108,10 @@ def page_metadata(rel: str, section: str) -> tuple[str, str] | None:
         if leaf != "README":
             return ROOT_PAGES.get(leaf)
         if section == "developers":
-            return ("Identity Verification SDK and API Developer Guides", "Integrate Identixia face recognition, liveness detection, document OCR, and identity verification SDKs using platform guides and HTTP APIs.")
+            return ("Identity Verification SDK and API Developer Guides", "Add the Identixia SDK to your app: download the runtime, activate a license, and call the kit on each platform.")
         if section == "guides":
-            return ("Identity Verification SDK Setup and Licensing Guides", "Choose an Identixia product, run a sample app, request an SDK license, and configure your identity verification deployment.")
-        return ("Identixia Identity Verification SDK Documentation", "Explore face recognition, liveness detection, ID document OCR, and self-hosted KYC. Find SDK setup guides, HTTP APIs, and licensing instructions.")
+            return ("Identity Verification SDK Setup and Licensing Guides", "Choose an Identixia product, run the sample, request a license, and contact support.")
+        return ("Identixia Identity Verification SDK Documentation", "What Identixia face and ID document products do, what you need to run a sample, and what the sample returns.")
     if family == "sdk-server":
         product = {"README": "Face Recognition and Document OCR", "face-recognition": "Face Recognition", "face-liveness": "Face Liveness Detection", "document-recognition": "ID Document Recognition and OCR", "document-liveness": "ID Document Liveness Detection"}.get(leaf)
         if product:
@@ -161,7 +161,7 @@ def page_metadata(rel: str, section: str) -> tuple[str, str] | None:
 REPLACEMENTS = {
     "On-premises ID Document Recognition and Document Liveness (authenticity) SDKs.": "Build document capture and identity data extraction with Identixia ID document recognition, optical character recognition (OCR), and document liveness SDKs.",
     "Read passports, national IDs, and driver licenses on **your** device or server: OCR / MRZ / barcode fields, cropped images, and optional anti-spoof authenticity checks.": "Read passports, national ID cards, and driver licenses on **your** device or server. Extract printed text, read the machine-readable zone (MRZ), decode supported barcodes, and obtain cropped document images. Add document anti-spoofing checks when enabled by your license.",
-    "Full-product repositories run both when licensed. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.": "Combined SDK repositories support both recognition and document liveness when licensed. Choose the **liveness-only** Linux / Docker API when you need document authenticity checks without text extraction.",
+    "Full-product repositories run both when licensed. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.": "The license flags are `recognition` and `authenticity`. [Choose a product](https://docs.identixia.com/guides/choose-a-product) lists the repository for each one.",
     "<strong>Face</strong> — recognition and passive liveness.": "<strong>Face</strong> — face recognition, matching, and passive liveness detection.",
     "<strong>ID documents</strong> — OCR, MRZ, barcode, and document liveness.": "<strong>ID documents</strong> — passport and ID card OCR, MRZ reading, barcode extraction, and document liveness.",
     "<strong>IDV</strong> — self-hosted KYC sessions on your own stack.": "<strong>IDV</strong> — self-hosted identity verification and Know Your Customer (KYC) sessions.",

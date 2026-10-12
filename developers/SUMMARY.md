@@ -11,15 +11,15 @@
   * [React Native](face-sdk/react-native.md)
   * [Ionic Capacitor](face-sdk/ionic-capacitor.md)
   * [Ionic Cordova](face-sdk/ionic-cordova.md)
-  * [Liveness only — Android](face-sdk/liveness-android.md)
-  * [Liveness only — iOS](face-sdk/liveness-ios.md)
+  * [Face Liveness — Android](face-sdk/liveness-android.md)
+  * [Face Liveness — iOS](face-sdk/liveness-ios.md)
 * [Platform index](face-sdk/reference.md)
   * [Windows](face-sdk/windows.md)
   * [Linux / Docker](face-sdk/linux-docker.md)
-  * [Recognition only — Windows](face-sdk/recognition-windows.md)
-  * [Recognition only — Linux / Docker](face-sdk/recognition-linux-docker.md)
-  * [Liveness only — Windows](face-sdk/liveness-windows.md)
-  * [Liveness only — Linux / Docker](face-sdk/liveness-linux-docker.md)
+  * [Face Recognition — Windows](face-sdk/recognition-windows.md)
+  * [Face Recognition — Linux / Docker](face-sdk/recognition-linux-docker.md)
+  * [Face Liveness — Windows](face-sdk/liveness-windows.md)
+  * [Face Liveness — Linux / Docker](face-sdk/liveness-linux-docker.md)
 
 ## ID Document
 
@@ -33,8 +33,8 @@
 * [Platform index](id-document-sdk/reference.md)
   * [Windows](id-document-sdk/windows.md)
   * [Linux / Docker](id-document-sdk/linux-docker.md)
-  * [Recognition only — Linux / Docker](id-document-sdk/recognition-linux-docker.md)
-  * [Liveness only — Linux / Docker](id-document-sdk/liveness-linux-docker.md)
+  * [ID Document Recognition — Linux / Docker](id-document-sdk/recognition-linux-docker.md)
+  * [ID Document Liveness — Linux / Docker](id-document-sdk/liveness-linux-docker.md)
 
 ## API
 

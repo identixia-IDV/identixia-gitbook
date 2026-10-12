@@ -18,15 +18,21 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 | **Recognition** | Detect, attributes, quality, templates, 1:1, 1:N | `recognition` |
 | **Liveness** | Passive presentation-attack score | `liveness` |
 
-Choose a repository that matches your license. A recognition-only build does not return liveness scores.
+## What you need
+
+A license that includes `recognition`. Add `liveness` when you need a presentation-attack score. From the product repository, run `python scripts/get_runtime.py` so the native libraries and `*.xdb` databases are on disk. You keep the gallery database.
+
+## Try it
+
+* [Run the sample](https://docs.identixia.com/guides/run-the-sample)
+* [Choose a product](https://docs.identixia.com/guides/choose-a-product)
+* [SDK Server](../sdk-server/README.md) — Windows and Docker HTTP API
 
 ![Face SDK Android home](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png)
 
 ## Next
 
-* [Reference](reference.md) — platform quick starts and sample repositories
-* [SDK Server](../sdk-server/) — HTTP API (Windows & Docker)
-* Function notes: [Recognition](recognition.md) · [Liveness](liveness.md)
+* [Recognition](recognition.md) · [Liveness](liveness.md)
 
 {% hint style="info" %}
 Biometric images and templates stay on **your** device or server. Identixia does not host them.

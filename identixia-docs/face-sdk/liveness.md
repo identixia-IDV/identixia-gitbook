@@ -23,8 +23,8 @@ It is **passive**: the user looks at the camera. The core API does not require s
 
 | Product line | Docs |
 | --- | --- |
-| Full Face SDK (recognition + liveness) | Platform pages under [Face SDK](README.md) |
-| Liveness-only | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Docker](liveness-linux-docker.md) |
+| Face Recognition & Liveness Detection | Platform pages under [Face SDK](README.md). Server port **14103**. |
+| Face Liveness Detection | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Docker](liveness-linux-docker.md). Flutter, React Native, and Ionic samples are in the repository list on [Choose a product](https://docs.identixia.com/guides/choose-a-product). Server port **14105**. |
 
 Hub pack: [`Face-Liveness-Detection-SDK`](https://github.com/identixia-IDV/Face-Liveness-Detection-SDK)
 

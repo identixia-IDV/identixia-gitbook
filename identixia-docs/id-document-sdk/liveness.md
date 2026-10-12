@@ -28,8 +28,8 @@ See [Security check fields](security-fields.md).
 
 | Product | Docs |
 | --- | --- |
-| Full Document SDK (mobile + server) | Platform pages on [ID Document SDK](README.md) |
-| Liveness-only Linux / Docker | [Document liveness Docker](liveness-linux-docker.md) |
+| ID Document Recognition & Liveness Detection | Platform pages on [ID Document SDK](README.md). Server port **14102**. |
+| ID Document Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, and [Linux / Docker](liveness-linux-docker.md). Server port **14107**. This build does not read MRZ, barcodes, or visual fields, and it does not expose `/api/document/process`. |
 
 ### Example — authenticity-only (full server)
 

@@ -16,16 +16,22 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
 | **Liveness / authenticity** | Screen / printout / substitution checks | `authenticity` |
 
-Combined SDK repositories support both recognition and document liveness when licensed. Choose the **liveness-only** Linux / Docker API when you need document authenticity checks without text extraction.
+## What you need
+
+A license that includes `recognition` for OCR, MRZ, and barcode reading. Add `authenticity` when you need screen, printout, or substitution checks. From the product repository, run `python scripts/get_runtime.py`.
+
+## Try it
+
+* [Run the sample](https://docs.identixia.com/guides/run-the-sample)
+* [Choose a product](https://docs.identixia.com/guides/choose-a-product)
+* [Result format](result-json.md) · [Security checks](security-fields.md)
 
 ![Document demo status](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)
 
 ## Next
 
-* [Reference](reference.md) — platform quick starts and sample repositories
-* [Result Format](result-json.md) · [Security check fields](security-fields.md)
-* [SDK Server](../sdk-server/) — HTTP API (Windows & Docker)
-* Function notes: [Recognition](recognition.md) · [Liveness](liveness.md)
+* [Recognition](recognition.md) · [Liveness](liveness.md)
+* [SDK Server](../sdk-server/README.md)
 
 {% hint style="info" %}
 Document images and OCR fields stay on **your** device or server. Parse [Result Format](result-json.md) — do not scrape the Result UI.

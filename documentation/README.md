@@ -1,6 +1,6 @@
 ---
 description: >-
-  Explore face recognition, liveness detection, ID document OCR, and self-hosted KYC. Find SDK setup guides, HTTP APIs, and licensing instructions.
+  What Identixia face and ID document products do, what you need to run a sample, and what the sample returns.
 icon: house
 ---
 
@@ -31,10 +31,6 @@ Build identity verification with face recognition, passive liveness detection, a
       <td><a href="id-document-sdk/README.md">ID Document SDK</a></td>
     </tr>
     <tr>
-      <td><strong>IDV</strong> — self-hosted identity verification and Know Your Customer (KYC) sessions.</td>
-      <td><a href="idv/README.md">IDV platform</a></td>
-    </tr>
-    <tr>
       <td><strong>SDK Server</strong> — the same HTTP API on Windows and Docker.</td>
       <td><a href="sdk-server/README.md">SDK Server</a></td>
     </tr>
@@ -45,16 +41,20 @@ Build identity verification with face recognition, passive liveness detection, a
 
 {% stepper %}
 {% step %}
-### Choose the product
-Open Face, Documents, or IDV above. Recognition-only builds do not include liveness. Liveness-only builds do not enroll or search a gallery.
+### See what the product does
+Open Face or ID documents above. Each page lists what the product is for, what you need, and what a sample returns.
 {% endstep %}
 {% step %}
 ### Run the sample
-Clone the repository and follow the platform page. Android and iOS are separate setups.
+Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. From the product clone, run `python scripts/get_runtime.py`.
 {% endstep %}
 {% step %}
-### Activate
-Request a license using your Android application ID, iOS bundle identifier, or server machine code. Activate the returned key before initializing the SDK.
+### Request a license
+Send the Android application ID, iOS bundle identifier, or server machine code on [Request a license](https://docs.identixia.com/guides/request-a-license-and-support). Activate that key before initializing the SDK.
+{% endstep %}
+{% step %}
+### Contact
+License requests and technical support: [Contact](https://docs.identixia.com/guides/contact-us).
 {% endstep %}
 {% endstepper %}
 

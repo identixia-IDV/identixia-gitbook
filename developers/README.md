@@ -1,14 +1,27 @@
 ---
 description: >-
-  Integrate Identixia face recognition, liveness detection, document OCR, and identity verification SDKs using platform guides and HTTP APIs.
+  Add the Identixia SDK to your app: download the runtime, activate a license, and call the kit on each platform.
 icon: code
 ---
 
 # Identity Verification SDK and API Developer Guides
 
-{% hint style="warning" %}
-Recognition-only builds do not include liveness. Liveness-only builds do not enroll or search a gallery.
-{% endhint %}
+Add the SDK to your own application in this order.
+
+{% stepper %}
+{% step %}
+### Open the integration guide
+Start with [Face](face-sdk/integration-guide.md) or [ID documents](id-document-sdk/integration-guide.md). The guide names the repository for the license you have.
+{% endstep %}
+{% step %}
+### Download the runtime
+Clone that repository and run `python scripts/get_runtime.py`. Native libraries and database packs are on GitHub Releases. They are not in git.
+{% endstep %}
+{% step %}
+### Activate, then call the kit
+Activate the license before initialization. Mobile calls run on a background thread. Server calls use the HTTP routes on the platform page.
+{% endstep %}
+{% endstepper %}
 
 <table data-view="cards">
   <thead>
@@ -30,19 +43,15 @@ Recognition-only builds do not include liveness. Liveness-only builds do not enr
       <td><strong>HTTP API</strong> on Windows or Docker.</td>
       <td><a href="sdk-server/face-recognition.md">Face recognition API</a></td>
     </tr>
-    <tr>
-      <td><strong>KYC session</strong> on the self-hosted platform.</td>
-      <td><a href="idv/api.md">Session API</a></td>
-    </tr>
   </tbody>
 </table>
 
 {% columns %}
 {% column %}
-Product behavior is in [Documentation](https://docs.identixia.com).
+What the product returns is in [Documentation](https://docs.identixia.com).
 {% endcolumn %}
 {% column %}
-First-run steps are in [Guides](https://docs.identixia.com/guides).
+Choosing a repository, running a sample, and requesting a license are in [Guides](https://docs.identixia.com/guides).
 {% endcolumn %}
 {% endcolumns %}
 

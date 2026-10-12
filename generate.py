@@ -329,9 +329,9 @@ This is the **full Face SDK integration path**. Open the platform page for your 
 
 | Goal | Product line | Example repos |
 | --- | --- | --- |
-| Recognition + optional liveness | Face Recognition & Liveness Detection | Android / iOS / Flutter / RN / Ionic / Windows / Docker |
-| Recognition only | Face Recognition | Windows / Docker (and thin mobile siblings) |
-| Liveness only | Face Liveness Detection | Android / iOS / Windows / Docker |
+| Recognition and liveness | Face Recognition & Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14103**. |
+| Recognition | Face Recognition | Windows and Linux / Docker. Server port **14104**. There is no recognition-only phone SDK. These builds do not return a liveness score. |
+| Liveness | Face Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14105**. These builds do not enroll a gallery or run 1:N search. |
 
 ## 2. Clone and download the runtime
 
@@ -397,9 +397,9 @@ This is the **full ID Document SDK integration path**. Open the platform page fo
 
 | Goal | Product line | Example repos |
 | --- | --- | --- |
-| OCR + optional authenticity | ID Document Recognition & Liveness Detection | Android / iOS / Flutter / RN / Ionic / Windows / Docker |
-| OCR only | ID Document Recognition | Thin siblings + server ports |
-| Authenticity / PAD only | ID Document Liveness Detection | Android / iOS / Windows / Docker |
+| Recognition and authenticity | ID Document Recognition & Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14102**. |
+| Recognition | ID Document Recognition | Linux / Docker. Server port **14106**. This build does not serve `/api/document/liveness`. |
+| Authenticity | ID Document Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14107**. It does not read MRZ, barcodes, or visual fields, and it does not expose `/api/document/process`. |
 
 ## 2. Clone and download the runtime
 
@@ -461,15 +461,21 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 | **Recognition** | Detect, attributes, quality, templates, 1:1, 1:N | `recognition` |
 | **Liveness** | Passive presentation-attack score | `liveness` |
 
-Choose a repository that matches your license. A recognition-only build does not return liveness scores.
+## What you need
+
+A license that includes `recognition`. Add `liveness` when you need a presentation-attack score. From the product repository, run `python scripts/get_runtime.py` so the native libraries and `*.xdb` databases are on disk. You keep the gallery database.
+
+## Try it
+
+* [Run the sample](https://docs.identixia.com/guides/run-the-sample)
+* [Choose a product](https://docs.identixia.com/guides/choose-a-product)
+* [SDK Server](../sdk-server/README.md) — Windows and Docker HTTP API
 
 <figure><img src="../.gitbook/assets/face-android-home.png" alt="Face SDK Android home" width="160"><figcaption>Android demo home</figcaption></figure>
 
 ## Next
 
-* [Reference](reference.md) — platform quick starts and sample repositories
-* [SDK Server](../sdk-server/) — HTTP API (Windows & Docker)
-* Function notes: [Recognition](recognition.md) · [Liveness](liveness.md)
+* [Recognition](recognition.md) · [Liveness](liveness.md)
 
 {{% hint style="info" %}}
 Biometric images and templates stay on **your** device or server. Identixia does not host them.
@@ -503,21 +509,27 @@ We provide SDKs for all platforms. Sample projects are on GitHub: [{GH.replace('
 | Windows | [Windows](windows.md) | [`FaceRecognition-LivenessDetection-Windows`]({GH}/FaceRecognition-LivenessDetection-Windows) |
 | Linux / Docker | [Linux / Docker](linux-docker.md) | [`FaceRecognition-LivenessDetection-Docker`]({GH}/FaceRecognition-LivenessDetection-Docker) |
 
-## Recognition only
+## Face Recognition
+
+Windows and Linux / Docker. There is no recognition-only phone SDK. These builds do not return a liveness score. Server port **14104**.
 
 | Platform | Docs | Repository |
 | --- | --- | --- |
-| Android, iOS, Flutter, React Native, Ionic | [Recognition only](recognition-only.md) | Listed on that page |
 | Windows | [Face Recognition (Windows)](recognition-windows.md) | [`FaceRecognition-Windows`]({GH}/FaceRecognition-Windows) |
 | Linux / Docker | [Face Recognition (Linux / Docker)](recognition-linux-docker.md) | [`FaceRecognition-Docker`]({GH}/FaceRecognition-Docker) |
 
-## Liveness only
+## Face Liveness Detection
+
+These builds score presentation attacks. They do not enroll a gallery or run 1:N search. Server port **14105**.
 
 | Platform | Docs | Repository |
 | --- | --- | --- |
 | Android | [Face Liveness (Android)](liveness-android.md) | [`FaceLivenessDetection-Android`]({GH}/FaceLivenessDetection-Android) |
 | iOS | [Face Liveness (iOS)](liveness-ios.md) | [`FaceLivenessDetection-iOS`]({GH}/FaceLivenessDetection-iOS) |
-| Flutter, React Native, Ionic | [Liveness only — mobile](liveness-only-mobile.md) | Listed on that page |
+| Flutter | Repository README | [`FaceLivenessDetection-Flutter`]({GH}/FaceLivenessDetection-Flutter) |
+| React Native | Repository README | [`FaceLivenessDetection-React-Native`]({GH}/FaceLivenessDetection-React-Native) |
+| Ionic Capacitor | Repository README | [`FaceLivenessDetection-Ionic-Capacitor`]({GH}/FaceLivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | Repository README | [`FaceLivenessDetection-Ionic-Cordova`]({GH}/FaceLivenessDetection-Ionic-Cordova) |
 | Windows | [Face Liveness (Windows)](liveness-windows.md) | [`FaceLivenessDetection-Windows`]({GH}/FaceLivenessDetection-Windows) |
 | Linux / Docker | [Face Liveness (Linux / Docker)](liveness-linux-docker.md) | [`FaceLivenessDetection-Docker`]({GH}/FaceLivenessDetection-Docker) |
 
@@ -617,8 +629,8 @@ It is **passive**: the user looks at the camera. The core API does not require s
 
 | Product line | Docs |
 | --- | --- |
-| Full Face SDK (recognition + liveness) | Platform pages under [Face SDK](README.md) |
-| Liveness-only | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Docker](liveness-linux-docker.md) |
+| Face Recognition & Liveness Detection | Platform pages under [Face SDK](README.md). Server port **14103**. |
+| Face Liveness Detection | [Android](liveness-android.md) · [iOS](liveness-ios.md) · [Windows](liveness-windows.md) · [Docker](liveness-linux-docker.md). Flutter, React Native, and Ionic samples are in the repository list on [Choose a product](https://docs.identixia.com/guides/choose-a-product). Server port **14105**. |
 
 Hub pack: [`Face-Liveness-Detection-SDK`]({GH}/Face-Liveness-Detection-SDK)
 
@@ -659,16 +671,22 @@ We provide SDKs for **Android**, **iOS**, **Flutter**, **React Native**, **Ionic
 | **Recognition** | Locate, OCR, MRZ, barcode, cropped images | `recognition` |
 | **Liveness / authenticity** | Screen / printout / substitution checks | `authenticity` |
 
-Full-product repositories run both when licensed. A **liveness-only** Linux / Docker API is available when you need authenticity without the full OCR surface.
+## What you need
+
+A license that includes `recognition` for OCR, MRZ, and barcode reading. Add `authenticity` when you need screen, printout, or substitution checks. From the product repository, run `python scripts/get_runtime.py`.
+
+## Try it
+
+* [Run the sample](https://docs.identixia.com/guides/run-the-sample)
+* [Choose a product](https://docs.identixia.com/guides/choose-a-product)
+* [Result format](result-json.md) · [Security checks](security-fields.md)
 
 <figure><img src="../.gitbook/assets/document-desktop-status.png" alt="Document demo status" width="480"><figcaption>Desktop demo — status</figcaption></figure>
 
 ## Next
 
-* [Reference](reference.md) — platform quick starts and sample repositories
-* [Result Format](result-json.md) · [Security check fields](security-fields.md)
-* [SDK Server](../sdk-server/) — HTTP API (Windows & Docker)
-* Function notes: [Recognition](recognition.md) · [Liveness](liveness.md)
+* [Recognition](recognition.md) · [Liveness](liveness.md)
+* [SDK Server](../sdk-server/README.md)
 
 {{% hint style="info" %}}
 Document images and OCR fields stay on **your** device or server. Parse [Result Format](result-json.md) — do not scrape the Result UI.
@@ -756,8 +774,8 @@ See [Security check fields](security-fields.md).
 
 | Product | Docs |
 | --- | --- |
-| Full Document SDK (mobile + server) | Platform pages on [ID Document SDK](README.md) |
-| Liveness-only Linux / Docker | [Document liveness Docker](liveness-linux-docker.md) |
+| ID Document Recognition & Liveness Detection | Platform pages on [ID Document SDK](README.md). Server port **14102**. |
+| ID Document Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, and [Linux / Docker](liveness-linux-docker.md). Server port **14107**. This build does not read MRZ, barcodes, or visual fields, and it does not expose `/api/document/process`. |
 
 ### Example — authenticity-only (full server)
 
@@ -1299,10 +1317,6 @@ Face recognition, face liveness, and ID document capture run on **your** device 
       <td><a href="id-document-sdk/README.md">ID Document SDK</a></td>
     </tr>
     <tr>
-      <td><strong>IDV</strong> — self-hosted KYC sessions on your own stack.</td>
-      <td><a href="idv/README.md">IDV platform</a></td>
-    </tr>
-    <tr>
       <td><strong>SDK Server</strong> — the same HTTP API on Windows and Docker.</td>
       <td><a href="sdk-server/README.md">SDK Server</a></td>
     </tr>
@@ -1313,16 +1327,20 @@ Face recognition, face liveness, and ID document capture run on **your** device 
 
 {{% stepper %}}
 {{% step %}}
-### Choose the product
-Open Face, Documents, or IDV above. Recognition-only builds do not include liveness. Liveness-only builds do not enroll or search a gallery.
+### See what the product does
+Open Face or ID documents above. Each page lists what the product is for, what you need, and what a sample returns.
 {{% endstep %}}
 {{% step %}}
 ### Run the sample
-Clone the repository and follow the platform page. Android and iOS are separate setups.
+Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. From the product clone, run `python scripts/get_runtime.py`.
 {{% endstep %}}
 {{% step %}}
-### Activate
-Send the application id, bundle id, or machine code, then call activate before init.
+### Request a license
+Send the Android application ID, iOS bundle identifier, or server machine code on [Request a license](https://docs.identixia.com/guides/request-a-license-and-support). Activate that key before initializing the SDK.
+{{% endstep %}}
+{{% step %}}
+### Contact
+License requests and technical support: [Contact](https://docs.identixia.com/guides/contact-us).
 {{% endstep %}}
 {{% endstepper %}}
 
@@ -3074,44 +3092,29 @@ def write_summary(_structure: dict[str, list[tuple[str, str]]] | None = None) ->
         "",
         "",
         "* [Welcome to Identixia](README.md)",
-        "* [SDK Server](sdk-server/README.md)",
-        "  * [Face Recognition](sdk-server/face-recognition.md)",
-        "  * [Face Liveness](sdk-server/face-liveness.md)",
-        "  * [Document Recognition](sdk-server/document-recognition.md)",
-        "  * [Document Liveness](sdk-server/document-liveness.md)",
-        "* [IDV: Self-Host KYC Platform](idv/README.md)",
-        "  * [Project structure](idv/project-structure.md)",
-        "  * [Project setup](idv/environment.md)",
-        "  * [Initial setup process](idv/initial-setup.md)",
-        "  * [Understanding session states](idv/session-states.md)",
-        "  * [iOS & Android](idv/components-clients.md)",
-        "  * [Creating a session (API)](idv/api.md)",
-        "  * [Webhook integration](idv/company-webhooks.md)",
-        "  * [Quick start](idv/quick-start.md)",
-        "  * [Walkthrough](idv/walkthrough.md)",
-        "  * [IDV server](idv/platform-server.md)",
-        "  * [Identity Console](idv/platform-console.md)",
-        "  * [Company backend](idv/company-backend.md)",
-        "  * [Company Admin UI](idv/company-admin.md)",
-        "  * [Licensing](idv/licensing.md)",
-        "  * [Production](idv/production.md)",
-        "  * [Reference](idv/reference.md)",
         "",
-        "## Face Recognition & Liveness Detection",
+        "## Face",
         "",
         "* [Introduction](face-sdk/README.md)",
-        "* [Develop](face-sdk/integration-guide.md)",
-        "  * [Integration guide](face-sdk/integration-guide.md)",
-        "  * [Face recognition](face-sdk/recognition.md)",
-        "  * [Face liveness](face-sdk/liveness.md)",
-        "  * [Full product](face-sdk/full-product.md)",
-        "  * [Full product — mobile](face-sdk/full-mobile.md)",
-        "  * [Full product — server](face-sdk/full-server.md)",
-        "  * [Recognition only](face-sdk/recognition-only.md)",
-        "  * [Liveness only](face-sdk/liveness-only.md)",
-        "  * [Liveness only — mobile](face-sdk/liveness-only-mobile.md)",
-        "  * [Liveness only — server](face-sdk/liveness-only-server.md)",
-        "* [Resources](face-sdk/reference.md)",
+        "* [Recognition](face-sdk/recognition.md)",
+        "* [Liveness](face-sdk/liveness.md)",
+        "",
+        "## ID Document",
+        "",
+        "* [Introduction](id-document-sdk/README.md)",
+        "* [Recognition](id-document-sdk/recognition.md)",
+        "* [Liveness](id-document-sdk/liveness.md)",
+        "* [Result format](id-document-sdk/result-json.md)",
+        "* [Security checks](id-document-sdk/security-fields.md)",
+        "",
+        "## API",
+        "",
+        "* [SDK Server](sdk-server/README.md)",
+        "",
+        "## Developers",
+        "",
+        "* [Face integration guide](face-sdk/integration-guide.md)",
+        "  * [Platform index](face-sdk/reference.md)",
         "  * [Android](face-sdk/android.md)",
         "  * [iOS](face-sdk/ios.md)",
         "  * [Flutter](face-sdk/flutter.md)",
@@ -3120,27 +3123,14 @@ def write_summary(_structure: dict[str, list[tuple[str, str]]] | None = None) ->
         "  * [Ionic Cordova](face-sdk/ionic-cordova.md)",
         "  * [Windows](face-sdk/windows.md)",
         "  * [Linux / Docker](face-sdk/linux-docker.md)",
-        "  * [Face Recognition (Windows)](face-sdk/recognition-windows.md)",
-        "  * [Face Recognition (Linux / Docker)](face-sdk/recognition-linux-docker.md)",
-        "  * [Face Liveness (Android)](face-sdk/liveness-android.md)",
-        "  * [Face Liveness (iOS)](face-sdk/liveness-ios.md)",
-        "  * [Face Liveness (Windows)](face-sdk/liveness-windows.md)",
-        "  * [Face Liveness (Linux / Docker)](face-sdk/liveness-linux-docker.md)",
-        "",
-        "## ID Document Recognition & Liveness Detection",
-        "",
-        "* [Introduction](id-document-sdk/README.md)",
-        "* [Develop](id-document-sdk/integration-guide.md)",
-        "  * [Integration guide](id-document-sdk/integration-guide.md)",
-        "  * [Document recognition](id-document-sdk/recognition.md)",
-        "  * [Document liveness](id-document-sdk/liveness.md)",
-        "  * [Full product](id-document-sdk/full-product.md)",
-        "  * [Full product — mobile](id-document-sdk/full-mobile.md)",
-        "  * [Full product — server](id-document-sdk/full-server.md)",
-        "  * [Liveness only](id-document-sdk/liveness-only.md)",
-        "  * [Result format](id-document-sdk/result-json.md)",
-        "  * [Security check fields](id-document-sdk/security-fields.md)",
-        "* [Resources](id-document-sdk/reference.md)",
+        "  * [Face Recognition — Windows](face-sdk/recognition-windows.md)",
+        "  * [Face Recognition — Linux / Docker](face-sdk/recognition-linux-docker.md)",
+        "  * [Face Liveness — Android](face-sdk/liveness-android.md)",
+        "  * [Face Liveness — iOS](face-sdk/liveness-ios.md)",
+        "  * [Face Liveness — Windows](face-sdk/liveness-windows.md)",
+        "  * [Face Liveness — Linux / Docker](face-sdk/liveness-linux-docker.md)",
+        "* [ID Document integration guide](id-document-sdk/integration-guide.md)",
+        "  * [Platform index](id-document-sdk/reference.md)",
         "  * [Android](id-document-sdk/android.md)",
         "  * [iOS](id-document-sdk/ios.md)",
         "  * [Flutter](id-document-sdk/flutter.md)",
@@ -3149,9 +3139,16 @@ def write_summary(_structure: dict[str, list[tuple[str, str]]] | None = None) ->
         "  * [Ionic Cordova](id-document-sdk/ionic-cordova.md)",
         "  * [Windows](id-document-sdk/windows.md)",
         "  * [Linux / Docker](id-document-sdk/linux-docker.md)",
-        "  * [Document Liveness (Linux / Docker)](id-document-sdk/liveness-linux-docker.md)",
+        "  * [ID Document Recognition — Linux / Docker](id-document-sdk/recognition-linux-docker.md)",
+        "  * [ID Document Liveness — Linux / Docker](id-document-sdk/liveness-linux-docker.md)",
+        "* [Face recognition API](sdk-server/face-recognition.md)",
+        "* [Face liveness API](sdk-server/face-liveness.md)",
+        "* [Document recognition API](sdk-server/document-recognition.md)",
+        "* [Document liveness API](sdk-server/document-liveness.md)",
         "",
-        "* [Request a License & Support](request-a-license-and-support.md)",
+        "## Guides",
+        "",
+        "* [Request a license](request-a-license-and-support.md)",
         "* [Contact](contact-us.md)",
         "",
     ]

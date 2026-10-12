@@ -12,9 +12,9 @@ This is the **full ID Document SDK integration path**. Open the platform page fo
 
 | Goal | Product line | Example repos |
 | --- | --- | --- |
-| OCR + optional authenticity | ID Document Recognition & Liveness Detection | Android / iOS / Flutter / RN / Ionic / Windows / Docker |
-| OCR only | ID Document Recognition | Thin siblings + server ports |
-| Authenticity / PAD only | ID Document Liveness Detection | Android / iOS / Windows / Docker |
+| Recognition and authenticity | ID Document Recognition & Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14102**. |
+| Recognition | ID Document Recognition | Linux / Docker. Server port **14106**. This build does not serve `/api/document/liveness`. |
+| Authenticity | ID Document Liveness Detection | Android, iOS, Flutter, React Native, Ionic Capacitor, Ionic Cordova, Windows, Linux / Docker. Server port **14107**. It does not read MRZ, barcodes, or visual fields, and it does not expose `/api/document/process`. |
 
 ## 2. Clone and download the runtime
 
