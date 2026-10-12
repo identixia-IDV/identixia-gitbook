@@ -319,7 +319,7 @@ def _runtime_paths(ctx: ProductCtx) -> tuple[str, str, str]:
         return (
             f"Android `{_android_aar(ctx.name)}` zip + iOS face zip (from the paired Android / iOS product Releases)",
             f"See the sample paths in the repository README (`example/android/libfacesdk/{_android_aar(ctx.name)}`, `ios/Frameworks/…`)",
-            "Do not skip database packs — `get_runtime.py` verifies required `*.xdb` files after download.",
+            "Unzip the Release into the sample folders and keep every `*.xdb` pack with the engine.",
         )
     if ctx.platform in ("Windows", "Linux"):
         asset = "GitHub Release `*-windows.zip` / `*-linux.zip`"
@@ -380,38 +380,22 @@ def runtime_download_section(ctx: ProductCtx) -> str:
     hint_close = "{% endhint %}"
     return f"""## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Every product ships `scripts/get_runtime.py`, which downloads the correct GitHub Release assets and places them where the sample expects.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
 | **Release asset** | {asset} |
-| **Local path after download** | {path} |
+| **Local path** | {path} |
 | **Databases** | {dbs} |
 
-### Manual download (optional)
-
-Open the repository **Releases** page and download the asset named above:
-
 ```text
-https://github.com/{ctx.owner}/{ctx.name}/releases/latest/download/<asset>
+https://github.com/{ctx.owner}/{ctx.name}/releases/latest
 ```
 
 Unzip so files land in the documented path — **not** nested inside an extra folder.
 
 {hint_open}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
 {hint_close}
 """
 
@@ -455,11 +439,7 @@ cd {ctx.name}
 
 ### 2. Download and place the runtime
 
-See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
+Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -556,13 +536,7 @@ cd {ctx.name}
 
 ### 2. Download and place the runtime
 
-Native libraries and `*.xdb` databases are not in git. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
-
-Files must land under `lib/cpu/` (DLLs or `.so` files **and** every required database pack). See [Download and place the runtime](#download-and-place-the-runtime).
+Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Configure and start the server
 
@@ -716,7 +690,7 @@ Call the same method names exposed by the plugin bridge (`activate` → `init` �
 
 ### Integration checklist
 
-1. Download runtime with `python scripts/get_runtime.py` (or `install.gradle` on Android).
+1. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
 2. `FaceRecognitionClient.get(context).activate(license) {{ code -> … }}` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
 4. Enroll → Identify, or Capture / Attribute for still flows.
@@ -1264,7 +1238,6 @@ def resources_section(ctx: ProductCtx) -> str:
 | --- | --- |
 | **This repository** | [`{ctx.owner}/{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) |
 | **GitHub Releases (runtime)** | [Latest download](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) |
-| **Runtime helper** | `python scripts/get_runtime.py` in the product clone |
 | **Documentation site** | [docs.identixia.com](https://docs.identixia.com) |
 | **SDK Server (HTTP)** | [SDK Server](../sdk-server/README.md) |
 | **Website** | [identixia.com](https://identixia.com) |
@@ -1282,7 +1255,7 @@ def next_steps(ctx: ProductCtx) -> str:
         "## Next steps",
         "",
         "1. Complete **Integration guide — start the project** until the sample shows **Ready**.",
-        "2. Confirm runtime files and databases are in place (`python scripts/get_runtime.py`).",
+        "2. Confirm the Release zip is unzipped and the database packs are next to the engine.",
         "3. Activate with a license issued for **your** application id or machine code.",
         "4. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.",
     ]
@@ -1379,7 +1352,7 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
                 "Without a liveness entitlement the score is omitted — treat as **not evaluated**, not pass.\n\n"
                 "### Usage example\n\n"
                 "```text\n"
-                "1. python scripts/get_runtime.py\n"
+                "1. Download the runtime zip from GitHub Releases and unzip it into the sample folder\n"
                 "2. activate(license) on a background thread → init()\n"
                 "3. liveness(bitmap) or start the capture / VideoWorker UI\n"
                 "4. Treat authenticity as REAL only when PAD and deepfake both pass\n"

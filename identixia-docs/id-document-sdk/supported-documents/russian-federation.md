@@ -1,0 +1,134 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Russian Federation.
+---
+
+# Russian Federation
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Alien Id Card (2021)
+- Alien Id Card (2021) Side B
+- Consular Id Card #1
+- Consular Id Card #2
+- Diplomatic Id Card #1
+- Driving License (1963)
+- Driving License (1993)
+- Driving License (1993) Side B
+- Driving License (1996) #1
+- Driving License (1996) #2
+- Driving License (1996) Side B
+- Driving License (1999)
+- Driving License (2011)
+- Driving License (2011-2019) Side B #1
+- Driving License (2011-2019) Side B #2
+- Driving License (2011-2019) Side B #3
+- Driving License (2011-2019) Side B #4
+- Driving License (2011-2019) Side B #5
+- Driving License (2011-2019) Side B #6
+- Driving License (2019) #1
+- Driving License (2019) #2
+- Entrepreneur Registration Certificate #2
+- ePassport (2006)
+- ePassport (2006) Diplomatic
+- ePassport (2006) Service
+- ePassport (2010)
+- ePassport (2010) Diplomatic
+- ePassport (2010) Service
+- ePassport (2010) Stateless person
+- ePassport (2010) Travel Document
+- ePassport (2010-2021) Page 3
+- ePassport (2021)
+- ePassport (2021) Diplomatic
+- ePassport (2021) Service
+- ePassport (2021) Stateless person
+- eVisa Notification #1
+- eVisa Notification #2
+- eVisa Notification #3
+- Foreigner Id Card (2024) #1
+- Foreigner Id Card (2024) #2
+- Foreigner Id Card (2024) Side B
+- International Driving License #1
+- International Driving License #1 Side B
+- Passport #1 Refugee
+- Passport #1 Refugee (not MRZ)
+- Passport #2 Stateless person (not MRZ)
+- Passport (1991) (not MRZ)
+- Passport (1998-2005)
+- Passport (1998-2005) (not MRZ)
+- Passport (1998-2005) Diplomatic
+- Passport (1998-2005) Page 34
+- Passport (1998-2005) Page B
+- Passport (1998-2005) Service
+- Passport (1998-2005) Service (not MRZ)
+- Passport (1998-2005) Travel Document
+- Passport (2000)
+- Passport (2000) Page 12
+- Passport (2000) Page 4
+- Passport (2000) Page 5
+- Passport (2000) Page 6
+- Passport (2000) Page 7
+- Passport (2000) Page 8
+- Passport (2000) Page 9
+- Passport (2006)
+- Passport (2018)
+- Passport (2022)
+- Passport Page 12
+- Passport Page 19
+- Passport Page 2
+- Passport Page 4
+- Passport Page 5
+- Passport Page 6
+- Passport Page 7
+- Passport Page 8
+- Passport Page 9
+- Registration Certificate #1
+- Registration Certificate #1 Side B
+- Registration Certificate #2
+- Registration Certificate #2 Side B
+- Registration Certificate #3
+- Registration Certificate #4
+- Registration Certificate #5
+- Registration Certificate #6
+- Registration Certificate #7
+- Registration Certificate #7 Side B
+- Registration Certificate (1993)
+- Registration Certificate (1993) Side B
+- Registration Certificate (2001)
+- Registration Certificate (2001) Side B
+- Residence Permit (2005)
+- Residence Permit (2005) (not MRZ)
+- Residence Permit (2005) Page B
+- Seafarer's Passport (1995)
+- Service Id Card #1
+- Service Id Card #2
+- Tax Registration Certificate #1
+- Tax Registration Certificate #2
+- Tax Registration Certificate #3
+- Tax Registration Certificate #4
+- Tax Registration Certificate #5
+- Temporary Residence Permit #1
+- Temporary Residence Permit #2
+- Temporary Residence Permit #2 (not MRZ)
+- Temporary Residence Permit #3
+- Temporary Residence Permit #3 (not MRZ)
+- Temporary Residence Permit (2001) (not MRZ)
+- Vehicle Passport #1
+- Vehicle Passport #1 (1)
+- Vehicle Passport #1 (Full)
+- Vehicle Passport #2
+- Vehicle Passport #2 (1)
+- Vehicle Passport #2 (Full)
+- Vehicle Passport #3
+- Vehicle Passport #3 (1)
+- Vehicle Passport #3 (Full)
+- Vehicle Passport #4
+- Vehicle Passport #4 (Full)
+- Visa #1
+- Visa (2000)
+- Visa (2005)
+- Visa (2009)
+- Visa (2020)
+- Visa (2025)
+- Visa Invitation #1
+- Visa Invitation #2

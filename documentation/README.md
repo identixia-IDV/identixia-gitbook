@@ -46,7 +46,7 @@ Open Face or ID documents above. Each page lists what the product is for, what y
 {% endstep %}
 {% step %}
 ### Run the sample
-Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. From the product clone, run `python scripts/get_runtime.py`.
+Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. Download the runtime zip from GitHub Releases before you build.
 {% endstep %}
 {% step %}
 ### Request a license
@@ -59,7 +59,7 @@ License requests and technical support: [Contact](https://docs.identixia.com/gui
 {% endstepper %}
 
 {% hint style="warning" %}
-Native engines and `*.xdb` databases ship on GitHub Releases. From a product clone, run `python scripts/get_runtime.py`. They are not committed to git.
+Native engines and `*.xdb` databases ship on GitHub Releases. Download the runtime zip and unzip it into the sample folder. They are not committed to git.
 {% endhint %}
 
 {% include "./.gitbook/includes/footer.md" %}

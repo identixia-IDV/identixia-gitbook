@@ -1,0 +1,128 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Argentina.
+---
+
+# Argentina
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Cipoletti Driving License #1
+- Cipoletti Driving License #1 Side B
+- Consular Id Card #1
+- Digital Driving License (2025)
+- Digital Driving License (2025) Side B
+- Digital Id Card (2019)
+- Digital Id Card (2019) Side B
+- Driving License #1
+- Driving License #1 Side B
+- Driving License #2
+- Driving License #2 Side B
+- Driving License #3
+- Driving License #3 Side B
+- Driving License #4
+- Driving License #5
+- Driving License #5 Side B
+- Driving License #6
+- Driving License #6 Side B
+- Driving License #7
+- Driving License #7 Side B
+- Driving License #8
+- Driving License (2010)
+- Driving License (2010-2013) Side B
+- Driving License (2013)
+- Driving License (2017) Side B
+- Driving License (2017-2024)
+- Driving License (2024) Side B
+- ePassport (2012)
+- ePassport (2014)
+- ePassport (2019)
+- ePassport (2022)
+- ePassport (2026)
+- Id Card #1
+- Id Card #1 Side B
+- Id Card #2
+- Id Card #2 (2)
+- Id Card #2 Side B
+- Id Card (2009)
+- Id Card (2009) Side B
+- Id Card (2009) Side B (2)
+- Id Card (2009) Side B (3)
+- Id Card (2009) Side B (4)
+- Id Card (2009) Side B (5)
+- Id Card (2009) Side B (6)
+- Id Card (2009) Side B (7)
+- Id Card (2012-2014) #1
+- Id Card (2012-2014) #2
+- Id Card (2012-2014) #3
+- Id Card (2012-2014) #4
+- Id Card (2012-2014) Side B
+- Id Card (2012-2014) Side B (10)
+- Id Card (2012-2014) Side B (12)
+- Id Card (2012-2014) Side B (13)
+- Id Card (2012-2014) Side B (2)
+- Id Card (2012-2014) Side B (3)
+- Id Card (2012-2014) Side B (4)
+- Id Card (2012-2014) Side B (5)
+- Id Card (2012-2014) Side B (6)
+- Id Card (2012-2014) Side B (7)
+- Id Card (2012-2014) Side B (8)
+- Id Card (2012-2014) Side B (9)
+- Id Card (2019)
+- Id Card (2019) Side B
+- Id Card (2019) Side B (12)
+- Id Card (2019) Side B (3)
+- Id Card (2019) Side B (4)
+- Id Card (2019) Side B (6)
+- Id Card (2019) Side B (9)
+- Id Card (2020) #1
+- Id Card (2020) #1 Side B
+- Id Card (2020) #1 Side B (12)
+- Id Card (2020) #1 Side B (3)
+- Id Card (2020) #1 Side B (4)
+- Id Card (2020) #1 Side B (6)
+- Id Card (2020) #1 Side B (9)
+- Id Card (2020) #2
+- Id Card (2020) #2 Side B
+- Id Card (2020) #2 Side B (10)
+- Id Card (2020) #2 Side B (11)
+- Id Card (2020) #2 Side B (12)
+- Id Card (2020) #2 Side B (14)
+- Id Card (2020) #2 Side B (3)
+- Id Card (2020) #2 Side B (4)
+- Id Card (2020) #2 Side B (6)
+- Id Card (2020) #2 Side B (9)
+- Id Card (2020) #3 Side B
+- Id Card (2020) #3 Side B (3)
+- Id Card (2020) #3 Side B (4)
+- Id Card (2020) #3 Side B (6)
+- Id Card (2020) #3 Side B (9)
+- Id Card (2023)
+- Id Card (2023) Side B (1)
+- Id Card (2023) Side B (2)
+- Id Card (2023) Side B (3)
+- Id Card (2023) Side B (4)
+- Id Card (2023) Side B (5)
+- Id Card (2023) Side B (6)
+- Id Card (2023) Side B (7)
+- Id Card (2024) #1
+- Id Card (2024) #2
+- Id Card (2024) #3
+- International Driving License #1
+- International Driving License #1 Side B
+- Passport #1
+- Passport #2 Emergency
+- Passport (1996)
+- Passport (2002)
+- Passport (2009)
+- Passport (2009) Diplomatic #1
+- Passport (2009) Diplomatic #2
+- Passport (2009) Official
+- Passport (2009) Service
+- Passport (2011) Consular
+- Passport (2015) Emergency #1
+- Passport (2015) Emergency #2
+- Registration Certificate (2015)
+- Registration Certificate (2015) Side B
+- Visa #1
+- Visa #2

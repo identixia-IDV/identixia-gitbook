@@ -405,14 +405,9 @@ This is the **full Face SDK integration path**. Open the platform page for your 
 ```bash
 git clone https://github.com/identixia-IDV/<PRODUCT>.git
 cd <PRODUCT>
-python scripts/get_runtime.py
 ```
 
-Pin a tag when you need a fixed build:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Download the runtime zip from that repository’s GitHub Releases page and unzip it into the folder in the table. The engine and database packs are not in git.
 
 | Channel | Where files land |
 | --- | --- |
@@ -473,8 +468,9 @@ This is the **full ID Document SDK integration path**. Open the platform page fo
 ```bash
 git clone https://github.com/identixia-IDV/<PRODUCT>.git
 cd <PRODUCT>
-python scripts/get_runtime.py
 ```
+
+Download the runtime zip from that repository’s GitHub Releases page and unzip it into the folder in the table. The engine and `document.xdb` are not in git.
 
 | Channel | Where files land |
 | --- | --- |
@@ -547,7 +543,7 @@ A missing liveness score means the check was not evaluated. It does not mean the
 | Requirement | Detail |
 | --- | --- |
 | License | `recognition` for detect, template, and match. Add `liveness` for the presentation-attack and deepfake scores |
-| Runtime | From the product repository, run `python scripts/get_runtime.py` |
+| Runtime | Download the runtime zip from GitHub Releases |
 | Databases | `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, `recognition-quality.xdb`. When liveness is licensed, also `recognition-liveness.xdb` and `recognition-deepfake.xdb` |
 | Gallery | You keep the enrolled templates. The SDK does not upload faces |
 
@@ -573,7 +569,7 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 ## Try it
 
 1. Clone one repository above.
-2. Run `python scripts/get_runtime.py`.
+2. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
 3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
 4. On Windows or Docker, call the HTTP API on port **14103**. See [SDK Server](../sdk-server/README.md).
 
@@ -834,7 +830,7 @@ Authenticity is rows in `tests` with `group: "authenticity"`. An empty set is no
 | Requirement | Detail |
 | --- | --- |
 | License | `recognition` for OCR, MRZ, and barcode. Add `authenticity` for the security checks |
-| Runtime | From the product repository, run `python scripts/get_runtime.py` |
+| Runtime | Download the runtime zip from GitHub Releases |
 | Database | `document.xdb`. On Android it is embedded in the AAR. On Windows and Linux it sits at the top of `lib/cpu/` |
 | Capture | A physical device for camera demos. Align the document in the guide and capture the back when the document has one |
 
@@ -860,7 +856,7 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 ## Try it
 
 1. Clone one repository above.
-2. Run `python scripts/get_runtime.py`.
+2. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
 3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
 4. On Windows or Docker, call `POST /api/document/process` on port **14102**. See [SDK Server](../sdk-server/README.md).
 
@@ -885,8 +881,21 @@ Document images and OCR fields stay on **your** device or server. Parse [Result 
     )
 
 
+def _country_slug(name: str, used: set[str]) -> str:
+    import re
+
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower().replace("'", "")).strip("-") or "country"
+    base = slug
+    n = 2
+    while slug in used:
+        slug = f"{base}-{n}"
+        n += 1
+    used.add(slug)
+    return slug
+
+
 def write_supported_documents() -> None:
-    """ID document series page. Data is the customer catalog, not address documents."""
+    """Country search page. Document rows are written per country, not as one list."""
     import json
 
     data_path = Path(__file__).resolve().parent / "data" / "supported-id-documents.json"
@@ -895,43 +904,116 @@ def write_supported_documents() -> None:
         return
     data = json.loads(data_path.read_text(encoding="utf-8"))
     listed = data["listed"]
-    total = data["catalog_total"]
     countries_total = data["countries_total"]
-    family_rows = "\n".join(
-        f"| {item['name']} | {item['count']} |" for item in data["families"]
-    )
-    letters = []
-    blocks = ["## Document families", "", "| Document family | Templates |", "| --- | ---: |", family_rows, ""]
-    current = None
+    folder = OUT / "id-document-sdk" / "supported-documents"
+    if folder.is_dir():
+        for old in folder.glob("*.md"):
+            old.unlink()
+    folder.mkdir(parents=True, exist_ok=True)
+    pairs: list[tuple[str, str]] = []
+    used: set[str] = set()
     for country in data["countries"]:
         name = country["name"]
-        letter = name[0].upper()
-        if letter != current:
-            current = letter
-            letters.append(letter)
-            blocks.append(f"## {letter}")
-            blocks.append("")
-        blocks.append(f"**{name}**")
-        blocks.append("")
-        for doc in country["documents"]:
-            blocks.append(f"- {doc}")
-        blocks.append("")
-    jump = " ".join(f"[{letter}](#{letter.lower()})" for letter in letters)
-    body = "\n".join(
-        [
-            f"The ID document recognition catalog contains **{total:,}** templates for **{countries_total}** issuing countries and authorities. This page lists **{listed:,}** templates from the most common document families. Proof of address is not included.",
-            "",
-            "Each line is one template: the document series, and the back side or an extra page when the catalog stores that side separately.",
-            "",
-            jump,
-            "",
-            *blocks,
-        ]
+        slug = _country_slug(name, used)
+        pairs.append((name, slug))
+        docs = "\n".join(f"- {doc}" for doc in country["documents"])
+        write_page(
+            folder / f"{slug}.md",
+            name,
+            f"Identity document templates Identixia recognizes for {name}.",
+            f"[{listed:,} templates across {countries_total} issuing countries](../supported-documents.md).\n\n{docs}\n",
+        )
+    link_md = "\n".join(
+        f"- [{name.replace('[', '').replace(']', '')}](supported-documents/{slug}.md)" for name, slug in pairs
     )
+    options_json = json.dumps(
+        [{"name": name, "href": f"supported-documents/{slug}.md"} for name, slug in pairs],
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    body = f"""Choose an issuing country. Document templates appear only after you select one. Proof of address is not included.
+
+<div class="idv-country">
+<label for="idv-country-q">Country or issuing authority</label>
+<input id="idv-country-q" type="search" placeholder="Search countries" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="idv-country-list" />
+<ul id="idv-country-list" role="listbox" hidden></ul>
+</div>
+<p id="idv-country-fallback"></p>
+
+<script type="application/json" id="idv-country-data">{options_json}</script>
+<script>
+(function () {{
+  var input = document.getElementById("idv-country-q");
+  var menu = document.getElementById("idv-country-list");
+  var dataNode = document.getElementById("idv-country-data");
+  var fallback = document.getElementById("idv-country-fallback");
+  if (!input || !menu || !dataNode) return;
+  var options = JSON.parse(dataNode.textContent || "[]");
+  if (fallback && fallback.nextElementSibling) fallback.nextElementSibling.hidden = true;
+  var active = -1;
+  function closeMenu() {{
+    menu.hidden = true;
+    menu.innerHTML = "";
+    input.setAttribute("aria-expanded", "false");
+    active = -1;
+  }}
+  function render(query) {{
+    var q = query.trim().toLowerCase();
+    closeMenu();
+    if (!q) return;
+    var found = options.filter(function (item) {{ return item.name.toLowerCase().indexOf(q) !== -1; }}).slice(0, 12);
+    if (!found.length) return;
+    menu.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+    found.forEach(function (item, index) {{
+      var li = document.createElement("li");
+      li.setAttribute("role", "option");
+      li.textContent = item.name;
+      li.dataset.href = item.href;
+      if (index === 0) active = 0;
+      li.addEventListener("mousedown", function (event) {{
+        event.preventDefault();
+        window.location.href = item.href;
+      }});
+      menu.appendChild(li);
+    }});
+    mark();
+  }}
+  function mark() {{
+    Array.prototype.forEach.call(menu.children, function (li, index) {{
+      li.setAttribute("aria-selected", index === active ? "true" : "false");
+    }});
+  }}
+  input.addEventListener("input", function () {{ render(input.value); }});
+  input.addEventListener("keydown", function (event) {{
+    var items = menu.children;
+    if (event.key === "ArrowDown" && items.length) {{
+      event.preventDefault();
+      active = Math.min(items.length - 1, active + 1);
+      mark();
+    }} else if (event.key === "ArrowUp" && items.length) {{
+      event.preventDefault();
+      active = Math.max(0, active - 1);
+      mark();
+    }} else if (event.key === "Enter" && active >= 0 && items[active]) {{
+      event.preventDefault();
+      window.location.href = items[active].dataset.href;
+    }} else if (event.key === "Escape") {{
+      input.value = "";
+      closeMenu();
+    }}
+  }});
+}})();
+</script>
+
+{{% expand title="Browse countries" %}}
+{link_md}
+{{% endexpand %}}
+"""
     write_page(
         OUT / "id-document-sdk" / "supported-documents.md",
         "Supported ID documents and countries",
-        f"Identity document templates for {countries_total} issuing countries. {listed:,} templates from the most common document families in the ID document recognition catalog.",
+        f"Search identity document templates by issuing country. {listed:,} templates across {countries_total} countries. Proof of address is not included.",
         body,
     )
 
@@ -1605,7 +1687,7 @@ Open Face or ID documents above. Each page lists what the product is for, what y
 {{% endstep %}}
 {{% step %}}
 ### Run the sample
-Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. From the product clone, run `python scripts/get_runtime.py`.
+Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. Download the runtime zip from GitHub Releases before you build.
 {{% endstep %}}
 {{% step %}}
 ### Request a license
@@ -1618,7 +1700,7 @@ License requests and technical support: [Contact](https://docs.identixia.com/gui
 {{% endstepper %}}
 
 {{% hint style="warning" %}}
-Native engines and `*.xdb` databases ship on GitHub Releases. From a product clone, run `python scripts/get_runtime.py`. They are not committed to git.
+Native engines and `*.xdb` databases ship on GitHub Releases. Download the runtime zip and unzip it into the sample folder. They are not committed to git.
 {{% endhint %}}
 """.strip()
     write_page(
@@ -1766,7 +1848,7 @@ These builds score presentation attacks and deepfake checks. They do not enroll 
 
 ## Integration path
 
-1. Clone the sample and place the liveness runtime from GitHub Releases (`python scripts/get_runtime.py`).
+1. Clone the sample and unzip the liveness runtime from GitHub Releases into the sample folder.
 2. Run until status shows **Ready**, then open the camera flow.
 3. Activate with a license that includes `liveness`.
 4. Treat a missing score as not evaluated, not as a pass.
@@ -2947,11 +3029,7 @@ Use this page to pick the port. Request bodies and platform setup are in [Develo
 ## Start any server (same pattern)
 
 1. Clone the product repository (Windows or Docker).
-2. Download runtime libraries and databases:
-
-```bash
-python scripts/get_runtime.py
-```
+2. Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/`.
 
 3. Copy `.env.example` → `.env`, install Python deps, start (`python run_server.py` / `python3 run_server.py` or Docker Compose).
 4. Read the machine code, request a license, activate.
@@ -2975,7 +3053,7 @@ curl -s http://127.0.0.1:14103/api/licenseStatus
 
 ## Runtime placement
 
-| Platform | Path after `get_runtime.py` |
+| Platform | Where to unzip the Release |
 | --- | --- |
 | Windows / Linux host | `lib/cpu/` — binaries **and** every required `*.xdb` |
 | Docker Hub image | Runtime is already inside the image |
@@ -3013,10 +3091,11 @@ Start Face Recognition (+ Liveness) Windows/Docker on port **14103** (recognitio
 
 ## Start the project
 
+Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+
 ```bash
 git clone https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows.git
 cd FaceRecognition-LivenessDetection-Windows
-python scripts/get_runtime.py
 cp -n .env.example .env
 pip install -r requirements.txt
 python run_server.py
@@ -3142,10 +3221,11 @@ Start Face Liveness Windows/Docker on port **14105** (the full Face product also
 
 ## Start the project
 
+Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+
 ```bash
 git clone https://github.com/identixia-IDV/FaceLivenessDetection-Windows.git
 cd FaceLivenessDetection-Windows
-python scripts/get_runtime.py
 cp -n .env.example .env
 pip install -r requirements.txt
 python run_server.py
@@ -3229,10 +3309,11 @@ Start Document full product on port **14102** (recognition-only uses **14106**).
 
 ## Start the project
 
+Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows.git
 cd ID-Document-Recognition-Liveness-Detection-Windows
-python scripts/get_runtime.py
 cp -n .env.example .env
 pip install -r requirements.txt
 python run_server.py
@@ -3309,10 +3390,11 @@ Start Document Liveness Windows/Docker on port **14107** (the full Document prod
 
 ## Start the project
 
+Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows.git
 cd ID-Document-Liveness-Detection-Windows
-python scripts/get_runtime.py
 cp -n .env.example .env
 pip install -r requirements.txt
 python run_server.py

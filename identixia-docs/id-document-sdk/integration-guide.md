@@ -20,8 +20,9 @@ This is the **full ID Document SDK integration path**. Open the platform page fo
 ```bash
 git clone https://github.com/identixia-IDV/<PRODUCT>.git
 cd <PRODUCT>
-python scripts/get_runtime.py
 ```
+
+Download the runtime zip from that repository’s GitHub Releases page and unzip it into the folder in the table. The engine and `document.xdb` are not in git.
 
 | Channel | Where files land |
 | --- | --- |

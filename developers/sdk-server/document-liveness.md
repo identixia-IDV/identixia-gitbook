@@ -10,10 +10,11 @@ Start Document Liveness Windows/Docker on port **14107** (the full Document prod
 
 ## Start the project
 
+Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows.git
 cd ID-Document-Liveness-Detection-Windows
-python scripts/get_runtime.py
 cp -n .env.example .env
 pip install -r requirements.txt
 python run_server.py

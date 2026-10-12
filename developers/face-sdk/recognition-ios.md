@@ -6,7 +6,6 @@ icon: file
 
 # Face Recognition SDK for iOS
 
-
 ## Overview
 
 | | |
@@ -37,19 +36,7 @@ icon: file
 
 ## Download and place the runtime
 
-Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Download the runtime zip from GitHub Releases and unzip it into the folder listed for that platform.
 
 | | |
 | --- | --- |
@@ -57,7 +44,7 @@ python scripts/get_runtime.py --tag 1.0.0
 | **Local path after download** | Repository root / `Frameworks/` + `databases/*.xdb` |
 | **Databases** | Place every `*.xdb` from the Release next to the frameworks (or under `databases/`). |
 
-### Manual download (optional)
+### Download
 
 Open the repository **Releases** page and download the asset named above:
 
@@ -66,10 +53,6 @@ https://github.com/identixia-IDV/FaceRecognition-iOS/releases/latest/download/<a
 ```
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
-
-{% hint style="warning" %}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
-{% endhint %}
 
 ## Integration guide — start the project
 
@@ -82,11 +65,7 @@ cd FaceRecognition-iOS
 
 ### 2. Download and place the runtime
 
-See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
+Download the runtime zip from GitHub Releases and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -99,7 +78,6 @@ Wait until Home status shows **Ready** before opening camera modes.
 1. Confirm Home / About shows a licensed **Ready** state (sample apps ship a demo key for the sample application id only).
 2. Exercise each demo tile once (enroll, identify, capture, attribute, liveness, document front/back, result).
 3. For your own app: request a license for **your** application id / bundle id, then call activate → init on a background thread.
-
 
 ## License and activation (mobile)
 
@@ -115,7 +93,6 @@ Wait until Home status shows **Ready** before opening camera modes.
 2. On success, call init (unpacks on-device models; may take a few seconds the first time).
 3. Gate UI on Ready / license status before camera modes.
 4. Never paste the demo key into a production app id.
-
 
 ### Status codes
 
@@ -134,7 +111,6 @@ Wait until Home status shows **Ready** before opening camera modes.
 | `-16` | Liveness failed (when gated) |
 
 Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
-
 
 ## API reference — mobile face SDK
 
@@ -204,7 +180,6 @@ Call the same method names exposed by the plugin bridge (`activate` → `init` �
 
 ### Integration checklist
 
-1. Download runtime with `python scripts/get_runtime.py` (or `install.gradle` on Android).
 2. `FaceRecognitionClient.get(context).activate(license) { code -> … }` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
 4. Enroll → Identify, or Capture / Attribute for still flows.
@@ -253,7 +228,6 @@ Keep the same license product line across stacks. From the [Face SDK](https://do
 ![iOS liveness](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/attribute-liveness.png)
 
 ![iOS about](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/ios/about.png)
-
 
 ## Support
 

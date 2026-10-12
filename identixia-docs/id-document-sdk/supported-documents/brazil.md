@@ -1,0 +1,255 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Brazil.
+---
+
+# Brazil
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Acre Digital Driving License (2017)
+- Acre Digital Driving License (2017) (Full)
+- Acre Driving License (2015)
+- Acre Id Card (2020)
+- Acre Id Card (2020) Side B
+- Alagoas Digital Driving License (2017)
+- Alagoas Digital Driving License (2017) (Full)
+- Alagoas Driving License (2015)
+- Alagoas Id Card (2020)
+- Alagoas Id Card (2020) Side B
+- Amapa Digital Driving License (2017)
+- Amapa Digital Driving License (2017) (Full)
+- Amapa Driving License (2015)
+- Amazonas Digital Driving License (2017)
+- Amazonas Driving License (2015)
+- Amazonas Id Card (2020)
+- Amazonas Id Card (2020) Side B
+- Bahia Digital Driving License (2017)
+- Bahia Digital Driving License (2017) (Full)
+- Bahia Driving License (2015)
+- Ceara Digital Driving License (2017)
+- Ceara Digital Driving License (2017) (Full)
+- Ceara Driving License (2015)
+- Ceara Id Card (2020)
+- Ceara Id Card (2020) Side B
+- Consular Id Card #1
+- Consular Id Card #1 Side B
+- Consular Id Card #2
+- Consular Id Card #2 Side B
+- Digital Driving License (2017) Side B
+- Digital Driving License (2022)
+- Digital Driving License (2022) Side B
+- Digital Driving License (2022) Side C
+- Digital Id Card (2022)
+- Digital Id Card (2022) (Full)
+- Digital Id Card (2022) Side B
+- Digital Registration Certificate (2020)
+- Diplomatic Id Card (2018)
+- Diplomatic Id Card (2018) Side B
+- Distrito Federal Digital Driving License (2017)
+- Distrito Federal Digital Driving License (2017) (Full)
+- Distrito Federal Driving License (2015)
+- Distrito Federal Id Card (2020)
+- Distrito Federal Id Card (2020) Side B
+- Driving License #1
+- Driving License #1 Side B
+- Driving License (2006)
+- Driving License (2006) Side B
+- Driving License (2015) Side B
+- Driving License (2022)
+- Driving License (2022) Side B
+- Driving License (2022) Side C
+- ePassport (2006-2010)
+- ePassport (2006-2010) Back cover
+- ePassport (2006-2010) Front cover
+- ePassport (2006-2010) Laissez Passer
+- ePassport (2006-2010) Travel Document
+- ePassport (2006-2014) Page 3
+- ePassport (2009)
+- ePassport (2009) Diplomatic
+- ePassport (2009) Official
+- ePassport (2014)
+- ePassport (2015) #1
+- ePassport (2015) #2
+- ePassport (2015) #3
+- ePassport (2015) #3 Alien's
+- ePassport (2015) #3 Diplomatic
+- ePassport (2015) #3 Official
+- ePassport (2015) Page 3
+- ePassport (2015) Travel Document
+- ePassport (2023) #1
+- ePassport (2023) #2
+- ePassport (2023) Diplomatic
+- ePassport (2023) For Foreigners
+- ePassport (2023) Laissez-Passer
+- ePassport (2023) Official
+- ePassport (2023) Page 3
+- Espirito Santo Digital Driving License (2017)
+- Espirito Santo Digital Driving License (2017) (Full)
+- Espirito Santo Driving License (2015)
+- Espirito Santo Id Card (2020)
+- Espirito Santo Id Card (2020) Side B
+- eVisa #1
+- Foreigners Id Card #1
+- Foreigners Id Card #1 Side B
+- Foreigners Id Card #2
+- Foreigners Id Card #2 Side B
+- Foreigners Id Card #3
+- Foreigners Id Card (2017)
+- Foreigners Id Card (2017-2021) Side B
+- Foreigners Id Card (2021)
+- Goias Digital Driving License (2017)
+- Goias Digital Driving License (2017) (Full)
+- Goias Driving License (2015)
+- Goias Id Card (2020)
+- Goias Id Card (2020) Side B
+- Id Card (1977)
+- Id Card (1983) #1
+- Id Card (1983) #2
+- Id Card (1983) Side B
+- Id Card (2014)
+- Id Card (2014) (2)
+- Id Card (2014) (2) Side B
+- Id Card (2014) Side B
+- Id Card (2022)
+- Id Card (2022) Side B
+- Id Card (2022) Side C
+- Id Card (2025)
+- Id Card (2025) Side B
+- Maranhao Driving License (2015)
+- Maranhao Id Card (2020)
+- Maranhao Id Card (2020) Side B (1)
+- Maranhao Id Card (2020) Side B (2)
+- Mato Grosso Digital Driving License (2017)
+- Mato Grosso Digital Driving License (2017) (Full)
+- Mato Grosso do Sul Digital Driving License (2017)
+- Mato Grosso do Sul Digital Driving License (2017) (Full)
+- Mato Grosso do Sul Driving License (2015)
+- Mato Grosso do Sul Id Card (2020)
+- Mato Grosso do Sul Id Card (2020) Side B
+- Mato Grosso Driving License (2015)
+- Mato Grosso Id Card #1
+- Mato Grosso Id Card #1 Side B
+- Mato Grosso Id Card (2020)
+- Mato Grosso Id Card (2020) Side B
+- Military Id Card #1
+- Military Id Card #1 Side B
+- Military Id Card #2
+- Military Id Card #2 Side B
+- Military Id Card #3
+- Military Id Card #4
+- Military Id Card #4 Side B
+- Military Id Card #5
+- Minas Gerais Digital Driving License (2017)
+- Minas Gerais Digital Driving License (2017) (Full)
+- Minas Gerais Driving License (2015)
+- Minas Gerais Id Card (2020)
+- Minas Gerais Id Card (2020) Side B (1)
+- Minas Gerais Id Card (2020) Side B (2)
+- Para Digital Driving License (2017)
+- Para Digital Driving License (2017) (Full)
+- Para Driving License (2015)
+- Para Id Card (2020)
+- Para Id Card (2020) Side B
+- Para Professional Id Card #1
+- Para Professional Id Card #1 Side B
+- Paraiba Digital Driving License (2017)
+- Paraiba Digital Driving License (2017) (Full)
+- Paraiba Driving License (2015)
+- Paraiba Id Card (2020)
+- Paraiba Id Card (2020) Side B
+- Parana Digital Driving License (2017)
+- Parana Digital Driving License (2017) (Full)
+- Parana Driving License (2015)
+- Parana Id Card (2020)
+- Parana Id Card (2020) Side B
+- Passport #1
+- Passport #1 Page 2
+- Passport #1 Page1
+- Passport #2 Back cover
+- Passport #2 Emergency
+- Passport #3 Emergency
+- Passport #4 Emergency
+- Passport (2006-2010) Emergency
+- Passport (2023) Emergency #1
+- Passport (2023) Emergency #2
+- Pernambuco Digital Driving License (2017)
+- Pernambuco Digital Driving License (2017) (Full)
+- Pernambuco Driving License (2015)
+- Pernambuco Id Card (2020)
+- Pernambuco Id Card (2020) Side B
+- Piaui Digital Driving License (2017)
+- Piaui Digital Driving License (2017) (Full)
+- Piaui Driving License (2015)
+- Piaui Id Card (2020)
+- Piaui Id Card (2020) Side B
+- Professional Id Card #1
+- Professional Id Card #1 Side B
+- Professional Id Card #1 Side B (2)
+- Professional Id Card #2
+- Professional Id Card #2 Side B
+- Professional Id Card #3
+- Professional Id Card #3 Side B
+- Professional Id Card #4
+- Professional Id Card #4 Side B
+- Professional Id Card #5
+- Professional Id Card #5 Side B
+- Professional Id Card #6
+- Professional Id Card #7
+- Professional Id Card #7 Side B
+- Professional Id Card #8
+- Professional Id Card #8 Side B
+- Rio de Janeiro Digital Driving License (2017)
+- Rio de Janeiro Digital Driving License (2017) (Full)
+- Rio de Janeiro Driving License (2015)
+- Rio de Janeiro Id Card (2020)
+- Rio de Janeiro Id Card (2020) Side B
+- Rio de Janeiro Id Card (2020) Side C
+- Rio de Janeiro Id Card (2020) Side D
+- Rio Grande do Norte Digital Driving License (2017)
+- Rio Grande do Norte Digital Driving License (2017) (Full)
+- Rio Grande do Norte Driving License (2015)
+- Rio Grande do Norte Id Card (2020)
+- Rio Grande do Norte Id Card (2020) Side B
+- Rio Grande do Sul Digital Driving License (2017)
+- Rio Grande do Sul Digital Driving License (2017) (Full)
+- Rio Grande do Sul Driving License (2015)
+- Rio Grande do Sul Id Card (2020)
+- Rio Grande do Sul Id Card (2020) Side B
+- Rondonia Digital Driving License (2017)
+- Rondonia Driving License (2015)
+- Roraima Digital Driving License (2017)
+- Roraima Digital Driving License (2017) (Full)
+- Roraima Driving License (2015)
+- Santa Catarina Digital Driving License (2017)
+- Santa Catarina Digital Driving License (2017) (Full)
+- Santa Catarina Driving License (2015)
+- Santa Catarina Id Card (2020)
+- Santa Catarina Id Card (2020) Side B
+- Sao Paulo Digital Driving License (2017)
+- Sao Paulo Digital Driving License (2017) (Full)
+- Sao Paulo Driving License (2015)
+- Sao Paulo Id Card (2020)
+- Sao Paulo Id Card (2020) Side B
+- Sao Paulo Professional Id Card #1
+- Sao Paulo Professional Id Card #1 Side B
+- Sergipe Digital Driving License (2017)
+- Sergipe Digital Driving License (2017) (Full)
+- Sergipe Driving License (2015)
+- Sergipe Id Card (2020)
+- Sergipe Id Card (2020) Side B
+- Temporary Id Card of Foreigner (2021) #1
+- Temporary Id Card of Foreigner (2021) #2
+- Temporary Id Card of Foreigner (2021) Side B
+- Tocantins Digital Driving License (2017)
+- Tocantins Digital Driving License (2017) (Full)
+- Tocantins Driving License (2015)
+- Tocantins Id Card (2020)
+- Tocantins Id Card (2020) Side B
+- Visa #1
+- Visa #2
+- Visa #3
+- Visa #4
+- Visa #5
+- Visa #6
+- Visa (2024)

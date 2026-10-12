@@ -1,0 +1,87 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for France.
+---
+
+# France
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Air France Id Card #1
+- Disabled Id Card (2017)
+- Disabled Id Card (2017) Side B
+- Driving License (1985)
+- Driving License (1994)
+- Driving License (1999)
+- Driving License (1999-2006) Side B (1)
+- Driving License (1999-2006) Side B (2)
+- Driving License (1999-2006) Side C
+- Driving License (2006)
+- Driving License (2013) Side B
+- Driving License (2013-2015)
+- Driving License (2015) Side B
+- ePassport (2006)
+- ePassport (2006) Service
+- ePassport (2006-2013) Page 3
+- ePassport (2008) Diplomatic
+- ePassport (2008-2013)
+- ePassport (2010) Travel Document
+- ePassport (2010) Travel Document 1951
+- ePassport (2010) Travel Document 1954
+- Id Card (1994) #1
+- Id Card (1994) #2
+- Id Card (1994) #3
+- Id Card (1994) #4
+- Id Card (1994) Side B
+- Id Card (1999)
+- Id Card (1999) (Document de Circulation)
+- Id Card (1999) Side B
+- Id Card (2021) #1
+- Id Card (2021) #2
+- Id Card (2021) Side B
+- Military Id Card (2014)
+- Military Id Card (2014) Side B
+- Passport (1991)
+- Passport (1999)
+- Passport (1999) Service
+- Passport (2002) Travel Document
+- Passport (2006-2011) Emergency
+- Passport (2008) Diplomatic
+- Professional Driving License (2017)
+- Professional Driving License (2017) Side B
+- Professional Id Card (2016) #1
+- Qualification Driving License (2010)
+- Qualification Driving License (2010) Side B
+- Qualification Driving License (2022)
+- Qualification Driving License (2022) Side B
+- Registration Certificate #1
+- Residence permit (1996) (Carte de Resident)
+- Residence permit (1996) (Carte de Sejour)
+- Residence permit (1996) (Certificat de Residence)
+- Residence permit (1996) (Economique europeen carte de sejour)
+- Residence permit (1996) (Economique europeen carte de sejour) Side B
+- Residence permit (2001) #1
+- Residence permit (2001) #2
+- Residence permit (2001) Side B
+- Residence permit (2002) (Carte de Resident de longue duree)
+- Residence permit (2002) (Carte de Resident Permanent)
+- Residence permit (2002) (Carte de Resident)
+- Residence permit (2002) (Carte de Sejour)
+- Residence permit (2002) (Certificat de Residence)
+- Residence permit (2002) (Ressortissant)
+- Residence permit (2002) Side B
+- Residence permit (2004)
+- Residence permit (2011)
+- Residence permit (2011) Side B
+- Residence permit (2015)
+- Residence permit (2015) Side B
+- Residence permit (2020)
+- Residence permit (2020) Side B
+- Saint Barthelemy Driving License (2013)
+- Temporary Residence Permit (1996)
+- Train Driving License #1
+- Train Driving License #1 Side B
+- Visa (2004)
+- Visa (2011)
+- Visa (2019)
+- Visa (2022)

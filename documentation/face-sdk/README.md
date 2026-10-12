@@ -38,7 +38,7 @@ A missing liveness score means the check was not evaluated. It does not mean the
 | Requirement | Detail |
 | --- | --- |
 | License | `recognition` for detect, template, and match. Add `liveness` for the presentation-attack and deepfake scores |
-| Runtime | From the product repository, run `python scripts/get_runtime.py` |
+| Runtime | Download the runtime zip from GitHub Releases |
 | Databases | `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, `recognition-quality.xdb`. When liveness is licensed, also `recognition-liveness.xdb` and `recognition-deepfake.xdb` |
 | Gallery | You keep the enrolled templates. The SDK does not upload faces |
 
@@ -64,7 +64,7 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 ## Try it
 
 1. Clone one repository above.
-2. Run `python scripts/get_runtime.py`.
+2. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
 3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
 4. On Windows or Docker, call the HTTP API on port **14103**. See [SDK Server](../sdk-server/README.md).
 

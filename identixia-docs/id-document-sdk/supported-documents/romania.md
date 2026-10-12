@@ -1,0 +1,84 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Romania.
+---
+
+# Romania
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Diplomatic Id Card (2012)
+- Diplomatic Id Card (2012) Side B
+- Driving License (1996)
+- Driving License (1996) Side B
+- Driving License (2008) Side B
+- Driving License (2008-2013)
+- Driving License (2013) Side B
+- ePassport (2008)
+- ePassport (2008) Diplomatic
+- ePassport (2008) Service
+- ePassport (2010)
+- ePassport (2010) Diplomatic #1
+- ePassport (2010) Diplomatic #2
+- ePassport (2010) Service #1
+- ePassport (2010) Service #2
+- ePassport (2010) Stateless person
+- ePassport (2010) Travel Document #1
+- ePassport (2010) Travel Document #2
+- ePassport (2010) Travel Document 1951
+- ePassport (2010-2018) Page 1
+- ePassport (2018)
+- ePassport (2019)
+- ePassport (2019) Diplomatic
+- ePassport (2019) Page 1
+- ePassport (2019) Service
+- ePassport (2019) Stateless person
+- ePassport (2019) Travel Document
+- ePassport (2019) Travel Document 1951
+- ePassport (2019) Travel Document Page 1
+- ePassport (2024)
+- ePassport (2024) Diplomatic
+- ePassport (2024) Page 1
+- ePassport (2024) Service
+- ePassport (2024) Travel Document
+- ePassport (2024) Travel Document 1951
+- Id Card (1997)
+- Id Card (1997-2001)
+- Id Card (2009)
+- Id Card (2021)
+- Id Card (2021) Side B
+- Id Card (2025) #1
+- Id Card (2025) #1 Side B
+- Id Card (2025) #2
+- Id Card (2025) #2 Side B
+- Id Card (7337)
+- Passport (1994)
+- Passport (2001)
+- Passport (2008) Temporary
+- Passport (2011) Temporary
+- Passport (2012) Temporary
+- Passport (2014) Temporary
+- Passport (2019) Temporary #3
+- Passport (2019) Temporary #3 Page B
+- Passport (2019) Temporary Page 3
+- Passport (2019-2025) Temporary #1
+- Passport (2019-2025) Temporary #2
+- Passport (2025) Temporary Page 3
+- Passport (2026) Emergency
+- Qualification Driving License #1
+- Qualification Driving License #1 Side B
+- Registration Certificate #1
+- Registration Certificate #1 (Full)
+- Residence permit (2007)
+- Residence permit (2007) Side B
+- Residence Permit (2009)
+- Residence Permit (2009) Side B
+- Residence Permit (2021) #1
+- Residence Permit (2021) #2
+- Residence Permit (2021) #3
+- Residence Permit (2021) Side B
+- Visa (2004)
+- Visa (2008)
+- Visa (2011)
+- Visa (2020)
+- Visa (2022)

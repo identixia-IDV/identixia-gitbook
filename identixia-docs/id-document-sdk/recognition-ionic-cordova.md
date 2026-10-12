@@ -5,7 +5,6 @@ description: >-
 
 # ID Document Recognition and OCR SDK for Ionic Cordova
 
-
 ## Overview
 
 | | |
@@ -38,19 +37,7 @@ This sample does not include document liveness. It does not serve `/api/document
 
 ## Download and place the runtime
 
-Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Download the runtime zip from GitHub Releases and unzip it into the folder listed for that platform.
 
 | | |
 | --- | --- |
@@ -58,7 +45,7 @@ python scripts/get_runtime.py --tag 1.0.0
 | **Local path after download** | See the sample paths in the repository README (`example/android/libdocsdk/documentrecognitionsdk.aar`, `ios/Frameworks/…`) |
 | **Databases** | Document Android embeds `document.xdb` in the AAR; iOS embeds it in the framework bundle. |
 
-### Manual download (optional)
+### Download
 
 Open the repository **Releases** page and download the asset named above:
 
@@ -67,10 +54,6 @@ https://github.com/identixia-IDV/ID-Document-Recognition-Ionic-Cordova/releases/
 ```
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
-
-{% hint style="warning" %}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
-{% endhint %}
 
 ## Integration guide — start the project
 
@@ -83,11 +66,7 @@ cd ID-Document-Recognition-Ionic-Cordova
 
 ### 2. Download and place the runtime
 
-See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
+Download the runtime zip from GitHub Releases and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -104,7 +83,6 @@ On iOS: `npm run setup:ios && npm run ios`.
 2. Exercise each demo tile once (enroll, identify, capture, attribute, liveness, document front/back, result).
 3. For your own app: request a license for **your** application id / bundle id, then call activate → init on a background thread.
 
-
 ## License and activation (mobile)
 
 | | |
@@ -119,7 +97,6 @@ On iOS: `npm run setup:ios && npm run ios`.
 2. On success, call init (unpacks on-device models; may take a few seconds the first time).
 3. Gate UI on Ready / license status before camera modes.
 4. Never paste the demo key into a production app id.
-
 
 ### Status codes
 
@@ -138,7 +115,6 @@ On iOS: `npm run setup:ios && npm run ios`.
 | `-16` | Liveness failed (when gated) |
 
 Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
-
 
 ## API reference — mobile document SDK
 
@@ -209,7 +185,6 @@ See [Result JSON](result-json.md) and [Security check fields](security-fields.md
 ![Liveness checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)
 
 ![Images](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png)
-
 
 ## Support
 

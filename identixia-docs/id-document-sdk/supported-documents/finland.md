@@ -1,0 +1,132 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Finland.
+---
+
+# Finland
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Child Id Card (2011)
+- Child Id Card (2011) Side B
+- Child Id Card (2017)
+- Child Id Card (2017) Side B
+- Child Id Card (2023)
+- Child Id Card (2023) Side B
+- Disabled Id Card #1
+- Driving License (1990)
+- Driving License (1996)
+- Driving License (1998) Side B
+- Driving License (1998-2000)
+- Driving License (1998-2000) Aland
+- Driving License (1998-2000) Aland Side B
+- Driving License (2000-2007) Side B
+- Driving License (2004-2007)
+- Driving License (2010)
+- Driving License (2010) Side B
+- Driving License (2013)
+- Driving License (2013) Aland
+- Driving License (2013) Aland Side B
+- Driving License (2013) Side B
+- Driving License (2013) Side B (2)
+- Driving License (2019)
+- Driving License (2019) Aland
+- Driving License (2019) Aland Side B
+- Driving License (2019) Side B
+- Driving License (2024)
+- Driving License (2024) Aland
+- Driving License (2024) Aland Side B
+- Driving License (2024) Side B
+- ePassport (2006)
+- ePassport (2006) Aland
+- ePassport (2006) Alien's
+- ePassport (2006) Diplomatic
+- ePassport (2006) Service
+- ePassport (2006) Travel Document
+- ePassport (2012)
+- ePassport (2012) Aland
+- ePassport (2012) Alien's
+- ePassport (2012) Diplomatic
+- ePassport (2012) Seaman's
+- ePassport (2012) Service
+- ePassport (2012) Travel Document 1951
+- ePassport (2017)
+- ePassport (2017) Aland
+- ePassport (2017) Alien's
+- ePassport (2017) Diplomatic
+- ePassport (2017) Page 1
+- ePassport (2017) Page 3
+- ePassport (2017) Service
+- ePassport (2017) Travel Document 1951
+- ePassport (2023)
+- ePassport (2023) Aland
+- ePassport (2023) Alien's
+- ePassport (2023) Diplomatic
+- ePassport (2023) Page 3
+- ePassport (2023) Service
+- ePassport (2023) Travel Document 1951
+- Id Card (1998)
+- Id Card (1998-1999) Side B
+- Id Card (1999)
+- Id Card (2003)
+- Id Card (2003) Side B
+- Id Card (2005)
+- Id Card (2005) Side B (1)
+- Id Card (2005) Side B (2)
+- Id Card (2011) #1
+- Id Card (2011) #1 Side B (1)
+- Id Card (2011) #1 Side B (2)
+- Id Card (2012)
+- Id Card (2012) Side B
+- Id Card (2017) #1
+- Id Card (2017) #1 Side B
+- Id Card (2017) #2
+- Id Card (2017) #2 Side B
+- Id Card (2021) #1
+- Id Card (2021) #1 Side B
+- Id Card (2021) #2
+- Id Card (2021) #2 Side B
+- Id Card (2023) #1
+- Id Card (2023) #1 Side B
+- Id Card (2023) #2
+- Id Card (2023) #2 Side B
+- Passport (1987)
+- Passport (1993) Aland
+- Passport (1997)
+- Passport (1997) Service
+- Passport (1997-2004)
+- Passport (1997-2004) Aland
+- Passport (1997-2004) Diplomatic
+- Passport (1997-2004) Service
+- Passport (2012) Aland Emergency
+- Passport (2012) Alien's
+- Passport (2012) Emergency
+- Passport (2017)
+- Passport (2017) Aland
+- Passport (2017) Alien's
+- Passport (2017) Seaman's
+- Passport (2023)
+- Passport (2023) Aland
+- Passport (2023) Alien's
+- Passport (2023) Emergency
+- Passport (2023) Seaman's
+- Professional Id Card (2018) #1
+- Professional Id Card (2018) #2
+- Professional Id Card (2018) #3
+- Qualification Driving License #1
+- Qualification Driving License #1 Side B
+- Qualification Driving License (2019)
+- Residence permit (2006)
+- Residence permit (2012)
+- Residence Permit (2017)
+- Residence Permit (2019) (EU Citizen)
+- Residence permit (2020)
+- Residence permit (2020) Side B
+- Temporary Id Card (2023) #1
+- Temporary Id Card (2023) #2
+- Train Driving License #1
+- Train Driving License #1 Side B
+- Visa (2004)
+- Visa (2010)
+- Visa (2019)
+- Visa (2022)

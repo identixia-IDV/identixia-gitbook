@@ -1,0 +1,94 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Germany.
+icon: file
+---
+
+# Germany
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Armed Forces Id Card (2009)
+- Armed Forces Id Card (2009) Side B
+- Armed Forces Id Card (2009) Side B (2)
+- Digital Resident Id Card (2021)
+- Digital Resident Id Card (2021) Side B
+- Diplomatic Residence Permit #1
+- Diplomatic Residence Permit #1 Side B
+- Diplomatic Residence Permit (2019-2024)
+- Diplomatic Residence Permit (2019-2024) Side B
+- Disabled Id Card #1
+- Disabled Id Card #1 Side B
+- Driving License (1989-1997) #1
+- Driving License (1999-2011)
+- Driving License (1999-2011) Side B
+- Driving License (2013)
+- Driving License (2013) Side B
+- ePassport (2004-2007)
+- ePassport (2004-2007) Diplomatic
+- ePassport (2004-2007) Page 1
+- ePassport (2004-2007) Service
+- ePassport (2004-2007) Travel Document
+- ePassport (2017)
+- ePassport (2017) Diplomatic
+- ePassport (2017) Service
+- ePassport (2017) Travel Document
+- ePassport (2017-2024) Page 1
+- ePassport (2017-2024) Service Page 1
+- ePassport (2017-2024) Travel Document Page 1
+- ePassport (2021)
+- ePassport (2021) Diplomatic
+- ePassport (2021) Service
+- ePassport (2021) Travel Document
+- ePassport (2024)
+- ePassport (2024) Diplomatic
+- ePassport (2024) Service
+- ePassport (2024) Travel Document
+- Id Card (1997) Side B
+- Id Card (1997-2001)
+- Id Card (1997-2001) Side B (2)
+- Id Card (2004)
+- Id Card (2004) Side B
+- Id Card (2010)
+- Id Card (2010-2021) Side B
+- Id Card (2016)
+- Id Card (2021)
+- Passport #1 Travel Document
+- Passport (2004)
+- Passport (2004) Child
+- Passport (2004) Diplomatic
+- Passport (2004) Page B
+- Passport (2004) Service
+- Passport (2004) Travel Document
+- Qualification Driving License (2021)
+- Qualification Driving License (2021) Side B
+- Registration Certificate (2005)
+- Residence permit (2005)
+- Residence permit (2011) #1
+- Residence permit (2011) #2
+- Residence permit (2011) Side B
+- Residence permit (2019) #1
+- Residence permit (2019) #2
+- Residence permit (2019) #3
+- Residence permit (2019) Side B
+- Temporary Residence Permit (2005) #1
+- Temporary Residence Permit (2005) #1 Page 2
+- Temporary Residence Permit (2005) #1 Page 4
+- Temporary Residence Permit (2005) #2
+- Temporary Residence Permit (2005) #2 Page 2
+- Temporary Residence Permit (2005) #2 Page 3
+- Temporary Residence Permit (2005) #2 Page 4
+- Temporary Residence Permit (2005) #2 Page 6
+- Temporary Residence Permit (2005) #2 Page B
+- Temporary Residence Permit (2005) #3 Page 2
+- Temporary Residence Permit (2005) #3 Page 3
+- Temporary Residence Permit (2005) #3 Page 4
+- Train Driving License (2011)
+- Train Driving License (2011) Side B
+- Visa (1995)
+- Visa (2003)
+- Visa (2010)
+- Visa (2018)
+- Visa (2022)
+
+{% include "../../.gitbook/includes/footer.md" %}

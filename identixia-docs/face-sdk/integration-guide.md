@@ -20,14 +20,9 @@ This is the **full Face SDK integration path**. Open the platform page for your 
 ```bash
 git clone https://github.com/identixia-IDV/<PRODUCT>.git
 cd <PRODUCT>
-python scripts/get_runtime.py
 ```
 
-Pin a tag when you need a fixed build:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Download the runtime zip from that repository’s GitHub Releases page and unzip it into the folder in the table. The engine and database packs are not in git.
 
 | Channel | Where files land |
 | --- | --- |

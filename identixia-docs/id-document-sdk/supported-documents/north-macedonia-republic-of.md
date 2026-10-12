@@ -1,0 +1,72 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for North Macedonia, Republic of.
+---
+
+# North Macedonia, Republic of
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Diplomatic Id Card #1
+- Driving License (2007) #1
+- Driving License (2007) #1 Side B
+- Driving License (2007) #2
+- Driving License (2007) #2 Side B
+- Driving License (2021) #1
+- Driving License (2021) #1 Side B
+- Driving License (2021) #2
+- Driving License (2021) #2 Side B
+- ePassport (2007) #1
+- ePassport (2007) #2
+- ePassport (2007) Diplomatic
+- ePassport (2007) For Foreigners
+- ePassport (2007) Page 1
+- ePassport (2007) Service
+- ePassport (2015) #1
+- ePassport (2015) #2
+- ePassport (2015-2021) #1 Page 1
+- ePassport (2015-2021) #2 Page 1
+- ePassport (2021) #1
+- ePassport (2021) #2
+- ePassport (2021) #3
+- ePassport (2021) #4
+- ePassport (2021) #4 Page 1
+- ePassport (2021) #5
+- ePassport (2021) #5 Page 1
+- ePassport (2021) #6
+- ePassport (2021) #6 Page 1
+- ePassport (2021) #7
+- ePassport (2021) #7 Page 1
+- ePassport (2021) Diplomatic
+- ePassport (2021) Service
+- Id Card #1 Special
+- Id Card #2 Special
+- Id Card (2007) #1
+- Id Card (2007) #1 Side B
+- Id Card (2007) #2
+- Id Card (2007) #2 Side B
+- Id Card (2021) #1
+- Id Card (2021) #1 Side B
+- Id Card (2021) #2
+- Id Card (2021) #2 Side B
+- Id Card (2021) #3
+- Id Card (2021) #3 Side B
+- Id Card (2021) #4
+- Id Card (2021) #4 Side B
+- Id Card (2021) #5
+- Id Card (2021) #5 Side B
+- Id Card (2021) #6
+- Id Card (2021) #7
+- Id Card (2021) #7 Side B
+- International Driving License #1
+- International Driving License #1 Side B
+- Passport #1
+- Passport #2
+- Passport #3
+- Registration Certificate #1
+- Registration Certificate #1 Side B
+- Temporary Residence Permit (2008)
+- Temporary Residence Permit (2008) Side B
+- Temporary Residence Permit (2021)
+- Temporary Residence Permit (2021) Side B
+- Visa (2008)

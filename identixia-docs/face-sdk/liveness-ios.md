@@ -32,38 +32,22 @@ description: >-
 
 ## Download and place the runtime
 
-Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceLivenessDetection-iOS/releases/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
 | **Release asset** | `facerecognitionsdk-ios.zip` (frameworks + `databases/*.xdb`) |
-| **Local path after download** | Repository root / `Frameworks/` + `databases/*.xdb` |
+| **Local path** | Repository root / `Frameworks/` + `databases/*.xdb` |
 | **Databases** | Place every `*.xdb` from the Release next to the frameworks (or under `databases/`). |
 
-### Manual download (optional)
-
-Open the repository **Releases** page and download the asset named above:
-
 ```text
-https://github.com/identixia-IDV/FaceLivenessDetection-iOS/releases/latest/download/<asset>
+https://github.com/identixia-IDV/FaceLivenessDetection-iOS/releases/latest
 ```
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
 {% endhint %}
 
 ## Integration guide — start the project
@@ -77,11 +61,7 @@ cd FaceLivenessDetection-iOS
 
 ### 2. Download and place the runtime
 
-See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
+Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceLivenessDetection-iOS/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -149,7 +129,7 @@ Without a liveness entitlement the score is omitted — treat as **not evaluated
 ### Usage example
 
 ```text
-1. python scripts/get_runtime.py
+1. Download the runtime zip from GitHub Releases and unzip it into the sample folder
 2. activate(license) on a background thread → init()
 3. liveness(bitmap) or start the capture / VideoWorker UI
 4. Treat authenticity as REAL only when PAD and deepfake both pass

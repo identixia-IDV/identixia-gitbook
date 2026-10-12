@@ -35,7 +35,7 @@ Authenticity is rows in `tests` with `group: "authenticity"`. An empty set is no
 | Requirement | Detail |
 | --- | --- |
 | License | `recognition` for OCR, MRZ, and barcode. Add `authenticity` for the security checks |
-| Runtime | From the product repository, run `python scripts/get_runtime.py` |
+| Runtime | Download the runtime zip from GitHub Releases |
 | Database | `document.xdb`. On Android it is embedded in the AAR. On Windows and Linux it sits at the top of `lib/cpu/` |
 | Capture | A physical device for camera demos. Align the document in the guide and capture the back when the document has one |
 
@@ -61,7 +61,7 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 ## Try it
 
 1. Clone one repository above.
-2. Run `python scripts/get_runtime.py`.
+2. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
 3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
 4. On Windows or Docker, call `POST /api/document/process` on port **14102**. See [SDK Server](../sdk-server/README.md).
 

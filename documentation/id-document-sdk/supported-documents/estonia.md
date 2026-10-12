@@ -1,0 +1,102 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Estonia.
+icon: file
+---
+
+# Estonia
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Digital Resident Id Card (2010-2014)
+- Digital Resident Id Card (2018)
+- Digital Resident Id Card (2018) Side B
+- Diplomatic Id Card (2007)
+- Diplomatic Id Card (2010)
+- Diplomatic Id Card (2010) Side B
+- Diplomatic Id Card (2018)
+- Diplomatic Id Card (2018) Side B
+- Diplomatic Id Card (2025)
+- Diplomatic Id Card (2025) Side B
+- Driving License #1
+- Driving License #1 Side B
+- Driving License (1999)
+- Driving License (1999) Side B
+- Driving License (2004)
+- Driving License (2004) Side B
+- Driving License (2013) #1
+- Driving License (2013) #1 Side B
+- Driving License (2013) #2
+- Driving License (2013) #2 Side B
+- Driving License (2020)
+- Driving License (2020) Side B
+- Driving License (2025)
+- Driving License (2025) Side B
+- ePassport (2007)
+- ePassport (2007) Alien's
+- ePassport (2007) Certificate
+- ePassport (2007) Diplomatic
+- ePassport (2007) Seafarer's
+- ePassport (2007) Temporary
+- ePassport (2007) Travel Document
+- ePassport (2014)
+- ePassport (2014) Alien's
+- ePassport (2014) Certificate
+- ePassport (2014) Diplomatic
+- ePassport (2014) Page 3
+- ePassport (2014) Seafarer's
+- ePassport (2014) Temporary
+- ePassport (2014) Travel Document
+- ePassport (2021)
+- ePassport (2021) Alien's
+- ePassport (2021) Certificate
+- ePassport (2021) Diplomatic
+- ePassport (2021) Page 2
+- ePassport (2021) Seafarer's
+- ePassport (2021) Temporary
+- ePassport (2021) Travel Document
+- Id Card (2002-2007)
+- Id Card (2002-2007) Side B
+- Id Card (2011)
+- Id Card (2011) Side B
+- Id Card (2018)
+- Id Card (2018-2021) Side B
+- Id Card (2021)
+- Id Card (2025)
+- Id Card (2025) Side B
+- Passport (1994)
+- Passport (1994) Alien's
+- Passport (2002)
+- Passport (2002) Alien's
+- Passport (2002) Diplomatic
+- Passport (2002) Seaman's
+- Passport (2002) Travel Document
+- Passport (2005)
+- Passport Seaman's (2000) #1
+- Passport Seaman's (2000) #2
+- Qualification Driving License #1
+- Qualification Driving License #1 Side B
+- Qualification Driving License (2007)
+- Qualification Driving License (2007) Side B
+- Qualification Driving License (2018)
+- Qualification Driving License (2018) Side B
+- Qualification Driving License (2021)
+- Qualification Driving License (2021) Side B
+- Residence permit (2011)
+- Residence permit (2011-2015) Side B
+- Residence permit (2015)
+- Residence permit (2018)
+- Residence permit (2018) Side B
+- Residence permit (2020)
+- Residence permit (2020) Side B
+- Residence Permit (2025)
+- Residence Permit (2025) Side B
+- Service Id Card (2007)
+- Service Id Card (2007) Side B
+- Service Id Card (2010)
+- Visa (2004)
+- Visa (2011)
+- Visa (2018)
+- Visa (2022)
+
+{% include "../../.gitbook/includes/footer.md" %}

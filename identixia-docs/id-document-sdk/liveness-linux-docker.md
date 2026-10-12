@@ -32,38 +32,22 @@ description: >-
 
 ## Download and place the runtime
 
-Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
 | **Release asset** | GitHub Release `*-windows.zip` / `*-linux.zip` |
-| **Local path after download** | `lib/cpu/` (`DocumentLivenessSDK.dll` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level) |
+| **Local path** | `lib/cpu/` (`DocumentLivenessSDK.dll` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level) |
 | **Databases** | Face recognition needs the full `recognition*.xdb` set; face liveness needs `recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb`; document products need `document.xdb`. |
 
-### Manual download (optional)
-
-Open the repository **Releases** page and download the asset named above:
-
 ```text
-https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/latest/download/<asset>
+https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/latest
 ```
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
 {% endhint %}
 
 ## Integration guide — start the project
@@ -79,13 +63,7 @@ cd ID-Document-Liveness-Detection-Docker
 
 ### 2. Download and place the runtime
 
-Native libraries and `*.xdb` databases are not in git. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
-
-Files must land under `lib/cpu/` (DLLs or `.so` files **and** every required database pack). See [Download and place the runtime](#download-and-place-the-runtime).
+Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Configure and start the server
 

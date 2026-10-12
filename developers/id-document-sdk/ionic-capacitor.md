@@ -38,38 +38,22 @@ icon: bolt
 
 ## Download and place the runtime
 
-Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/releases/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
 | **Release asset** | Android `documentfullsdk.aar` + iOS `docsdk.xcframework.zip` (from the paired native product Releases) |
-| **Local path after download** | See the sample paths in the repository README (`example/android/libdocsdk/documentfullsdk.aar`, `ios/Frameworks/…`) |
+| **Local path** | See the sample paths in the repository README (`example/android/libdocsdk/documentfullsdk.aar`, `ios/Frameworks/…`) |
 | **Databases** | Document Android embeds `document.xdb` in the AAR; iOS embeds it in the framework bundle. |
 
-### Manual download (optional)
-
-Open the repository **Releases** page and download the asset named above:
-
 ```text
-https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/releases/latest/download/<asset>
+https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/releases/latest
 ```
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
 {% endhint %}
 
 ## Integration guide — start the project
@@ -83,11 +67,7 @@ cd ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor
 
 ### 2. Download and place the runtime
 
-See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
+Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Ionic-Capacitor/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 

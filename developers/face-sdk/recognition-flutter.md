@@ -6,7 +6,6 @@ icon: file
 
 # Face Recognition SDK for Flutter
 
-
 ## Overview
 
 | | |
@@ -37,27 +36,14 @@ icon: file
 
 ## Download and place the runtime
 
-Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Download the runtime zip from GitHub Releases and unzip it into the folder listed for that platform.
 
 | | |
 | --- | --- |
 | **Release asset** | Android `facerecognitionsdk.aar` zip + iOS face zip (from the paired Android / iOS product Releases) |
 | **Local path after download** | See the sample paths in the repository README (`example/android/libfacesdk/facerecognitionsdk.aar`, `ios/Frameworks/…`) |
-| **Databases** | Do not skip database packs — `get_runtime.py` verifies required `*.xdb` files after download. |
 
-### Manual download (optional)
+### Download
 
 Open the repository **Releases** page and download the asset named above:
 
@@ -66,10 +52,6 @@ https://github.com/identixia-IDV/FaceRecognition-Flutter/releases/latest/downloa
 ```
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
-
-{% hint style="warning" %}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
-{% endhint %}
 
 ## Integration guide — start the project
 
@@ -82,11 +64,7 @@ cd FaceRecognition-Flutter
 
 ### 2. Download and place the runtime
 
-See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
+Download the runtime zip from GitHub Releases and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -103,7 +81,6 @@ Use a physical device for camera demos.
 2. Exercise each demo tile once (enroll, identify, capture, attribute, liveness, document front/back, result).
 3. For your own app: request a license for **your** application id / bundle id, then call activate → init on a background thread.
 
-
 ## License and activation (mobile)
 
 | | |
@@ -118,7 +95,6 @@ Use a physical device for camera demos.
 2. On success, call init (unpacks on-device models; may take a few seconds the first time).
 3. Gate UI on Ready / license status before camera modes.
 4. Never paste the demo key into a production app id.
-
 
 ### Status codes
 
@@ -137,7 +113,6 @@ Use a physical device for camera demos.
 | `-16` | Liveness failed (when gated) |
 
 Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
-
 
 ## API reference — mobile face SDK
 
@@ -207,7 +182,6 @@ Call the same method names exposed by the plugin bridge (`activate` → `init` �
 
 ### Integration checklist
 
-1. Download runtime with `python scripts/get_runtime.py` (or `install.gradle` on Android).
 2. `FaceRecognitionClient.get(context).activate(license) { code -> … }` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
 4. Enroll → Identify, or Capture / Attribute for still flows.
@@ -252,7 +226,6 @@ Keep the same license product line across stacks. From the [Face SDK](https://do
 ![Android home (same product family)](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png)
 
 ![Android identify](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/identify.png)
-
 
 ## Support
 

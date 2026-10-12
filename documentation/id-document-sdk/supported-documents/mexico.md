@@ -1,0 +1,517 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Mexico.
+icon: file
+---
+
+# Mexico
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Aguascalientes Driving License #1
+- Aguascalientes Driving License #1 Side B
+- Aguascalientes Driving License #2 (1)
+- Aguascalientes Driving License #2 (2)
+- Aguascalientes Driving License #2 Side B
+- Aguascalientes Driving License #3
+- Aguascalientes Driving License #3 Side B
+- Aguascalientes Driving License #4 (1)
+- Aguascalientes Driving License #4 (2)
+- Aguascalientes Driving License #4 Side B
+- Aguascalientes Driving License #5 (1)
+- Aguascalientes Driving License #5 (2)
+- Aguascalientes Driving License #5 Side B
+- Baja California Digital Driving License (2023)
+- Baja California Digital Driving License (2023) Side B
+- Baja California Driving License (2012)
+- Baja California Driving License (2012) Side B
+- Baja California Driving License (2014)
+- Baja California Driving License (2014) Side B
+- Baja California Driving License (2018)
+- Baja California Driving License (2018) Side B (1)
+- Baja California Driving License (2018) Side B (2)
+- Baja California Driving License (2019)
+- Baja California Driving License (2019) Side B (1)
+- Baja California Driving License (2019) Side B (2)
+- Baja California Driving License (2020)
+- Baja California Driving License (2020) Side B
+- Baja California Driving License (2024)
+- Baja California Driving License (2024) Side B
+- Baja California Sur Driving License #1
+- Baja California Sur Driving License #1 Side B
+- Baja California Sur Driving License #2
+- Baja California Sur Driving License #2 Side B
+- Baja California Sur Driving License #3
+- Baja California Sur Driving License #3 Side B
+- Baja California Sur Driving License #4
+- Baja California Sur Driving License #5
+- Baja California Sur Driving License #5 Side B
+- Campeche Driving License #1
+- Campeche Driving License #1 Side B
+- Campeche Driving License (2018)
+- Campeche Driving License (2018) Side B
+- Chiapas Driving License #1
+- Chiapas Driving License #1 Side B
+- Chiapas Driving License #2
+- Chiapas Driving License (2013)
+- Chiapas Driving License (2013) Side B
+- Chiapas Driving License (2019)
+- Chiapas Driving License (2019) Side B
+- Chiapas Driving License (2025)
+- Chiapas Driving License (2025) Side B
+- Chihuahua Driving License #1
+- Chihuahua Driving License #1 Side B
+- Chihuahua Driving License #2
+- Chihuahua Driving License #2 Side B
+- Chihuahua Driving License (2017)
+- Chihuahua Driving License (2017) Side B
+- Chihuahua Driving License (2020)
+- Chihuahua Driving License (2020) Side B
+- Chihuahua Driving License (2021) #1
+- Chihuahua Driving License (2021) #1 Side B
+- Chihuahua Driving License (2021) #2
+- Chihuahua Driving License (2021) #2 Side B
+- CNS Id Card #1
+- Coahuila Driving License #1
+- Coahuila Driving License #1 Side B
+- Coahuila Driving License #2
+- Coahuila Driving License #2 Side B
+- Coahuila Driving License (2015)
+- Coahuila Driving License (2015) Side B
+- Coahuila Driving License (2018)
+- Coahuila Driving License (2018) Side B
+- Colima Driving License #1
+- Colima Driving License #1 Side B
+- Colima Driving License (2017)
+- Colima Driving License (2017) Side B
+- Colima Driving License (2018)
+- Colima Driving License (2018) Side B
+- Colima Driving License (2022)
+- Colima Driving License (2022) Side B
+- Commercial Driving License #1
+- Commercial Driving License #1 Side B
+- Commercial Driving License #2
+- Commercial Driving License #2 Side B
+- Commercial Driving License (2011)
+- Commercial Driving License (2011) Side B
+- Consular Id Card (2006)
+- Consular Id Card (2006) Side B #1
+- Consular Id Card (2006) Side B #2
+- Consular Id Card (2014)
+- Consular Id Card (2014) Side B
+- Consular Id Card (2022)
+- Consular Id Card (2022) Side B (1)
+- Consular Id Card (2022) Side B (2)
+- Diplomatic Id Card #1
+- Diplomatic Id Card #1 Side B
+- Distrito Federal Driving License #1
+- Distrito Federal Driving License #2
+- Distrito Federal Driving License #2 Side B
+- Distrito Federal Driving License #3
+- Distrito Federal Driving License #3 Side B
+- Distrito Federal Driving License #4
+- Distrito Federal Driving License #4 Side B
+- Distrito Federal Driving License #5
+- Distrito Federal Driving License #5 Side B
+- Distrito Federal Driving License #6
+- Distrito Federal Driving License #6 Side B
+- Distrito Federal Driving License #7
+- Distrito Federal Driving License #7 Side B
+- Distrito Federal Driving License (2013)
+- Distrito Federal Driving License (2013) Side B
+- Distrito Federal Driving License (2015)
+- Distrito Federal Driving License (2015) Side B
+- Distrito Federal Registration Certificate #1
+- Distrito Federal Registration Certificate #1 Side B
+- Durango Driving License (2007)
+- Durango Driving License (2007) Side B
+- Durango Driving License (2018)
+- Durango Driving License (2018) Side B
+- Durango Driving License (2023)
+- Durango Driving License (2023) Side B
+- Durango Driving License (2025)
+- Durango Driving License (2025) Side B
+- ePassport (2021)
+- ePassport (2021) Diplomatic
+- ePassport (2021) Official
+- ePassport (2021) Page B
+- Guanajuato Driving License #1
+- Guanajuato Driving License #1 Side B
+- Guanajuato Driving License #2
+- Guanajuato Driving License #2 Side B
+- Guanajuato Driving License #3
+- Guanajuato Driving License #3 Side B
+- Guanajuato Driving License #4
+- Guanajuato Driving License #4 Side B
+- Guanajuato Driving License (2013)
+- Guanajuato Driving License (2013) Side B
+- Guanajuato Driving License (2019) #1
+- Guanajuato Driving License (2019) #2
+- Guanajuato Driving License (2019) #3
+- Guanajuato Driving License (2019) Side B
+- Guanajuato Driving License (2023)
+- Guanajuato Driving License (2023) Side B
+- Guanajuato Registration Certificate #1
+- Guerrero Driving License #1
+- Guerrero Driving License #10
+- Guerrero Driving License #10 Side B
+- Guerrero Driving License #11
+- Guerrero Driving License #11 Side B
+- Guerrero Driving License #12
+- Guerrero Driving License #12 Side B
+- Guerrero Driving License #13
+- Guerrero Driving License #13 Side B
+- Guerrero Driving License #14
+- Guerrero Driving License #14 Side B
+- Guerrero Driving License #15
+- Guerrero Driving License #15 Side B
+- Guerrero Driving License #16
+- Guerrero Driving License #16 Side B
+- Guerrero Driving License #17
+- Guerrero Driving License #18
+- Guerrero Driving License #18 Side B
+- Guerrero Driving License #19
+- Guerrero Driving License #19 Side B
+- Guerrero Driving License #2
+- Guerrero Driving License #2 Side B
+- Guerrero Driving License #20
+- Guerrero Driving License #21
+- Guerrero Driving License #21 Side B
+- Guerrero Driving License #22
+- Guerrero Driving License #22 Side B
+- Guerrero Driving License #23
+- Guerrero Driving License #23 Side B
+- Guerrero Driving License #24
+- Guerrero Driving License #24 Side B
+- Guerrero Driving License #25
+- Guerrero Driving License #25 Side B
+- Guerrero Driving License #26
+- Guerrero Driving License #26 Side B
+- Guerrero Driving License #27
+- Guerrero Driving License #27 Side B
+- Guerrero Driving License #28
+- Guerrero Driving License #28 Side B
+- Guerrero Driving License #29
+- Guerrero Driving License #29 Side B
+- Guerrero Driving License #3
+- Guerrero Driving License #3 Side B
+- Guerrero Driving License #30
+- Guerrero Driving License #30 Side B
+- Guerrero Driving License #31
+- Guerrero Driving License #4
+- Guerrero Driving License #5
+- Guerrero Driving License #6
+- Guerrero Driving License #6 Side B
+- Guerrero Driving License #7 (1)
+- Guerrero Driving License #7 (1) Side B
+- Guerrero Driving License #7 (2)
+- Guerrero Driving License #8
+- Guerrero Driving License #8 Side B
+- Guerrero Driving License #9
+- Guerrero Driving License #9 Side B
+- Guerrero Driving License (2021) #1
+- Guerrero Driving License (2021) #1 Side B
+- Guerrero Driving License (2021) #2
+- Guerrero Driving License (2021) #2 Side B
+- Guerrero Driving License (2022)
+- Guerrero Driving License (2022) Side B
+- Guerrero Driving License (2024)
+- Guerrero Driving License (2024) Side B
+- Guerrero Driving License (2025)
+- Guerrero Driving License (2025) Side B
+- Hidalgo Driving License #1
+- Hidalgo Driving License #1 Side B
+- Hidalgo Driving License #2
+- Hidalgo Driving License #2 Side B
+- Hidalgo Driving License #3
+- Hidalgo Driving License #3 Side B
+- Hidalgo Driving License (2022)
+- Hidalgo Driving License (2022) Side B
+- International Driving License #1
+- Jalisco Driving License #1
+- Jalisco Driving License #1 Side B
+- Jalisco Driving License #1 Side B (2)
+- Jalisco Driving License #2
+- Jalisco Driving License #2 Side B
+- Jalisco Driving License #2 Side B (2)
+- Jalisco Driving License #3
+- Jalisco Driving License #3 Side B (1)
+- Jalisco Driving License #3 Side B (2)
+- Jalisco Driving License (2012)
+- Jalisco Driving License (2012) Side B
+- Jalisco Driving License (2018)
+- Jalisco Driving License (2018) Side B
+- Jalisco Driving License (2020)
+- Jalisco Driving License (2020) Side B
+- Jalisco Driving License (2021) #1
+- Jalisco Driving License (2021) #2
+- Jalisco Driving License (2021) Side B (1)
+- Jalisco Driving License (2021) Side B (2)
+- Jalisco Driving License (2024) #1
+- Jalisco Driving License (2024) #1 Side B
+- Jalisco Driving License (2024) #2
+- Jalisco Driving License (2024) #2 Side B
+- Mexico Driving License #1
+- Mexico Driving License #1 Side B
+- Mexico Driving License #2
+- Mexico Driving License #2 Side B
+- Mexico Driving License #3
+- Mexico Driving License #3 Side B
+- Mexico Driving License (2010)
+- Mexico Driving License (2010) Side B
+- Mexico Driving License (2014)
+- Mexico Driving License (2014) Side B
+- Mexico Driving License (2018)
+- Mexico Driving License (2018) Side B
+- Mexico Driving License (2019) #1
+- Mexico Driving License (2019) #1 Side B
+- Mexico Driving License (2019) #2
+- Mexico Driving License (2019) #2 Side B
+- Mexico Driving License (2021)
+- Mexico Driving License (2021) Side B
+- Mexico Driving License (2023)
+- Mexico Driving License (2023) Side B
+- Mexico Driving License (2024)
+- Mexico Driving License (2024) Side B
+- Mexico Registration Certificate #1
+- Mexico Registration Certificate #2
+- Mexico Registration Certificate #3
+- Mexico Registration Certificate #3 Side B
+- Mexico Registration Certificate #4
+- Mexico Registration Certificate #5
+- Mexico Registration Certificate #6
+- Mexico Registration Certificate #6 Side B
+- Michoacan Driving License #1
+- Michoacan Driving License #1 Side B
+- Michoacan Driving License #2
+- Michoacan Driving License #2 Side B
+- Michoacan Driving License (2018)
+- Michoacan Driving License (2018) Side B
+- Michoacan Driving License (2021)
+- Michoacan Driving License (2021) Side B
+- Michoacan Driving License (2023)
+- Michoacan Driving License (2023) Side B
+- Morelos Driving License #1
+- Morelos Driving License #1 Side B
+- Morelos Driving License #2
+- Morelos Driving License #2 Side B
+- Morelos Driving License #3
+- Morelos Driving License #3 Side B
+- Morelos Driving License (2025)
+- Morelos Driving License (2025) Side B
+- Nayarit Driving License #1
+- Nayarit Driving License #1 Side B
+- Nayarit Driving License #2
+- Nayarit Driving License #2 Side B
+- Nayarit Driving License #3
+- Nayarit Driving License #3 Side B
+- Nayarit Driving License (2021)
+- Nayarit Driving License (2022)
+- Nayarit Driving License (2022) #2
+- Nayarit Driving License (2022) #2 Side B
+- Nayarit Driving License (2022) Side B
+- Nuevo Leon Driving License #1
+- Nuevo Leon Driving License #1 Side B
+- Nuevo Leon Driving License (2007)
+- Nuevo Leon Driving License (2007) Side B
+- Nuevo Leon Driving License (2011)
+- Nuevo Leon Driving License (2011) Side B
+- Nuevo Leon Driving License (2019)
+- Nuevo Leon Driving License (2019) Side B
+- Nuevo Leon Driving License (2021) #1
+- Nuevo Leon Driving License (2021) #1 Side B
+- Nuevo Leon Driving License (2021) #2
+- Nuevo Leon Driving License (2021) #2 Side B
+- Nuevo Leon Driving License (2026)
+- Nuevo Leon Driving License (2026) Side B
+- Nuevo Leon Registration Certificate #1
+- Oaxaca Driving License #1
+- Oaxaca Driving License #1 Side B
+- Oaxaca Driving License #2
+- Oaxaca Driving License #2 Side B
+- Oaxaca Driving License #3
+- Oaxaca Driving License #3 Side B
+- Oaxaca Driving License #4
+- Oaxaca Driving License #4 Side B
+- Oaxaca Driving License (2023)
+- Oaxaca Driving License (2023) Side B
+- Passport (1993)
+- Passport (2001)
+- Passport (2001) Diplomatic #1
+- Passport (2001) Diplomatic #2
+- Passport (2001) Official #1
+- Passport (2001) Official #2
+- Passport (2008) #1
+- Passport (2008) #2
+- Passport (2008) Page B
+- Passport (2012)
+- Passport (2012) Diplomatic
+- Passport (2012) Emergency
+- Passport (2012) Official
+- Passport (2015)
+- Passport (2015) Diplomatic
+- Passport (2015) Emergency
+- Passport (2015) Official
+- Passport (2015) Page 17
+- Passport (2015) Page B
+- Passport (2025) Travel Document
+- Passport (2025) Travel Document 1951
+- Passport (2025) Travel Document 1954
+- Professional Id Card #1
+- Professional Id Card #1 Side B
+- Professional Id Card #2
+- Professional Id Card #2 Side B
+- Professional Id Card #3
+- Professional Id Card #3 Side B
+- Professional Id Card #4
+- Professional Id Card #5
+- Puebla Driving License #1
+- Puebla Driving License (2015) #1
+- Puebla Driving License (2015) #2
+- Puebla Driving License (2015) #3
+- Puebla Driving License (2015) Side B
+- Puebla Driving License (2017) #1
+- Puebla Driving License (2017) #2
+- Puebla Driving License (2017) Side B
+- Puebla Driving License (2019) #1 (1)
+- Puebla Driving License (2019) #1 (2)
+- Puebla Driving License (2019) #1 (3)
+- Puebla Driving License (2019) #1 Side B
+- Puebla Driving License (2019) #1 Side B (2)
+- Puebla Driving License (2019) #2
+- Puebla Driving License (2019) #2 Side B
+- Puebla Driving License (2025)
+- Puebla Driving License (2025) Side B
+- Puebla Registration Certificate (2017)
+- Puebla Registration Certificate (2019)
+- Queretaro Driving License #1
+- Queretaro Driving License #1 Side B
+- Queretaro Driving License #2
+- Queretaro Driving License #2 Side B
+- Queretaro Driving License #3
+- Queretaro Driving License #4
+- Queretaro Driving License #4 Side B
+- Queretaro Driving License (2016) #1
+- Queretaro Driving License (2016) #2
+- Queretaro Driving License (2016) Side B
+- Quintana Roo Driving License #1
+- Quintana Roo Driving License #2
+- Quintana Roo Driving License #2 Side B
+- Quintana Roo Driving License #3
+- Quintana Roo Driving License #4
+- Quintana Roo Driving License #4 Side B
+- Quintana Roo Driving License #5
+- Quintana Roo Driving License #5 Side B
+- Quintana Roo Driving License #6
+- Quintana Roo Driving License #6 Side B
+- Quintana Roo Driving License #7
+- Quintana Roo Driving License #7 Side B
+- Quintana Roo Driving License (2019)
+- Quintana Roo Driving License (2019) Side B
+- Quintana Roo Driving License (2020)
+- Quintana Roo Driving License (2021)
+- Quintana Roo Driving License (2021) Side B
+- Quintana Roo Driving License (2023)
+- Quintana Roo Driving License (2023) Side B
+- Quintana Roo Driving License (2024)
+- Quintana Roo Driving License (2024) Side B
+- Quintana Roo Registration Certificate #1
+- San Luis Potosi Driving License #1
+- San Luis Potosi Driving License #1 Side B
+- San Luis Potosi Driving License #2
+- San Luis Potosi Driving License #2 Side B
+- San Luis Potosi Driving License #3
+- San Luis Potosi Driving License #3 Side B
+- San Luis Potosi Driving License #4
+- San Luis Potosi Driving License #4 Side B
+- San Luis Potosi Driving License #5
+- San Luis Potosi Driving License #5 Side B
+- San Luis Potosi Driving License (2016)
+- San Luis Potosi Driving License (2016) Side B
+- San Luis Potosi Driving License (2021)
+- San Luis Potosi Driving License (2021) Side B
+- SEP Id Card #1
+- SEP Id Card #1 Side B
+- Sinaloa Driving License #1
+- Sinaloa Driving License #1 Side B
+- Sinaloa Driving License #2
+- Sinaloa Driving License #2 Side B
+- Sinaloa Driving License #3 (1)
+- Sinaloa Driving License #3 (1) Side B
+- Sinaloa Driving License #3 (2)
+- Sinaloa Driving License #3 (2) Side B
+- Sinaloa Driving License #4
+- Sinaloa Driving License #4 Side B
+- Sinaloa Driving License (2019)
+- Sinaloa Driving License (2019) Side B
+- Sonora Driving License #1
+- Sonora Driving License #1 Side B
+- Sonora Driving License (2016)
+- Sonora Driving License (2016) Side B
+- Sonora Driving License (2021)
+- Sonora Driving License (2021) Side B
+- Sonora Driving License (2022)
+- Sonora Driving License (2022) Side B
+- Tabasco Driving License #1
+- Tabasco Driving License #1 Side B
+- Tabasco Driving License #2
+- Tabasco Driving License #2 Side B
+- Tabasco Driving License #3
+- Tabasco Driving License #3 Side B
+- Tabasco Driving License #4
+- Tabasco Driving License #4 Side B
+- Tabasco Driving License #5
+- Tamaulipas Driving License #1
+- Tamaulipas Driving License #1 Side B
+- Tamaulipas Driving License #2
+- Tamaulipas Driving License #2 Side B
+- Tamaulipas Driving License (2011)
+- Tamaulipas Driving License (2011) Side B
+- Tamaulipas Driving License (2018)
+- Tamaulipas Driving License (2018) Side B
+- Tamaulipas Driving License (2020)
+- Tamaulipas Driving License (2020) Side B
+- Tamaulipas Driving License (2022)
+- Tamaulipas Driving License (2022) Side B
+- Tlaxcala Driving License #1
+- Tlaxcala Driving License #1 Side B
+- Tlaxcala Driving License #2
+- Tlaxcala Driving License #2 Side B
+- Tlaxcala Driving License (2018)
+- Tlaxcala Driving License (2018) Side B
+- Tlaxcala Registration Certificate #1
+- Veracruz Driving License #1
+- Veracruz Driving License #2
+- Veracruz Driving License #2 Side B
+- Veracruz Driving License #3
+- Veracruz Driving License #3 Side B
+- Veracruz Driving License #4
+- Veracruz Driving License #5
+- Veracruz Driving License #6
+- Veracruz Driving License #6 Side B
+- Veracruz Driving License #7
+- Veracruz Driving License #7 Side B
+- Veracruz Driving License #8
+- Veracruz Driving License (2025)
+- Veracruz Driving License (2025) Side B
+- Visa #1
+- Visa #2
+- Visa (2024)
+- Visa Card (2023)
+- Visa Card (2023) Side B
+- Yucatan Driving License #1
+- Yucatan Driving License #1 Side B
+- Zacatecas Driving License #1
+- Zacatecas Driving License #2
+- Zacatecas Driving License #2 Side B
+- Zacatecas Driving License #3
+- Zacatecas Driving License #3 Side B
+- Zacatecas Driving License #4
+- Zacatecas Driving License #4 Side B
+- Zacatecas Driving License #5
+- Zacatecas Driving License #5 Side B
+- Zacatecas Driving License #6
+- Zacatecas Driving License #6 Side B
+- Zacatecas Driving License (2017)
+
+{% include "../../.gitbook/includes/footer.md" %}

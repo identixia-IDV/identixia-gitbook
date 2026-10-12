@@ -23,11 +23,7 @@ Use this page to pick the port. Request bodies and platform setup are in [Develo
 ## Start any server (same pattern)
 
 1. Clone the product repository (Windows or Docker).
-2. Download runtime libraries and databases:
-
-```bash
-python scripts/get_runtime.py
-```
+2. Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/`.
 
 3. Copy `.env.example` → `.env`, install Python deps, start (`python run_server.py` / `python3 run_server.py` or Docker Compose).
 4. Read the machine code, request a license, activate.
@@ -51,7 +47,7 @@ curl -s http://127.0.0.1:14103/api/licenseStatus
 
 ## Runtime placement
 
-| Platform | Path after `get_runtime.py` |
+| Platform | Where to unzip the Release |
 | --- | --- |
 | Windows / Linux host | `lib/cpu/` — binaries **and** every required `*.xdb` |
 | Docker Hub image | Runtime is already inside the image |

@@ -1,0 +1,118 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Sweden.
+icon: file
+---
+
+# Sweden
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Diplomatic Id Card #1
+- Driving License #1
+- Driving License #1 Side B
+- Driving License (1997)
+- Driving License (1999-2004)
+- Driving License (1999-2004) Side B
+- Driving License (2007)
+- Driving License (2007) Side B
+- Driving License (2009)
+- Driving License (2009) Side B
+- Driving License (2013)
+- Driving License (2013) Side B
+- Driving License (2016)
+- Driving License (2016) Side B
+- Driving License (2025)
+- Driving License (2025) Side B
+- ePassport (2005)
+- ePassport (2005) Emergency
+- ePassport (2006) Alien's
+- ePassport (2006-2008) Travel Document
+- ePassport (2008) Diplomatic
+- ePassport (2008) Service
+- ePassport (2012)
+- ePassport (2012) Alien's
+- ePassport (2012) Diplomatic
+- ePassport (2012) Emergency
+- ePassport (2012) Emergency Page 3
+- ePassport (2012) Page 2
+- ePassport (2012) Page 3
+- ePassport (2012) Service
+- ePassport (2012) Travel Document 1951
+- ePassport (2022)
+- ePassport (2022) Alien's
+- ePassport (2022) Alien's Page 1
+- ePassport (2022) Diplomatic
+- ePassport (2022) Diplomatic Page 1
+- ePassport (2022) Emergency
+- ePassport (2022) Emergency Page 1
+- ePassport (2022) Emergency Page 3
+- ePassport (2022) Page 1
+- ePassport (2022) Page 3 (1)
+- ePassport (2022) Page 3 (2)
+- ePassport (2022) Page 3 (3)
+- ePassport (2022) Service
+- ePassport (2022) Service Page 1
+- ePassport (2022) Travel Document
+- ePassport (2022) Travel Document Page 1
+- Handelsbanken Id Card (1996)
+- Id Card (2005)
+- Id Card (2005-2007) Side B
+- Id Card (2007)
+- Id Card (2012)
+- Id Card (2012) Side B
+- Id Card (2021)
+- Id Card (2021) Side B
+- Id Card (2022)
+- Id Card (2022) Side B
+- Migrationsverket Id Card (1996)
+- Nordea Id Card (2003)
+- Olands Bank Id Card (1996)
+- Passport (1989)
+- Passport (1998)
+- Passport (1998) Emergency
+- Passport (1998) Travel Document
+- Passport (1999-2004) Alien's
+- Passport (2001) Diplomatic
+- Passport (2001) Service
+- Passport (2005) Emergency
+- Qualification Driving License (2009)
+- Qualification Driving License (2009) Side B
+- Qualification Driving License (2012)
+- Qualification Driving License (2012) Side B
+- Qualification Driving License (2016)
+- Qualification Driving License (2016) Side B
+- Residence Permit #1
+- Residence permit #1 Side B
+- Residence Permit (2002)
+- Residence Permit (2011)
+- Residence Permit (2011) Side B
+- Residence Permit (2012)
+- Residence Permit (2012) Side B
+- Residence Permit (2020-2022)
+- Residence Permit (2020-2022) Side B
+- Seaman's Passport #1
+- Seaman's Passport (1999)
+- SEB Id Card (2003)
+- Sjofartsverket Id Card (1996)
+- Sparbank Id Card (1996)
+- Swedbank Id Card (1996)
+- Tax Id Card (2009)
+- Tax Id Card (2009) Side B
+- Tax Id Card (2013)
+- Tax Id Card (2013) Side B
+- Tax Id Card (2017)
+- Tax Id Card (2017) Side B
+- Tax Id Card (2022)
+- Tax Id Card (2022) Side B
+- Temporary Id Card of Foreigner (2012)
+- Temporary Id Card of Foreigner (2012) Side B
+- Temporary Id Card of Foreigner (2022)
+- Temporary Id Card of Foreigner (2022) Side B
+- Train Driving License #1
+- Vaktare Id Card (1996)
+- Visa (2010)
+- Visa (2019)
+- Visa (2022)
+
+{% include "../../.gitbook/includes/footer.md" %}

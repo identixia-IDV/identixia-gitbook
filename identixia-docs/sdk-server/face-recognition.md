@@ -9,10 +9,11 @@ Start Face Recognition (+ Liveness) Windows/Docker on port **14103** (recognitio
 
 ## Start the project
 
+Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+
 ```bash
 git clone https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows.git
 cd FaceRecognition-LivenessDetection-Windows
-python scripts/get_runtime.py
 cp -n .env.example .env
 pip install -r requirements.txt
 python run_server.py

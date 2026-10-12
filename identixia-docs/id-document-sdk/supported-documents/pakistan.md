@@ -1,0 +1,136 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Pakistan.
+---
+
+# Pakistan
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Armed Forces Id Card #1
+- Azad Jammu and Kashmir Driving License #1
+- Azad Jammu and Kashmir Driving License #1 Side B
+- Azad Jammu and Kashmir Driving License #2
+- Azad Jammu and Kashmir Driving License #2 Side B
+- Azad Jammu and Kashmir Driving License #3
+- Azad Jammu and Kashmir Driving License #3 Side B
+- Balochistan Driving License #1
+- Balochistan Driving License #1 Side B
+- Balochistan Driving License #2
+- Balochistan Driving License #2 Side B
+- Balochistan Driving License #3
+- Balochistan Driving License #3 Side B
+- Balochistan Driving License #4
+- Balochistan Driving License #4 Side B
+- Child Id Card (2012)
+- Consular Id Card #1
+- Driving License #1
+- Driving License #1 Side B
+- Driving License #3
+- Driving License #4
+- Driving License #4 Side B
+- Driving License #5
+- Driving License #5 Side B
+- Driving License #6
+- Driving License #6 Side B
+- Driving License #7
+- Driving License #7 Side B
+- Driving License #8
+- Driving License #9
+- Driving License #9 Side B
+- Driving License (2022)
+- Driving License (2022) Side B (1)
+- Driving License (2022) Side B (2)
+- ePassport (2022) Diplomatic
+- ePassport (2022) Service
+- ePassport (2023)
+- ePassport (2023) Page 1
+- ePassport (2023) Page B
+- eVisa #1
+- Foreigner Id Card (2012) #1
+- Foreigner Id Card (2012) #2
+- Gilgit-Baltistan Driving License #1
+- Gilgit-Baltistan Driving License #2
+- Gilgit-Baltistan Driving License #2 Side B
+- Id Card (2002) #1
+- Id Card (2002) #1 Side B
+- Id Card (2002) #2
+- Id Card (2002) #2 Side B
+- Id Card (2002) #3
+- Id Card (2002) #3 Side B
+- Id Card (2002) #4
+- Id Card (2002) #4 Side B
+- Id Card (2012)
+- Id Card (2012) Side B (1)
+- Id Card (2012) Side B (2)
+- Id Card (2025)
+- Id Card (2025) Side B
+- Islamabad Driving License (2009) #1
+- Islamabad Driving License (2009) #2
+- Islamabad Driving License (2009) Side B
+- Islamabad Driving License (2014)
+- Islamabad Driving License (2014) Side B
+- Islamabad Driving License (2015)
+- Islamabad Driving License (2015) Side B
+- Islamabad Driving License (2017)
+- Islamabad Driving License (2017) Side B
+- Islamabad Driving License (2021)
+- Islamabad Driving License (2021) Side B
+- Islamabad Driving License (2023)
+- Islamabad Driving License (2023) Side B
+- Islamabad Registration Certificate #1
+- Islamabad Registration Certificate #1 Side B
+- Khyber Pakhtunkhwa Driving License #1
+- Khyber Pakhtunkhwa Driving License #1 Side B
+- Khyber Pakhtunkhwa Driving License #2
+- Khyber Pakhtunkhwa Driving License #2 Side B
+- Khyber Pakhtunkhwa Driving License #3
+- Khyber Pakhtunkhwa Driving License #3 Side B
+- Khyber Pakhtunkhwa Driving License #4
+- Khyber Pakhtunkhwa Driving License #4 Side B
+- Khyber Pakhtunkhwa Driving License #5
+- Khyber Pakhtunkhwa Driving License #5 Side B
+- Khyber Pakhtunkhwa Driving License #6
+- Khyber Pakhtunkhwa Driving License #6 Side B
+- Khyber Pakhtunkhwa International Driving License #1
+- Khyber Pakhtunkhwa International Driving License #1 Side B
+- Khyber Pakhtunkhwa International Driving License #2
+- Khyber Pakhtunkhwa International Driving License #2 Side B
+- Passport #1
+- Passport (1999)
+- Passport (2004)
+- Passport (2004) Diplomatic
+- Passport (2004) Service
+- Passport (2017)
+- Passport (2017) Diplomatic
+- Passport (2017) Page 2
+- Passport (2017) Service
+- Punjab Driving License #1
+- Punjab Driving License #1 Side B
+- Punjab Driving License #2
+- Punjab Driving License #2 Side B
+- Punjab Driving License #3
+- Punjab Driving License #3 Side B
+- Punjab Driving License (2010)
+- Punjab Driving License (2010) Side B
+- Punjab Registration Certificate (2018)
+- Punjab Registration Certificate (2018) Side B
+- Punjab Registration Certificate (2024)
+- Punjab Registration Certificate (2024) Side B
+- Refugee Id Card (2007)
+- Refugee Id Card (2010)
+- Refugee Id Card (2010) Side B
+- Refugee Id Card (2017)
+- Refugee Id Card (2021)
+- Refugee Id Card (2021) Side B
+- Sindh Driving License #1
+- Sindh Driving License #1 Side B
+- Sindh Driving License #2
+- Sindh Driving License #2 Side B
+- Sindh Driving License #3
+- Sindh Driving License #3 Side B
+- Sindh Registration Certificate #1
+- Sindh Registration Certificate #1 Side B
+- Visa #1
+- Visa #2
+- Visa #3

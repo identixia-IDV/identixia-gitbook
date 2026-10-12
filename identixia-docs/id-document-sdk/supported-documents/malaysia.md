@@ -1,0 +1,122 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Malaysia.
+---
+
+# Malaysia
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Armed Forces Id Card (2010)
+- Armed Forces Id Card (2010) Side B (1)
+- Armed Forces Id Card (2010) Side B (2)
+- Child Id Card #1
+- Child Id Card #1 Side B
+- Child Id Card (2003)
+- Child Id Card (2003) Side B
+- Consular Id Card #1
+- Digital Driving License (2023)
+- Digital Driving License (2023) Side B
+- Digital Driving License (2025)
+- Digital Driving License (2025) Side B
+- Digital Probationary Driving License (2023)
+- Digital Probationary Driving License (2025)
+- Diplomatic Id Card #1
+- Disabled Id Card #1
+- Disabled Id Card #1 Side B
+- Disabled Id Card #2
+- Disabled Id Card (2025)
+- Disabled Id Card (2025) Side B
+- Driving License (1989)
+- Driving License (1989) Side B
+- Driving License (2013)
+- Driving License (2013) Side B
+- Driving License (2023)
+- Driving License (2024)
+- Driving License (2024) Side B
+- Driving License (2025)
+- Driving License (2025) Side B
+- ePassport #1
+- ePassport (2006)
+- ePassport (2006) Business
+- ePassport (2006) Diplomatic
+- ePassport (2006) Official
+- ePassport (2010)
+- ePassport (2010) Diplomatic
+- ePassport (2010) Official
+- ePassport (2013)
+- ePassport (2013) Business
+- ePassport (2013) Diplomatic
+- ePassport (2013) Official
+- ePassport (2013) Page 3
+- ePassport (2017)
+- ePassport (2017) Diplomatic
+- ePassport (2017) Official
+- ePassport (2017) Page B
+- ePassport (2026)
+- ePassport (2026) Diplomatic
+- ePassport (2026) Official
+- eVisa #1
+- eVisa #2
+- eVisa #3
+- eVisa #4
+- eVisa #5
+- eVisa #6
+- eVisa #7
+- eVisa #8
+- Id Card #1
+- Id Card #2
+- Id Card #3
+- Id Card #3 Side B
+- Id Card (2000)
+- Id Card (2000) Side B
+- Id Card (2001)
+- Id Card (2001) Side B
+- Id Card (2012) #1
+- Id Card (2012) #2
+- Id Card (2012) Side B
+- International Driving License (2024)
+- International Driving License (2024) Side B
+- Learner Driving License (1989) (1)
+- Learner Driving License (1989) (2)
+- Passport #1 Page 3
+- Passport #1 Page 4
+- Passport #2 Page 2
+- Passport #2 Page 7
+- Passport #3
+- Passport (1992)
+- Passport (1998)
+- Passport (1998) Child
+- Passport (1998) Diplomatic
+- Passport (1998) Official
+- Passport (2015) Emergency
+- Passport (2015) Emergency Page 2
+- Probationary Driving License (1989)
+- Probationary Driving License (2013)
+- Probationary Driving License (2025)
+- Professional Driving License #1
+- Professional Driving License #2
+- Professional Id Card #1
+- Professional Id Card (2019)
+- Professional Id Card (2019) Side B
+- Refugee Id Card #1
+- Refugee Id Card #1 Side B
+- Refugee Id Card #2
+- Visa #1
+- Visa #10
+- Visa #2
+- Visa #3
+- Visa #4
+- Visa #5
+- Visa #6
+- Visa #7
+- Visa #8
+- Visa #9
+- Visa (2018) #1
+- Visa (2018) #2
+- Visa (2018) #3
+- Visa (2018) #4
+- Visa (2024) #1
+- Visa (2024) #2
+- Visa (2024) #3
+- Visa (2024) #4

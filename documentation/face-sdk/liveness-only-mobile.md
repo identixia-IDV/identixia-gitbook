@@ -21,7 +21,7 @@ These builds score presentation attacks and deepfake checks. They do not enroll 
 
 ## Integration path
 
-1. Clone the sample and place the liveness runtime from GitHub Releases (`python scripts/get_runtime.py`).
+1. Clone the sample and unzip the liveness runtime from GitHub Releases into the sample folder.
 2. Run until status shows **Ready**, then open the camera flow.
 3. Activate with a license that includes `liveness`.
 4. Treat a missing score as not evaluated, not as a pass.

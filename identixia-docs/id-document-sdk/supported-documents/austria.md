@@ -1,0 +1,123 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Austria.
+---
+
+# Austria
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Armed Forces Id Card #1
+- Armed Forces Id Card #1 Side B
+- Armed Forces Id Card (2019) #1
+- Armed Forces Id Card (2019) #2
+- Diplomatic Id Card #1
+- Diplomatic Id Card #2
+- Diplomatic Id Card #2 Side B
+- Diplomatic Id Card #3
+- Diplomatic Id Card (2010)
+- Diplomatic Id Card (2010) Side B
+- Disabled Id Card (2016)
+- Driving License (1976-1982)
+- Driving License (1997-2004)
+- Driving License (2006)
+- Driving License (2006) Side B
+- Driving License (2013-2014)
+- Driving License (2013-2014) Side B
+- Driving License (Forklift) #1
+- Driving License (Forklift) #1 Side B
+- ePassport (2006)
+- ePassport (2006-2022) Alien's
+- ePassport (2006-2022) Diplomatic
+- ePassport (2006-2022) Page 3
+- ePassport (2006-2022) Service
+- ePassport (2006-2022) Travel Document
+- ePassport (2022)
+- ePassport (2023)
+- ePassport (2023) Alien's
+- ePassport (2023) Diplomatic
+- ePassport (2023) Page 1
+- ePassport (2023) Page 3
+- ePassport (2023) Page 3 (2)
+- ePassport (2023) Service
+- ePassport (2023) Travel Document
+- Foreigner Id Card (2010)
+- Foreigner Id Card (2010) Side B
+- Id Card #1
+- Id Card #1 Side B
+- Id Card (2000)
+- Id Card (2000) Side B
+- Id Card (2002) Side B
+- Id Card (2002-2010)
+- Id Card (2010) Side B
+- Id Card (2021)
+- Id Card (2021) Side B
+- Passport (1996)
+- Passport (1996) Diplomatic
+- Passport (1996) Service
+- Passport (1996) Travel Document 1951
+- Passport (2006) Emergency
+- Passport (2022) Emergency
+- Professional Id Card #1
+- Professional Id Card #10
+- Professional Id Card #11
+- Professional Id Card #12
+- Professional Id Card #13
+- Professional Id Card #13 Side B
+- Professional Id Card #2
+- Professional Id Card #3
+- Professional Id Card #3 Side B
+- Professional Id Card #4
+- Professional Id Card #4 Side B
+- Professional Id Card #5
+- Professional Id Card #5 Side B
+- Professional Id Card #6
+- Professional Id Card #6 Side B
+- Professional Id Card #7
+- Professional Id Card #7 Side B
+- Professional Id Card #8
+- Professional Id Card #8 Side B
+- Professional Id Card #9
+- Registration Certificate #1
+- Registration Certificate #2
+- Registration Certificate (1999)
+- Registration Certificate (2011)
+- Registration Certificate (2011) Side B
+- Residence permit (2003-2008)
+- Residence permit (2003-2008) Side B
+- Residence permit (2005)
+- Residence Permit (2006-2010)
+- Residence Permit (2006-2010) (EU Citizen)
+- Residence permit (2006-2010) Side B
+- Residence Permit (2006-2014) #1
+- Residence Permit (2006-2014) #1 Side B
+- Residence Permit (2006-2014) #2
+- Residence Permit (2006-2014) #2 Side B
+- Residence Permit (2006-2014) #3
+- Residence Permit (2006-2014) #3 Side B
+- Residence Permit (2006-2014) #4
+- Residence Permit (2006-2014) #5
+- Residence Permit (2006-2014) #5 Side B
+- Residence Permit (2006-2014) #6
+- Residence Permit (2006-2014) #6 Side B
+- Residence Permit (2006-2014) #7
+- Residence Permit (2006-2014) #7 Side B
+- Residence Permit (2006-2014) #8
+- Residence Permit (2006-2014) #8 Side B
+- Residence Permit (2006-2014) #9
+- Residence Permit (2006-2014) #9 Side B
+- Residence permit (2011)
+- Residence permit (2011-2014) Side B
+- Residence permit (2014)
+- Residence Permit (2020)
+- Residence Permit (2020) (EU Citizen)
+- Residence permit (2020) Side B
+- Service Id Card #1
+- Service Id Card #1 Side B
+- Student Id Card (2014)
+- Train Driving License #1
+- Train Driving License #1 Side B
+- Visa (2004)
+- Visa (2011)
+- Visa (2018)
+- Visa (2022)

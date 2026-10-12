@@ -38,38 +38,22 @@ description: >-
 
 ## Download and place the runtime
 
-Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
 | **Release asset** | Android `facefullsdk.aar` zip + iOS face zip (from the paired Android / iOS product Releases) |
-| **Local path after download** | See the sample paths in the repository README (`example/android/libfacesdk/facefullsdk.aar`, `ios/Frameworks/…`) |
-| **Databases** | Do not skip database packs — `get_runtime.py` verifies required `*.xdb` files after download. |
-
-### Manual download (optional)
-
-Open the repository **Releases** page and download the asset named above:
+| **Local path** | See the sample paths in the repository README (`example/android/libfacesdk/facefullsdk.aar`, `ios/Frameworks/…`) |
+| **Databases** | Unzip the Release into the sample folders and keep every `*.xdb` pack with the engine. |
 
 ```text
-https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/latest/download/<asset>
+https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/latest
 ```
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
 {% hint style="warning" %}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
 {% endhint %}
 
 ## Integration guide — start the project
@@ -83,11 +67,7 @@ cd FaceRecognition-LivenessDetection-React-Native
 
 ### 2. Download and place the runtime
 
-See [Download and place the runtime](#download-and-place-the-runtime) below. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
+Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -217,7 +197,7 @@ Call the same method names exposed by the plugin bridge (`activate` → `init` �
 
 ### Integration checklist
 
-1. Download runtime with `python scripts/get_runtime.py` (or `install.gradle` on Android).
+1. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
 2. `FaceRecognitionClient.get(context).activate(license) { code -> … }` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
 4. Enroll → Identify, or Capture / Attribute for still flows.

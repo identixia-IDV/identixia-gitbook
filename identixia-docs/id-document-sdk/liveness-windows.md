@@ -5,7 +5,6 @@ description: >-
 
 # ID Document Liveness Detection SDK for Windows
 
-
 ## Overview
 
 | | |
@@ -33,19 +32,7 @@ description: >-
 
 ## Download and place the runtime
 
-Download the native SDK libraries and model files before running the sample. Use `scripts/get_runtime.py` to retrieve the required GitHub Release assets and place them in the sample's expected folders.
-
-### Download (recommended)
-
-```bash
-python scripts/get_runtime.py
-```
-
-To pin a specific Release tag:
-
-```bash
-python scripts/get_runtime.py --tag 1.0.0
-```
+Download the runtime zip from GitHub Releases and unzip it into the folder listed for that platform.
 
 | | |
 | --- | --- |
@@ -53,7 +40,7 @@ python scripts/get_runtime.py --tag 1.0.0
 | **Local path after download** | `lib/cpu/` (`DocumentLivenessSDK.dll` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level) |
 | **Databases** | Face recognition needs the full `recognition*.xdb` set; face liveness needs `recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb`; document products need `document.xdb`. |
 
-### Manual download (optional)
+### Download
 
 Open the repository **Releases** page and download the asset named above:
 
@@ -62,10 +49,6 @@ https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows/releases
 ```
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
-
-{% hint style="warning" %}
-If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. `get_runtime.py` checks required packs after download.
-{% endhint %}
 
 ## Integration guide — start the project
 
@@ -81,10 +64,6 @@ cd ID-Document-Liveness-Detection-Windows
 ### 2. Download and place the runtime
 
 Native libraries and `*.xdb` databases are not in git. From the repository root:
-
-```bash
-python scripts/get_runtime.py
-```
 
 Files must land under `lib/cpu/` (DLLs or `.so` files **and** every required database pack). See [Download and place the runtime](#download-and-place-the-runtime).
 
@@ -123,7 +102,6 @@ curl -s -X POST http://127.0.0.1:14107/api/document/liveness \
   -H "Content-Type: application/json" \
   -d "{\"images\":[\"BASE64_JPEG\"]}"
 ```
-
 
 ## License and activation (server)
 
@@ -171,7 +149,6 @@ This product is **PAD / authenticity**, not OCR. Pair with ID Document Recogniti
 ![Liveness checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)
 
 ![Status card](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)
-
 
 ## Support
 

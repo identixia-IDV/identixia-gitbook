@@ -843,7 +843,7 @@ Start with [Face](face-sdk/integration-guide.md) or [ID documents](id-document-s
 {% endstep %}
 {% step %}
 ### Download the runtime
-Clone that repository and run `python scripts/get_runtime.py`. Native libraries and database packs are on GitHub Releases. They are not in git.
+Clone that repository, then download the runtime zip from its GitHub Releases page and unzip it into the sample folder. Native libraries and database packs are not in git.
 {% endstep %}
 {% step %}
 ### Activate, then call the kit
@@ -1062,17 +1062,11 @@ Screen, printout, and substitution checks. License flag `authenticity`. No MRZ, 
 Clone the product repository, then open the tab for your stack. Android and iOS are separate setups. On macOS use `python3`.
 {% endhint %}
 
-```bash
-python scripts/get_runtime.py
-```
+Download the runtime zip from the product’s GitHub Releases page and unzip it into the folder named on that platform’s page.
 
 {% tabs %}
 {% tab title="Android" %}
 Requirements from the sample: Android Studio, JDK **17**, minSdk **24**, ABIs `arm64-v8a` and `armeabi-v7a`. Use a physical **arm64** phone for the camera.
-
-```bash
-python scripts/get_runtime.py
-```
 
 Open the Android project in Android Studio and run it. The sample prints the application id to send with a license request. Wait until status shows **Ready**.
 {% endtab %}
@@ -1144,7 +1138,7 @@ npm run ios
 Same steps for a Windows service and a Docker build of the same product. They share one port.
 
 1. Clone the Windows or Docker repository.
-2. On a host install, run `python scripts/get_runtime.py`. A Docker Hub image already contains the runtime.
+2. On a host install, download the runtime zip from GitHub Releases and unzip it into `lib/cpu/`. A Docker Hub image already contains the runtime.
 3. Copy `.env.example` to `.env`, install the Python dependencies, then start with `python run_server.py` (`python3` on macOS or Linux) or Docker Compose.
 4. Read `GET /api/machinecode`, request a license, then `POST /api/activate`.
 5. Call the process route for that product. Ports are on [SDK Server](https://docs.identixia.com/sdk-server).

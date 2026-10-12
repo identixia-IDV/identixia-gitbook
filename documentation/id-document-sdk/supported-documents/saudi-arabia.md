@@ -1,0 +1,116 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Saudi Arabia.
+icon: file
+---
+
+# Saudi Arabia
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Armed Forces Id Card #1
+- Digital Driving License (2021)
+- Digital Driving License (2023) #1
+- Digital Driving License (2023) #2
+- Digital Id Card (2021) #1
+- Digital Id Card (2021) #2
+- Digital Id Card (2021) #3
+- Digital Id Card (2021) #4
+- Digital Passport (2022) #1
+- Digital Passport (2022) #2
+- Digital Registration Certificate #1
+- Digital Residence Permit (2019) #1
+- Digital Residence Permit (2019) #2
+- Digital Residence Permit (2019) #3
+- Digital Residence Permit (2019) #4
+- Digital Residence Permit (2019) #5
+- Digital Residence Permit (2019) #6
+- Digital Residence Permit (2019) #7
+- Digital Residence Permit (2019) #8
+- Digital Residence Permit (2024) #1
+- Digital Residence Permit (2024) #2
+- Digital Residence Permit (2024) #3
+- Diplomatic Id Card #1
+- Diplomatic Id Card #2
+- Diplomatic Id Card #3
+- Diplomatic Id Card #4
+- Driving License #1
+- Driving License #1 Side B
+- Driving License #2
+- Driving License #2 Side B
+- Driving License #3
+- ePassport (2020)
+- ePassport (2020) Diplomatic
+- ePassport (2020) Page 1
+- ePassport (2020) Special
+- eVisa (2019) #1
+- eVisa (2019) #2
+- eVisa (2019) #3
+- eVisa (2019) #4
+- eVisa (2024) #1
+- eVisa (2024) #10
+- eVisa (2024) #11
+- eVisa (2024) #2
+- eVisa (2024) #3
+- eVisa (2024) #4
+- eVisa (2024) #5
+- eVisa (2024) #6
+- eVisa (2024) #7
+- eVisa (2024) #8
+- eVisa (2024) #9
+- Id Card (2010)
+- Id Card (2010) Side B
+- Id Card (2018)
+- Id Card (2018) Side B
+- International Driving License #1
+- International Driving License #1 Side B
+- International Driving License #2
+- Passport #1
+- Passport (2000) #1
+- Passport (2000) #1 Diplomatic
+- Passport (2000) #1 Special
+- Passport (2000) #2
+- Passport (2000-2014) Page 3
+- Passport (2014)
+- Registration Certificate #1
+- Registration Certificate #1 Side B
+- Registration Certificate #1 Side B (2)
+- Residence Permit #1 (1)
+- Residence Permit #1 (2)
+- Residence Permit #1 (3)
+- Residence permit #1 Side B
+- Residence Permit #2 (1)
+- Residence Permit #2 (2)
+- Residence Permit #3 (1)
+- Residence Permit #3 (2)
+- Residence Permit #3 (3)
+- Residence permit #3 Side B
+- Residence Permit (2015) #1 (1)
+- Residence Permit (2015) #1 (2)
+- Residence Permit (2015) #1 (3)
+- Residence Permit (2015) #1 (4)
+- Residence Permit (2015) #2
+- Residence Permit (2015) #2 (2)
+- Residence Permit (2015) #3
+- Residence Permit (2015) #4
+- Residence Permit (2015) Side B
+- Residence Permit (2019) #1
+- Residence Permit (2019) #2
+- Residence Permit (2019) #3
+- Residence Permit (2019) Side B
+- Temporary Id Card #1
+- Temporary Id Card #1 Side B
+- Temporary Id Card #2
+- Visa #1
+- Visa #10
+- Visa #11
+- Visa #2
+- Visa #3
+- Visa #4
+- Visa #5
+- Visa #6
+- Visa #7
+- Visa #8
+- Visa #9
+
+{% include "../../.gitbook/includes/footer.md" %}

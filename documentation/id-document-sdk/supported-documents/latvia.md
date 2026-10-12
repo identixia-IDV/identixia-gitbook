@@ -1,0 +1,102 @@
+---
+description: >-
+  Identity document templates Identixia recognizes for Latvia.
+icon: file
+---
+
+# Latvia
+
+[14,136 templates across 254 issuing countries](../supported-documents.md).
+
+- Disabled Id Card #1
+- Disabled Id Card #1 Side B
+- Disabled Id Card #2
+- Driving License (1993)
+- Driving License (1993) Side B
+- Driving License (2004)
+- Driving License (2004) Side B
+- Driving License (2013)
+- Driving License (2013) Side B
+- Driving License (2023)
+- Driving License (2023) Side B
+- ePassport (2007)
+- ePassport (2007) Alien's
+- ePassport (2007) Diplomatic
+- ePassport (2007) Service
+- ePassport (2007) Travel Document
+- ePassport (2007) Travel Document 1951
+- ePassport (2007) Travel Document 1954
+- ePassport (2015)
+- ePassport (2015) Alien's
+- ePassport (2015) Diplomatic
+- ePassport (2015) Service
+- ePassport (2015) Travel Document
+- ePassport (2015) Travel Document 1951
+- ePassport (2015) Travel Document 1954
+- ePassport (2015) Travel Document Page 3
+- ePassport (2024)
+- ePassport (2024) Alien's
+- ePassport (2024) Diplomatic
+- ePassport (2024) Page 3
+- ePassport (2024) Service
+- ePassport (2024) Travel Document
+- ePassport (2024) Travel Document 1951
+- ePassport (2024) Travel Document 1954
+- ePassport (2024) Travel Document Page 3
+- Foreigner Id Card (2021)
+- Foreigner Id Card (2021) Side B
+- Id Card (2012) #1
+- Id Card (2012) #1 Side B
+- Id Card (2012) #2
+- Id Card (2012) #2 Side B
+- Id Card (2012) #3
+- Id Card (2012) #3 Side B
+- Id Card (2019) #1
+- Id Card (2019) #2
+- Id Card (2019) #3
+- Id Card (2019-2021) #1 Side B
+- Id Card (2019-2021) #2 Side B
+- Id Card (2019-2021) #3 Side B
+- Id Card (2021) #1
+- Id Card (2021) #2
+- Id Card (2021) #3
+- Learner Driving License (2004)
+- Learner Driving License (2004) Side B
+- Learner Driving License (2013)
+- Learner Driving License (2013) Side B
+- Learner Driving License (2023)
+- Learner Driving License (2023) Side B
+- Passport (1992)
+- Passport (1992) Seaman's
+- Passport (1997) Alien's
+- Passport (1997) Side B
+- Passport (2002)
+- Passport (2002) Alien's
+- Passport (2002) Diplomatic
+- Passport (2002) Seaman's
+- Passport (2002) Service
+- Passport (2002) Side B
+- Passport (2002) Travel Document
+- Qualification Driving License #1
+- Qualification Driving License #1 Side B
+- Qualification Driving License (2023)
+- Qualification Driving License (2023) Side B
+- Registration Certificate (1994)
+- Registration Certificate (1994) Side B
+- Registration Certificate (2004) Side B
+- Registration Certificate (2004-2019)
+- Registration Certificate (2014-2019) Side B
+- Residence permit (2004)
+- Residence permit (2012)
+- Residence permit (2012) Side B
+- Residence permit (2021)
+- Residence permit (2021) Side B
+- Seafarer's Driving License #1
+- Visa (1999)
+- Visa (2004)
+- Visa (2010)
+- Visa (2012)
+- Visa (2019)
+- Visa (2022)
+
+{% include "../../.gitbook/includes/footer.md" %}
