@@ -923,92 +923,22 @@ def write_supported_documents() -> None:
             f"Identity document templates Identixia recognizes for {name}.",
             f"[{listed:,} templates across {countries_total} issuing countries](../supported-documents.md).\n\n{docs}\n",
         )
-    link_md = "\n".join(
-        f"- [{name.replace('[', '').replace(']', '')}](supported-documents/{slug}.md)" for name, slug in pairs
+    groups: dict[str, list[str]] = {}
+    for name, slug in pairs:
+        letter = name[0].upper()
+        if not letter.isalpha():
+            letter = "Other"
+        label = name.replace("[", "").replace("]", "")
+        groups.setdefault(letter, []).append(f"- [{label}](supported-documents/{slug}.md)")
+    sections = "\n\n".join(
+        f'{{% expand title="{letter}" %}}\n' + "\n".join(links) + "\n{% endexpand %}"
+        for letter, links in groups.items()
     )
-    options_json = json.dumps(
-        [{"name": name, "href": f"supported-documents/{slug}.md"} for name, slug in pairs],
-        ensure_ascii=False,
-        separators=(",", ":"),
-    )
-    body = f"""Choose an issuing country. Document templates appear only after you select one. Proof of address is not included.
+    body = f"""Select an issuing country. Templates for that country are listed on its own page. This page does not list document templates. Proof of address is not included.
 
-<div class="idv-country">
-<label for="idv-country-q">Country or issuing authority</label>
-<input id="idv-country-q" type="search" placeholder="Search countries" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="idv-country-list" />
-<ul id="idv-country-list" role="listbox" hidden></ul>
-</div>
-<p id="idv-country-fallback"></p>
+Type a country name in the documentation search, or open a letter below.
 
-<script type="application/json" id="idv-country-data">{options_json}</script>
-<script>
-(function () {{
-  var input = document.getElementById("idv-country-q");
-  var menu = document.getElementById("idv-country-list");
-  var dataNode = document.getElementById("idv-country-data");
-  var fallback = document.getElementById("idv-country-fallback");
-  if (!input || !menu || !dataNode) return;
-  var options = JSON.parse(dataNode.textContent || "[]");
-  if (fallback && fallback.nextElementSibling) fallback.nextElementSibling.hidden = true;
-  var active = -1;
-  function closeMenu() {{
-    menu.hidden = true;
-    menu.innerHTML = "";
-    input.setAttribute("aria-expanded", "false");
-    active = -1;
-  }}
-  function render(query) {{
-    var q = query.trim().toLowerCase();
-    closeMenu();
-    if (!q) return;
-    var found = options.filter(function (item) {{ return item.name.toLowerCase().indexOf(q) !== -1; }}).slice(0, 12);
-    if (!found.length) return;
-    menu.hidden = false;
-    input.setAttribute("aria-expanded", "true");
-    found.forEach(function (item, index) {{
-      var li = document.createElement("li");
-      li.setAttribute("role", "option");
-      li.textContent = item.name;
-      li.dataset.href = item.href;
-      if (index === 0) active = 0;
-      li.addEventListener("mousedown", function (event) {{
-        event.preventDefault();
-        window.location.href = item.href;
-      }});
-      menu.appendChild(li);
-    }});
-    mark();
-  }}
-  function mark() {{
-    Array.prototype.forEach.call(menu.children, function (li, index) {{
-      li.setAttribute("aria-selected", index === active ? "true" : "false");
-    }});
-  }}
-  input.addEventListener("input", function () {{ render(input.value); }});
-  input.addEventListener("keydown", function (event) {{
-    var items = menu.children;
-    if (event.key === "ArrowDown" && items.length) {{
-      event.preventDefault();
-      active = Math.min(items.length - 1, active + 1);
-      mark();
-    }} else if (event.key === "ArrowUp" && items.length) {{
-      event.preventDefault();
-      active = Math.max(0, active - 1);
-      mark();
-    }} else if (event.key === "Enter" && active >= 0 && items[active]) {{
-      event.preventDefault();
-      window.location.href = items[active].dataset.href;
-    }} else if (event.key === "Escape") {{
-      input.value = "";
-      closeMenu();
-    }}
-  }});
-}})();
-</script>
-
-{{% expand title="Browse countries" %}}
-{link_md}
-{{% endexpand %}}
+{sections}
 """
     write_page(
         OUT / "id-document-sdk" / "supported-documents.md",
