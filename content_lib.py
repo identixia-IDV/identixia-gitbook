@@ -74,7 +74,7 @@ def overview(ctx: ProductCtx) -> str:
 
 | | |
 | --- | --- |
-| **Repository** | [`{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) · [Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) |
+| **Repository** | [`{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) · [Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) |
 | **Platform** | {ctx.platform} |
 | **Runs** | {runs} |
 """
@@ -380,7 +380,7 @@ def runtime_download_section(ctx: ProductCtx) -> str:
     hint_close = "{% endhint %}"
     return f"""## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
@@ -388,9 +388,7 @@ Native engines and model databases are **not** stored in git. Download the runti
 | **Local path** | {path} |
 | **Databases** | {dbs} |
 
-```text
-https://github.com/{ctx.owner}/{ctx.name}/releases/latest
-```
+[Download the runtime](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest)
 
 Unzip so files land in the documented path — **not** nested inside an extra folder.
 
@@ -439,7 +437,7 @@ cd {ctx.name}
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -536,7 +534,7 @@ cd {ctx.name}
 
 ### 2. Download and place the runtime
 
-Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
+Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Configure and start the server
 
@@ -1237,7 +1235,7 @@ def resources_section(ctx: ProductCtx) -> str:
 | Resource | Link |
 | --- | --- |
 | **This repository** | [`{ctx.owner}/{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) |
-| **GitHub Releases (runtime)** | [Latest download](https://github.com/{ctx.owner}/{ctx.name}/releases/latest) |
+| **GitHub Releases (runtime)** | [Latest download](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) |
 | **Documentation site** | [docs.identixia.com](https://docs.identixia.com) |
 | **SDK Server (HTTP)** | [SDK Server](../sdk-server/README.md) |
 | **Website** | [identixia.com](https://identixia.com) |

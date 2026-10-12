@@ -10,7 +10,7 @@ description: >-
 
 | | |
 | --- | --- |
-| **Repository** | [`FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/latest) |
+| **Repository** | [`FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/tag/latest) |
 | **Platform** | Ionic-Cordova |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -37,7 +37,7 @@ description: >-
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/tag/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
@@ -45,9 +45,7 @@ Native engines and model databases are **not** stored in git. Download the runti
 | **Local path** | See the sample paths in the repository README (`example/android/libfacesdk/facefullsdk.aar`, `ios/Frameworks/…`) |
 | **Databases** | Unzip the Release into the sample folders and keep every `*.xdb` pack with the engine. |
 
-```text
-https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/latest
-```
+[Download the runtime](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
@@ -66,7 +64,7 @@ cd FaceRecognition-LivenessDetection-Ionic-Cordova
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 

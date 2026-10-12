@@ -10,7 +10,7 @@ icon: shield
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Liveness-Detection-Windows`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows) · [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows/releases/latest) |
+| **Repository** | [`ID-Document-Liveness-Detection-Windows`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows) · [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows/releases/tag/latest) |
 | **Platform** | Windows |
 | **Runs** | On your server or in your container. Images stay there. |
 
@@ -45,9 +45,7 @@ Download the runtime zip from GitHub Releases and unzip it into the folder liste
 
 Open the repository **Releases** page and download the asset named above:
 
-```text
-https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows/releases/latest/download/<asset>
-```
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 

@@ -9,7 +9,7 @@ description: >-
 
 | | |
 | --- | --- |
-| **Repository** | [`FaceRecognition-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-Ionic-Cordova) · [Releases](https://github.com/identixia-IDV/FaceRecognition-Ionic-Cordova/releases/latest) |
+| **Repository** | [`FaceRecognition-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-Ionic-Cordova) · [Releases](https://github.com/identixia-IDV/FaceRecognition-Ionic-Cordova/releases/tag/latest) |
 | **Platform** | Ionic-Cordova |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -46,9 +46,7 @@ Download the runtime zip from GitHub Releases and unzip it into the folder liste
 
 Open the repository **Releases** page and download the asset named above:
 
-```text
-https://github.com/identixia-IDV/FaceRecognition-Ionic-Cordova/releases/latest/download/<asset>
-```
+[Download the runtime](https://github.com/identixia-IDV/FaceRecognition-Ionic-Cordova/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 

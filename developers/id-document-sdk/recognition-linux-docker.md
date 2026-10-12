@@ -11,7 +11,7 @@ icon: cube
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Recognition-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Docker) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/latest) |
+| **Repository** | [`ID-Document-Recognition-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Docker) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/tag/latest) |
 | **Platform** | Linux |
 | **Runs** | On your server or in your container. Images stay there. |
 
@@ -39,7 +39,7 @@ This sample does not include document liveness. It does not serve `/api/document
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/tag/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
@@ -47,9 +47,7 @@ Native engines and model databases are **not** stored in git. Download the runti
 | **Local path** | `lib/cpu/` (`DocumentRecognitionSDK.dll` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level) |
 | **Databases** | Face recognition needs the full `recognition*.xdb` set; face liveness needs `recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb`; document products need `document.xdb`. |
 
-```text
-https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/latest
-```
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
@@ -70,7 +68,7 @@ cd ID-Document-Recognition-Docker
 
 ### 2. Download and place the runtime
 
-Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
+Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Docker/releases/tag/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Configure and start the server
 

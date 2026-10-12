@@ -10,7 +10,7 @@ description: >-
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Recognition-Liveness-Detection-iOS`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/latest) |
+| **Repository** | [`ID-Document-Recognition-Liveness-Detection-iOS`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/tag/latest) |
 | **Platform** | iOS |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -37,7 +37,7 @@ description: >-
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/tag/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
@@ -45,9 +45,7 @@ Native engines and model databases are **not** stored in git. Download the runti
 | **Local path** | `docsdk.xcframework` / `docsdk.framework` (includes `document.xdb` in the bundle) |
 | **Databases** | If the framework is missing `document.xdb`, add it from the paired SDK pack before shipping. |
 
-```text
-https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/latest
-```
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
@@ -66,7 +64,7 @@ cd ID-Document-Recognition-Liveness-Detection-iOS
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-iOS/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 

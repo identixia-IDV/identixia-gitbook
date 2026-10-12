@@ -10,7 +10,7 @@ icon: file
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Recognition-iOS`](https://github.com/identixia-IDV/ID-Document-Recognition-iOS) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-iOS/releases/latest) |
+| **Repository** | [`ID-Document-Recognition-iOS`](https://github.com/identixia-IDV/ID-Document-Recognition-iOS) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-iOS/releases/tag/latest) |
 | **Platform** | iOS |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -50,9 +50,7 @@ Download the runtime zip from GitHub Releases and unzip it into the folder liste
 
 Open the repository **Releases** page and download the asset named above:
 
-```text
-https://github.com/identixia-IDV/ID-Document-Recognition-iOS/releases/latest/download/<asset>
-```
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-iOS/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 

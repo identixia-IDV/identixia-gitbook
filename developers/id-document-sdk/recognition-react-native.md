@@ -10,7 +10,7 @@ icon: file
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Recognition-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native/releases/latest) |
+| **Repository** | [`ID-Document-Recognition-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native/releases/tag/latest) |
 | **Platform** | ReactNative |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -51,9 +51,7 @@ Download the runtime zip from GitHub Releases and unzip it into the folder liste
 
 Open the repository **Releases** page and download the asset named above:
 
-```text
-https://github.com/identixia-IDV/ID-Document-Recognition-React-Native/releases/latest/download/<asset>
-```
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 

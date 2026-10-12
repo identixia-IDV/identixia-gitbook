@@ -11,7 +11,7 @@ icon: code
 
 | | |
 | --- | --- |
-| **Repository** | [`FaceRecognition-LivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/latest) |
+| **Repository** | [`FaceRecognition-LivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/tag/latest) |
 | **Platform** | ReactNative |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -39,7 +39,7 @@ icon: code
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/tag/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
@@ -47,9 +47,7 @@ Native engines and model databases are **not** stored in git. Download the runti
 | **Local path** | See the sample paths in the repository README (`example/android/libfacesdk/facefullsdk.aar`, `ios/Frameworks/…`) |
 | **Databases** | Unzip the Release into the sample folders and keep every `*.xdb` pack with the engine. |
 
-```text
-https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/latest
-```
+[Download the runtime](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
@@ -68,7 +66,7 @@ cd FaceRecognition-LivenessDetection-React-Native
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 

@@ -11,7 +11,7 @@ icon: code
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Recognition-Liveness-Detection-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native/releases/latest) |
+| **Repository** | [`ID-Document-Recognition-Liveness-Detection-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native/releases/tag/latest) |
 | **Platform** | ReactNative |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -39,7 +39,7 @@ icon: code
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native/releases/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native/releases/tag/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
@@ -47,9 +47,7 @@ Native engines and model databases are **not** stored in git. Download the runti
 | **Local path** | See the sample paths in the repository README (`example/android/libdocsdk/documentfullsdk.aar`, `ios/Frameworks/…`) |
 | **Databases** | Document Android embeds `document.xdb` in the AAR; iOS embeds it in the framework bundle. |
 
-```text
-https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native/releases/latest
-```
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
@@ -68,7 +66,7 @@ cd ID-Document-Recognition-Liveness-Detection-React-Native
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-React-Native/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 

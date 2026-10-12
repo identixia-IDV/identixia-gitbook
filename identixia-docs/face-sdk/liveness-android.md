@@ -10,7 +10,7 @@ description: >-
 
 | | |
 | --- | --- |
-| **Repository** | [`FaceLivenessDetection-Android`](https://github.com/identixia-IDV/FaceLivenessDetection-Android) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/latest) |
+| **Repository** | [`FaceLivenessDetection-Android`](https://github.com/identixia-IDV/FaceLivenessDetection-Android) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/latest) |
 | **Platform** | Android |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -34,7 +34,7 @@ description: >-
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/latest) and unzip it into the path below.
 
 | | |
 | --- | --- |
@@ -42,9 +42,7 @@ Native engines and model databases are **not** stored in git. Download the runti
 | **Local path** | `libfacesdk/facelivenessdk.aar` and `libfacesdk/databases/*.xdb` |
 | **Databases** | Required packs: `liveness.xdb` and `recognition-deepfake.xdb`. |
 
-```text
-https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/latest
-```
+[Download the runtime](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/latest)
 
 Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
 
@@ -63,7 +61,7 @@ cd FaceLivenessDetection-Android
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
