@@ -884,111 +884,387 @@ Document images and OCR fields stay on **your** device or server. Parse [Result 
     )
 
 
-def _pdf_literal(text: str) -> str:
-    safe = []
-    for char in text:
-        if char in "()\\":
-            safe.append("\\" + char)
-        elif 32 <= ord(char) <= 255:
-            safe.append(char)
-        else:
-            safe.append("?")
-    return "".join(safe)
-
-
 def _catalog_pdf(data: dict) -> bytes:
-    """Letter-size catalog. One country heading, then that country's templates."""
-    width, height = 612, 792
-    left, right, top, bottom = 48, 564, 748, 48
-    pages: list[list[str]] = [[]]
-    y = top
+    """Production catalog: cover, family summary, country index, and template tables."""
+    import io
+    import re
+    from xml.sax.saxutils import escape
 
-    def ensure(size: int) -> None:
-        nonlocal y
-        if y - size >= bottom:
-            return
-        pages.append([])
-        y = top
-
-    def line(text: str, size: int, font: str, gap: int) -> None:
-        nonlocal y
-        ensure(gap)
-        pages[-1].append(f"BT /{font} {size} Tf {left} {y} Td ({_pdf_literal(text)}) Tj ET")
-        y -= gap
-
-    def wrap(text: str, size: int, font: str, gap: int, width_chars: int) -> None:
-        words = text.split()
-        current = ""
-        for word in words:
-            trial = word if not current else f"{current} {word}"
-            if len(trial) <= width_chars:
-                current = trial
-                continue
-            if current:
-                line(current, size, font, gap)
-            current = word
-        if current:
-            line(current, size, font, gap)
-
-    listed = data["listed"]
-    countries = data["countries"]
-    line("Supported ID documents", 18, "F2", 28)
-    wrap(
-        f"{listed:,} identity document templates for {len(countries)} issuing countries and authorities. Proof of address is not included.",
-        11,
-        "F1",
-        16,
-        88,
+    from reportlab.lib.colors import Color, white
+    from reportlab.lib.enums import TA_LEFT, TA_RIGHT
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import ParagraphStyle
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    from reportlab.platypus import (
+        BaseDocTemplate,
+        CondPageBreak,
+        Flowable,
+        Frame,
+        HRFlowable,
+        NextPageTemplate,
+        PageBreak,
+        PageTemplate,
+        Paragraph,
+        Spacer,
+        Table,
+        TableStyle,
     )
-    y -= 8
-    for country in countries:
-        line(country["name"], 13, "F2", 18)
-        for doc in country["documents"]:
-            wrap(doc, 10, "F1", 13, 92)
-        y -= 6
 
-    objects: list[bytes] = []
-
-    def add(body: bytes) -> int:
-        objects.append(body)
-        return len(objects)
-
-    font1 = add(b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
-    font2 = add(b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>")
-    page_ids: list[int] = []
-    for commands in pages:
-        stream = "\n".join(commands).encode("latin-1")
-        content_id = add(b"<< /Length " + str(len(stream)).encode() + b" >>\nstream\n" + stream + b"\nendstream")
-        page_ids.append(content_id)
-    page_object_ids: list[int] = []
-    for content_id in page_ids:
-        page_object_ids.append(
-            add(
-                b"<< /Type /Page /Parent 0 0 R /MediaBox [0 0 612 792] "
-                + f"/Contents {content_id} 0 R /Resources << /Font << /F1 {font1} 0 R /F2 {font2} 0 R >> >> >>".encode()
+    font_dir = Path(r"C:\Windows\Fonts")
+    regular = font_dir / "segoeui.ttf"
+    bold = font_dir / "segoeuib.ttf"
+    if regular.is_file() and bold.is_file():
+        if "Identixia" not in pdfmetrics.getRegisteredFontNames():
+            pdfmetrics.registerFont(TTFont("Identixia", str(regular)))
+            pdfmetrics.registerFont(TTFont("Identixia-Bold", str(bold)))
+            pdfmetrics.registerFontFamily(
+                "Identixia",
+                normal="Identixia",
+                bold="Identixia-Bold",
+                italic="Identixia",
+                boldItalic="Identixia-Bold",
             )
+        font, font_bold = "Identixia", "Identixia-Bold"
+    else:
+        font, font_bold = "Times-Roman", "Times-Bold"
+
+    ink = Color(20 / 255, 26 / 255, 34 / 255)
+    muted = Color(90 / 255, 101 / 255, 115 / 255)
+    teal = Color(15 / 255, 118 / 255, 110 / 255)
+    teal_deep = Color(12 / 255, 74 / 255, 70 / 255)
+    mist = Color(247 / 255, 248 / 255, 250 / 255)
+    rule = Color(197 / 255, 204 / 255, 216 / 255)
+    card = Color(28 / 255, 36 / 255, 48 / 255)
+
+    page_w, page_h = A4
+    left, right, top, bottom = 40, 40, 46, 40
+    listed = int(data["listed"])
+    catalog_total = int(data["catalog_total"])
+    countries_total = int(data["countries_total"])
+    countries = data["countries"]
+    families = data["families"]
+    content_w = page_w - left - right
+
+    def bookmark_key(name: str, used: set[str]) -> str:
+        slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "country"
+        key = f"country-{slug}"
+        n = 2
+        while key in used:
+            key = f"country-{slug}-{n}"
+            n += 1
+        used.add(key)
+        return key
+
+    class Bookmark(Flowable):
+        def __init__(self, key: str, title: str, level: int, registry: dict[str, int], record: str | None = None):
+            super().__init__()
+            self.key = key
+            self.title = title
+            self.level = level
+            self.registry = registry
+            self.record = record
+
+        def wrap(self, aw: float, ah: float) -> tuple[float, float]:
+            return (0, 0)
+
+        def draw(self) -> None:
+            self.canv.bookmarkPage(self.key)
+            closed = self.level == 0 and self.key == "countries"
+            self.canv.addOutlineEntry(self.title, self.key, level=self.level, closed=closed)
+            if self.record:
+                self.registry[self.record] = int(self.canv.getPageNumber())
+
+    def draw_tracked(canvas, text: str, x: float, y: float, face: str, size: float, tracking: float, color: Color) -> None:
+        canvas.setFillColor(color)
+        canvas.setFont(face, size)
+        for char in text:
+            canvas.drawString(x, y, char)
+            x += canvas.stringWidth(char, face, size) + tracking
+
+    def paint_meta(canvas) -> None:
+        canvas.setTitle("Supported ID Documents")
+        canvas.setAuthor("Identixia")
+        canvas.setSubject("Identity document templates recognized by Identixia ID Document Recognition.")
+        canvas.setCreator("Identixia")
+        canvas.setKeywords(["Identixia", "ID document", "passport", "identity document catalog"])
+
+    def draw_cover(canvas, doc) -> None:
+        paint_meta(canvas)
+        canvas.saveState()
+        canvas.setFillColor(ink)
+        canvas.rect(0, 0, page_w, page_h, fill=1, stroke=0)
+        canvas.setFillColor(teal)
+        canvas.rect(0, page_h - 292, page_w, 292, fill=1, stroke=0)
+        canvas.setFillColor(Color(94 / 255, 234 / 255, 212 / 255))
+        canvas.rect(0, page_h - 296, page_w, 4, fill=1, stroke=0)
+        draw_tracked(canvas, "IDENTIXIA", 48, page_h - 64, font, 11, 1.6, white)
+        canvas.setFillColor(white)
+        canvas.setFont(font_bold, 30)
+        canvas.drawString(48, page_h - 148, "Supported ID documents")
+        canvas.setFillColor(Color(204 / 255, 251 / 255, 241 / 255))
+        canvas.setFont(font, 12)
+        canvas.drawString(48, page_h - 176, "ID Document Recognition catalog")
+        stats = (
+            (f"{listed:,}", "Templates in this edition"),
+            (f"{len(countries)}", "Issuing authorities"),
+            (f"{len(families)}", "Document families"),
         )
-    kids = " ".join(f"{page_id} 0 R" for page_id in page_object_ids)
-    pages_id = add(f"<< /Type /Pages /Count {len(page_object_ids)} /Kids [{kids}] >>".encode())
-    for page_id in page_object_ids:
-        objects[page_id - 1] = objects[page_id - 1].replace(b"/Parent 0 0 R", f"/Parent {pages_id} 0 R".encode())
-    catalog_id = add(f"<< /Type /Catalog /Pages {pages_id} 0 R >>".encode())
-    out = bytearray(b"%PDF-1.4\n")
-    offsets = [0]
-    for index, body in enumerate(objects, start=1):
-        offsets.append(len(out))
-        out.extend(f"{index} 0 obj\n".encode())
-        out.extend(body)
-        out.extend(b"\nendobj\n")
-    xref = len(out)
-    out.extend(f"xref\n0 {len(objects) + 1}\n".encode())
-    out.extend(b"0000000000 65535 f \n")
-    for offset in offsets[1:]:
-        out.extend(f"{offset:010d} 00000 n \n".encode())
-    out.extend(
-        f"trailer\n<< /Size {len(objects) + 1} /Root {catalog_id} 0 R >>\nstartxref\n{xref}\n%%EOF\n".encode()
-    )
-    return bytes(out)
+        x = 48
+        for value, label in stats:
+            canvas.setFillColor(card)
+            canvas.roundRect(x, 168, 158, 78, 6, fill=1, stroke=0)
+            canvas.setFillColor(Color(94 / 255, 234 / 255, 212 / 255))
+            canvas.rect(x, 168, 3, 78, fill=1, stroke=0)
+            canvas.setFillColor(white)
+            canvas.setFont(font_bold, 16)
+            canvas.drawString(x + 16, 210, value)
+            canvas.setFillColor(Color(148 / 255, 163 / 255, 184 / 255))
+            canvas.setFont(font, 8)
+            canvas.drawString(x + 16, 188, label)
+            x += 172
+        canvas.setFillColor(Color(203 / 255, 213 / 255, 225 / 255))
+        canvas.setFont(font, 9)
+        scope = (
+            f"This edition lists {listed:,} identity document templates from the most common document families. "
+            f"The recognition catalog contains {catalog_total:,} templates for {countries_total} issuing countries and authorities. "
+            "Proof of address is not included."
+        )
+        text = canvas.beginText(48, 128)
+        text.setFont(font, 9)
+        text.setFillColor(Color(203 / 255, 213 / 255, 225 / 255))
+        text.setLeading(13)
+        words = scope.split()
+        line = ""
+        for word in words:
+            trial = word if not line else f"{line} {word}"
+            if canvas.stringWidth(trial, font, 9) <= page_w - 96:
+                line = trial
+                continue
+            text.textLine(line)
+            line = word
+        if line:
+            text.textLine(line)
+        canvas.drawText(text)
+        canvas.setFillColor(teal)
+        canvas.rect(0, 0, page_w, 36, fill=1, stroke=0)
+        canvas.setFillColor(white)
+        canvas.setFont(font, 8)
+        canvas.drawString(48, 14, "docs.identixia.com")
+        canvas.drawRightString(page_w - 48, 14, "Customer catalog")
+        canvas.restoreState()
+
+    def draw_body(canvas, doc) -> None:
+        paint_meta(canvas)
+        canvas.saveState()
+        canvas.setFillColor(teal)
+        canvas.rect(0, page_h - 28, page_w, 28, fill=1, stroke=0)
+        canvas.setFillColor(white)
+        canvas.setFont(font, 8)
+        canvas.drawString(left, page_h - 18, "Identixia")
+        canvas.drawRightString(page_w - right, page_h - 18, "Supported ID documents")
+        canvas.setStrokeColor(rule)
+        canvas.setLineWidth(0.4)
+        canvas.line(left, 30, page_w - right, 30)
+        canvas.setFillColor(muted)
+        canvas.setFont(font, 8)
+        canvas.drawString(left, 16, "ID Document Recognition  |  Proof of address is not included")
+        canvas.drawRightString(page_w - right, 16, str(doc.page))
+        canvas.restoreState()
+
+    h1 = ParagraphStyle("h1", fontName=font_bold, fontSize=16, leading=20, textColor=ink, spaceAfter=4)
+    body = ParagraphStyle("body", fontName=font, fontSize=9, leading=13, textColor=ink, spaceAfter=8)
+    label = ParagraphStyle("label", fontName=font_bold, fontSize=8, leading=11, textColor=teal, spaceBefore=8, spaceAfter=2)
+    cell = ParagraphStyle("cell", fontName=font, fontSize=8, leading=10, textColor=ink)
+    cell_right = ParagraphStyle("cell_right", parent=cell, alignment=TA_RIGHT, textColor=muted)
+    head = ParagraphStyle("head", fontName=font_bold, fontSize=8, leading=10, textColor=white)
+    head_right = ParagraphStyle("head_right", parent=head, alignment=TA_RIGHT)
+    country_name = ParagraphStyle("country_name", fontName=font_bold, fontSize=11, leading=14, textColor=white)
+    country_meta = ParagraphStyle("country_meta", fontName=font, fontSize=8, leading=11, textColor=Color(204 / 255, 251 / 255, 241 / 255), alignment=TA_RIGHT)
+    index_link = ParagraphStyle("index_link", fontName=font, fontSize=8, leading=11, textColor=teal)
+    index_meta = ParagraphStyle("index_meta", fontName=font, fontSize=8, leading=11, textColor=muted, alignment=TA_RIGHT)
+
+    def section(title: str, key: str, level: int = 0) -> list:
+        return [
+            Bookmark(key, title, level, pages),
+            Paragraph(title, h1),
+            HRFlowable(width="100%", thickness=1.25, color=teal, spaceBefore=0, spaceAfter=10),
+        ]
+
+    def family_table() -> Table:
+        rows = [[Paragraph("Document family", head), Paragraph("Templates", head_right)]]
+        for item in families:
+            rows.append([Paragraph(escape(item["name"]), cell), Paragraph(f"{int(item['count']):,}", cell_right)])
+        rows.append([Paragraph("This edition", ParagraphStyle("tot", parent=cell, fontName=font_bold)), Paragraph(f"{listed:,}", ParagraphStyle("tot_r", parent=cell_right, fontName=font_bold, textColor=ink))])
+        table = Table(rows, colWidths=[content_w - 90, 90], repeatRows=1)
+        style = [
+            ("BACKGROUND", (0, 0), (-1, 0), teal),
+            ("TEXTCOLOR", (0, 0), (-1, 0), white),
+            ("BACKGROUND", (0, 1), (-1, -2), white),
+            ("BACKGROUND", (0, -1), (-1, -1), mist),
+            ("FONTNAME", (0, 0), (-1, -1), font),
+            ("LEFTPADDING", (0, 0), (-1, -1), 8),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+            ("TOPPADDING", (0, 0), (-1, -1), 5),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("LINEBELOW", (0, 1), (-1, -2), 0.25, rule),
+            ("ALIGN", (1, 0), (1, -1), "RIGHT"),
+        ]
+        for index in range(1, len(rows) - 1):
+            if index % 2 == 0:
+                style.append(("BACKGROUND", (0, index), (-1, index), mist))
+        table.setStyle(TableStyle(style))
+        return table
+
+    def country_table(country: dict) -> Table:
+        docs = country["documents"]
+        rows = [[
+            Paragraph(escape(country["name"]), country_name),
+            Paragraph(f"{len(docs):,} templates", country_meta),
+        ]]
+        pair: list = []
+        for doc in docs:
+            pair.append(Paragraph(escape(doc), cell))
+            if len(pair) == 2:
+                rows.append(pair)
+                pair = []
+        if pair:
+            rows.append([pair[0], ""])
+        table = Table(rows, colWidths=[content_w / 2, content_w / 2], repeatRows=1)
+        style_cmds = [
+            ("BACKGROUND", (0, 0), (-1, 0), teal),
+            ("LEFTPADDING", (0, 0), (-1, -1), 8),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+            ("TOPPADDING", (0, 0), (0, 0), 7),
+            ("BOTTOMPADDING", (0, 0), (0, 0), 7),
+            ("TOPPADDING", (0, 1), (-1, -1), 3),
+            ("BOTTOMPADDING", (0, 1), (-1, -1), 3),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("LINEBELOW", (0, 1), (-1, -1), 0.2, rule),
+        ]
+        for index in range(1, len(rows)):
+            if index % 2 == 0:
+                style_cmds.append(("BACKGROUND", (0, index), (-1, index), mist))
+        table.setStyle(TableStyle(style_cmds))
+        return table
+
+    def index_table(page_of: dict[str, int]) -> Table:
+        used: set[str] = set()
+        keyed = [(country, bookmark_key(country["name"], used)) for country in countries]
+        mid = (len(keyed) + 1) // 2
+        left_rows = keyed[:mid]
+        right_rows = keyed[mid:]
+        header = [
+            Paragraph("Issuing authority", head),
+            Paragraph("Templates", head_right),
+            Paragraph("Page", head_right),
+            Paragraph("Issuing authority", head),
+            Paragraph("Templates", head_right),
+            Paragraph("Page", head_right),
+        ]
+        rows = [header]
+        name_w, count_w, page_col = 168, 52, 32
+        gap = content_w - (name_w + count_w + page_col) * 2
+        for index in range(mid):
+            left_country, left_key = left_rows[index]
+            right = right_rows[index] if index < len(right_rows) else None
+            left_page = page_of.get(left_key, "—")
+            row = [
+                Paragraph(f'<link href="#{left_key}">{escape(left_country["name"])}</link>', index_link),
+                Paragraph(f"{len(left_country['documents']):,}", index_meta),
+                Paragraph(str(left_page), index_meta),
+            ]
+            if right:
+                right_country, right_key = right
+                row.extend([
+                    Paragraph(f'<link href="#{right_key}">{escape(right_country["name"])}</link>', index_link),
+                    Paragraph(f"{len(right_country['documents']):,}", index_meta),
+                    Paragraph(str(page_of.get(right_key, "—")), index_meta),
+                ])
+            else:
+                row.extend(["", "", ""])
+            rows.append(row)
+        table = Table(rows, colWidths=[name_w, count_w, page_col, name_w + gap, count_w, page_col], repeatRows=1)
+        commands = [
+            ("BACKGROUND", (0, 0), (-1, 0), teal),
+            ("LEFTPADDING", (0, 0), (-1, -1), 4),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+            ("TOPPADDING", (0, 0), (-1, -1), 3),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("LINEBELOW", (0, 1), (-1, -1), 0.2, rule),
+            ("LINEAFTER", (2, 0), (2, -1), 8, white),
+        ]
+        for index in range(1, len(rows)):
+            if index % 2 == 0:
+                commands.append(("BACKGROUND", (0, index), (-1, index), mist))
+        table.setStyle(TableStyle(commands))
+        return table
+
+    def build_story(page_of: dict[str, int]) -> list:
+        used: set[str] = set()
+        story: list = [NextPageTemplate("body"), PageBreak()]
+        story.extend(section("Overview", "overview"))
+        story.append(Paragraph(
+            f"This catalog is the customer list for Identixia ID Document Recognition. "
+            f"It contains <b>{listed:,}</b> templates issued by <b>{len(countries)}</b> countries and authorities. "
+            f"Those templates are the most common identity-document families in a recognition catalog of "
+            f"{catalog_total:,} templates and {countries_total} issuing authorities.",
+            body,
+        ))
+        story.append(Paragraph(
+            "Each row is one template. A back side or an extra page is listed on its own row when the catalog stores that side separately. Proof of address is not included.",
+            body,
+        ))
+        story.append(Spacer(1, 6))
+        story.extend(section("Document families", "families"))
+        story.append(family_table())
+        story.append(Spacer(1, 14))
+        story.extend(section("Issuing countries", "index"))
+        story.append(Paragraph("Select an issuing authority. The page number opens its template list.", body))
+        story.append(index_table(page_of))
+        story.append(PageBreak())
+        story.append(Bookmark("countries", "Countries", 0, page_of))
+        for country in countries:
+            key = bookmark_key(country["name"], used)
+            story.append(CondPageBreak(88))
+            story.append(Bookmark(key, country["name"], 1, page_of, record=key))
+            story.append(country_table(country))
+            story.append(Spacer(1, 12))
+        return story
+
+    def render(page_of: dict[str, int]) -> io.BytesIO:
+        buffer = io.BytesIO()
+        doc = BaseDocTemplate(
+            buffer,
+            pagesize=A4,
+            title="Supported ID Documents",
+            author="Identixia",
+            subject="Identity document templates recognized by Identixia ID Document Recognition.",
+            creator="Identixia",
+            leftMargin=left,
+            rightMargin=right,
+            topMargin=top,
+            bottomMargin=bottom,
+        )
+        frame_h = page_h - top - bottom
+        doc.addPageTemplates([
+            PageTemplate(id="cover", frames=[Frame(0, 0, page_w, page_h, id="cover", showBoundary=0)], onPage=draw_cover),
+            PageTemplate(
+                id="body",
+                frames=[Frame(left, bottom, content_w, frame_h, id="body", showBoundary=0)],
+                onPage=draw_body,
+            ),
+        ])
+        doc.build(build_story(page_of))
+        buffer.seek(0)
+        return buffer
+
+    pages: dict[str, int] = {}
+    render(pages)
+    final = render(pages)
+    return final.getvalue()
 
 
 def write_supported_documents() -> None:
