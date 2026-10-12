@@ -71,6 +71,7 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 
 * [Recognition](recognition.md) — OCR, MRZ, barcode, and crops
 * [Liveness](liveness.md) — screen, printout, and substitution checks
+* [Supported ID documents and countries](supported-documents.md)
 * [Result format](result-json.md) · [Security checks](security-fields.md)
 
 {% hint style="info" %}

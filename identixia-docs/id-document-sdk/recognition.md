@@ -14,6 +14,8 @@ Document **recognition** finds the card in the frame and extracts:
 * Barcode / QR when present
 * Cropped images (portrait, document, signature, and related crops)
 
+Issuing countries and document series are listed in [Supported ID documents and countries](supported-documents.md).
+
 ## Capture tips
 
 * Prefer a **physical** device for camera demos.

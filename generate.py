@@ -870,6 +870,7 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 
 * [Recognition](recognition.md) — OCR, MRZ, barcode, and crops
 * [Liveness](liveness.md) — screen, printout, and substitution checks
+* [Supported ID documents and countries](supported-documents.md)
 * [Result format](result-json.md) · [Security checks](security-fields.md)
 
 {{% hint style="info" %}}
@@ -881,6 +882,57 @@ Document images and OCR fields stay on **your** device or server. Parse [Result 
         "Introduction",
         "On-premises ID Document Recognition and Document Liveness SDKs.",
         body + "\n",
+    )
+
+
+def write_supported_documents() -> None:
+    """ID document series page. Data is the customer catalog, not address documents."""
+    import json
+
+    data_path = Path(__file__).resolve().parent / "data" / "supported-id-documents.json"
+    if not data_path.is_file():
+        print(f"SKIP supported documents: missing {data_path.name}")
+        return
+    data = json.loads(data_path.read_text(encoding="utf-8"))
+    listed = data["listed"]
+    total = data["catalog_total"]
+    countries_total = data["countries_total"]
+    family_rows = "\n".join(
+        f"| {item['name']} | {item['count']} |" for item in data["families"]
+    )
+    letters = []
+    blocks = ["## Document families", "", "| Document family | Templates |", "| --- | ---: |", family_rows, ""]
+    current = None
+    for country in data["countries"]:
+        name = country["name"]
+        letter = name[0].upper()
+        if letter != current:
+            current = letter
+            letters.append(letter)
+            blocks.append(f"## {letter}")
+            blocks.append("")
+        blocks.append(f"**{name}**")
+        blocks.append("")
+        for doc in country["documents"]:
+            blocks.append(f"- {doc}")
+        blocks.append("")
+    jump = " ".join(f"[{letter}](#{letter.lower()})" for letter in letters)
+    body = "\n".join(
+        [
+            f"The ID document recognition catalog contains **{total:,}** templates for **{countries_total}** issuing countries and authorities. This page lists **{listed:,}** templates from the most common document families. Proof of address is not included.",
+            "",
+            "Each line is one template: the document series, and the back side or an extra page when the catalog stores that side separately.",
+            "",
+            jump,
+            "",
+            *blocks,
+        ]
+    )
+    write_page(
+        OUT / "id-document-sdk" / "supported-documents.md",
+        "Supported ID documents and countries",
+        f"Identity document templates for {countries_total} issuing countries. {listed:,} templates from the most common document families in the ID document recognition catalog.",
+        body,
     )
 
 
@@ -898,6 +950,8 @@ Document **recognition** finds the card in the frame and extracts:
 * **MRZ** (machine-readable zone)
 * Barcode / QR when present
 * Cropped images (portrait, document, signature, and related crops)
+
+Issuing countries and document series are listed in [Supported ID documents and countries](supported-documents.md).
 
 ## Capture tips
 
@@ -3354,6 +3408,7 @@ def write_summary(_structure: dict[str, list[tuple[str, str]]] | None = None) ->
         "* [Liveness](id-document-sdk/liveness.md)",
         "* [Result format](id-document-sdk/result-json.md)",
         "* [Security checks](id-document-sdk/security-fields.md)",
+        "* [Supported ID documents and countries](id-document-sdk/supported-documents.md)",
         "",
         "## API",
         "",
@@ -3452,6 +3507,7 @@ def main() -> int:
     write_face_concepts()
     write_document_hub()
     write_document_concepts()
+    write_supported_documents()
     write_integration_guides()
     write_sdk_server()
     write_idv_pages()
