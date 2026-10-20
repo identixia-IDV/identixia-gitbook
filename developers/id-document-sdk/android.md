@@ -11,7 +11,7 @@ icon: mobile-screen
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Recognition-Liveness-Detection-Android`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/latest) |
+| **Repository** | [`ID-Document-Recognition-Liveness-Detection-Android`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/runtime) |
 | **Platform** | Android |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -40,17 +40,19 @@ icon: mobile-screen
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Open the `runtime` GitHub Release and place each file in the path below.
 
 | | |
 | --- | --- |
-| **Release asset** | `documentfullsdk.aar` |
-| **Local path** | `libdocsdk/documentfullsdk.aar` |
-| **Databases** | `document.xdb` is embedded inside the AAR (`assets/document.xdb`). |
+| **Release asset** | `documentfullsdk.aar` from this repository’s `runtime` Release |
+| **Local path** | `libdocumentfullsdk/documentfullsdk.aar/` |
+| **Databases** | `document.xdb` ships inside the AAR or the iOS framework bundle (Windows/Linux: next to the DLL/`.so` in `lib/cpu/`). |
 
-[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/latest)
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/runtime)
 
-Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
+Download [`documentfullsdk.aar`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/runtime). Save the file as `libdocumentfullsdk/documentfullsdk.aar`.
+
+Extract so files land in the documented path — **not** nested inside an extra folder.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
@@ -67,7 +69,9 @@ cd ID-Document-Recognition-Liveness-Detection-Android
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download [`documentfullsdk.aar`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Android/releases/tag/runtime). Save the file as `libdocumentfullsdk/documentfullsdk.aar`.
+
+See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 

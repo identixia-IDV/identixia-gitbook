@@ -11,7 +11,7 @@ icon: shield
 
 | | |
 | --- | --- |
-| **Repository** | [`FaceLivenessDetection-Android`](https://github.com/identixia-IDV/FaceLivenessDetection-Android) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/latest) |
+| **Repository** | [`FaceLivenessDetection-Android`](https://github.com/identixia-IDV/FaceLivenessDetection-Android) · [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/runtime) |
 | **Platform** | Android |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -35,17 +35,19 @@ icon: shield
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Open the `runtime` GitHub Release and place each file in the path below.
 
 | | |
 | --- | --- |
-| **Release asset** | `facelivenessdk-android.zip` (contains `facelivenessdk.aar` + `databases/*.xdb`) |
-| **Local path** | `libfacesdk/facelivenessdk.aar` and `libfacesdk/databases/*.xdb` |
+| **Release asset** | `libfacelivenesssdk.rar` from this repository’s `runtime` Release |
+| **Local path** | `libfacelivenesssdk/` |
 | **Databases** | Required packs: `liveness.xdb` and `recognition-deepfake.xdb`. |
 
-[Download the runtime](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/latest)
+[Download the runtime](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/runtime)
 
-Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
+Download [`libfacelivenesssdk.rar`](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/runtime). Extract it into `libfacelivenesssdk/`. The files should sit in that folder, not inside an extra directory.
+
+Extract so files land in the documented path — **not** nested inside an extra folder.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
@@ -62,7 +64,9 @@ cd FaceLivenessDetection-Android
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download [`libfacelivenesssdk.rar`](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/FaceLivenessDetection-Android/releases/tag/runtime). Extract it into `libfacelivenesssdk/`. The files should sit in that folder, not inside an extra directory.
+
+See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -140,7 +144,7 @@ Without a liveness entitlement the score is omitted — treat as **not evaluated
 ### Usage example
 
 ```text
-1. Download the runtime zip from GitHub Releases and unzip it into the sample folder
+1. Download the `runtime` GitHub Release and extract it into the sample folder
 2. activate(license) on a background thread → init()
 3. liveness(bitmap) or start the capture / VideoWorker UI
 4. Treat authenticity as REAL only when PAD and deepfake both pass

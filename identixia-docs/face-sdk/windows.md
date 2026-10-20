@@ -10,7 +10,7 @@ description: >-
 
 | | |
 | --- | --- |
-| **Repository** | [`FaceRecognition-LivenessDetection-Windows`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/latest) |
+| **Repository** | [`FaceRecognition-LivenessDetection-Windows`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/runtime) |
 | **Platform** | Windows |
 | **Runs** | On your server or in your container. Images stay there. |
 
@@ -38,17 +38,19 @@ description: >-
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Open the `runtime` GitHub Release and place each file in the path below.
 
 | | |
 | --- | --- |
-| **Release asset** | GitHub Release `*-windows.zip` / `*-linux.zip` |
-| **Local path** | `lib/cpu/` (`FaceFullSDK.dll` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level) |
-| **Databases** | Face recognition needs the full `recognition*.xdb` set; face liveness needs `recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb`; document products need `document.xdb`. |
+| **Release asset** | `facefull.rar` from this repository’s `runtime` Release |
+| **Local path** | `lib/cpu/` |
+| **Databases** | Required packs: `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, `recognition-quality.xdb`, and when licensed `recognition-liveness.xdb` + `recognition-deepfake.xdb`. |
 
-[Download the runtime](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/latest)
+[Download the runtime](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/runtime)
 
-Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
+Download [`facefull.rar`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/runtime). Extract it into `lib/cpu/`. The files should sit in that folder, not inside an extra directory.
+
+Extract so files land in the documented path — **not** nested inside an extra folder.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
@@ -67,7 +69,7 @@ cd FaceRecognition-LivenessDetection-Windows
 
 ### 2. Download and place the runtime
 
-Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
+Native libraries and `*.xdb` databases are not in git. Download [`facefull.rar`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows/releases/tag/runtime). Extract it into `lib/cpu/`. The files should sit in that folder, not inside an extra directory. DLLs or `.so` files and every required database pack sit in `lib/cpu/`, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Configure and start the server
 

@@ -309,19 +309,20 @@ def app_doc_rel(name: str) -> tuple[str, str] | None:
     return None
 
 
-def write_missing_app_pages(owner: str) -> int:
-    """Write a developer page for every app folder that does not have one yet."""
+def write_missing_app_pages(owner: str, already: set[str] | None = None) -> int:
+    """Write a developer page for every app folder not already built this run."""
+    already = already or set()
     apps = REPOS_DIR / "APPs"
     written = 0
     for path in sorted(apps.iterdir()):
         if not path.is_dir() or path.name.startswith("_") or path.name.startswith("."):
             continue
+        if path.name in already:
+            continue
         mapped = app_doc_rel(path.name)
         if mapped is None:
             continue
         rel, plat = mapped
-        if out_path_for(rel).is_file():
-            continue
         item = {
             "name": path.name,
             "description": path.name.replace("-", " "),
@@ -407,14 +408,15 @@ git clone https://github.com/identixia-IDV/<PRODUCT>.git
 cd <PRODUCT>
 ```
 
-Download the runtime zip from that repository’s GitHub Releases page and unzip it into the folder in the table. The engine and database packs are not in git.
+Download the `runtime` GitHub Release for that repository (or the paired Android / iOS `runtime` Release for Flutter, React Native, and Ionic) and extract it into the folder in the table. The engine and database packs are not in git.
 
 | Channel | Where files land |
 | --- | --- |
-| Android | `libfacesdk/*.aar` + `libfacesdk/databases/*.xdb` |
-| iOS | Frameworks at repo root / `Frameworks/` + `databases/*.xdb` |
+| Android (Face) | `libfacerecognitionsdk/`, `libfacelivenesssdk/`, or `libfacefullsdk/` (AAR + `databases/*.xdb`) |
+| Android (Document) | `libdocumentrecognitionsdk/`, `libdocumentlivenesssdk/`, or `libdocumentfullsdk/` (the `.aar`) |
+| iOS | Unzip at the repository root so frameworks and database packs land in the sample folders |
 | Flutter / RN / Ionic | Sample Android + iOS paths (see that platform page) |
-| Windows / Linux | `lib/cpu/` (binaries **and** every `recognition*.xdb`) |
+| Windows / Linux | `lib/cpu/` (binaries **and** every required `*.xdb`) |
 
 {% hint style="warning" %}
 Never ship the engine without database packs. Missing `*.xdb` files cause empty OCR / liveness / match results even when activate returns success.
@@ -470,12 +472,12 @@ git clone https://github.com/identixia-IDV/<PRODUCT>.git
 cd <PRODUCT>
 ```
 
-Download the runtime zip from that repository’s GitHub Releases page and unzip it into the folder in the table. The engine and `document.xdb` are not in git.
+Download the `runtime` GitHub Release for that repository (or the paired Android / iOS `runtime` Release for Flutter, React Native, and Ionic) and extract it into the folder in the table. The engine and `document.xdb` are not in git.
 
 | Channel | Where files land |
 | --- | --- |
-| Android | `libdocsdk/documentreadersdk.aar` (`document.xdb` embedded) |
-| iOS | `docsdk.xcframework` / `docsdk.framework` (`document.xdb` in the bundle) |
+| Android | `libdocumentrecognitionsdk/documentrecognitionsdk.aar`, `libdocumentlivenesssdk/documentlivenesssdk.aar`, or `libdocumentfullsdk/documentfullsdk.aar` (`document.xdb` embedded) |
+| iOS | Unzip the `*.framework.zip` at the repository root (`document.xdb` in the bundle) |
 | Flutter / RN / Ionic | Sample Android + iOS paths (see that platform page) |
 | Windows / Linux | `lib/cpu/` with `document.xdb` at the top level |
 
@@ -543,7 +545,7 @@ A missing liveness score means the check was not evaluated. It does not mean the
 | Requirement | Detail |
 | --- | --- |
 | License | `recognition` for detect, template, and match. Add `liveness` for the presentation-attack and deepfake scores |
-| Runtime | Download the runtime zip from GitHub Releases |
+| Runtime | Download the `runtime` GitHub Release |
 | Databases | `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, `recognition-quality.xdb`. When liveness is licensed, also `recognition-liveness.xdb` and `recognition-deepfake.xdb` |
 | Gallery | You keep the enrolled templates. The SDK does not upload faces |
 
@@ -569,7 +571,7 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 ## Try it
 
 1. Clone one repository above.
-2. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
+2. Download the `runtime` GitHub Release and extract it into the sample folder.
 3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
 4. On Windows or Docker, call the HTTP API on port **14103**. See [SDK Server](../sdk-server/README.md).
 
@@ -834,7 +836,7 @@ Authenticity is rows in `tests` with `group: "authenticity"`. An empty set is no
 | Requirement | Detail |
 | --- | --- |
 | License | `recognition` for OCR, MRZ, and barcode. Add `authenticity` for the security checks |
-| Runtime | Download the runtime zip from GitHub Releases |
+| Runtime | Download the `runtime` GitHub Release |
 | Database | `document.xdb`. On Android it is embedded in the AAR. On Windows and Linux it sits at the top of `lib/cpu/` |
 | Capture | A physical device for camera demos. Align the document in the guide and capture the back when the document has one |
 
@@ -860,7 +862,7 @@ Other licenses use different repositories. [Choose a product](https://docs.ident
 ## Try it
 
 1. Clone one repository above.
-2. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
+2. Download the `runtime` GitHub Release and extract it into the sample folder.
 3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
 4. On Windows or Docker, call `POST /api/document/process` on port **14102**. See [SDK Server](../sdk-server/README.md).
 
@@ -1963,7 +1965,7 @@ Open Face or ID documents above. Each page lists what the product is for, what y
 {{% endstep %}}
 {{% step %}}
 ### Run the sample
-Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. Download the runtime zip from GitHub Releases before you build.
+Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. Download the `runtime` GitHub Release before you build.
 {{% endstep %}}
 {{% step %}}
 ### Request a license
@@ -1976,7 +1978,7 @@ License requests and technical support: [Contact](https://docs.identixia.com/gui
 {{% endstepper %}}
 
 {{% hint style="warning" %}}
-Native engines and `*.xdb` databases ship on GitHub Releases. Download the runtime zip and unzip it into the sample folder. They are not committed to git.
+Native engines and `*.xdb` databases ship on GitHub Releases. Download the `runtime` Release and extract it into the sample folder. They are not committed to git.
 {{% endhint %}}
 """.strip()
     write_page(
@@ -3305,7 +3307,7 @@ Use this page to pick the port. Request bodies and platform setup are in [Develo
 ## Start any server (same pattern)
 
 1. Clone the product repository (Windows or Docker).
-2. Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/`.
+2. Download the `runtime` GitHub Release and extract it into `lib/cpu/`.
 
 3. Copy `.env.example` → `.env`, install Python deps, start (`python run_server.py` / `python3 run_server.py` or Docker Compose).
 4. Read the machine code, request a license, activate.
@@ -3367,7 +3369,7 @@ Start Face Recognition (+ Liveness) Windows/Docker on port **14103** (recognitio
 
 ## Start the project
 
-Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+Download the `runtime` GitHub Release and extract it into `lib/cpu/` before you start the server.
 
 ```bash
 git clone https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows.git
@@ -3497,7 +3499,7 @@ Start Face Liveness Windows/Docker on port **14105** (the full Face product also
 
 ## Start the project
 
-Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+Download the `runtime` GitHub Release and extract it into `lib/cpu/` before you start the server.
 
 ```bash
 git clone https://github.com/identixia-IDV/FaceLivenessDetection-Windows.git
@@ -3585,7 +3587,7 @@ Start Document full product on port **14102** (recognition-only uses **14106**).
 
 ## Start the project
 
-Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+Download the `runtime` GitHub Release and extract it into `lib/cpu/` before you start the server.
 
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows.git
@@ -3666,7 +3668,7 @@ Start Document Liveness Windows/Docker on port **14107** (the full Document prod
 
 ## Start the project
 
-Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+Download the `runtime` GitHub Release and extract it into `lib/cpu/` before you start the server.
 
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Windows.git
@@ -3889,7 +3891,12 @@ def main() -> int:
             section, leaf = rel.split("/", 1)
             structure.setdefault(section, []).append((summary_label(rel), f"{leaf}.md"))
 
-    written = write_missing_app_pages(owner)
+    catalog_names = {
+        item["name"]
+        for item in about["repositories"]
+        if homepage_rel(item.get("homepage") or "")
+    }
+    written = write_missing_app_pages(owner, catalog_names)
     print(f"missing app pages written: {written}")
 
     write_welcome()

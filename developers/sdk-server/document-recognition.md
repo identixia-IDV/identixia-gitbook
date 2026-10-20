@@ -10,7 +10,7 @@ Start Document full product on port **14102** (recognition-only uses **14106**).
 
 ## Start the project
 
-Download the runtime zip from GitHub Releases and unzip it into `lib/cpu/` before you start the server.
+Download the `runtime` GitHub Release and extract it into `lib/cpu/` before you start the server.
 
 ```bash
 git clone https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows.git

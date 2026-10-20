@@ -5,11 +5,12 @@ description: >-
 
 # ID Document Recognition and OCR SDK for React Native
 
+
 ## Overview
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Recognition-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native/releases/tag/latest) |
+| **Repository** | [`ID-Document-Recognition-React-Native`](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native) · [Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Android/releases/tag/runtime) |
 | **Platform** | ReactNative |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -38,21 +39,25 @@ This sample does not include document liveness. It does not serve `/api/document
 
 ## Download and place the runtime
 
-Download the runtime zip from GitHub Releases and unzip it into the folder listed for that platform.
+Native engines and model databases are **not** stored in git. Open the `runtime` GitHub Release and place each file in the path below.
 
 | | |
 | --- | --- |
-| **Release asset** | Android `documentrecognitionsdk.aar` + iOS `docsdk.xcframework.zip` (from the paired native product Releases) |
-| **Local path after download** | See the sample paths in the repository README (`example/android/libdocsdk/documentrecognitionsdk.aar`, `ios/Frameworks/…`) |
-| **Databases** | Document Android embeds `document.xdb` in the AAR; iOS embeds it in the framework bundle. |
+| **Release asset** | `documentrecognitionsdk.aar`, `documentrecognitionsdk.framework.zip` from `ID-Document-Recognition-Android` `runtime`, `ID-Document-Recognition-iOS` `runtime` |
+| **Local path** | `example/android/libdocumentrecognitionsdk/documentrecognitionsdk.aar/`, `ios/Frameworks/` |
+| **Databases** | `document.xdb` ships inside the AAR or the iOS framework bundle (Windows/Linux: next to the DLL/`.so` in `lib/cpu/`). |
 
-### Download
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-Android/releases/tag/runtime)
 
-Open the repository **Releases** page and download the asset named above:
+Download [`documentrecognitionsdk.aar`](https://github.com/identixia-IDV/ID-Document-Recognition-Android/releases/tag/runtime) from the [ID-Document-Recognition-Android Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Android/releases/tag/runtime). Save the file as `example/android/libdocumentrecognitionsdk/documentrecognitionsdk.aar`.
 
-[Download the runtime](https://github.com/identixia-IDV/ID-Document-Recognition-React-Native/releases/tag/latest)
+Download [`documentrecognitionsdk.framework.zip`](https://github.com/identixia-IDV/ID-Document-Recognition-iOS/releases/tag/runtime) from the [ID-Document-Recognition-iOS Releases](https://github.com/identixia-IDV/ID-Document-Recognition-iOS/releases/tag/runtime). Unzip it into `ios/Frameworks/`. The files should sit in that folder, not inside an extra directory.
 
-Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
+Extract so files land in the documented path — **not** nested inside an extra folder.
+
+{% hint style="warning" %}
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
+{% endhint %}
 
 ## Integration guide — start the project
 
@@ -65,7 +70,11 @@ cd ID-Document-Recognition-React-Native
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from GitHub Releases and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download [`documentrecognitionsdk.aar`](https://github.com/identixia-IDV/ID-Document-Recognition-Android/releases/tag/runtime) from the [ID-Document-Recognition-Android Releases](https://github.com/identixia-IDV/ID-Document-Recognition-Android/releases/tag/runtime). Save the file as `example/android/libdocumentrecognitionsdk/documentrecognitionsdk.aar`.
+
+Download [`documentrecognitionsdk.framework.zip`](https://github.com/identixia-IDV/ID-Document-Recognition-iOS/releases/tag/runtime) from the [ID-Document-Recognition-iOS Releases](https://github.com/identixia-IDV/ID-Document-Recognition-iOS/releases/tag/runtime). Unzip it into `ios/Frameworks/`. The files should sit in that folder, not inside an extra directory.
+
+See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -82,6 +91,7 @@ On iOS: `cd example/ios && pod install && cd .. && yarn ios --device`.
 2. Exercise each demo tile once (enroll, identify, capture, attribute, liveness, document front/back, result).
 3. For your own app: request a license for **your** application id / bundle id, then call activate → init on a background thread.
 
+
 ## License and activation (mobile)
 
 | | |
@@ -96,6 +106,7 @@ On iOS: `cd example/ios && pod install && cd .. && yarn ios --device`.
 2. On success, call init (unpacks on-device models; may take a few seconds the first time).
 3. Gate UI on Ready / license status before camera modes.
 4. Never paste the demo key into a production app id.
+
 
 ### Status codes
 
@@ -114,6 +125,7 @@ On iOS: `cd example/ios && pod install && cd .. && yarn ios --device`.
 | `-16` | Liveness failed (when gated) |
 
 Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
+
 
 ## API reference — mobile document SDK
 
@@ -184,6 +196,7 @@ See [Result JSON](result-json.md) and [Security check fields](security-fields.md
 ![Liveness checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)
 
 ![Images](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-images.png)
+
 
 ## Support
 

@@ -10,7 +10,7 @@ icon: play
 Clone the repository for your chosen product and follow the tab for your development framework. Complete Android and iOS setup separately; iOS requires a Mac. Use `python3` on macOS.
 {% endhint %}
 
-Download the runtime zip from the product’s GitHub Releases page and unzip it into the folder named on that platform’s page.
+Download the `runtime` GitHub Release and extract it into the folder named on that platform’s page.
 
 {% tabs %}
 {% tab title="Android" %}
@@ -86,7 +86,7 @@ npm run ios
 Same steps for a Windows service and a Docker build of the same product. They share one port.
 
 1. Clone the Windows or Docker repository.
-2. On a host install, download the runtime zip from GitHub Releases and unzip it into `lib/cpu/`. A Docker Hub image already contains the runtime.
+2. On a host install, download the `runtime` GitHub Release and extract it into `lib/cpu/`. A Docker Hub image already contains the runtime.
 3. Copy `.env.example` to `.env`, install the Python dependencies, then start with `python run_server.py` (`python3` on macOS or Linux) or Docker Compose.
 4. Read `GET /api/machinecode`, request a license, then `POST /api/activate`.
 5. Call the process route for that product. Ports are on [SDK Server](https://docs.identixia.com/sdk-server).

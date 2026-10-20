@@ -10,7 +10,7 @@ description: >-
 
 | | |
 | --- | --- |
-| **Repository** | [`FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/tag/latest) |
+| **Repository** | [`FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) · [Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/releases/tag/runtime) |
 | **Platform** | Ionic-Cordova |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -37,17 +37,21 @@ description: >-
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/tag/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Open the `runtime` GitHub Release and place each file in the path below.
 
 | | |
 | --- | --- |
-| **Release asset** | Android `facefullsdk.aar` zip + iOS face zip (from the paired Android / iOS product Releases) |
-| **Local path** | See the sample paths in the repository README (`example/android/libfacesdk/facefullsdk.aar`, `ios/Frameworks/…`) |
-| **Databases** | Unzip the Release into the sample folders and keep every `*.xdb` pack with the engine. |
+| **Release asset** | `libfacefullsdk.rar`, `facefull.zip` from `FaceRecognition-LivenessDetection-Android` `runtime`, `FaceRecognition-LivenessDetection-iOS` `runtime` |
+| **Local path** | `Identixia/src/android/`, `Identixia/src/ios/Frameworks/` |
+| **Databases** | Required packs: `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, `recognition-quality.xdb`, and when licensed `recognition-liveness.xdb` + `recognition-deepfake.xdb`. |
 
-[Download the runtime](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/tag/latest)
+[Download the runtime](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/releases/tag/runtime)
 
-Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
+Download [`libfacefullsdk.rar`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/releases/tag/runtime) from the [FaceRecognition-LivenessDetection-Android Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/releases/tag/runtime). Extract it into `Identixia/src/android/`. The files should sit in that folder, not inside an extra directory.
+
+Download [`facefull.zip`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/releases/tag/runtime) from the [FaceRecognition-LivenessDetection-iOS Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/releases/tag/runtime). Unzip it into `Identixia/src/ios/Frameworks/`. The files should sit in that folder, not inside an extra directory.
+
+Extract so files land in the documented path — **not** nested inside an extra folder.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
@@ -64,7 +68,11 @@ cd FaceRecognition-LivenessDetection-Ionic-Cordova
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download [`libfacefullsdk.rar`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/releases/tag/runtime) from the [FaceRecognition-LivenessDetection-Android Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android/releases/tag/runtime). Extract it into `Identixia/src/android/`. The files should sit in that folder, not inside an extra directory.
+
+Download [`facefull.zip`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/releases/tag/runtime) from the [FaceRecognition-LivenessDetection-iOS Releases](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS/releases/tag/runtime). Unzip it into `Identixia/src/ios/Frameworks/`. The files should sit in that folder, not inside an extra directory.
+
+See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -194,7 +202,7 @@ Call the same method names exposed by the plugin bridge (`activate` → `init` �
 
 ### Integration checklist
 
-1. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
+1. Download the `runtime` GitHub Release and extract it into the sample folder.
 2. `FaceRecognitionClient.get(context).activate(license) { code -> … }` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
 4. Enroll → Identify, or Capture / Attribute for still flows.

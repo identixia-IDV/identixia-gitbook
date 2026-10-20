@@ -11,7 +11,7 @@ icon: shield
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker) · [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/latest) |
+| **Repository** | [`ID-Document-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker) · [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/runtime) |
 | **Platform** | Linux |
 | **Runs** | On your server or in your container. Images stay there. |
 
@@ -33,17 +33,19 @@ icon: shield
 
 ## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Open the `runtime` GitHub Release and place each file in the path below.
 
 | | |
 | --- | --- |
-| **Release asset** | GitHub Release `*-windows.zip` / `*-linux.zip` |
-| **Local path** | `lib/cpu/` (`DocumentLivenessSDK.dll` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level) |
-| **Databases** | Face recognition needs the full `recognition*.xdb` set; face liveness needs `recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb`; document products need `document.xdb`. |
+| **Release asset** | `documentliveness.zip` from this repository’s `runtime` Release |
+| **Local path** | `lib/cpu/` |
+| **Databases** | `document.xdb` ships inside the AAR or the iOS framework bundle (Windows/Linux: next to the DLL/`.so` in `lib/cpu/`). |
 
-[Download the runtime](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/latest)
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/runtime)
 
-Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
+Download [`documentliveness.zip`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/runtime). Unzip it into `lib/cpu/`. The files should sit in that folder, not inside an extra directory.
+
+Extract so files land in the documented path — **not** nested inside an extra folder.
 
 {% hint style="warning" %}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
@@ -62,7 +64,7 @@ cd ID-Document-Liveness-Detection-Docker
 
 ### 2. Download and place the runtime
 
-Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
+Native libraries and `*.xdb` databases are not in git. Download [`documentliveness.zip`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Docker/releases/tag/runtime). Unzip it into `lib/cpu/`. The files should sit in that folder, not inside an extra directory. DLLs or `.so` files and every required database pack sit in `lib/cpu/`, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Configure and start the server
 

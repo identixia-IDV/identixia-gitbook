@@ -4,8 +4,15 @@
 from __future__ import annotations
 
 import re
+import sys
 from dataclasses import dataclass
 from pathlib import Path
+
+_ROOT = Path(__file__).resolve().parents[1]
+_SCRIPTS = str(_ROOT / "scripts")
+if _SCRIPTS not in sys.path:
+    sys.path.insert(0, _SCRIPTS)
+import runtime_layout as layout  # noqa: E402
 
 
 @dataclass
@@ -62,6 +69,13 @@ def github_block(owner: str, name: str) -> str:
     return ""
 
 
+def _runtime_host(ctx: ProductCtx) -> str:
+    rt = layout.lookup(ctx.name)
+    if rt and rt.assets:
+        return rt.assets[0].source_repo or ctx.name
+    return ctx.name
+
+
 def overview(ctx: ProductCtx) -> str:
     if ctx.platform in ("Windows", "Linux"):
         runs = "On your server or in your container. Images stay there."
@@ -69,12 +83,13 @@ def overview(ctx: ProductCtx) -> str:
         runs = "On the device or server for the platform you choose."
     else:
         runs = "On the device. Images stay in the app."
+    host = _runtime_host(ctx)
     return f"""
 ## Overview
 
 | | |
 | --- | --- |
-| **Repository** | [`{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) · [Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) |
+| **Repository** | [`{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) · [Releases](https://github.com/{ctx.owner}/{host}/releases/tag/{layout.RELEASE_TAG}) |
 | **Platform** | {ctx.platform} |
 | **Runs** | {runs} |
 """
@@ -265,71 +280,39 @@ def _windows_dll(name: str) -> str:
 
 def _runtime_paths(ctx: ProductCtx) -> tuple[str, str, str]:
     """Return (asset_hint, local_path, databases_note)."""
-    if ctx.platform == "Android" and ctx.family in ("face_combined", "face_recog", "face_liveness"):
-        aar = _android_aar(ctx.name)
-        stem = aar[: -len(".aar")]
-        if ctx.family == "face_liveness" or ctx.name.startswith("FaceLiveness"):
+    rt = layout.lookup(ctx.name)
+    if rt and rt.assets:
+        assets = ", ".join(f"`{a.asset}`" for a in rt.assets)
+        paths = ", ".join(
+            "`repository root`" if a.dest in {".", ""} else f"`{a.dest.rstrip('/')}/`"
+            for a in rt.assets
+        )
+        hosts = []
+        for a in rt.assets:
+            host = a.source_repo or ctx.name
+            if host not in hosts:
+                hosts.append(host)
+        if ctx.family == "face_liveness":
             note = "Required packs: `liveness.xdb` and `recognition-deepfake.xdb`."
-            local = f"`libfacesdk/{aar}` and `libfacesdk/databases/*.xdb`"
         elif ctx.family == "face_recog":
             note = (
                 "Packs included: `recognition-common.xdb`, `recognition.xdb`, `recognition-attr.xdb`, "
                 "`recognition-quality.xdb`. This sample does not include `recognition-liveness.xdb` or `recognition-deepfake.xdb`."
             )
-            local = f"`libfacerecognitionsdk/{aar}` and `libfacerecognitionsdk/databases/*.xdb`"
-        else:
+        elif ctx.family == "face_combined":
             note = (
                 "Required packs: `recognition.xdb`, `recognition-common.xdb`, `recognition-attr.xdb`, "
                 "`recognition-quality.xdb`, and when licensed `recognition-liveness.xdb` + `recognition-deepfake.xdb`."
             )
-            local = f"`libfacesdk/{aar}` and `libfacesdk/databases/*.xdb`"
-        return (
-            f"`{stem}-android.zip` (contains `{aar}` + `databases/*.xdb`)",
-            local,
-            note,
-        )
-    if ctx.platform == "Android" and ctx.family in ("document", "document_recog", "document_liveness"):
-        aar = _android_aar(ctx.name)
-        folder = "libdocumentrecognitionsdk" if ctx.family == "document_recog" else "libdocsdk"
-        return (
-            f"`{aar}`",
-            f"`{folder}/{aar}`",
-            "`document.xdb` is embedded inside the AAR (`assets/document.xdb`).",
-        )
-    if ctx.platform == "iOS" and ctx.family in ("face_combined", "face_recog", "face_liveness"):
-        return (
-            "`facerecognitionsdk-ios.zip` (frameworks + `databases/*.xdb`)",
-            "Repository root / `Frameworks/` + `databases/*.xdb`",
-            "Place every `*.xdb` from the Release next to the frameworks (or under `databases/`).",
-        )
-    if ctx.platform == "iOS" and ctx.family in ("document", "document_recog", "document_liveness"):
-        return (
-            "`docsdk.xcframework.zip`",
-            "`docsdk.xcframework` / `docsdk.framework` (includes `document.xdb` in the bundle)",
-            "If the framework is missing `document.xdb`, add it from the paired SDK pack before shipping.",
-        )
-    if ctx.platform in ("Flutter", "ReactNative", "Ionic", "Ionic-Cordova"):
-        if "Document" in ctx.name or ctx.family.startswith("document"):
-            aar = _android_aar(ctx.name)
-            return (
-                f"Android `{aar}` + iOS `docsdk.xcframework.zip` (from the paired native product Releases)",
-                f"See the sample paths in the repository README (`example/android/libdocsdk/{aar}`, `ios/Frameworks/…`)",
-                "Document Android embeds `document.xdb` in the AAR; iOS embeds it in the framework bundle.",
-            )
-        return (
-            f"Android `{_android_aar(ctx.name)}` zip + iOS face zip (from the paired Android / iOS product Releases)",
-            f"See the sample paths in the repository README (`example/android/libfacesdk/{_android_aar(ctx.name)}`, `ios/Frameworks/…`)",
-            "Unzip the Release into the sample folders and keep every `*.xdb` pack with the engine.",
-        )
-    if ctx.platform in ("Windows", "Linux"):
-        asset = "GitHub Release `*-windows.zip` / `*-linux.zip`"
-        return (
-            asset,
-            f"`lib/cpu/` (`{_windows_dll(ctx.name)}` on Windows, or the `.so` files on Linux, **and** every required `*.xdb` at the top level)",
-            "Face recognition needs the full `recognition*.xdb` set; face liveness needs "
-            "`recognition-common.xdb`, `recognition-liveness.xdb`, `recognition-deepfake.xdb`; "
-            "document products need `document.xdb`.",
-        )
+        elif ctx.family.startswith("document"):
+            note = "`document.xdb` ships inside the AAR or the iOS framework bundle (Windows/Linux: next to the DLL/`.so` in `lib/cpu/`)."
+        else:
+            note = "Keep every `*.xdb` pack from the Release next to the engine."
+        if len(hosts) == 1 and hosts[0] == ctx.name:
+            hint = f"{assets} from this repository’s `runtime` Release"
+        else:
+            hint = f"{assets} from " + ", ".join(f"`{h}` `runtime`" for h in hosts)
+        return (hint, paths, note)
     return (
         "GitHub Release assets for this repository",
         "Paths documented in the product README",
@@ -374,13 +357,30 @@ def _run_commands_mobile(ctx: ProductCtx) -> str:
     return "Follow the repository **Run** section."
 
 
+def _runtime_download_lines(ctx: ProductCtx) -> str:
+    rt = layout.lookup(ctx.name)
+    if not rt or not rt.assets:
+        url = f"https://github.com/{ctx.owner}/{ctx.name}/releases/tag/{layout.RELEASE_TAG}"
+        return (
+            f"Download the runtime from [GitHub Releases]({url}) and place the files "
+            "where the product README names them."
+        )
+    return "\n\n".join(layout.download_sentence(ctx.name, rule, org=ctx.owner) for rule in rt.assets)
+
+
 def runtime_download_section(ctx: ProductCtx) -> str:
     asset, path, dbs = _runtime_paths(ctx)
     hint_open = '{% hint style="warning" %}'
     hint_close = "{% endhint %}"
+    steps = _runtime_download_lines(ctx)
+    link_repo = ctx.name
+    rt = layout.lookup(ctx.name)
+    if rt and rt.assets:
+        link_repo = rt.assets[0].source_repo or ctx.name
+    url = f"https://github.com/{ctx.owner}/{link_repo}/releases/tag/{layout.RELEASE_TAG}"
     return f"""## Download and place the runtime
 
-Native engines and model databases are **not** stored in git. Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) and unzip it into the path below.
+Native engines and model databases are **not** stored in git. Open the `{layout.RELEASE_TAG}` GitHub Release and place each file in the path below.
 
 | | |
 | --- | --- |
@@ -388,9 +388,11 @@ Native engines and model databases are **not** stored in git. Download the runti
 | **Local path** | {path} |
 | **Databases** | {dbs} |
 
-[Download the runtime](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest)
+[Download the runtime]({url})
 
-Unzip so files land in the documented path — **not** nested inside an extra folder.
+{steps}
+
+Extract so files land in the documented path — **not** nested inside an extra folder.
 
 {hint_open}
 If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
@@ -437,7 +439,9 @@ cd {ctx.name}
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+{_runtime_download_lines(ctx)}
+
+See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -534,7 +538,7 @@ cd {ctx.name}
 
 ### 2. Download and place the runtime
 
-Native libraries and `*.xdb` databases are not in git. Download the runtime zip from [GitHub Releases](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) and unzip it into `lib/cpu/`. DLLs or `.so` files and every required database pack sit in that folder, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
+Native libraries and `*.xdb` databases are not in git. {_runtime_download_lines(ctx)} DLLs or `.so` files and every required database pack sit in `lib/cpu/`, not inside an extra directory. See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Configure and start the server
 
@@ -688,7 +692,7 @@ Call the same method names exposed by the plugin bridge (`activate` → `init` �
 
 ### Integration checklist
 
-1. Download the runtime zip from GitHub Releases and unzip it into the sample folder.
+1. Download the `runtime` GitHub Release and extract it into the sample folder.
 2. `FaceRecognitionClient.get(context).activate(license) {{ code -> … }}` (or `setActivation` → `init` on plugins).
 3. On `0`, enable camera modes.
 4. Enroll → Identify, or Capture / Attribute for still flows.
@@ -1235,7 +1239,7 @@ def resources_section(ctx: ProductCtx) -> str:
 | Resource | Link |
 | --- | --- |
 | **This repository** | [`{ctx.owner}/{ctx.name}`](https://github.com/{ctx.owner}/{ctx.name}) |
-| **GitHub Releases (runtime)** | [Latest download](https://github.com/{ctx.owner}/{ctx.name}/releases/tag/latest) |
+| **GitHub Releases (runtime)** | [`runtime` download](https://github.com/{ctx.owner}/{_runtime_host(ctx)}/releases/tag/{layout.RELEASE_TAG}) |
 | **Documentation site** | [docs.identixia.com](https://docs.identixia.com) |
 | **SDK Server (HTTP)** | [SDK Server](../sdk-server/README.md) |
 | **Website** | [identixia.com](https://identixia.com) |
@@ -1253,7 +1257,7 @@ def next_steps(ctx: ProductCtx) -> str:
         "## Next steps",
         "",
         "1. Complete **Integration guide — start the project** until the sample shows **Ready**.",
-        "2. Confirm the Release zip is unzipped and the database packs are next to the engine.",
+        "2. Confirm the `runtime` Release is extracted and the database packs are next to the engine.",
         "3. Activate with a license issued for **your** application id or machine code.",
         "4. Call only the APIs your license allows; treat missing flags as “not evaluated”, not as pass.",
     ]
@@ -1350,7 +1354,7 @@ def build_page_body(ctx: ProductCtx, readme_body: str) -> str:
                 "Without a liveness entitlement the score is omitted — treat as **not evaluated**, not pass.\n\n"
                 "### Usage example\n\n"
                 "```text\n"
-                "1. Download the runtime zip from GitHub Releases and unzip it into the sample folder\n"
+                "1. Download the `runtime` GitHub Release and extract it into the sample folder\n"
                 "2. activate(license) on a background thread → init()\n"
                 "3. liveness(bitmap) or start the capture / VideoWorker UI\n"
                 "4. Treat authenticity as REAL only when PAD and deepfake both pass\n"

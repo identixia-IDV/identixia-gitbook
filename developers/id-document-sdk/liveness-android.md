@@ -6,11 +6,12 @@ icon: shield
 
 # ID Document Liveness Detection SDK for Android
 
+
 ## Overview
 
 | | |
 | --- | --- |
-| **Repository** | [`ID-Document-Liveness-Detection-Android`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android) · [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android/releases/tag/latest) |
+| **Repository** | [`ID-Document-Liveness-Detection-Android`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android) · [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android/releases/tag/runtime) |
 | **Platform** | Android |
 | **Runs** | On the device. Images stay in the app. |
 
@@ -34,21 +35,23 @@ icon: shield
 
 ## Download and place the runtime
 
-Download the runtime zip from GitHub Releases and unzip it into the folder listed for that platform.
+Native engines and model databases are **not** stored in git. Open the `runtime` GitHub Release and place each file in the path below.
 
 | | |
 | --- | --- |
-| **Release asset** | `documentlivenesssdk.aar` |
-| **Local path after download** | `libdocsdk/documentlivenesssdk.aar` |
-| **Databases** | `document.xdb` is embedded inside the AAR (`assets/document.xdb`). |
+| **Release asset** | `documentlivenesssdk.aar` from this repository’s `runtime` Release |
+| **Local path** | `libdocumentlivenesssdk/documentlivenesssdk.aar/` |
+| **Databases** | `document.xdb` ships inside the AAR or the iOS framework bundle (Windows/Linux: next to the DLL/`.so` in `lib/cpu/`). |
 
-### Download
+[Download the runtime](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android/releases/tag/runtime)
 
-Open the repository **Releases** page and download the asset named above:
+Download [`documentlivenesssdk.aar`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android/releases/tag/runtime). Save the file as `libdocumentlivenesssdk/documentlivenesssdk.aar`.
 
-[Download the runtime](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android/releases/tag/latest)
+Extract so files land in the documented path — **not** nested inside an extra folder.
 
-Extract the archive directly into the documented folder. Check that the library and model files are not inside an additional nested directory.
+{% hint style="warning" %}
+If databases are missing, activate/init may succeed but recognition, liveness, or OCR will fail at runtime. An unavailable check is not a pass.
+{% endhint %}
 
 ## Integration guide — start the project
 
@@ -61,7 +64,9 @@ cd ID-Document-Liveness-Detection-Android
 
 ### 2. Download and place the runtime
 
-Download the runtime zip from GitHub Releases and unzip it into the path in [Download and place the runtime](#download-and-place-the-runtime).
+Download [`documentlivenesssdk.aar`](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android/releases/tag/runtime) from this repository’s [Releases](https://github.com/identixia-IDV/ID-Document-Liveness-Detection-Android/releases/tag/runtime). Save the file as `libdocumentlivenesssdk/documentlivenesssdk.aar`.
+
+See [Download and place the runtime](#download-and-place-the-runtime).
 
 ### 3. Run the demo
 
@@ -74,6 +79,7 @@ Wait until Home status shows **Ready** before opening camera modes.
 1. Confirm Home / About shows a licensed **Ready** state (sample apps ship a demo key for the sample application id only).
 2. Exercise each demo tile once (enroll, identify, capture, attribute, liveness, document front/back, result).
 3. For your own app: request a license for **your** application id / bundle id, then call activate → init on a background thread.
+
 
 ## License and activation (mobile)
 
@@ -89,6 +95,7 @@ Wait until Home status shows **Ready** before opening camera modes.
 2. On success, call init (unpacks on-device models; may take a few seconds the first time).
 3. Gate UI on Ready / license status before camera modes.
 4. Never paste the demo key into a production app id.
+
 
 ### Status codes
 
@@ -107,6 +114,7 @@ Wait until Home status shows **Ready** before opening camera modes.
 | `-16` | Liveness failed (when gated) |
 
 Run native SDK calls sequentially on **one background thread**. The engine does not support simultaneous calls.
+
 
 ## API reference — mobile document liveness
 
@@ -138,6 +146,7 @@ A missing authenticity result is not a pass. See [Security check fields](https:/
 ![Liveness checks](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-checks-liveness.png)
 
 ![Status card](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)
+
 
 ## Support
 

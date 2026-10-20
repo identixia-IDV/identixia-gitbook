@@ -23,12 +23,12 @@ git clone https://github.com/identixia-IDV/<PRODUCT>.git
 cd <PRODUCT>
 ```
 
-Download the runtime zip from that repository’s GitHub Releases page and unzip it into the folder in the table. The engine and `document.xdb` are not in git.
+Download the `runtime` GitHub Release for that repository (or the paired Android / iOS `runtime` Release for Flutter, React Native, and Ionic) and extract it into the folder in the table. The engine and `document.xdb` are not in git.
 
 | Channel | Where files land |
 | --- | --- |
-| Android | `libdocsdk/documentreadersdk.aar` (`document.xdb` embedded) |
-| iOS | `docsdk.xcframework` / `docsdk.framework` (`document.xdb` in the bundle) |
+| Android | `libdocumentrecognitionsdk/documentrecognitionsdk.aar`, `libdocumentlivenesssdk/documentlivenesssdk.aar`, or `libdocumentfullsdk/documentfullsdk.aar` (`document.xdb` embedded) |
+| iOS | Unzip the `*.framework.zip` at the repository root (`document.xdb` in the bundle) |
 | Flutter / RN / Ionic | Sample Android + iOS paths (see that platform page) |
 | Windows / Linux | `lib/cpu/` with `document.xdb` at the top level |
 

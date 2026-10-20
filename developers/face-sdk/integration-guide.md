@@ -23,14 +23,15 @@ git clone https://github.com/identixia-IDV/<PRODUCT>.git
 cd <PRODUCT>
 ```
 
-Download the runtime zip from that repository’s GitHub Releases page and unzip it into the folder in the table. The engine and database packs are not in git.
+Download the `runtime` GitHub Release for that repository (or the paired Android / iOS `runtime` Release for Flutter, React Native, and Ionic) and extract it into the folder in the table. The engine and database packs are not in git.
 
 | Channel | Where files land |
 | --- | --- |
-| Android | `libfacesdk/*.aar` + `libfacesdk/databases/*.xdb` |
-| iOS | Frameworks at repo root / `Frameworks/` + `databases/*.xdb` |
+| Android (Face) | `libfacerecognitionsdk/`, `libfacelivenesssdk/`, or `libfacefullsdk/` (AAR + `databases/*.xdb`) |
+| Android (Document) | `libdocumentrecognitionsdk/`, `libdocumentlivenesssdk/`, or `libdocumentfullsdk/` (the `.aar`) |
+| iOS | Unzip at the repository root so frameworks and database packs land in the sample folders |
 | Flutter / RN / Ionic | Sample Android + iOS paths (see that platform page) |
-| Windows / Linux | `lib/cpu/` (binaries **and** every `recognition*.xdb`) |
+| Windows / Linux | `lib/cpu/` (binaries **and** every required `*.xdb`) |
 
 {% hint style="warning" %}
 Never ship the engine without database packs. Missing `*.xdb` files cause empty OCR / liveness / match results even when activate returns success.

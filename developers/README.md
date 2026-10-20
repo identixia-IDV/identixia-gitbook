@@ -15,7 +15,7 @@ Start with [Face](face-sdk/integration-guide.md) or [ID documents](id-document-s
 {% endstep %}
 {% step %}
 ### Download the runtime
-Clone that repository, then download the runtime zip from its GitHub Releases page and unzip it into the sample folder. Native libraries and database packs are not in git.
+Clone that repository, then download the `runtime` GitHub Release and extract it into the sample folder. Native libraries and database packs are not in git.
 {% endstep %}
 {% step %}
 ### Activate, then call the kit
