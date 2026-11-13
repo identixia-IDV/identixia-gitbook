@@ -1,0 +1,55 @@
+---
+description: >-
+  Find platform guides and sample repositories for Identixia face recognition and liveness detection SDKs.
+---
+
+# Face Recognition SDK Platform Reference
+
+Documentation for Face Recognition and Face Liveness Detection SDKs.
+
+We provide SDKs for all platforms. Sample projects are on GitHub: [identixia-IDV](https://github.com/identixia-IDV).
+
+## Quick start
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Android](android.md) | [`FaceRecognition-LivenessDetection-Android`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Android) |
+| iOS | [iOS](ios.md) | [`FaceRecognition-LivenessDetection-iOS`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-iOS) |
+| Flutter | [Flutter](flutter.md) | [`FaceRecognition-LivenessDetection-Flutter`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Flutter) |
+| React Native | [React Native](react-native.md) | [`FaceRecognition-LivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](ionic-capacitor.md) | [`FaceRecognition-LivenessDetection-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](ionic-cordova.md) | [`FaceRecognition-LivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Ionic-Cordova) |
+| Windows | [Windows](windows.md) | [`FaceRecognition-LivenessDetection-Windows`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows) |
+| Linux / Docker | [Linux / Docker](linux-docker.md) | [`FaceRecognition-LivenessDetection-Docker`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker) |
+
+## Face Recognition
+
+These builds do not return a liveness score. Server port **14104**.
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Face Recognition (Android)](recognition-android.md) | [`FaceRecognition-Android`](https://github.com/identixia-IDV/FaceRecognition-Android) |
+| iOS | [Face Recognition (iOS)](recognition-ios.md) | [`FaceRecognition-iOS`](https://github.com/identixia-IDV/FaceRecognition-iOS) |
+| Flutter | [Face Recognition (Flutter)](recognition-flutter.md) | [`FaceRecognition-Flutter`](https://github.com/identixia-IDV/FaceRecognition-Flutter) |
+| React Native | [Face Recognition (React Native)](recognition-react-native.md) | [`FaceRecognition-React-Native`](https://github.com/identixia-IDV/FaceRecognition-React-Native) |
+| Ionic Capacitor | [Face Recognition (Ionic Capacitor)](recognition-ionic-capacitor.md) | [`FaceRecognition-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceRecognition-Ionic-Capacitor) |
+| Ionic Cordova | [Face Recognition (Ionic Cordova)](recognition-ionic-cordova.md) | [`FaceRecognition-Ionic-Cordova`](https://github.com/identixia-IDV/FaceRecognition-Ionic-Cordova) |
+| Windows | [Face Recognition (Windows)](recognition-windows.md) | [`FaceRecognition-Windows`](https://github.com/identixia-IDV/FaceRecognition-Windows) |
+| Linux / Docker | [Face Recognition (Linux / Docker)](recognition-linux-docker.md) | [`FaceRecognition-Docker`](https://github.com/identixia-IDV/FaceRecognition-Docker) |
+
+## Face Liveness Detection
+
+These builds score presentation attacks. They do not enroll a gallery or run 1:N search. Server port **14105**.
+
+| Platform | Docs | Repository |
+| --- | --- | --- |
+| Android | [Face Liveness (Android)](liveness-android.md) | [`FaceLivenessDetection-Android`](https://github.com/identixia-IDV/FaceLivenessDetection-Android) |
+| iOS | [Face Liveness (iOS)](liveness-ios.md) | [`FaceLivenessDetection-iOS`](https://github.com/identixia-IDV/FaceLivenessDetection-iOS) |
+| Flutter | [Flutter](liveness-flutter.md) | [`FaceLivenessDetection-Flutter`](https://github.com/identixia-IDV/FaceLivenessDetection-Flutter) |
+| React Native | [React Native](liveness-react-native.md) | [`FaceLivenessDetection-React-Native`](https://github.com/identixia-IDV/FaceLivenessDetection-React-Native) |
+| Ionic Capacitor | [Ionic Capacitor](liveness-ionic-capacitor.md) | [`FaceLivenessDetection-Ionic-Capacitor`](https://github.com/identixia-IDV/FaceLivenessDetection-Ionic-Capacitor) |
+| Ionic Cordova | [Ionic Cordova](liveness-ionic-cordova.md) | [`FaceLivenessDetection-Ionic-Cordova`](https://github.com/identixia-IDV/FaceLivenessDetection-Ionic-Cordova) |
+| Windows | [Face Liveness (Windows)](liveness-windows.md) | [`FaceLivenessDetection-Windows`](https://github.com/identixia-IDV/FaceLivenessDetection-Windows) |
+| Linux / Docker | [Face Liveness (Linux / Docker)](liveness-linux-docker.md) | [`FaceLivenessDetection-Docker`](https://github.com/identixia-IDV/FaceLivenessDetection-Docker) |
+
+HTTP APIs: [SDK Server](../sdk-server/).
