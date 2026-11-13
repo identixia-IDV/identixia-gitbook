@@ -1,0 +1,9 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: Identixia Docs
+  structure:
+    - type: space
+      key: space-1
+      title: Identixia Docs
+      content:
+        directory: .
