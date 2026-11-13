@@ -20,6 +20,6 @@ The sample in this repo:
 | [Company Admin](company-admin.md) | Operator UI |
 | [Webhooks](company-webhooks.md) | Wire Identity Console → company receiver |
 
-{{% hint style="info" %}}
+{% hint style="info" %}
 Keep `IDV_SERVICE_TOKEN` on the company server only. Capture apps must not embed it.
-{{% endhint %}}
+{% endhint %}

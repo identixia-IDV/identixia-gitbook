@@ -1,4 +1,5 @@
-root: .
+root: ./
 
-# Images are loaded from identixia-IDV/identixia-assets. Do not commit binaries here.
-# Configure the space icon/favicon in GitBook UI to favicon.png if needed.
+structure:
+  readme: README.md
+  summary: SUMMARY.md

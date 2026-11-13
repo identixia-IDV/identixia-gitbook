@@ -36,9 +36,9 @@ Confirm the console can reach the API (meta / sessions list loads). With `IDV_OP
 
 Details: [Webhook integration](company-webhooks.md).
 
-{{% hint style="danger" %}}
+{% hint style="danger" %}
 Treat `whsec_…` like a password. Do not put it in applicant apps or public repos.
-{{% endhint %}}
+{% endhint %}
 
 ## 4. Service credential reminder
 

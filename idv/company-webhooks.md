@@ -40,9 +40,9 @@ X-IDV-Signature: sha256=<HMAC-SHA256 of the raw body>
 
 Compute HMAC-SHA256 over the **raw** request body with `whsec_…` and compare in constant time. Leave the secret blank only for an unsigned **local** trial.
 
-{{% hint style="danger" %}}
+{% hint style="danger" %}
 In production always verify the signature, reject bad signatures, and make handlers idempotent. Poll `GET /v1/sessions/{id}` if a delivery is missing.
-{{% endhint %}}
+{% endhint %}
 
 ## Test the integration
 

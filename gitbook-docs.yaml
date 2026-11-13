@@ -5,5 +5,7 @@ site:
     - type: space
       key: space-1
       title: Identixia Docs
+      path: docs
+      default: true
       content:
-        directory: .
+        directory: ./
