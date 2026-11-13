@@ -1,6 +1,7 @@
 ---
 description: >-
   ID document liveness for React Native. Presentation-attack checks for passports and ID cards run on the device, separate from OCR.
+icon: shield-halved
 ---
 
 # ID Document Liveness Detection SDK for React Native

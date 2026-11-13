@@ -1,6 +1,7 @@
 ---
 description: >-
   Understand Identixia face liveness detection, presentation attack checks, license requirements, and how to interpret results.
+icon: shield-halved
 ---
 
 # Face Liveness Detection and Anti-Spoofing

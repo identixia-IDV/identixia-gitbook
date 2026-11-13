@@ -1,6 +1,7 @@
 ---
 description: >-
   Choose Identixia SDKs that combine face recognition with licensed liveness checks for mobile or server integration.
+icon: cubes
 ---
 
 # Face Recognition with Liveness Detection

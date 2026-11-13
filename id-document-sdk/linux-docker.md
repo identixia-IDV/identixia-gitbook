@@ -1,6 +1,7 @@
 ---
 description: >-
   ID document recognition and liveness for Linux and Docker. Passport, national ID, and driver license OCR, MRZ, and barcode reading run on your server. Document liveness runs when the license includes it.
+icon: cube
 ---
 
 # ID Document OCR and Liveness Detection SDK for Linux and Docker

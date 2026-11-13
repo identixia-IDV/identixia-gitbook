@@ -1,6 +1,7 @@
 ---
 description: >-
   ID document recognition for Linux and Docker. Passport, national ID, and driver license OCR, MRZ, and barcode reading run on your server. This build does not include document liveness.
+icon: id-card
 ---
 
 # ID Document Recognition and OCR SDK for Linux and Docker

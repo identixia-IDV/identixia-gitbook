@@ -1,6 +1,7 @@
 ---
 description: >-
   Learn how Identixia face recognition works, which APIs to use, and which sample repositories match your platform.
+icon: magnifying-glass
 ---
 
 # Face Recognition SDK Features and Integration

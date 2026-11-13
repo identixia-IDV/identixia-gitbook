@@ -1,6 +1,7 @@
 ---
 description: >-
   Face recognition and liveness for Ionic Cordova. Enrollment, templates, and 1:N search run on the device. Passive liveness runs when the license includes it.
+icon: plug
 ---
 
 # Face Recognition and Liveness Detection SDK for Ionic Cordova

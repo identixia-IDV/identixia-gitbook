@@ -1,6 +1,7 @@
 ---
 description: >-
   Face recognition and liveness for Ionic Capacitor. Enrollment, templates, and 1:N search run on the device. Passive liveness runs when the license includes it.
+icon: bolt
 ---
 
 # Face Recognition and Liveness Detection SDK for Ionic Capacitor

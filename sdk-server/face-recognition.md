@@ -1,6 +1,7 @@
 ---
 description: >-
   Integrate the self-hosted Identixia face recognition HTTP API on Windows or Docker. Follow setup, activation, and request examples.
+icon: magnifying-glass
 ---
 
 # Face Recognition HTTP API

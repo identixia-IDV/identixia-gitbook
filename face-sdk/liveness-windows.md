@@ -1,6 +1,7 @@
 ---
 description: >-
   Passive face liveness for Windows. Presentation-attack and deepfake checks run on your server. A face is REAL only when both pass.
+icon: shield-halved
 ---
 
 # Face Liveness Detection SDK for Windows

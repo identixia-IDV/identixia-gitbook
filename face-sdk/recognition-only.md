@@ -1,6 +1,7 @@
 ---
 description: >-
   Choose a recognition-only Identixia SDK for face recognition. Compare available repositories and integration options.
+icon: crosshairs
 ---
 
 # Face Recognition SDKs without Liveness

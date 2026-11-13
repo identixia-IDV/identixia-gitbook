@@ -1,13 +1,14 @@
 ---
 description: >-
   Integrate the self-hosted Identixia face recognition and document OCR HTTP API on Windows or Docker. Follow setup, activation, and request examples.
+icon: server
 ---
 
 # Face Recognition and Document OCR HTTP API
 
 SDK Server is the on-premise HTTP API. A Windows build and a Docker build of the **same product** share one port and the same `/api` routes. Phone SDKs are not this API.
 
-Use this page to pick the port. Request bodies and platform setup are in [Developers](https://docs.identixia.com/developers).
+Use this page to pick the port. Request bodies and platform setup are in the [Face integration guide](../face-sdk/integration-guide.md) and the [Document integration guide](../id-document-sdk/integration-guide.md).
 
 ## Products and ports
 

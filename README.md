@@ -1,6 +1,7 @@
 ---
 description: >-
   What Identixia face and ID document products do, what you need to run a sample, and what the sample returns.
+icon: house
 ---
 
 # Identixia Identity Verification SDK Documentation
@@ -45,15 +46,15 @@ Open Face or ID documents above. Each page lists what the product is for, what y
 {% endstep %}
 {% step %}
 ### Run the sample
-Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample). Android and iOS are separate setups. Download the `runtime` GitHub Release before you build.
+Follow [Run the sample](run-the-sample.md). Android and iOS are separate setups. Download the `runtime` GitHub Release before you build.
 {% endstep %}
 {% step %}
 ### Request a license
-Send the Android application ID, iOS bundle identifier, or server machine code on [Request a license](https://docs.identixia.com/guides/request-a-license-and-support). Activate that key before initializing the SDK.
+Send the Android application ID, iOS bundle identifier, or server machine code on [Request a license](request-a-license-and-support.md). Activate that key before initializing the SDK.
 {% endstep %}
 {% step %}
 ### Contact
-License requests and technical support: [Contact](https://docs.identixia.com/guides/contact-us).
+License requests and technical support: [Contact](contact-us.md).
 {% endstep %}
 {% endstepper %}
 

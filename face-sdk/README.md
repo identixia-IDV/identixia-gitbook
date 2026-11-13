@@ -1,6 +1,7 @@
 ---
 description: >-
   Explore Identixia face recognition and liveness SDKs for mobile apps and self-hosted servers. Compare features and choose a platform.
+icon: user
 ---
 
 # Face Recognition and Liveness Detection SDKs
@@ -58,13 +59,13 @@ These repositories include recognition and liveness. Server port **14103**. Grad
 | Windows | [Windows](windows.md) | [`FaceRecognition-LivenessDetection-Windows`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Windows) |
 | Linux / Docker | [Linux / Docker](linux-docker.md) | [`FaceRecognition-LivenessDetection-Docker`](https://github.com/identixia-IDV/FaceRecognition-LivenessDetection-Docker) |
 
-Other licenses use different repositories. [Choose a product](https://docs.identixia.com/guides/choose-a-product) lists them.
+Other licenses use different repositories. [Choose a product](../choose-a-product.md) lists them.
 
 ## Try it
 
 1. Clone one repository above.
 2. Download the `runtime` GitHub Release and extract it into the sample folder.
-3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
+3. Follow [Run the sample](../run-the-sample.md) until the sample shows **Ready**.
 4. On Windows or Docker, call the HTTP API on port **14103**. See [SDK Server](../sdk-server/README.md).
 
 ![Face SDK Android home](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/face-recognition/android/home.png)

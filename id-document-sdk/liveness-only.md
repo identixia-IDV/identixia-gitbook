@@ -1,6 +1,7 @@
 ---
 description: >-
   Choose a standalone Identixia ID document liveness detection SDK for anti-spoofing checks, separate from recognition.
+icon: eye
 ---
 
 # Standalone ID Document Liveness Detection SDKs

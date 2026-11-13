@@ -1,6 +1,7 @@
 ---
 description: >-
   Integrate the self-hosted Identixia ID document liveness detection HTTP API on Windows or Docker. Follow setup, activation, and request examples.
+icon: shield-halved
 ---
 
 # ID Document Liveness Detection HTTP API

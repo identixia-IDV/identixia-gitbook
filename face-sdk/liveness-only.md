@@ -1,6 +1,7 @@
 ---
 description: >-
   Choose a standalone Identixia face liveness detection SDK for anti-spoofing checks, separate from recognition.
+icon: eye
 ---
 
 # Standalone Face Liveness Detection SDKs

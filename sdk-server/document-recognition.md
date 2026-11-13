@@ -1,6 +1,7 @@
 ---
 description: >-
   Integrate the self-hosted Identixia ID document recognition and OCR HTTP API on Windows or Docker. Follow setup, activation, and request examples.
+icon: id-card
 ---
 
 # ID Document Recognition and OCR HTTP API

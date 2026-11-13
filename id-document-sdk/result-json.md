@@ -1,6 +1,7 @@
 ---
 description: >-
   Read document recognition results from mobile and server APIs, including identity fields, MRZ data, barcodes, images, and checks.
+icon: brackets-curly
 ---
 
 # ID Document OCR Result JSON Reference

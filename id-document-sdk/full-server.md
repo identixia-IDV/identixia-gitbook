@@ -1,6 +1,7 @@
 ---
 description: >-
   Deploy Identixia ID document recognition and OCR with licensed liveness checks using self-hosted HTTP APIs on Windows or Linux and Docker.
+icon: server
 ---
 
 # ID Document Recognition and OCR APIs for Windows and Docker

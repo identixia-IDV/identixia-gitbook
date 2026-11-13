@@ -1,6 +1,7 @@
 ---
 description: >-
   ID document liveness for Windows. Presentation-attack checks for passports and ID cards run on your server, separate from OCR.
+icon: shield-halved
 ---
 
 # ID Document Liveness Detection SDK for Windows

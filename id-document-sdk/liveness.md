@@ -1,6 +1,7 @@
 ---
 description: >-
   Understand Identixia ID document liveness detection, presentation attack checks, license requirements, and how to interpret results.
+icon: shield-halved
 ---
 
 # ID Document Liveness Detection and Anti-Spoofing

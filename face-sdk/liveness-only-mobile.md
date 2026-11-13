@@ -1,6 +1,7 @@
 ---
 description: >-
   Integrate standalone Identixia face liveness detection on Android or iOS. Explore sample apps and license requirements.
+icon: mobile-screen
 ---
 
 # Face Liveness Detection SDKs for Android and iOS

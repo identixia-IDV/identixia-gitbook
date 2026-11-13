@@ -1,6 +1,7 @@
 ---
 description: >-
   Face recognition for Linux and Docker. Detection, attributes, quality, templates, and 1:1 match run on your server. This build does not include liveness.
+icon: magnifying-glass
 ---
 
 # Face Recognition SDK for Linux and Docker

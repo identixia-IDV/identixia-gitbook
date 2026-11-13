@@ -1,6 +1,7 @@
 ---
 description: >-
   Deploy Identixia face recognition with licensed liveness checks using self-hosted HTTP APIs on Windows or Linux and Docker.
+icon: server
 ---
 
 # Face Recognition APIs for Windows and Docker

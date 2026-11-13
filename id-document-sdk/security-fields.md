@@ -1,6 +1,7 @@
 ---
 description: >-
   Interpret document authenticity and liveness checks in result JSON. Understand missing checks and license-dependent security fields.
+icon: lock
 ---
 
 # Document Liveness and Security Check Results

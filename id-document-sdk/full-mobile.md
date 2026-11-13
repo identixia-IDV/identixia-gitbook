@@ -1,6 +1,7 @@
 ---
 description: >-
   Compare Android, iOS, Flutter, React Native, and Ionic samples for Identixia ID document recognition and OCR with licensed liveness checks.
+icon: mobile-screen
 ---
 
 # ID Document Recognition and OCR SDKs for Mobile Apps

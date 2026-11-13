@@ -1,6 +1,7 @@
 ---
 description: >-
   Request a license for Face SDK, ID Document SDK, or IDV. Learn which app identifier or machine code to provide and how to activate.
+icon: key
 ---
 
 # Request an Identixia SDK License and Technical Support

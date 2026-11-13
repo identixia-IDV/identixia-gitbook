@@ -1,6 +1,7 @@
 ---
 description: >-
   ID document recognition and liveness for iOS. Passport, national ID, and driver license OCR, MRZ, and barcode reading run on the device. Document liveness runs when the license includes it.
+icon: mobile-screen-button
 ---
 
 # ID Document OCR and Liveness Detection SDK for iOS

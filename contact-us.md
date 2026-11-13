@@ -1,6 +1,7 @@
 ---
 description: >-
   Contact Identixia for face recognition, liveness detection, document OCR, and IDV licensing or technical integration support.
+icon: comments
 ---
 
 # Contact Identixia for SDK Licensing and Support

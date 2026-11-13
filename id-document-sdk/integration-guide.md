@@ -1,6 +1,7 @@
 ---
 description: >-
   Set up the Identixia ID document recognition and OCR SDK, download native libraries and models, activate a license, and call the APIs.
+icon: code
 ---
 
 # ID Document Recognition and OCR SDK Integration Guide

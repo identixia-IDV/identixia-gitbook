@@ -1,6 +1,7 @@
 ---
 description: >-
   Learn how Identixia ID document recognition and OCR works, which APIs to use, and which sample repositories match your platform.
+icon: id-card
 ---
 
 # ID Document Recognition and OCR SDK Features and Integration

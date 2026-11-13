@@ -1,6 +1,7 @@
 ---
 description: >-
   Face recognition for Ionic Cordova. Detection, attributes, quality, templates, and 1:1 match run on the device. This build does not include liveness.
+icon: magnifying-glass
 ---
 
 # Face Recognition SDK for Ionic Cordova

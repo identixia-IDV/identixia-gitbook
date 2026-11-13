@@ -1,6 +1,7 @@
 ---
 description: >-
   Choose Identixia SDKs that combine ID document recognition and OCR with licensed liveness checks for mobile or server integration.
+icon: cubes
 ---
 
 # ID Document Recognition and OCR with Liveness Detection

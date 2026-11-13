@@ -1,6 +1,7 @@
 ---
 description: >-
   Passive face liveness for Android. Presentation-attack and deepfake checks run on the device. A face is REAL only when both pass.
+icon: shield-halved
 ---
 
 # Face Liveness Detection SDK for Android

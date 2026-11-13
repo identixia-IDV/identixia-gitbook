@@ -1,6 +1,7 @@
 ---
 description: >-
   ID document recognition for Android. Passport, national ID, and driver license OCR, MRZ, and barcode reading run on the device. This build does not include document liveness.
+icon: id-card
 ---
 
 # ID Document Recognition and OCR SDK for Android

@@ -1,6 +1,7 @@
 ---
 description: >-
   Find platform guides and sample repositories for Identixia face recognition and liveness detection SDKs.
+icon: list
 ---
 
 # Face Recognition SDK Platform Reference

@@ -1,6 +1,7 @@
 ---
 description: >-
   Read passports and ID cards with Identixia document OCR, MRZ, and barcode SDKs. Add licensed document liveness checks on mobile or self-hosted servers.
+icon: id-card
 ---
 
 # ID Document OCR and Liveness Detection SDKs
@@ -60,13 +61,13 @@ These repositories include recognition and document liveness. Server port **1410
 | Windows | [Windows](windows.md) | [`ID-Document-Recognition-Liveness-Detection-Windows`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Windows) |
 | Linux / Docker | [Linux / Docker](linux-docker.md) | [`ID-Document-Recognition-Liveness-Detection-Docker`](https://github.com/identixia-IDV/ID-Document-Recognition-Liveness-Detection-Docker) |
 
-Other licenses use different repositories. [Choose a product](https://docs.identixia.com/guides/choose-a-product) lists them.
+Other licenses use different repositories. [Choose a product](../choose-a-product.md) lists them.
 
 ## Try it
 
 1. Clone one repository above.
 2. Download the `runtime` GitHub Release and extract it into the sample folder.
-3. Follow [Run the sample](https://docs.identixia.com/guides/run-the-sample) until the sample shows **Ready**.
+3. Follow [Run the sample](../run-the-sample.md) until the sample shows **Ready**.
 4. On Windows or Docker, call `POST /api/document/process` on port **14102**. See [SDK Server](../sdk-server/README.md).
 
 ![Document demo status](https://raw.githubusercontent.com/identixia-IDV/identixia-assets/main/screenshots/document-reader/desktop/demo-ui-status.png)

@@ -1,6 +1,7 @@
 ---
 description: >-
   Set up the Identixia face recognition SDK, download native libraries and models, activate a license, and call the APIs.
+icon: code
 ---
 
 # Face Recognition SDK Integration Guide

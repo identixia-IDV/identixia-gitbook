@@ -1,6 +1,7 @@
 ---
 description: >-
   Run standalone Identixia face liveness detection through a self-hosted HTTP API on Windows or Linux and Docker.
+icon: server
 ---
 
 # Face Liveness Detection APIs for Windows and Docker

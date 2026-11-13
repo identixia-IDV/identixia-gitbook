@@ -1,6 +1,7 @@
 ---
 description: >-
   Face recognition and liveness for React Native. Enrollment, templates, and 1:N search run on the device. Passive liveness runs when the license includes it.
+icon: code-branch
 ---
 
 # Face Recognition and Liveness Detection SDK for React Native
